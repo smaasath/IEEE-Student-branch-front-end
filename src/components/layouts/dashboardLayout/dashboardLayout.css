@@ -11,7 +11,7 @@
 @media only screen and (max-width: 576px ) {
     .sidebar {
      height: auto !important;
-     background-color: var(--body-primary);
+     background-color: var(--body-bag-primary);
     }
     .mobile-side-bar{
       width: 75%;

@@ -2,23 +2,28 @@
     --primary: #00629B;
     --secondary: #4CB9E7;
     --third: #0E2954;
-    --body-primary: #F8F9FA ;
+    --body-bag-primary: #F8F9FA ;
+    --secondary-50: #bbe1f1 ;
 }
 
-.bg-primary {
+.bag-primary {
     background-color: #00629B !important;
 }
 
-.text-primary {
+.text-cl-primary {
     color: #00629B !important;
 }
 
-.bg-secondary {
+.bag-secondary {
     background-color: #4CB9E7 !important;
 }
 
-.text-secondary {
+.text-cl-secondary {
     color: #4CB9E7 !important;
+}
+
+body{
+    background-color: #F8F9FA !important;
 }
 
 .bg-third {
@@ -29,11 +34,11 @@
     color: #0E2954 !important;
 }
 
-.body-primary {
+.body-bag-primary {
     background-color: #F8F9FA !important;
 }
 
-.body-secondary {
+.body-bag-secondary {
     background-color: #E9ECEF !important;
 }
 

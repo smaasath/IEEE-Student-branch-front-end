@@ -21,7 +21,7 @@ const DashboardLayout = ({ children }) => {
                 </div>
 
 
-                <div className="col-sm-10 body-primary container-fluid m-0 p-0">
+                <div className="col-sm-10 body-bag-primary container-fluid m-0 p-0">
                     <CommonNavBar>
                     <button className="navbar-toggler btn-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarSupportedContent"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

@@ -1,5 +1,4 @@
 
-
 .side-bar-body {
     height: 100vh;
     overflow-x: hidden;
@@ -17,6 +16,7 @@
 
 .nav-link {
     color:white;
+    transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .nav-link.active {
@@ -29,7 +29,8 @@
 }
 
 .nav-link:hover{
-    background-color: var(--secondary);
+    transform: scale(1.05);
+    color:white
 }
 
 .side-bar-icon {
