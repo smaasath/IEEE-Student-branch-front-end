@@ -44,6 +44,16 @@ body{
     transition: border-color 0.3s ease;
 }
 
+.form-select{
+    height: 45px;
+}
+
+.form-select:focus{
+    border-color: #00629B !important;
+    box-shadow: 0 0 0 0.25rem rgba(0, 98, 155, 0.25) !important; /* Updated to match the border color */
+    transition: border-color 0.3s ease;
+}
+
 .body-bag-primary {
     background-color: #F8F9FA !important;
 }

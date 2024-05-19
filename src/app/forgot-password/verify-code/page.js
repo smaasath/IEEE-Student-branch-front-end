@@ -17,7 +17,7 @@ const page = () => {
       <div className='d-flex w-100 justify-content-between align-items-start'>
         <div className='d-flex flex-column '>
           <div className=''>
-            <Link href={`/forgot-password/email`} className="nav-link d-flex align-items-center text-center justify-content-center "><div><Image src={back} className='img-fluid' style={{ width: 22 }} /></div><div className='h6 m-0'>Back</div></Link>
+            <Link href={`/forgot-password/email`} className="nav-link d-flex align-items-center text-center justify-content-center "><div><Image src={back} className='img-fluid' style={{ width: 22 }} /></div><div className='h6 m-0'></div></Link>
           </div>
         </div>
       </div>
