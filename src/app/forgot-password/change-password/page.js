@@ -3,7 +3,7 @@ import CommonButton from '@/components/common/commonButton/commonButton'
 import AuthLayout from '@/components/layouts/authLayout/authLayout'
 import Link from 'next/link'
 import React from 'react'
-import back from '../.../../../../../public/icons/back.png'
+import back from '../.../../../../../public/icons/Back.png'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
