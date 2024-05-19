@@ -3,12 +3,9 @@ import React from 'react'
 
 const page = () => {
   return (
-    <DashboardLayout>
-      <div>
-        <h1>project</h1>
-      </div>
-    </DashboardLayout>
-
+   <DashboardLayout>
+    <h1>main dash</h1>
+   </DashboardLayout>
   )
 }
 

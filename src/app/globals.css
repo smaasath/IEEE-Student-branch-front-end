@@ -1,5 +1,39 @@
 :root {
-
+    --primary: #00629B;
+    --secondary: #4CB9E7;
+    --third: #0E2954;
+    --body-primary: #F8F9FA ;
 }
 
+.bg-primary {
+    background-color: #00629B !important;
+}
+
+.text-primary {
+    color: #00629B !important;
+}
+
+.bg-secondary {
+    background-color: #4CB9E7 !important;
+}
+
+.text-secondary {
+    color: #4CB9E7 !important;
+}
+
+.bg-third {
+    background-color: #0E2954 !important;
+}
+
+.text-third {
+    color: #0E2954 !important;
+}
+
+.body-primary {
+    background-color: #F8F9FA !important;
+}
+
+.body-secondary {
+    background-color: #E9ECEF !important;
+}
 

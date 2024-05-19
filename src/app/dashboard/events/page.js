@@ -2,14 +2,14 @@ import DashboardLayout from '@/components/layouts/dashboardLayout/dashboardLayou
 import React from 'react'
 
 const page = () => {
-  return (
-    <DashboardLayout>
-      <div>
-        <h1>project</h1>
-      </div>
-    </DashboardLayout>
+    return (
+        <DashboardLayout>
+            <div>
+                <h1>events</h1>
+            </div>
+        </DashboardLayout>
 
-  )
+    )
 }
 
 export default page
