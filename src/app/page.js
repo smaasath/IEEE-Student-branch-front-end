@@ -2,10 +2,18 @@
 import CommonButton from "@/components/common/commonButton/commonButton";
 import styles from "./page.module.css";
 import AuthLayout from "@/components/layouts/authLayout/authLayout";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+
 
 export default function Home() {
+  const router = useRouter()
+  function login() {
+    router.push('/dashboard/insights')
+  }
   return (
-    <AuthLayout>
+    <AuthLayout type={'SIGNIN'}>
       <div className='d-flex w-100 justify-content-between align-items-start'>
         <div className='d-flex flex-column '>
           <div>
@@ -20,7 +28,7 @@ export default function Home() {
             <span className='p text-secondary'>No Account ?</span>
           </div>
           <div className=''>
-            <p className='text-cl-primary'>Sign Up</p>
+            <Link href={`/sign-up`} className="nav-link"><p className='text-cl-primary'>Sign Up</p></Link>
           </div>
         </div>
       </div>
@@ -40,10 +48,10 @@ export default function Home() {
       </div>
 
       <div className='mt-3 w-100 d-flex justify-content-end'>
-        <h6 className='text-cl-primary'>Forgot Password?</h6>
+        <Link href={`/forgot-password/email`} className="nav-link"><h6 className='text-cl-primary'>Forgot Password?</h6></Link>
       </div>
       <div className='mt-5 w-100 mb-3'>
-        <CommonButton text={"Sign In"} onClick={() => console.warn("sign")} />
+        <CommonButton text={"Sign In"} onClick={() => login()} />
       </div>
     </AuthLayout>
 

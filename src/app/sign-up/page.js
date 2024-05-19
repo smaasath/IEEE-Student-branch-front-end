@@ -1,3 +1,4 @@
+import AuthLayout from '@/components/layouts/authLayout/authLayout'
 import React from 'react'
 
 const page = () => {
