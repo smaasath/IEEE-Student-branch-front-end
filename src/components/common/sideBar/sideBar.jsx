@@ -1,27 +1,20 @@
-"use client"
 import React from 'react'
 import "./sideBar.css";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import Image from "next/image";
-import dashboardIcon from '../../../../public/icons/dashboard-icon.png'
-import eventicon from '../../../../public/icons/event-icon.png'
-import financeicon from '../../../../public/icons/finance-icon.png'
-import logouticon from '../../../../public/icons/logout-icon.png'
-import projecticon from '../../../../public/icons/project-icon.png'
-import settingsicon from '../../../../public/icons/settings-icon.png'
+import dashboardIcon from '../../../assets/icons/dashboard-icon.png'
+import eventicon from '../../../assets/icons/event-icon.png'
+import financeicon from '../../../assets/icons/finance-icon.png'
+import logouticon from '../../../assets/icons/logout-icon.png'
+import projecticon from '../../../assets/icons/project-icon.png'
+import settingsicon from '../../../assets/icons/settings-icon.png'
+import { Link, useLocation } from "react-router-dom";
 
 const SideBar = () => {
+    const location = useLocation();
+    const { pathname } = location;
 
-    const router = useRouter();
-    const pathname = usePathname();
-    const handleLogout = async (e) => {
-        e.preventDefault();
-        // logout();
-        router.push('/');
-    };
+
     const routes = [
-        { name: "Dashboard", image: dashboardIcon, path: "dashboard/insights" },
+        { name: "Dashboard", image: dashboardIcon, path: "dashboard" },
         { name: "Events", image: eventicon, path: "dashboard/events" },
         { name: "Ex Com", image: dashboardIcon, path: "dashboard/executive-committee" },
         { name: "Project", image: projecticon, path: "dashboard/project" },
@@ -35,7 +28,7 @@ const SideBar = () => {
     return (
         <div className="d-flex flex-column flex-shrink-0 p-3 w-100 side-bar-body z-1 sticky-top mt-2">
             <div className="w-100 align-items-center align-content-center text-center">
-                <Link href="/" className="text-decoration-none">
+                <Link to="/dashboard" className="text-decoration-none">
                     {/* <Image className="side-bar-logo" src="" loading="lazy" /> */}
                 </Link>
             </div>
@@ -46,20 +39,21 @@ const SideBar = () => {
                         <div className="" key={index}>
                             <li className="nav-item">
                                 <Link
-                                    className={`nav-link ${pathname.startsWith(`/${item.path}`) ? "active" : ""
+                                //Navlink add
+                                    className={`nav-link ${pathname == '/dashboard' && item.path == 'dashboard' ? 'active' : (pathname.startsWith(`/${item.path}`) && item.path != 'dashboard' ? "active" : "")
                                         }`}
-                                    href={`/${item.path}`}
+                                    to={`/${item.path}`}
                                 >
                                     <div className="d-flex gap-2 align-items-center">
                                         <div>
-                                            <Image
+                                            <img
                                                 src={item.image}
                                                 className="side-bar-icon"
                                                 loading="lazy"
                                                 alt='side bar icon'
                                             />
                                         </div>
-                                        <div className="d-none d-lg-block item-lable">{item.name}</div>
+                                        <div className="d-none d-lg-block text-white item-lable">{item.name}</div>
                                     </div>
                                 </Link>
                             </li>
@@ -74,20 +68,21 @@ const SideBar = () => {
                         <div className="" key={index}>
                             <li className="nav-item">
                                 <Link
-                                    className={`nav-link ${pathname === `/${item.path}` ? "active" : ""
+                                //NavLink add 
+                                    className={`nav-link ${pathname == '/dashboard' && item.path == 'dashboard' ? 'active' : (pathname.startsWith(`/${item.path}`) && item.path != 'dashboard' ? "active" : "")
                                         }`}
-                                    href={`/${item.path}`}
+                                    to={`/${item.path}`}
                                 >
                                     <div className="d-flex gap-2 align-items-center">
                                         <div>
-                                            <Image
+                                            <img
                                                 src={item.image}
                                                 className="side-bar-icon"
                                                 loading="lazy"
                                                 alt='side bar icon'
                                             />
                                         </div>
-                                        <div className="d-none d-lg-block item-lable">{item.name}</div>
+                                        <div className="d-none text-white d-lg-block item-lable">{item.name}</div>
                                     </div>
                                 </Link>
                             </li>

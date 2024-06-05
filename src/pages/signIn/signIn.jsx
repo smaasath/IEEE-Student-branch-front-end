@@ -1,17 +1,15 @@
-'use client'
-import CommonButton from "@/components/common/commonButton/commonButton";
-import styles from "./page.module.css";
-import AuthLayout from "@/components/layouts/authLayout/authLayout";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link } from "react-router-dom";
+import CommonButton from "../../components/common/commonButton/commonButton";
+import AuthLayout from "../../components/layouts/authLayout/authLayout";
 
 
 
-export default function Home() {
-  const router = useRouter()
-  function login() {
-    router.push('/dashboard/insights')
-  }
+
+export default function SignIN() {
+  // const router = useRouter()
+  // function login() {
+  //   router.push('/dashboard/insights')
+  // }
   return (
     <AuthLayout type={'SIGNIN'}>
       <div className='d-flex w-100 justify-content-between align-items-start'>
