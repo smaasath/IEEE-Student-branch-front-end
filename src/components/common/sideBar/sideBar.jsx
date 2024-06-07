@@ -53,7 +53,7 @@ const SideBar = () => {
                                                 alt='side bar icon'
                                             />
                                         </div>
-                                        <div className="d-none d-lg-block text-white item-lable">{item.name}</div>
+                                        <div className="d-lg-block text-white item-lable-text">{item.name}</div>
                                     </div>
                                 </Link>
                             </li>
@@ -82,7 +82,7 @@ const SideBar = () => {
                                                 alt='side bar icon'
                                             />
                                         </div>
-                                        <div className="d-none text-white d-lg-block item-lable">{item.name}</div>
+                                        <div className="d-lg-block text-white item-lable-text">{item.name}</div>
                                     </div>
                                 </Link>
                             </li>
