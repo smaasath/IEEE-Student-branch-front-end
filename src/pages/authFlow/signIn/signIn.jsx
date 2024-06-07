@@ -1,15 +1,15 @@
-import { Link } from "react-router-dom";
-import CommonButton from "../../components/common/commonButton/commonButton";
-import AuthLayout from "../../components/layouts/authLayout/authLayout";
+import { Link, useNavigate } from "react-router-dom";
+import CommonButton from "../../../components/common/commonButton/commonButton";
+import AuthLayout from "../../../components/layouts/authLayout/authLayout";
 
 
 
 
 export default function SignIN() {
-  // const router = useRouter()
-  // function login() {
-  //   router.push('/dashboard/insights')
-  // }
+  const navigate = useNavigate()
+  function login() {
+    navigate('/dashboard')
+  }
   return (
     <AuthLayout type={'SIGNIN'}>
       <div className='d-flex w-100 justify-content-between align-items-start'>
@@ -26,7 +26,7 @@ export default function SignIN() {
             <span className='p text-secondary'>No Account ?</span>
           </div>
           <div className=''>
-            <Link href={`/sign-up`} className="nav-link"><p className='text-cl-primary'>Sign Up</p></Link>
+            <Link to={`/sign-up`} className="nav-link"><p className='text-cl-primary'>Sign Up</p></Link>
           </div>
         </div>
       </div>
@@ -46,7 +46,7 @@ export default function SignIN() {
       </div>
 
       <div className='mt-3 w-100 d-flex justify-content-end'>
-        <Link href={`/forgot-password/email`} className="nav-link"><h6 className='text-cl-primary'>Forgot Password?</h6></Link>
+        <Link to={`/forgot-password`} className="nav-link"><h6 className='text-cl-primary'>Forgot Password?</h6></Link>
       </div>
       <div className='mt-5 w-100 mb-3'>
         <CommonButton text={"Sign In"} onClick={() => login()} />

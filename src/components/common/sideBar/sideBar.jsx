@@ -29,7 +29,7 @@ const SideBar = () => {
         <div className="d-flex flex-column flex-shrink-0 p-3 w-100 side-bar-body z-1 sticky-top mt-2">
             <div className="w-100 align-items-center align-content-center text-center">
                 <Link to="/dashboard" className="text-decoration-none">
-                    {/* <Image className="side-bar-logo" src="" loading="lazy" /> */}
+                    <img className="side-bar-logo" src="" loading="lazy" />
                 </Link>
             </div>
             <hr className='text-white' />
@@ -39,7 +39,7 @@ const SideBar = () => {
                         <div className="" key={index}>
                             <li className="nav-item">
                                 <Link
-                                //Navlink add
+                        
                                     className={`nav-link ${pathname == '/dashboard' && item.path == 'dashboard' ? 'active' : (pathname.startsWith(`/${item.path}`) && item.path != 'dashboard' ? "active" : "")
                                         }`}
                                     to={`/${item.path}`}
@@ -53,7 +53,7 @@ const SideBar = () => {
                                                 alt='side bar icon'
                                             />
                                         </div>
-                                        <div className="d-none d-lg-block text-white item-lable">{item.name}</div>
+                                        <div className="d-lg-block text-white item-lable-text">{item.name}</div>
                                     </div>
                                 </Link>
                             </li>
@@ -82,7 +82,7 @@ const SideBar = () => {
                                                 alt='side bar icon'
                                             />
                                         </div>
-                                        <div className="d-none text-white d-lg-block item-lable">{item.name}</div>
+                                        <div className="d-lg-block text-white item-lable-text">{item.name}</div>
                                     </div>
                                 </Link>
                             </li>
