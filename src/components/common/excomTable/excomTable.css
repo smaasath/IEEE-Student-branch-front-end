@@ -1,0 +1,26 @@
+.table thead th {
+    color: #fdfeff !important;
+    background-color: #00629B !important;
+}
+
+.table tbody td,
+.table tbody th {
+    color: #00629B !important;
+}
+
+.table tbody tr:hover {
+    background-color: #f2f2f2 !important;
+}
+
+.table-container {
+    height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.table-container thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
