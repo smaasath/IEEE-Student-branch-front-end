@@ -9,6 +9,7 @@ import VerifyCode from './pages/authFlow/verifyCode/verifyCode';
 import ForgotPassword from './pages/authFlow/forgotPassword/forgotPassword';
 import ChangePassword from './pages/authFlow/changePassword/changePassword';
 import NotFound from './pages/notFound/notFound';
+import FinanceLanding from './pages/financeFlow/financeLanding/financeLanding';
 
 
 function App() {
@@ -23,7 +24,9 @@ function App() {
         <Route path='/forgot-password/change-password' element={<ChangePassword/>} />
         <Route path='/dashboard' element={<DashboardLayout />}>
           <Route path='executive-committee' element={<ExcomLandingPage />} />
-          <Route path='' element={<h1>not fouend</h1>}></Route>
+          <Route path='finance'>
+          <Route path='' element={<FinanceLanding />} />
+          </Route>
           <Route path='*' element={<NotFound/>}>
           </Route>
         </Route>
