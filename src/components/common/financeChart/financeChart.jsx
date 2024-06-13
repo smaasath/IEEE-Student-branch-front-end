@@ -87,7 +87,7 @@ const FinanceChart = () => {
         </div>
         <div className='w-100'>
           <div>
-            <ReactApexChart options={state.options} series={state.series} type="area" height={300} />
+            <ReactApexChart options={state.options} series={state.series} type="area" height={240} />
           </div>
 
         </div>
