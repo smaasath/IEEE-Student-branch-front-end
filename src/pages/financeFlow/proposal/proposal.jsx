@@ -77,7 +77,7 @@ const Proposal = () => {
                 </div>
 
                 <div className='mt-4'>
-                    <CommonTable tableHeading={tableHeading} tableData={tableData} primary={true} viewAction={() => { console.warn("kkkkk") }} />
+                    <CommonTable tableHeading={tableHeading} tableData={tableData} primary={true} loading={false} viewAction={() => { console.warn("kkkkk") }} />
                 </div>
 
             </div>
