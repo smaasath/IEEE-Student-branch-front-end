@@ -4,6 +4,8 @@ import financeExpence from '../../../assets/icons/financeExpence.png'
 import editPrimary from '../../../assets/icons/editPrimary.png'
 import viewPrimary from '../../../assets/icons/viewPrimary.png'
 import deleteicon from '../../../assets/icons/delete.png'
+import viewDark from '../../../assets/icons/darkView.png'
+import editDark from '../../../assets/icons/darkEdit.png'
 import CommonStatusContainer from '../commonStatusContainer/commonStatusContainer'
 
 
@@ -16,7 +18,7 @@ const CommonTable = ({ tableHeading, tableData, finance, primary, viewAction, ed
                     <tr>
                         {tableHeading?.map((item) => {
                             return (
-                                <th scope="col" className={`${primary ? "bag-primary" : finance ? "white" : "bg-third"}`}>{item.lable}</th>
+                                <th scope="col" className={`${primary ? "bag-primary text-white" : finance ? "white text-cl-primary" : "bg-third text-white"}`}>{item.lable}</th>
                             )
                         })}
 
@@ -36,10 +38,10 @@ const CommonTable = ({ tableHeading, tableData, finance, primary, viewAction, ed
                                                     let actionFunction = null;
 
                                                     if (action === "VIEW") {
-                                                        iconSrc = viewPrimary;
+                                                        iconSrc = primary || finance ? viewPrimary : viewDark;
                                                         actionFunction = viewAction;
                                                     } else if (action === "EDIT") {
-                                                        iconSrc = editPrimary;
+                                                        iconSrc = primary || finance ? editPrimary : editDark;
                                                         actionFunction = editAction;
                                                     } else if (action === "DELETE") {
                                                         iconSrc = deleteicon;

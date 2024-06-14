@@ -4,9 +4,18 @@ import BankAccountCard from '../../../components/common/bankAccountCard/bankAcco
 import FinanceChart from '../../../components/common/financeChart/financeChart'
 import CommonBalanceCard from '../../../components/common/commonBalanceCard/commonBalanceCard'
 import CommonFinanceTable from '../../../components/common/commonFinanceTable/commonFinanceTable'
+import { useNavigate } from 'react-router-dom'
 
 
 const FinanceLanding = () => {
+
+
+    const navigate = useNavigate()
+    function navigateToProposal() {
+      navigate('proposal')
+    }
+
+
     return (
         <div className='container'>
 
@@ -45,7 +54,7 @@ const FinanceLanding = () => {
                 <div className='text-cl-primary'>Accounts</div>
                 <div className='d-flex justify-content-end gap-4'>
                     <div>
-                    <CommonButton text={"Go to proposal"} />
+                    <CommonButton text={"Go to proposal"} onClick={()=>{navigateToProposal()}} />
                     </div>
                     <div>
                      <CommonButton text={"Add Transaction"} />

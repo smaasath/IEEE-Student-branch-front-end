@@ -94,10 +94,10 @@ const CommonFinanceTable = () => {
           )
         })}
       </div>
-      <div className='d-flex justify-content-end'>
+      <div className='d-flex justify-content-end mt-3'>
         <CommonSearch primary={true} />
       </div>
-      <div className='mt-4 p-3 rounded-4 bg-white common-shadow'>
+      <div className='mt-3 p-3 rounded-4 bg-white common-shadow'>
         <CommonTable tableHeading={tableHeading} tableData={tableData} finance={true} viewAction={() => { console.warn("kkkkk") }} />
       </div>
     </div>
