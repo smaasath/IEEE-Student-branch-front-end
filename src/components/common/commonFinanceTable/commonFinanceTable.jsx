@@ -84,9 +84,9 @@ const CommonFinanceTable = () => {
   return (
     <div>
       <div className='d-flex align-items-center gap-4'>
-        {typeDetail.map((item) => {
+        {typeDetail.map((item,index) => {
           return (
-            <div className='d-flex flex-column gap-1'>
+            <div key={index} className='d-flex flex-column gap-1'>
               <div>
                 <button onClick={() => { setSelectedType(item.value) }} className='border-0 bg-transparent'>{item.lable}</button>
               </div>

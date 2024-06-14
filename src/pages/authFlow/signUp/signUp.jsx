@@ -51,7 +51,7 @@ const SignUp = () => {
       <div className='mt-3 d-flex gap-3 justify-content-between align-items-center '>
         <div className="mb-3 w-50">
           <label for="exampleFormControlInput1" className="form-label text-dark">Academic Year</label>
-          <select class="form-select w-100" aria-label="Large select example">
+          <select className="form-select w-100" aria-label="Large select example">
             <option selected>select year</option>
             <option value="1">One</option>
             <option value="2">Two</option>

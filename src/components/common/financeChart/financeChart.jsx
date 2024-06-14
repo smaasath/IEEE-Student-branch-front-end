@@ -70,8 +70,8 @@ const FinanceChart = () => {
           </div>
           <div className='row align-items-center gap-3 justify-content-center'>
             <div className='col-md-5'>
-              <div class="input-group input-group-sm">
-                <input type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+              <div className="input-group input-group-sm">
+                <input type="date" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
               </div>
             </div>
 
@@ -79,8 +79,8 @@ const FinanceChart = () => {
               to
             </div>
             <div className='col-md-5'>
-              <div class="input-group input-group-sm">
-                <input type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+              <div className="input-group input-group-sm">
+                <input type="date" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
               </div>
             </div>
           </div>

@@ -35,7 +35,7 @@ const CommonPagination = ({ pages, currentPage, setCurrentPage }) => {
 
     return (
         <div>
-            <div className='d-flex align-items-center gap-2'>
+            <div className='d-flex align-items-center justify-content-center flex-wrap gap-2'>
                 <button
                     className='bag-primary text-white border-0 rounded-3 p-2'
                     onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}

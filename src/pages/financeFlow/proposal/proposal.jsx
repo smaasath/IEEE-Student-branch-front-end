@@ -68,7 +68,7 @@ const Proposal = () => {
         <div className='container'>
             <div className='text-cl-primary'>Proposal</div>
             <div className='mt-3 pt-4 p-3 rounded-4 bg-white common-shadow'>
-                <div className='d-flex justify-content-between align-items-center'>
+                <div className='d-flex justify-content-between flex-wrap align-items-center'>
                     <div>
                         <CommonSearch primary={true} />
                     </div>
