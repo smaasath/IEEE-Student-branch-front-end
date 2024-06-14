@@ -2,11 +2,11 @@ import React from 'react'
 import './navBar.css'
 const CommonNavBar = ({ children }) => {
     return (
-        <nav className="navbar m-0 navbar-expand-lg z-0 body-bag-primary main-navbar sticky-top">
+        <div className="navbar m-0 navbar-expand-lg body-bag-primary main-navbar sticky-top fixed-top">
             <div className="container-fluid d-flex align-items-center">
                 {children}
             </div>
-        </nav>
+        </div>
     )
 }
 

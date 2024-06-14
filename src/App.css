@@ -10,6 +10,7 @@
   background-color: #4CB9E7 !important;
 }
 
+
 .text-cl-secondary {
   color: #4CB9E7 !important;
 }
@@ -26,9 +27,9 @@ body{
   color: #0E2954 !important;
 }
 
-.form-control{
+/* .form-control{
   height: 45px;
-}
+} */
 
 .form-control:focus{
   border-color: #00629B !important;
@@ -36,9 +37,9 @@ body{
   transition: border-color 0.3s ease;
 }
 
-.form-select{
+/* .form-select{
   height: 45px;
-}
+} */
 
 .form-select:focus{
   border-color: #00629B !important;
@@ -53,3 +54,60 @@ body{
 .body-bag-secondary {
   background-color: #E9ECEF !important;
 }
+
+.common-shadow{
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+/* Hide scrollbar for Chrome, Safari, and Opera */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE and Edge */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* CSS for the custom scroll bar */
+.custom-scrollbar {
+  overflow-y: scroll;
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+.custom-pagination {
+  background-color: green !important; 
+  color: white !important; 
+  border-color: green !important; 
+}
+
+/* Webkit browsers (Chrome, Safari) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 0px; /* Hide scrollbar */
+}
+
+.custom-scrollbar:hover {
+  scrollbar-width: thin; /* Show scrollbar for Firefox on hover */
+}
+
+/* Webkit browsers (Chrome, Safari) */
+.custom-scrollbar:hover::-webkit-scrollbar {
+  width: 8px; /* Adjust the width as needed */
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-track {
+  background: #e0e0e0; /* Track color */
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: #888; /* Thumb color */
+  border-radius: 10px; /* Optional: make the thumb rounded */
+  border: 2px solid #e0e0e0; /* Match track color for better look */
+}
+
+.table-container{
+  height: 620px;
+}
+
+

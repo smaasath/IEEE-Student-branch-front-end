@@ -1,4 +1,11 @@
-.main-navbar{
+/* navBar.css */
+.main-navbar {
     box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
     height: 8vh;
-}
+    z-index: 100 !important; /* Ensuring a high z-index */
+    position: sticky; /* or fixed, depending on your layout needs */
+    top: 0;
+  }
+  
+
+  
