@@ -48,8 +48,8 @@ const CommonFinanceTable = () => {
       value: "balance"
     },
     {
-      lable: "Status",
-      value: "status"
+      lable: "Amount",
+      value: "amount"
     },
     {
       lable: "",
@@ -64,8 +64,16 @@ const CommonFinanceTable = () => {
       description: "Spotify Subscription",
       type: "INCOME",
       date: "28 Jan, 12.30 AM",
-      balance: "5750",
-      status: "TODO",
+      balance: "5750.00",
+      amount: "2500.00",
+    },
+    {
+      id: "#12548796",
+      description: "Spotify Subscription",
+      type: "EXPENCE",
+      date: "28 Jan, 12.30 AM",
+      balance: "5750.00",
+      amount: "2500.00",
     }
   ]
 
@@ -89,8 +97,8 @@ const CommonFinanceTable = () => {
       <div className='d-flex justify-content-end'>
         <CommonSearch primary={true} />
       </div>
-      <div className='mt-4'>
-        <CommonTable tableHeading={tableHeading} tableData={tableData} finance={true}/>
+      <div className='mt-4 p-3 rounded-4 bg-white common-shadow'>
+        <CommonTable tableHeading={tableHeading} tableData={tableData} finance={true} viewAction={() => { console.warn("kkkkk") }} />
       </div>
     </div>
   )
