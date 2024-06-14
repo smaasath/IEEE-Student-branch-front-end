@@ -3,6 +3,7 @@ import CommonButton from '../../../components/common/commonButton/commonButton'
 import BankAccountCard from '../../../components/common/bankAccountCard/bankAccountCard'
 import FinanceChart from '../../../components/common/financeChart/financeChart'
 import CommonBalanceCard from '../../../components/common/commonBalanceCard/commonBalanceCard'
+import CommonFinanceTable from '../../../components/common/commonFinanceTable/commonFinanceTable'
 
 
 const FinanceLanding = () => {
@@ -38,6 +39,22 @@ const FinanceLanding = () => {
                 <CommonBalanceCard wallet={true} text={"Wallet Balance"} amount={"5,680.00"} />
                 <CommonBalanceCard text={"Income"} amount={"5,680.00"} />
                 <CommonBalanceCard text={"Expense"} amount={"5,680.00"} />
+            </div>
+
+            <div className='mt-5 d-flex justify-content-between align-items-center'>
+                <div className='text-cl-primary'>Accounts</div>
+                <div className='d-flex justify-content-end gap-4'>
+                    <div>
+                        <CommonButton text={"Go to proposal"} />
+                    </div>
+                    <div>
+                        <CommonButton text={"Add Transaction"} />
+                    </div>
+                </div>
+            </div>
+
+            <div className='mt-4'>
+                <CommonFinanceTable />
             </div>
         </div>
     )

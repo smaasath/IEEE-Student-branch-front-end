@@ -27,9 +27,9 @@ body{
   color: #0E2954 !important;
 }
 
-.form-control{
+/* .form-control{
   height: 45px;
-}
+} */
 
 .form-control:focus{
   border-color: #00629B !important;
@@ -37,9 +37,9 @@ body{
   transition: border-color 0.3s ease;
 }
 
-.form-select{
+/* .form-select{
   height: 45px;
-}
+} */
 
 .form-select:focus{
   border-color: #00629B !important;
