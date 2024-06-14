@@ -12,9 +12,9 @@ import CommonStatusContainer from '../commonStatusContainer/commonStatusContaine
 const CommonTable = ({ tableHeading, tableData, finance, primary, viewAction, editAction, deleteAction, loading }) => {
 
     return (
-        <div className='table-responsive'>
+        <div className='table-responsive overflow-y-scroll custom-scrollbar' style={{maxHeight:500}}>
             <table className="table table-hover">
-                <thead>
+                <thead className='sticky-top z-1'>
                     <tr>
                         {tableHeading?.map((item) => {
                             return (
@@ -30,7 +30,7 @@ const CommonTable = ({ tableHeading, tableData, finance, primary, viewAction, ed
 
                             <tr>
                                 <td colspan={tableHeading.length}> 
-                                    <div className="d-flex justify-content-center">
+                                    <div className="d-flex justify-content-center p-5 m-5">
                                         <div className={`spinner-border ${finance || primary ? "text-cl-primary" : "text-third"}`} role="status">
                                         </div>
                                     </div>

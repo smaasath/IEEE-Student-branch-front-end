@@ -26,7 +26,7 @@ const SideBar = () => {
         { name: "Settings", image: settingsicon, path: "dashboard/setting" },
     ]
     return (
-        <div className="d-flex flex-column flex-shrink-0 p-3 w-100 side-bar-body z-1 sticky-top mt-2">
+        <div className="d-flex flex-column flex-shrink-0 p-3 w-100 side-bar-body z-1 sticky-top mt-2" style={{zIndex:1000}}>
             <div className="w-100 align-items-center align-content-center text-center">
                 <Link to="/dashboard" className="text-decoration-none">
                     <img className="side-bar-logo" src="" loading="lazy" />

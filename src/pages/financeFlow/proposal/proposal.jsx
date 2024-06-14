@@ -1,8 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import CommonSearch from '../../../components/common/commonSearch/commonSearch'
 import CommonTable from '../../../components/common/commonTable/commonTable'
+import CommonPagination from '../../../components/common/commonPagination/commonPagination'
+
+
 
 const Proposal = () => {
+
+    const [currentPage, setCurrentPage] = useState(1);
+
     const tableHeading = [
         {
             lable: "",
@@ -55,7 +61,7 @@ const Proposal = () => {
             title: "Fund for Shopping",
             amount: "2500.00",
             status: "RECIEVED"
-        },
+        }
 
     ]
     return (
@@ -76,8 +82,11 @@ const Proposal = () => {
                     </div>
                 </div>
 
-                <div className='mt-4'>
+                <div className='mt-3 p-3 rounded-4 bg-white d-flex flex-column justify-content-between table-container'>
                     <CommonTable tableHeading={tableHeading} tableData={tableData} primary={true} loading={false} viewAction={() => { console.warn("kkkkk") }} />
+                    <div className='mt-4 d-flex justify-content-end'>
+                        <CommonPagination pages={10} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+                    </div>
                 </div>
 
             </div>

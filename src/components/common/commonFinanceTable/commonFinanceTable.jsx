@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import CommonSearch from '../commonSearch/commonSearch';
 import CommonTable from '../commonTable/commonTable';
+import CommonPagination from '../commonPagination/commonPagination';
 
 
 const CommonFinanceTable = () => {
 
   const [selectedType, setSelectedType] = useState();
-
+  const [currentPage, setCurrentPage] = useState(1);
   const typeDetail = [
     {
       lable: "All Transactions",
@@ -97,9 +98,13 @@ const CommonFinanceTable = () => {
       <div className='d-flex justify-content-end mt-3'>
         <CommonSearch primary={true} />
       </div>
-      <div className='mt-3 p-3 rounded-4 bg-white common-shadow'>
+      <div className='mt-3 p-3 rounded-4 bg-white common-shadow d-flex flex-column justify-content-between table-container'>
         <CommonTable tableHeading={tableHeading} tableData={tableData} finance={true} loading={false} viewAction={() => { console.warn("kkkkk") }} />
+        <div className='mt-4 d-flex justify-content-end'>
+          <CommonPagination pages={10} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+        </div>
       </div>
+
     </div>
   )
 }

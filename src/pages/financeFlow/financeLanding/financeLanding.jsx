@@ -50,7 +50,7 @@ const FinanceLanding = () => {
                 <CommonBalanceCard text={"Expense"} amount={"5,680.00"} />
             </div>
 
-            <div className='mt-5 d-flex justify-content-between align-items-center'>
+            <div className='mt-5 d-flex justify-content-between align-items-center gap-4 flex-wrap'>
                 <div className='text-cl-primary'>Accounts</div>
                 <div className='d-flex justify-content-end gap-4'>
                     <div>
