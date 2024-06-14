@@ -45,11 +45,13 @@ const FinanceLanding = () => {
                 <div className='text-cl-primary'>Accounts</div>
                 <div className='d-flex justify-content-end gap-4'>
                     <div>
-                        <CommonButton text={"Go to proposal"} />
+                    <CommonButton text={"Go to proposal"} />
                     </div>
                     <div>
-                        <CommonButton text={"Add Transaction"} />
+                     <CommonButton text={"Add Transaction"} />
                     </div>
+                    
+                   
                 </div>
             </div>
 

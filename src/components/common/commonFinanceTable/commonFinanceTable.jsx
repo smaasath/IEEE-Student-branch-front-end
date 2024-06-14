@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import CommonSearch from '../commonSearch/commonSearch';
-
+import CommonTable from '../commonTable/commonTable';
 
 
 const CommonFinanceTable = () => {
@@ -22,6 +22,53 @@ const CommonFinanceTable = () => {
     },
   ]
 
+  const tableHeading = [
+    {
+      lable: "",
+      value: "STARTIMAGE"
+    },
+    {
+      lable: "ID",
+      value: "id"
+    },
+    {
+      lable: "Description",
+      value: "description"
+    },
+    {
+      lable: "Type",
+      value: "type"
+    },
+    {
+      lable: "Date",
+      value: "date"
+    },
+    {
+      lable: "Balance",
+      value: "balance"
+    },
+    {
+      lable: "Status",
+      value: "status"
+    },
+    {
+      lable: "",
+      value: "ACTION",
+      type: ["EDIT", "VIEW"]
+    },
+  ]
+
+  const tableData = [
+    {
+      id: "#12548796",
+      description: "Spotify Subscription",
+      type: "INCOME",
+      date: "28 Jan, 12.30 AM",
+      balance: "5750",
+      status: "TODO",
+    }
+  ]
+
   useEffect(() => {
     setSelectedType("ALL")
   }, [])
@@ -41,6 +88,9 @@ const CommonFinanceTable = () => {
       </div>
       <div className='d-flex justify-content-end'>
         <CommonSearch primary={true} />
+      </div>
+      <div className='mt-4'>
+        <CommonTable tableHeading={tableHeading} tableData={tableData} finance={true}/>
       </div>
     </div>
   )

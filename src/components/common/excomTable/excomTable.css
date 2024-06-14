@@ -1,4 +1,4 @@
-.table thead th {
+/* .table thead th {
     color: #fdfeff !important;
     background-color: #00629B !important;
 }
@@ -10,9 +10,9 @@
 
 .table tbody tr:hover {
     background-color: #f2f2f2 !important;
-}
+} */
 
-.table-container {
+/* .table-container {
     height: 400px;
     overflow-y: auto;
     overflow-x: hidden;
@@ -23,4 +23,4 @@
     position: sticky;
     top: 0;
     z-index: 1;
-  }
+  } */
