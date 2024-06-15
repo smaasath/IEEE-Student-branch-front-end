@@ -63,7 +63,7 @@ const CommonTable = ({ tableHeading, tableData, finance, primary, viewAction, ed
                                                             }
 
                                                             return (
-                                                                <button key={actionIndex} className='border-0 bg-transparent' onClick={actionFunction}>
+                                                                <button key={actionIndex} className='border-0 bg-transparent' onClick={()=>actionFunction(item.id)}>
                                                                     <img src={iconSrc} style={{ width: 24 }} />
                                                                 </button>
                                                             );
