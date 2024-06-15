@@ -96,7 +96,7 @@ const ReportPage = () => {
 
     return (
         <>
-            <div className='d-flex justify-content-end'><div><CommonButton onClick={() => toPDF()} text={"Download"} /></div></div>
+            <div className='d-flex justify-content-end pe-5'><div><CommonButton onClick={() => toPDF()} text={"Download"} /></div></div>
             <div className='mb-5 p-5' ref={targetRef}>
                 <div className='d-flex justify-content-end'>
                     <div className='row align-items-center gap-3 justify-content-center'>
@@ -117,10 +117,13 @@ const ReportPage = () => {
                     </div>
                 </div>
 
-                <div className='mt-5 d-flex justify-content-between'>
+                <div className='mt-5 d-flex justify-content-between flex-wrap flex-md-row-reverse gap-4'>
+                <div className='d-flex flex-column justify-content-between'>
+                        <img src={logo} style={{ width: 200 }} />
+                    </div>
                     <div className='flex flex-column'>
                         <div>
-                            <h4>Invoice</h4>
+                            <h4>Finance Report</h4>
                         </div>
                         <div className='d-flex mt-2 gap-5 justify-content-between'>
                             <div className='text-black-50'>Invoice Date</div>
@@ -135,9 +138,7 @@ const ReportPage = () => {
                             <div><h6>LKR 12000.00</h6></div>
                         </div>
                     </div>
-                    <div className='d-flex flex-column justify-content-between'>
-                        <img src={logo} style={{ width: 200 }} />
-                    </div>
+                   
                 </div>
 
                 <div className='mt-4'>
