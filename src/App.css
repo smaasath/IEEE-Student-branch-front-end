@@ -116,4 +116,12 @@ body{
 background-color: #E5E7E9 ;
 }
 
+.common-transition{
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.common-transition:hover{
+  transform: scale(1.03);
+}
+
 

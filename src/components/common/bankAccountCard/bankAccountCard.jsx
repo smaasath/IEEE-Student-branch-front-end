@@ -8,7 +8,7 @@ const BankAccountCard = () => {
     return (
         <>
 
-            <div className='bag-primary d-flex flex-column rounded-3 p-3' style={{ width: 310 }}>
+            <div className='bag-primary d-flex flex-column rounded-3 p-3 common-transition' style={{ width: 310 }}>
                 <div className='text-center' style={{ marginTop: -10 }}>
                     <img src={Spiral} className='w-50' />
                 </div>

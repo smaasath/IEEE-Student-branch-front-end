@@ -73,7 +73,7 @@ const Proposal = () => {
             <div className='container'>
                 <div className='text-cl-primary'>Proposal</div>
                 <div className='mt-3 pt-4 p-3 rounded-4 bg-white common-shadow'>
-                    <div className='d-flex justify-content-between flex-wrap align-items-center'>
+                    <div className='d-flex justify-content-between flex-wrap align-items-center p-3'>
                         <div>
                             <CommonSearch primary={true} />
                         </div>
@@ -88,7 +88,7 @@ const Proposal = () => {
                     </div>
 
                     <div className='mt-3 p-3 rounded-4 bg-white d-flex flex-column justify-content-between table-container'>
-                        <CommonTable tableHeading={tableHeading} tableData={tableData} primary={true} loading={false} viewAction={(id) => { handleShowStatusChangeModel() }} />
+                        <CommonTable tableHeading={tableHeading} tableData={tableData} primary={true} loading={false} editAction={(id) => { handleShowStatusChangeModel() }} />
                         <div className='mt-4 d-flex justify-content-end'>
                             <CommonPagination pages={10} currentPage={currentPage} setCurrentPage={setCurrentPage} />
                         </div>
