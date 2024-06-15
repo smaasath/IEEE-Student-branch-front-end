@@ -6,13 +6,19 @@ import CommonBalanceCard from '../../../components/common/commonBalanceCard/comm
 import CommonFinanceTable from '../../../components/common/commonFinanceTable/commonFinanceTable'
 import { useNavigate } from 'react-router-dom'
 import AddTransectionModel from '../../../components/models/addTransectionModel/addTransectionModel'
+import AddBankAccountModel from '../../../components/models/addBankAccountModel/addBankAccountModel'
+
+
 
 const FinanceLanding = () => {
 
     const [transectionModelShow, setTransectionModelShow] = useState(false);
+    const [addBankModelShow, setAddBankModelShow] = useState(false);
 
     const handleCloseTransectionModel = () => { setTransectionModelShow(false); }
     const handleShowTransectionModel = () => { setTransectionModelShow(true); }
+    const handleCloseAddBankModel = () => { setAddBankModelShow(false); }
+    const handleShowAddBankModel = () => { setAddBankModelShow(true); }
     const navigate = useNavigate()
     function navigateToProposal() {
         navigate('proposal')
@@ -30,7 +36,7 @@ const FinanceLanding = () => {
                             <CommonButton text={"Report"} />
                         </div>
                         <div>
-                            <CommonButton text={"Add Account"} />
+                            <CommonButton onClick={handleShowAddBankModel} text={"Add Account"} />
                         </div>
                     </div>
 
@@ -73,7 +79,8 @@ const FinanceLanding = () => {
                 </div>
             </div>
 
-            <AddTransectionModel show={true} onHide={handleCloseTransectionModel} />
+            <AddTransectionModel show={transectionModelShow} onHide={handleCloseTransectionModel} setTransectionModelShow={setTransectionModelShow} />
+            <AddBankAccountModel show={addBankModelShow} onHide={handleCloseAddBankModel} />
         </>
     )
 }
