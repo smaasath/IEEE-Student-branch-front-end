@@ -11,6 +11,7 @@ import ChangePassword from './pages/authFlow/changePassword/changePassword';
 import NotFound from './pages/notFound/notFound';
 import FinanceLanding from './pages/financeFlow/financeLanding/financeLanding';
 import Proposal from './pages/financeFlow/proposal/proposal';
+import ReportPage from './pages/financeFlow/reportPage/reportPage';
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <Route path='finance'>
             <Route path='' element={<FinanceLanding />} />
             <Route path='proposal' element={<Proposal />} />
+            <Route path='report' element={<ReportPage />} />
           </Route>
           <Route path='*' element={<NotFound />}>
           </Route>

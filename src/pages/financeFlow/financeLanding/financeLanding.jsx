@@ -33,7 +33,7 @@ const FinanceLanding = () => {
                     <div className='text-cl-primary'>Accounts</div>
                     <div className='d-flex gap-3 flex-row'>
                         <div>
-                            <CommonButton text={"Report"} />
+                            <CommonButton text={"Report"} onClick={()=>{navigate('report')}} />
                         </div>
                         <div>
                             <CommonButton onClick={handleShowAddBankModel} text={"Add Account"} />
