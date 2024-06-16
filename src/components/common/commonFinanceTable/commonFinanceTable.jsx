@@ -2,12 +2,42 @@ import React, { useEffect, useState } from 'react'
 import CommonSearch from '../commonSearch/commonSearch';
 import CommonTable from '../commonTable/commonTable';
 import CommonPagination from '../commonPagination/commonPagination';
+import AddTransectionModel from '../../models/addTransectionModel/addTransectionModel';
 
 
 const CommonFinanceTable = () => {
 
   const [selectedType, setSelectedType] = useState();
   const [currentPage, setCurrentPage] = useState(1);
+  const [transectionModelShow, setTransectionModelShow] = useState(false);
+  const [disable, setDisable] = useState(false);
+  const [editable, setEditable] = useState(false);
+  const [id, setId] = useState(null);
+
+  const handleCloseTransectionModel = () => {
+    setTransectionModelShow(false);
+    setDisable(false)
+    setEditable(false)
+    setId(null)
+
+  }
+  const handleShowTransectionModel = () => { setTransectionModelShow(true); }
+
+  function viewTransection(id) {
+    setId(id)
+    setDisable(true)
+    setEditable(false)
+    handleShowTransectionModel()
+  }
+
+  function editTransection(id) {
+    setId(id)
+    setDisable(false)
+    setEditable(true)
+    handleShowTransectionModel()
+  }
+
+
   const typeDetail = [
     {
       lable: "All Transactions",
@@ -82,30 +112,33 @@ const CommonFinanceTable = () => {
     setSelectedType("ALL")
   }, [])
   return (
-    <div>
-      <div className='d-flex align-items-center gap-4'>
-        {typeDetail.map((item,index) => {
-          return (
-            <div key={index} className='d-flex flex-column gap-1'>
-              <div>
-                <button onClick={() => { setSelectedType(item.value) }} className='border-0 bg-transparent'>{item.lable}</button>
+    <>
+      <div>
+        <div className='d-flex align-items-center gap-4'>
+          {typeDetail.map((item, index) => {
+            return (
+              <div key={index} className='d-flex flex-column gap-1'>
+                <div>
+                  <button onClick={() => { setSelectedType(item.value) }} className='border-0 bg-transparent'>{item.lable}</button>
+                </div>
+                {item.value == selectedType ? <div className='bg-third' style={{ height: 2 }}></div> : null}
               </div>
-              {item.value == selectedType ? <div className='bg-third' style={{ height: 2 }}></div> : null}
-            </div>
-          )
-        })}
-      </div>
-      <div className='d-flex justify-content-end mt-3'>
-        <CommonSearch primary={true} />
-      </div>
-      <div className='mt-3 p-3 rounded-4 bg-white common-shadow d-flex flex-column justify-content-between table-container'>
-        <CommonTable tableHeading={tableHeading} tableData={tableData} finance={true} loading={false} viewAction={() => { console.warn("kkkkk") }} />
-        <div className='mt-4 d-flex justify-content-end'>
-          <CommonPagination pages={10} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+            )
+          })}
         </div>
-      </div>
+        <div className='d-flex justify-content-end mt-3'>
+          <CommonSearch primary={true} />
+        </div>
+        <div className='mt-3 p-3 rounded-4 bg-white common-shadow d-flex flex-column justify-content-between table-container'>
+          <CommonTable tableHeading={tableHeading} tableData={tableData} finance={true} loading={false} viewAction={(id) => { viewTransection(id) }} editAction={(id) => { editTransection(id) }} />
+          <div className='mt-4 d-flex justify-content-end'>
+            <CommonPagination pages={10} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+          </div>
+        </div>
 
-    </div>
+      </div>
+      <AddTransectionModel disabled={disable} editable={editable} id={id} show={transectionModelShow} onHide={handleCloseTransectionModel} setTransectionModelShow={setTransectionModelShow} />
+    </>
   )
 }
 

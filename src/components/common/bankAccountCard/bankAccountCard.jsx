@@ -4,7 +4,9 @@ import Spiral from '../../../assets/images/Spiral.png'
 import Spiral2 from '../../../assets/images/Spiral2.png'
 import Edit from '../../../assets/icons/editWhite.png'
 import View from '../../../assets/icons/viewWhite.png'
-const BankAccountCard = () => {
+
+const BankAccountCard = ({ editAction, ViewAction }) => {
+
     return (
         <>
 
@@ -24,13 +26,13 @@ const BankAccountCard = () => {
                     </div>
                     <div className='d-flex gap-2'>
                         <div>
-                            <button className='border-0 bg-transparent'>
+                            <button onClick={editAction} className='border-0 bg-transparent'>
                                 <img style={{ width: 21, height: 17 }} src={Edit} />
                             </button>
 
                         </div>
                         <div>
-                            <button className='border-0 bg-transparent'>
+                            <button onClick={ViewAction} className='border-0 bg-transparent'>
                                 <img style={{ width: 21, height: 17 }} src={View} />
                             </button>
                         </div>

@@ -14,10 +14,32 @@ const FinanceLanding = () => {
 
     const [transectionModelShow, setTransectionModelShow] = useState(false);
     const [addBankModelShow, setAddBankModelShow] = useState(false);
+    const [disable, setDisable] = useState(false);
+    const [editable, setEditable] = useState(false);
+    const [id, setId] = useState(null);
 
     const handleCloseTransectionModel = () => { setTransectionModelShow(false); }
     const handleShowTransectionModel = () => { setTransectionModelShow(true); }
-    const handleCloseAddBankModel = () => { setAddBankModelShow(false); }
+    const handleCloseAddBankModel = () => {
+        setAddBankModelShow(false);
+        setDisable(false)
+        setEditable(false)
+        setId(null)
+    }
+
+    function editAccount() {
+        setDisable(false)
+        setId("1")
+        setEditable(true)
+        handleShowAddBankModel()
+    }
+
+    function viewAccount() {
+        setDisable(true)
+        setId(null)
+        setEditable(false)
+        handleShowAddBankModel()
+    }
     const handleShowAddBankModel = () => { setAddBankModelShow(true); }
     const navigate = useNavigate()
     function navigateToProposal() {
@@ -33,7 +55,7 @@ const FinanceLanding = () => {
                     <div className='text-cl-primary'>Accounts</div>
                     <div className='d-flex gap-3 flex-row'>
                         <div>
-                            <CommonButton text={"Report"} onClick={()=>{navigate('report')}} />
+                            <CommonButton text={"Report"} onClick={() => { navigate('report') }} />
                         </div>
                         <div>
                             <CommonButton onClick={handleShowAddBankModel} text={"Add Account"} />
@@ -44,7 +66,7 @@ const FinanceLanding = () => {
                 </div>
                 <div className='d-flex flex-wrap mt-3 gap-4'>
                     <div className='pb-3 d-flex flex-column align-items-center gap-3 overflow-scroll hide-scrollbar' style={{ maxHeight: 410 }}>
-                        <BankAccountCard />
+                        <BankAccountCard ViewAction={viewAccount} editAction={editAccount} />
                         <BankAccountCard />
 
 
@@ -80,7 +102,7 @@ const FinanceLanding = () => {
             </div>
 
             <AddTransectionModel show={transectionModelShow} onHide={handleCloseTransectionModel} setTransectionModelShow={setTransectionModelShow} />
-            <AddBankAccountModel show={addBankModelShow} onHide={handleCloseAddBankModel} />
+            <AddBankAccountModel show={addBankModelShow} onHide={handleCloseAddBankModel} disabled={disable} editable={editable} id={id} />
         </>
     )
 }
