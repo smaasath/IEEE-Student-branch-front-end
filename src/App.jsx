@@ -12,6 +12,8 @@ import NotFound from './pages/notFound/notFound';
 import FinanceLanding from './pages/financeFlow/financeLanding/financeLanding';
 import Proposal from './pages/financeFlow/proposal/proposal';
 import ReportPage from './pages/financeFlow/reportPage/reportPage';
+import ProjectLandingPage from './pages/projectFlow/projectLandingPage/projectLandingPage';
+import TimeLinePage from './pages/projectFlow/timeLinePage/timeLinePage';
 
 
 function App() {
@@ -26,6 +28,10 @@ function App() {
         <Route path='/forgot-password/change-password' element={<ChangePassword />} />
         <Route path='/dashboard' element={<DashboardLayout />}>
           <Route path='executive-committee' element={<ExcomLandingPage />} />
+          <Route path='project'>
+            <Route path='' element={<ProjectLandingPage />} />
+            <Route path='time-line' element={<TimeLinePage />} />
+          </Route>
           <Route path='finance'>
             <Route path='' element={<FinanceLanding />} />
             <Route path='proposal' element={<Proposal />} />

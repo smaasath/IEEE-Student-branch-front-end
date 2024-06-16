@@ -134,6 +134,7 @@ const CommonFinanceTable = () => {
           <div className='mt-4 d-flex justify-content-end'>
             <CommonPagination pages={10} currentPage={currentPage} setCurrentPage={setCurrentPage} />
           </div>
+          
         </div>
 
       </div>
