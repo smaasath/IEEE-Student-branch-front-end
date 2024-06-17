@@ -6,7 +6,7 @@ import myprofile from '../../../assets/images/testUser.png'
 
 const CommonNoteContainer = () => {
     return (
-        <div className='bg-white d-flex flex-column common-shadow rounded-3 p-3' style={{ width: 300 }}>
+        <div className='bg-white w-100 d-flex flex-column common-shadow rounded-3 p-3' style={{ width: 300 }}>
             <div className='d-flex justify-content-between align-items-center'>
                 <div className='d-flex gap-3'>
                     <div className='d-flex justify-content-center'>
@@ -23,7 +23,7 @@ const CommonNoteContainer = () => {
                     <img src={deleted} width={25} />
                 </button>
             </div>
-            <div className='mt-3'>
+            <div className='mt-2'>
                 <p style={{ color: "#4F4F4F" }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut id dui mi. Fusce varius bibendum ante, non lacinia. Fall usasc ce variu slorem ipsum dolor sit amet</p>
             </div>
             <div className=' d-flex justify-content-end align-items-center gap-2'>

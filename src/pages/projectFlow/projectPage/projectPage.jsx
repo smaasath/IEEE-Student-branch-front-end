@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import CommonSearch from '../../../components/common/commonSearch/commonSearch';
 import CommonDropAndDrag from '../../../components/common/commonDropAndDrag/commonDropAndDrag';
 import add from '../../../assets/icons/Add.png';
+import send from '../../../assets/icons/Sent.png';
 import CommonNoteContainer from '../../../components/common/commonNoteContainer/commonNoteContainer';
 import CommonMemberContainer from '../../../components/common/commonMemberContainer/commonMemberContainer';
 
@@ -86,23 +87,28 @@ const ProjectPage = () => {
                             <div>
                                 <h6 className='text-third fw-bold'>Notes</h6>
                             </div>
-                            <div>
-                                <button className='bg-transparent border-0'>
-                                    <img src={add} width={30} />
-                                </button>
-                            </div>
                         </div>
 
-                        <div className='mt-3 d-flex'>
+                        <div className='mt-3 d-flex justify-content-end'>
                             <div>
                                 <CommonSearch primary={false} />
                             </div>
                         </div>
 
-                        <div className='mt-4 d-flex justify-content-between align-items-center gap-4 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar pb-3 ps-2 pe-2 pt-1' style={{maxHeight:800}}>
+                        <div className='mt-4 d-flex justify-content-between align-items-center gap-4 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar pb-3 ps-2 pe-2 pt-1' style={{ maxHeight: 800 }}>
                             <CommonNoteContainer />
                             <CommonNoteContainer />
                             <CommonNoteContainer />
+                        </div>
+                        <div className='mt-3'>
+                            <div className='d-flex justify-content-between align-items-center gap-3'>
+                                <div class="form-group w-100">
+                                    <textarea class="form-control" placeholder='Add note here' id="exampleFormControlTextarea1"></textarea>
+                                </div>
+                                <button className='bg-transparent border-0'>
+                                    <img src={send} width={30} />
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -123,7 +129,7 @@ const ProjectPage = () => {
                             <CommonSearch primary={false} />
                         </div>
 
-                        <div className='mt-4 d-flex justify-content-between align-items-center gap-1 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar' style={{maxHeight:500}}>
+                        <div className='mt-4 d-flex justify-content-between align-items-center gap-1 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar' style={{ maxHeight: 500 }}>
                             <CommonMemberContainer />
                             <CommonMemberContainer />
                             <CommonMemberContainer />
