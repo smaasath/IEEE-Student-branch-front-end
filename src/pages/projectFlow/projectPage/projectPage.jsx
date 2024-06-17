@@ -5,6 +5,10 @@ import CommonPieChart from '../../../components/common/commonPieChart/commonPieC
 import CommonStatusCountCard from '../../../components/common/commonStatusCountCard/commonStatusCountCard';
 import CommonButton from '../../../components/common/commonButton/commonButton';
 import { useNavigate } from 'react-router-dom'
+import CommonSearch from '../../../components/common/commonSearch/commonSearch';
+import CommonDropAndDrag from '../../../components/common/commonDropAndDrag/commonDropAndDrag';
+
+
 
 const ProjectPage = () => {
     const params = useParams();
@@ -47,9 +51,30 @@ const ProjectPage = () => {
                 </div>
             </div>
 
-            <div className='d-flex mt-5 justify-content-between align-items-center'>
+            <div className='d-flex mt-5 justify-content-between align-items-center flex-wrap gap-4'>
                 <div className='text-cl-primary mt-4'>Board</div>
-                <div className=''><CommonButton onClick={()=>{navigateToFinance()}} text={"Finance"} /></div>
+                <div className='d-flex justify-content-end gap-4 align-items-center flex-wrap'>
+                    <div className=''><CommonButton onClick={() => { }} text={"PR Plan"} /></div>
+                    <div className=''><CommonButton onClick={() => { navigateToFinance() }} text={"Finance"} /></div>
+                    <div className=''><CommonButton onClick={() => { }} text={"Events"} /></div>
+                </div>
+            </div>
+
+            <div className='d-flex flex-column bg-white common-shadow rounded-3 p-3 mt-4'>
+                <div className='d-flex justify-content-between align-items-center w-100'>
+                    <div>
+                        <CommonSearch />
+                    </div>
+                    <div className="">
+                        <select className="form-select w-100" aria-label="Large select example">
+                            <option selected>Assignee</option>
+                            <option value="1">Me</option>
+                        </select>
+                    </div>
+                </div>
+                <div className='mt-4'>
+                    <CommonDropAndDrag />
+                </div>
             </div>
 
         </div>
