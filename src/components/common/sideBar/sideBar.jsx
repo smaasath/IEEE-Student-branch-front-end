@@ -6,6 +6,7 @@ import financeicon from '../../../assets/icons/finance-icon.png'
 import logouticon from '../../../assets/icons/logout-icon.png'
 import projecticon from '../../../assets/icons/project-icon.png'
 import settingsicon from '../../../assets/icons/settings-icon.png'
+import serviceicon from '../../../assets/icons/Service.png'
 import { Link, useLocation } from "react-router-dom";
 
 const SideBar = () => {
@@ -19,6 +20,7 @@ const SideBar = () => {
         { name: "Ex Com", image: dashboardIcon, path: "dashboard/executive-committee" },
         { name: "Project", image: projecticon, path: "dashboard/project" },
         { name: "Finance", image: financeicon, path: "dashboard/finance" },
+        { name: "Service", image: serviceicon, path: "dashboard/service" },
 
     ];
 
