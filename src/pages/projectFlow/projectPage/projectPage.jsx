@@ -3,10 +3,15 @@ import { useParams } from 'react-router-dom';
 import projectDefault from '../../../assets/images/projectDefault.png'
 import CommonPieChart from '../../../components/common/commonPieChart/commonPieChart';
 import CommonStatusCountCard from '../../../components/common/commonStatusCountCard/commonStatusCountCard';
-
+import CommonButton from '../../../components/common/commonButton/commonButton';
+import { useNavigate } from 'react-router-dom'
 
 const ProjectPage = () => {
     const params = useParams();
+    const navigate = useNavigate()
+    function navigateToFinance() {
+        navigate('finance');
+    }
     return (
         <div className='p-3'>
             <div className='bg-white rounded-3 common-shadow p-3 row align-items-center'>
@@ -41,6 +46,12 @@ const ProjectPage = () => {
                     </div>
                 </div>
             </div>
+
+            <div className='d-flex mt-5 justify-content-between align-items-center'>
+                <div className='text-cl-primary mt-4'>Board</div>
+                <div className=''><CommonButton onClick={()=>{navigateToFinance()}} text={"Finance"} /></div>
+            </div>
+
         </div>
     )
 }
