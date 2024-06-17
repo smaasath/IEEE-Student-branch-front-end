@@ -16,6 +16,8 @@ import ProjectLandingPage from './pages/projectFlow/projectLandingPage/projectLa
 import TimeLinePage from './pages/projectFlow/timeLinePage/timeLinePage';
 import ProjectPage from './pages/projectFlow/projectPage/projectPage';
 import ProjectFinanceLanding from './pages/projectFlow/finance/projectFinanceLanding/projectFinanceLanding';
+import ServiceLanding from './pages/serviceFlow/serviveLandingPage/serviveLandingPage';
+import Volunteering from './pages/serviceFlow/VolunteeringPage/VolunteeringPage';
 
 
 function App() {
@@ -42,6 +44,10 @@ function App() {
             <Route path='' element={<FinanceLanding />} />
             <Route path='proposal' element={<Proposal />} />
             <Route path='report' element={<ReportPage />} />
+          </Route>
+          <Route path='service'>
+            <Route path='' element={<ServiceLanding/>} />
+            <Route path='volunteering' element={<Volunteering />} />
           </Route>
           <Route path='*' element={<NotFound />}>
           </Route>
