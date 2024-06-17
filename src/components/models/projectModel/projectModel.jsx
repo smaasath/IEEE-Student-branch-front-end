@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react'
 import Modal from 'react-bootstrap/Modal';
 import CommonButton from '../../common/commonButton/commonButton';
 
-const AddBankAccountModel = ({ onHide, show, disabled, editable, id }) => {
+const ProjectModel = ({ onHide, show, disabled, editable, id }) => {
     return (
         <>
             <Modal
@@ -14,7 +13,7 @@ const AddBankAccountModel = ({ onHide, show, disabled, editable, id }) => {
             >
                 <Modal.Header closeButton>
                     <Modal.Title className='text-cl-primary' id="contained-modal-title-vcenter">
-                        {editable ? "Edit" : disabled ? "View" : "Add"} Account
+                        {editable ? "Edit" : disabled ? "View" : "Add"} Project
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -22,27 +21,26 @@ const AddBankAccountModel = ({ onHide, show, disabled, editable, id }) => {
                         <div className="mt-3">
                             <label for="exampleFormControlInput1" className="form-label text-dark">Bank</label>
                             <select className="form-select w-100" aria-label="Large select example" disabled={disabled}>
-                                <option selected>Select bank</option>
-                                <option value="1">BOC</option>
-                                <option value="2">Sampath Bank</option>
+                                <option selected>Select Entity</option>
+                                <option value="1">CS Chapter</option>
                             </select>
                         </div>
                         <div className='mt-3'>
                             <div className="">
-                                <label for="exampleFormControlInput1" className="form-label text-dark">Branch</label>
-                                <input type="text" className="form-control" id="exampleFormControlInput1" placeholder="branch" disabled={disabled} />
+                                <label for="exampleFormControlInput1" className="form-label text-dark">Project Title</label>
+                                <input type="text" className="form-control" id="exampleFormControlInput1" placeholder="project title" disabled={disabled} />
                             </div>
                         </div>
                         <div className='mt-3'>
                             <div className="">
-                                <label for="exampleFormControlInput1" className="form-label text-dark">Account Number</label>
-                                <input type="text" className="form-control" id="exampleFormControlInput1" placeholder="account number" disabled={disabled} />
+                                <label for="exampleFormControlInput1" className="form-label text-dark">Start Date</label>
+                                <input type="date" className="form-control" id="exampleFormControlInput1" placeholder="account number" disabled={disabled} />
                             </div>
                         </div>
                         <div className='mt-3'>
                             <div className="">
-                                <label for="exampleFormControlInput1" className="form-label text-dark">Amount</label>
-                                <input type="text" className="form-control" id="exampleFormControlInput1" placeholder="amount" disabled={disabled} />
+                                <label for="exampleFormControlInput1" className="form-label text-dark">End date</label>
+                                <input type="date" className="form-control" id="exampleFormControlInput1" placeholder="amount" disabled={disabled} />
                             </div>
                         </div>
                         <div className='mt-3'>
@@ -72,4 +70,4 @@ const AddBankAccountModel = ({ onHide, show, disabled, editable, id }) => {
     )
 }
 
-export default AddBankAccountModel
+export default ProjectModel
