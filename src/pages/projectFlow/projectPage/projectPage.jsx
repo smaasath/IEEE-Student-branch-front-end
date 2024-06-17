@@ -99,7 +99,7 @@ const ProjectPage = () => {
                             </div>
                         </div>
 
-                        <div className='mt-4 d-flex justify-content-between align-items-center gap-4 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar' style={{maxHeight:700}}>
+                        <div className='mt-4 d-flex justify-content-between align-items-center gap-4 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar pb-3 ps-2 pe-2 pt-1' style={{maxHeight:800}}>
                             <CommonNoteContainer />
                             <CommonNoteContainer />
                             <CommonNoteContainer />
