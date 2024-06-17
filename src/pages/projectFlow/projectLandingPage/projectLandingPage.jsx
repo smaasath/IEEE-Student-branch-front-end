@@ -24,18 +24,16 @@ const ProjectLandingPage = () => {
         setId(null)
     }
 
-    function editProject() {
+    function editProject(id) {
         setDisable(false)
-        setId("1")
+        setId(id)
         setEditable(true)
         handleShowProjectModel()
     }
 
-    function viewProject() {
-        setDisable(true)
-        setId(null)
-        setEditable(false)
-        handleShowProjectModel()
+    function navigateToProject(id) {
+        const encodedId = encodeURIComponent(id);
+        navigate(encodedId);
     }
     const handleShowProjectModel = () => { setProjectModelShow(true); }
 
@@ -70,7 +68,7 @@ const ProjectLandingPage = () => {
 
     const tableData = [
         {
-            id: "#12548796",
+            id: "12548796",
             project_name: "IEEE OpenDay 2024",
             ou_name: "CS Chapter",
             start_date: "2024/08/13",
@@ -78,7 +76,7 @@ const ProjectLandingPage = () => {
             status: "TODO",
         },
         {
-            id: "#12548796",
+            id: "12548796",
             project_name: "IEEE OpenDay 2024",
             ou_name: "CS Chapter",
             start_date: "2024/08/13",
@@ -140,7 +138,7 @@ const ProjectLandingPage = () => {
                     </div>
 
                     <div className='mt-4 table-container'>
-                        <CommonTable tableHeading={tableHeading} primary={true} tableData={tableData} loading={false} viewAction={(id) => { viewProject(id) }} editAction={(id) => { editProject(id) }} />
+                        <CommonTable tableHeading={tableHeading} primary={true} tableData={tableData} loading={false} viewAction={(id) => { navigateToProject(id) }} editAction={(id) => { editProject(id) }} />
                     </div>
                     <div className='mt-4 d-flex justify-content-end'>
                         <CommonPagination pages={10} currentPage={currentPage} setCurrentPage={setCurrentPage} />

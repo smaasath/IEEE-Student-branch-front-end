@@ -14,6 +14,7 @@ import Proposal from './pages/financeFlow/proposal/proposal';
 import ReportPage from './pages/financeFlow/reportPage/reportPage';
 import ProjectLandingPage from './pages/projectFlow/projectLandingPage/projectLandingPage';
 import TimeLinePage from './pages/projectFlow/timeLinePage/timeLinePage';
+import ProjectPage from './pages/projectFlow/projectPage/projectPage';
 
 
 function App() {
@@ -31,6 +32,8 @@ function App() {
           <Route path='project'>
             <Route path='' element={<ProjectLandingPage />} />
             <Route path='time-line' element={<TimeLinePage />} />
+            <Route path=':id' element={<ProjectPage />} >
+            </Route>
           </Route>
           <Route path='finance'>
             <Route path='' element={<FinanceLanding />} />
