@@ -4,11 +4,13 @@ import Spiral from '../../../assets/images/Spiral.png'
 import Spiral2 from '../../../assets/images/Spiral2.png'
 import Edit from '../../../assets/icons/editWhite.png'
 import View from '../../../assets/icons/viewWhite.png'
-const BankAccountCard = () => {
+
+const BankAccountCard = ({ editAction, ViewAction }) => {
+
     return (
         <>
 
-            <div className='bag-primary d-flex flex-column rounded-3 p-3' style={{ width: 310 }}>
+            <div className='bag-primary d-flex flex-column rounded-3 p-3 common-transition' style={{ width: 310 }}>
                 <div className='text-center' style={{ marginTop: -10 }}>
                     <img src={Spiral} className='w-50' />
                 </div>
@@ -24,13 +26,13 @@ const BankAccountCard = () => {
                     </div>
                     <div className='d-flex gap-2'>
                         <div>
-                            <button className='border-0 bg-transparent'>
+                            <button onClick={editAction} className='border-0 bg-transparent'>
                                 <img style={{ width: 21, height: 17 }} src={Edit} />
                             </button>
 
                         </div>
                         <div>
-                            <button className='border-0 bg-transparent'>
+                            <button onClick={ViewAction} className='border-0 bg-transparent'>
                                 <img style={{ width: 21, height: 17 }} src={View} />
                             </button>
                         </div>

@@ -109,5 +109,19 @@ body{
 .table-container{
   height: 620px;
 }
+.common-serach-model{
+  background-color: #F8F9F9 ;
+  }
+.common-serach-model:hover{
+background-color: #E5E7E9 ;
+}
+
+.common-transition{
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.common-transition:hover{
+  transform: scale(1.03);
+}
 
 

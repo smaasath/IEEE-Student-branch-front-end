@@ -9,14 +9,14 @@ import editDark from '../../../assets/icons/darkEdit.png'
 import CommonStatusContainer from '../commonStatusContainer/commonStatusContainer'
 
 
-const CommonTable = ({ tableHeading, tableData, finance, primary, viewAction, editAction, deleteAction, loading }) => {
+const CommonTable = ({ tableHeading, tableData, finance, primary, viewAction, editAction, deleteAction, loading, report }) => {
 
     return (
-        <div className='table-responsive overflow-y-scroll custom-scrollbar' style={{maxHeight:500}}>
+        <div className='table-responsive overflow-y-scroll custom-scrollbar' style={{ maxHeight: report ? null : 500 }}>
             <table className="table table-hover">
                 <thead className='sticky-top z-1'>
                     <tr>
-                        {tableHeading?.map((item,index) => {
+                        {tableHeading?.map((item, index) => {
                             return (
                                 <th key={index} scope="col" className={`${primary ? "bag-primary text-white" : finance ? "white text-cl-primary" : "bg-third text-white"}`}>{item.lable}</th>
                             )
@@ -29,7 +29,7 @@ const CommonTable = ({ tableHeading, tableData, finance, primary, viewAction, ed
                         loading ? (
 
                             <tr>
-                                <td colspan={tableHeading.length}> 
+                                <td colspan={tableHeading.length}>
                                     <div className="d-flex justify-content-center p-5 m-5">
                                         <div className={`spinner-border ${finance || primary ? "text-cl-primary" : "text-third"}`} role="status">
                                         </div>
@@ -63,7 +63,7 @@ const CommonTable = ({ tableHeading, tableData, finance, primary, viewAction, ed
                                                             }
 
                                                             return (
-                                                                <button key={actionIndex} className='border-0 bg-transparent' onClick={actionFunction}>
+                                                                <button key={actionIndex} className='border-0 bg-transparent' onClick={() => actionFunction(item.id)}>
                                                                     <img src={iconSrc} style={{ width: 24 }} />
                                                                 </button>
                                                             );
@@ -80,6 +80,33 @@ const CommonTable = ({ tableHeading, tableData, finance, primary, viewAction, ed
                                                                 style={{ width: 24 }}
                                                                 alt={item.type === "INCOME" ? "Income" : "Expense"}
                                                             />
+                                                        </td>
+                                                    );
+                                                } else if (head.value === "DEBIT") {
+                                                    return (
+                                                        <td key={headIndex}>
+                                                            {item.type === "DEBIT" ? (
+                                                                <div style={{ color: "#FE5C73" }}>-{item["amount"]}</div>
+                                                            ) : (
+                                                                null
+                                                            )}
+                                                        </td>
+                                                    );
+                                                } else if (head.value === "CREDIT") {
+                                                    return (
+                                                        <td key={headIndex}>
+                                                            {item.type === "CREDIT" ? (
+                                                                <div style={{ color: "#16DBAA" }}>+{item["amount"]}</div>
+                                                            ) : (
+                                                                null
+                                                            )}
+                                                        </td>
+                                                    );
+                                                } else if (head.value === "TRANSECTION") {
+                                                    return (
+                                                        <td key={headIndex}>
+                                                            <h5>{item["title"]}</h5>
+                                                            <p>{item["description"]}</p>
                                                         </td>
                                                     );
                                                 } else if (head.value === "amount") {

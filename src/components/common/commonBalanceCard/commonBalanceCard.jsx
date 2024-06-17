@@ -5,7 +5,7 @@ import expence from '../../../assets/icons/expence.png'
 const CommonBalanceCard = (props) => {
     return (
         <div
-            className={`common-shadow rounded-4 d-flex justify-content-between ${props.wallet ? 'bg-third' : 'bg-white'}`}
+            className={`common-shadow rounded-4 d-flex justify-content-between common-transition ${props.wallet ? 'bg-third' : 'bg-white'}`}
             style={{ width: 330 }}
         >
             <div className='p-3'>

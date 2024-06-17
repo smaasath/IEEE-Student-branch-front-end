@@ -11,11 +11,13 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
+    "gantt-task-react": "^0.3.9",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
     "react-bootstrap": "^2.10.2",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.23.1"
+    "react-router-dom": "^6.23.1",
+    "react-to-pdf": "^1.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
