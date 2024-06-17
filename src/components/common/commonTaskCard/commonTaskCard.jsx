@@ -2,12 +2,14 @@ import React, { useState } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import testUser from '../../../assets/images/testUser.png'
 import deadline from '../../../assets/icons/deadline.png'
-const CommonTaskCard = ({ task }) => {
-    const [dropdownOpen, setDropdownOpen] = useState(false);
+import enter from '../../../assets/icons/Enter.png'
+import CommonPriorityContainer from '../commonPriorityContainer/commonPriorityContainer';
 
-    const toggleDropdown = () => {
-        setDropdownOpen(!dropdownOpen);
-    };
+
+
+
+const CommonTaskCard = ({ task }) => {
+
 
 
     return (
@@ -25,13 +27,11 @@ const CommonTaskCard = ({ task }) => {
                 >
                     <div className='d-flex justify-content-between align-items-center'>
                         <div className='d-flex align-items-center gap-2'>
-                            <div style={{ width: 13, height: 13, backgroundColor: "red", borderRadius: 90 }}>
-
-                            </div>
-                            <div style={{ backgroundColor: "#FDF2F2", color: "#EC5962", height: 24 }} className='p-1 ps-2 pe-2 rounded-1 text-center d-flex justify-content-center align-items-center' >
-                                <div><p className='m-0'>HIGH</p></div>
-                            </div>
+                            <CommonPriorityContainer priority={"HIGH"} />
                         </div>
+                        <button className='bg-transparent border-0'>
+                            <img width={35} src={enter} />
+                        </button>
                     </div>
 
                     <div className='mt-3'>

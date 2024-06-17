@@ -26,12 +26,12 @@ const CommonDropAndDrag = () => {
       },
       'PROGRESS': {
         id: 'PROGRESS',
-        title: 'In progress',
+        title: 'On Going',
         taskIds: [],
       },
       'COMPLETE': {
         id: 'COMPLETE',
-        title: 'Done',
+        title: 'Completed',
         taskIds: [],
       },
     },
@@ -98,7 +98,7 @@ const CommonDropAndDrag = () => {
   };
 
   return (
-    <div className='d-flex justify-content-between overflow-scroll custom-scrollbar' style={{ maxWidth: 1300 }}>
+    <div className='d-flex justify-content-between'>
       <DragDropContext onDragEnd={onDragEnd}>
         {data.columnOrder.map((columnId) => {
           const column = data.columns[columnId];
@@ -110,8 +110,8 @@ const CommonDropAndDrag = () => {
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className='d-flex flex-column align-items-center m-3 p-4 rounded-3'
-                  style={{ backgroundColor: "#EEF2F5", width: 317 }}
+                  className='d-flex flex-column align-items-center m-3 p-4 rounded-3 overflow-scroll overflow-x-hidden custom-scrollbar'
+                  style={{ backgroundColor: "#EEF2F5", width: 330, maxHeight: 1000 }}
 
                 >
                   <div className='d-flex justify-content-between align-items-center w-100'>

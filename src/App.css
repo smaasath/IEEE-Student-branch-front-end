@@ -15,7 +15,7 @@
   color: #4CB9E7 !important;
 }
 
-body{
+body {
   background-color: #F8F9FA !important;
 }
 
@@ -31,9 +31,10 @@ body{
   height: 45px;
 } */
 
-.form-control:focus{
+.form-control:focus {
   border-color: #00629B !important;
-  box-shadow: 0 0 0 0.25rem rgba(0, 98, 155, 0.25) !important; /* Updated to match the border color */
+  box-shadow: 0 0 0 0.25rem rgba(0, 98, 155, 0.25) !important;
+  /* Updated to match the border color */
   transition: border-color 0.3s ease;
 }
 
@@ -41,9 +42,10 @@ body{
   height: 45px;
 } */
 
-.form-select:focus{
+.form-select:focus {
   border-color: #00629B !important;
-  box-shadow: 0 0 0 0.25rem rgba(0, 98, 155, 0.25) !important; /* Updated to match the border color */
+  box-shadow: 0 0 0 0.25rem rgba(0, 98, 155, 0.25) !important;
+  /* Updated to match the border color */
   transition: border-color 0.3s ease;
 }
 
@@ -55,7 +57,7 @@ body{
   background-color: #E9ECEF !important;
 }
 
-.common-shadow{
+.common-shadow {
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
@@ -66,66 +68,80 @@ body{
 
 /* Hide scrollbar for IE and Edge */
 .hide-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 /* CSS for the custom scroll bar */
 .custom-scrollbar {
   overflow-y: scroll;
-  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  scrollbar-width: none;
+  /* Hide scrollbar for Firefox */
 }
 
 .custom-pagination {
-  background-color: green !important; 
-  color: white !important; 
-  border-color: green !important; 
+  background-color: green !important;
+  color: white !important;
+  border-color: green !important;
 }
 
 /* Webkit browsers (Chrome, Safari) */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 0px; /* Hide scrollbar */
+  width: 0px;
+  /* Hide scrollbar */
 }
 
 .custom-scrollbar:hover {
-  scrollbar-width: thin; /* Show scrollbar for Firefox on hover */
+  scrollbar-width: thin;
+  /* Show scrollbar for Firefox on hover */
 }
 
 /* Webkit browsers (Chrome, Safari) */
 .custom-scrollbar:hover::-webkit-scrollbar {
-  width: 8px; /* Adjust the width as needed */
+  width: 8px;
+  /* Adjust the width as needed */
 }
 
 .custom-scrollbar:hover::-webkit-scrollbar-track {
-  background: #e0e0e0; /* Track color */
+  background: #e0e0e0;
+  /* Track color */
 }
 
 .custom-scrollbar:hover::-webkit-scrollbar-thumb {
-  background-color: #888; /* Thumb color */
-  border-radius: 10px; /* Optional: make the thumb rounded */
-  border: 2px solid #e0e0e0; /* Match track color for better look */
+  background-color: #888;
+  /* Thumb color */
+  border-radius: 10px;
+  /* Optional: make the thumb rounded */
+  border: 2px solid #e0e0e0;
+  /* Match track color for better look */
 }
 
-.table-container{
+.table-container {
   height: 620px;
 }
-.common-serach-model{
-  background-color: #F8F9F9 ;
-  }
-.common-serach-model:hover{
-background-color: #E5E7E9 ;
+
+.common-serach-model {
+  background-color: #F8F9F9;
 }
 
-.common-transition{
+.common-serach-model:hover {
+  background-color: #E5E7E9;
+}
+
+.common-transition {
   transition: transform 0.3s ease, color 0.3s ease;
 }
 
-.common-transition:hover{
+.common-transition:hover {
   transform: scale(1.03);
 }
 
+.common-member-container {
+  background-color: white !important;
+}
 
-
-
-
-
+.common-member-container:hover {
+  background-color: #F0F5FC !important;
+}
