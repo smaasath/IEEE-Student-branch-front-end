@@ -1,6 +1,7 @@
 import React from 'react'
 import enter from '../../../assets/icons/note.png'
 import deleted from '../../../assets/icons/delete.png'
+import myprofile from '../../../assets/images/testUser.png'
 
 
 const CommonNoteContainer = () => {
@@ -23,10 +24,15 @@ const CommonNoteContainer = () => {
                 </button>
             </div>
             <div className='mt-3'>
-                <h6 style={{ color: "#4F4F4F" }}>ChatGPT Tricks for business marketing</h6>
+                <p style={{ color: "#4F4F4F" }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut id dui mi. Fusce varius bibendum ante, non lacinia. Fall usasc ce variu slorem ipsum dolor sit amet</p>
             </div>
-            <div className=''>
-                <p style={{ color: "#9999" }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut id dui mi. Fusce varius bibendum ante, non lacinia. Fall usasc ce variu slorem ipsum dolor sit amet</p>
+            <div className=' d-flex justify-content-end align-items-center gap-2'>
+                <div>
+                    <p className='m-0' style={{fontSize:11, color:"#999999"}}>Mohamed Aasath</p>
+                </div>
+                <div className=''>
+                    <img src={myprofile} height={25} width={25} style={{ borderRadius: 90 }} />
+                </div>
             </div>
         </div>
     )
