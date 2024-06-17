@@ -5,6 +5,12 @@ import CommonPieChart from '../../../components/common/commonPieChart/commonPieC
 import CommonStatusCountCard from '../../../components/common/commonStatusCountCard/commonStatusCountCard';
 import CommonButton from '../../../components/common/commonButton/commonButton';
 import { useNavigate } from 'react-router-dom'
+import CommonSearch from '../../../components/common/commonSearch/commonSearch';
+import CommonDropAndDrag from '../../../components/common/commonDropAndDrag/commonDropAndDrag';
+import add from '../../../assets/icons/Add.png';
+import CommonNoteContainer from '../../../components/common/commonNoteContainer/commonNoteContainer';
+import CommonMemberContainer from '../../../components/common/commonMemberContainer/commonMemberContainer';
+
 
 const ProjectPage = () => {
     const params = useParams();
@@ -47,9 +53,87 @@ const ProjectPage = () => {
                 </div>
             </div>
 
-            <div className='d-flex mt-5 justify-content-between align-items-center'>
+            <div className='d-flex mt-5 justify-content-between align-items-center flex-wrap gap-4'>
                 <div className='text-cl-primary mt-4'>Board</div>
-                <div className=''><CommonButton onClick={()=>{navigateToFinance()}} text={"Finance"} /></div>
+                <div className='d-flex justify-content-end gap-4 align-items-center flex-wrap'>
+                    <div className=''><CommonButton onClick={() => { }} text={"PR Plan"} /></div>
+                    <div className=''><CommonButton onClick={() => { navigateToFinance() }} text={"Finance"} /></div>
+                    <div className=''><CommonButton onClick={() => { }} text={"Events"} /></div>
+                </div>
+            </div>
+
+            <div className='d-flex flex-column bg-white common-shadow rounded-3 p-3 mt-4'>
+                <div className='d-flex justify-content-between align-items-center w-100 flex-wrap gap-4'>
+                    <div>
+                        <CommonSearch />
+                    </div>
+                    <div className="">
+                        <select className="form-select w-100" aria-label="Large select example">
+                            <option selected>Assignee</option>
+                            <option value="1">Me</option>
+                        </select>
+                    </div>
+                </div>
+                <div className='mt-4 d-flex justify-content-between overflow-scroll overflow-y-hidden custom-scrollbar' style={{ maxWidth: 1300 }}>
+                    <CommonDropAndDrag />
+                </div>
+            </div>
+
+            <div className='row mt-4'>
+                <div className='col-lg-8 p-3'>
+                    <div className='d-flex bg-white common-shadow flex-column p-3 rounded-3'>
+                        <div className='d-flex justify-content-between align-items-center gap-4 flex-wrap'>
+                            <div>
+                                <h6 className='text-third fw-bold'>Notes</h6>
+                            </div>
+                            <div>
+                                <button className='bg-transparent border-0'>
+                                    <img src={add} width={30} />
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className='mt-3 d-flex'>
+                            <div>
+                                <CommonSearch primary={false} />
+                            </div>
+                        </div>
+
+                        <div className='mt-4 d-flex justify-content-between align-items-center gap-4 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar' style={{maxHeight:700}}>
+                            <CommonNoteContainer />
+                            <CommonNoteContainer />
+                            <CommonNoteContainer />
+                        </div>
+                    </div>
+                </div>
+                <div className='col-lg-4 p-3'>
+                    <div className='d-flex bg-white common-shadow flex-column p-3 rounded-3'>
+                        <div className='d-flex justify-content-between align-items-center gap-4 flex-wrap'>
+                            <div>
+                                <h6 className='text-third fw-bold'>Project Members</h6>
+                            </div>
+                            <div>
+                                <button className='bg-transparent border-0'>
+                                    <img src={add} width={30} />
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className='mt-3'>
+                            <CommonSearch primary={false} />
+                        </div>
+
+                        <div className='mt-4 d-flex justify-content-between align-items-center gap-1 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar' style={{maxHeight:500}}>
+                            <CommonMemberContainer />
+                            <CommonMemberContainer />
+                            <CommonMemberContainer />
+                            <CommonMemberContainer />
+                            <CommonMemberContainer />
+                            <CommonMemberContainer />
+                            <CommonMemberContainer />
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
