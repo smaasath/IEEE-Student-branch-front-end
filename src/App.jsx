@@ -31,7 +31,9 @@ function App() {
         <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path='/forgot-password/change-password' element={<ChangePassword />} />
         <Route path='/dashboard' element={<DashboardLayout />}>
-          <Route path='executive-committee' element={<ExcomLandingPage />} />
+          <Route path='' >
+            <Route path='executive-committee' element={<ExcomLandingPage />} />
+          </Route>
           <Route path='project'>
             <Route path='' element={<ProjectLandingPage />} />
             <Route path='time-line' element={<TimeLinePage />} />
@@ -46,7 +48,7 @@ function App() {
             <Route path='report' element={<ReportPage />} />
           </Route>
           <Route path='service'>
-            <Route path='' element={<ServiceLanding/>} />
+            <Route path='' element={<ServiceLanding />} />
             <Route path='volunteering' element={<Volunteering />} />
           </Route>
           <Route path='*' element={<NotFound />}>

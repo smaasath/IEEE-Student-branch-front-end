@@ -62,7 +62,7 @@ const ProjectLandingPage = () => {
         {
             lable: "",
             value: "ACTION",
-            type: ["EDIT", "VIEW"]
+            type: ["EDIT", "VIEW",]
         },
     ]
 
