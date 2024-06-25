@@ -3,6 +3,7 @@ import './App.css';
 import { Route, Routes, } from 'react-router-dom';
 import DashboardLayout from './components/layouts/dashboardLayout/dashboardLayout';
 import ExcomLandingPage from './pages/excomFLow/excomLandingPage/excomLandingPage';
+import ExecutiveCommitteePage from './pages/excomFLow/executiveCommitteePage/executiveCommitteePage';
 import SignIN from './pages/authFlow/signIn/signIn';
 import SignUp from './pages/authFlow/signUp/signUp';
 import VerifyCode from './pages/authFlow/verifyCode/verifyCode';
@@ -32,6 +33,7 @@ function App() {
         <Route path='/forgot-password/change-password' element={<ChangePassword />} />
         <Route path='/dashboard' element={<DashboardLayout />}>
           <Route path='executive-committee' element={<ExcomLandingPage />} />
+          <Route path='executiveCommitteePage' element={<ExecutiveCommitteePage />} />
           <Route path='project'>
             <Route path='' element={<ProjectLandingPage />} />
             <Route path='time-line' element={<TimeLinePage />} />
