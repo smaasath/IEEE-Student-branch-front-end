@@ -68,6 +68,10 @@ const ProjectPage = () => {
                 <div className='text-cl-primary mt-4'>Upcomming Birthday</div>
             </div>
 
+            <div>
+                <h2>Test</h2>
+            </div>
+
         </div>
     )
 }
