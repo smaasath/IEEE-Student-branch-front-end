@@ -1,30 +1,28 @@
-import React from 'react'
+import React from 'react';
 import { useParams } from 'react-router-dom';
-import projectDefault from '../../../assets/images/projectDefault.png'
 import CommonPieChart from '../../../components/common/commonPieChart/commonPieChart';
 import CommonStatusCountCard from '../../../components/common/commonStatusCountCard/commonStatusCountCard';
 import CommonButton from '../../../components/common/commonButton/commonButton';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import CommonSearch from '../../../components/common/commonSearch/commonSearch';
 import CommonDropAndDrag from '../../../components/common/commonDropAndDrag/commonDropAndDrag';
-import add from '../../../assets/icons/Add.png';
-import send from '../../../assets/icons/Sent.png';
-import CommonNoteContainer from '../../../components/common/commonNoteContainer/commonNoteContainer';
-import CommonMemberContainer from '../../../components/common/commonMemberContainer/commonMemberContainer';
+import Profile from '../../../assets/images/profile.png'; // Import your profile image here
+import BalloonImage from '../../../assets/images/balloon.png'; // Import balloon image
 
-
-const ProjectPage = () => {
+const ExecutiveCommitteePage = () => {
     const params = useParams();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
     function navigateToFinance() {
         navigate('finance');
     }
+
     return (
         <div className='p-3'>
             <div className='d-flex justify-content-end gap-4 align-items-center flex-wrap'>
-                    <div className=''><CommonButton onClick={() => { }} text={"Design Tasks"} /></div>
-                    <div className=''><CommonButton onClick={() => { navigateToFinance() }} text={"Excom Details"} /></div>
-                </div>
+                <div><CommonButton onClick={() => { }} text={"Design Tasks"} /></div>
+                <div><CommonButton onClick={() => { navigateToFinance() }} text={"Excom Details"} /></div>
+            </div>
 
             <div className='text-cl-primary mt-4'>Tasks</div>
             <div className='d-flex mt-3 justify-content-between align-items-center gap-4 flex-wrap'>
@@ -64,16 +62,81 @@ const ProjectPage = () => {
                     <CommonDropAndDrag />
                 </div>
             </div>
+
             <div className='d-flex mt-5 justify-content-between align-items-center flex-wrap gap-4'>
-                <div className='text-cl-primary mt-4'>Upcomming Birthday</div>
+                <div className='text-cl-primary mt-4'>Upcoming Birthday</div>
             </div>
 
-            <div>
-                <h2>Test</h2>
+            <div className="container mt-4">
+                <div className="row">
+                    <div className="col-md-3">
+                        <div className="card">
+                            <div className="card-body d-flex align-items-center">
+                                <img 
+                                    src={Profile} 
+                                    alt="Profile" 
+                                    className="rounded-circle me-3" 
+                                    style={{ width: '50px', height: '50px', objectFit: 'cover' }} 
+                                />
+                                <h6>Ishara Suvini</h6>
+                            </div>
+                            <div className="card-footer">
+                                <small className="text-muted">22th October<img src={BalloonImage} alt="Balloon" style={{ width: '30px', marginLeft: '100px' }} /></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-3">
+                        <div className="card">
+                            <div className="card-body d-flex align-items-center">
+                                <img 
+                                    src={Profile} 
+                                    alt="Profile" 
+                                    className="rounded-circle me-3" 
+                                    style={{ width: '50px', height: '50px', objectFit: 'cover' }} 
+                                />
+                                <h6>Ishara Suvini</h6>
+                            </div>
+                            <div className="card-footer">
+                                <small className="text-muted">22th October<img src={BalloonImage} alt="Balloon" style={{ width: '30px', marginLeft: '100px' }} /></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-3">
+                        <div className="card">
+                            <div className="card-body d-flex align-items-center">
+                                <img 
+                                    src={Profile} 
+                                    alt="Profile" 
+                                    className="rounded-circle me-3" 
+                                    style={{ width: '50px', height: '50px', objectFit: 'cover' }} 
+                                />
+                                <h6>Ishara Suvini</h6>
+                            </div>
+                            <div className="card-footer">
+                                <small className="text-muted">22th October<img src={BalloonImage} alt="Balloon" style={{ width: '30px', marginLeft: '100px' }} /></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-3">
+                        <div className="card">
+                            <div className="card-body d-flex align-items-center">
+                                <img 
+                                    src={Profile} 
+                                    alt="Profile" 
+                                    className="rounded-circle me-3" 
+                                    style={{ width: '50px', height: '50px', objectFit: 'cover' }} 
+                                />
+                                <h6>Ishara Suvini</h6>
+                            </div>
+                            <div className="card-footer">
+                                <small className="text-muted">22th October<img src={BalloonImage} alt="Balloon" style={{ width: '30px', marginLeft: '100px' }} /></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
         </div>
-    )
+    );
 }
 
-export default ProjectPage
+export default ExecutiveCommitteePage;
