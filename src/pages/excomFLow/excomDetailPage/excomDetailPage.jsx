@@ -28,6 +28,7 @@ const CommitteeMemberCard = ({ photo, name, phone, email, academicYear }) => {
 const ExcomDetailPage = () => {
   const committeeMembers = [
     {
+      position: 'Chair',
       photo: profile,
       name: 'Thilini Priyangika',
       phone: '+94712668316',
@@ -35,6 +36,7 @@ const ExcomDetailPage = () => {
       academicYear: '3rd Year',
     },
     {
+      position: 'Vice Chair',
       photo: profile,
       name: 'Thilini Priyangika',
       phone: '+94712668316',
@@ -42,6 +44,7 @@ const ExcomDetailPage = () => {
       academicYear: '3rd Year',
     },
     {
+      position: 'Secretary',
       photo: profile,
       name: 'Thilini Priyangika',
       phone: '+94712668316',
@@ -49,6 +52,7 @@ const ExcomDetailPage = () => {
       academicYear: '3rd Year',
     },
     {
+      position: 'Assistant Secretary',
       photo: profile,
       name: 'Thilini Priyangika',
       phone: '+94712668316',
@@ -56,6 +60,7 @@ const ExcomDetailPage = () => {
       academicYear: '3rd Year',
     },
     {
+      position: 'Treasurer',
       photo: profile,
       name: 'Thilini Priyangika',
       phone: '+94712668316',
@@ -63,6 +68,7 @@ const ExcomDetailPage = () => {
       academicYear: '3rd Year',
     },
     {
+      position: 'Webmaster',
       photo: profile,
       name: 'Thilini Priyangika',
       phone: '+94712668316',
@@ -81,17 +87,18 @@ const ExcomDetailPage = () => {
           <select className="form-select w-100" aria-label="Large select example">
             <option selected>Term Year</option>
             <option value="1">1st Year</option>
+            <option value="1">2nd Year</option>
+            <option value="1">3rd Year</option>
           </select>
         </div>
       </div>
 
-      <div className='d-flex justify-content-between align-items-center flex-wrap gap-4'>
-        <div className='text-cl-primary mt-6'>Committee Members Details</div>
-      </div>
+      <div className='text-cl-primary mt-4'>Committee Members Details</div>
 
-      <div className='row'>
+      <div className='row mt-4'>
         {committeeMembers.map((member, index) => (
-          <div className='col-12 col-md-6 mb-4' key={index}>
+          <div className='col-6 col-md-6 mb-4' key={index}>
+            <div className='mb-2 fw-bold'>{member.position}</div>
             <CommitteeMemberCard
               photo={member.photo}
               name={member.name}
