@@ -15,8 +15,8 @@ function ExecutiveCommitteePage() {
     const navigate = useNavigate();
     const [showTaskModal, setShowTaskModal] = useState(false);
 
-    function navigateToFinance() {
-        navigate('finance');
+    function navigateToexcomDetailPage() {
+        navigate('/dashboard/excomDetailPage');
     }
 
     const openTaskModal = () => {
@@ -31,7 +31,7 @@ function ExecutiveCommitteePage() {
         <div className='p-3'>
             <div className='d-flex justify-content-end gap-4 align-items-center flex-wrap'>
                 <div><CommonButton onClick={openTaskModal} text={"Design Tasks"} /></div>
-                <div><CommonButton onClick={navigateToFinance} text={"Excom Details"} /></div>
+                <div className=''><CommonButton onClick={() => { navigateToexcomDetailPage() }} text={"Excom Details"} /></div>
             </div>
 
             <div className='text-cl-primary mt-4'>Tasks</div>
