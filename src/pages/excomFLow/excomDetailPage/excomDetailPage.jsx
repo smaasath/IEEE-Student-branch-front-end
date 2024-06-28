@@ -1,6 +1,9 @@
 import React from 'react';
 import CommonButton from '../../../components/common/commonButton/commonButton';
-import { FaEnvelope, FaWhatsapp, FaFacebook, FaLinkedin } from 'react-icons/fa';
+import Envelope from '../../../assets/icons/Circled Envelope.png';
+import WhatsApp from '../../../assets/icons/WhatsApp.png';
+import Facebook from '../../../assets/icons/Facebook.png';
+import Linkedin from '../../../assets/icons/LinkedIn Circled.png';
 import profile from '../../../assets/images/profile.png';
 
 const CommitteeMemberCard = ({ photo, name, phone, email, academicYear }) => {
@@ -14,10 +17,10 @@ const CommitteeMemberCard = ({ photo, name, phone, email, academicYear }) => {
           <p className='card-text'>{phone}</p>
           <p className='card-text'>{academicYear}</p>
           <div className='d-flex gap-2'>
-            <a href={`mailto:${email}`} className='text-decoration-none'><FaEnvelope size={20} /></a>
-            <a href={`https://wa.me/${phone}`} className='text-decoration-none'><FaWhatsapp size={20} /></a>
-            <a href='#' className='text-decoration-none'><FaFacebook size={20} /></a>
-            <a href='#' className='text-decoration-none'><FaLinkedin size={20} /></a>
+          <img src={Envelope} alt='Envelope' />
+          <img src={WhatsApp} alt='WhatsApp' />
+          <img src={Facebook} alt='Facebook' />
+          <img src={Linkedin} alt='Linkedin' />
           </div>
         </div>
       </div>
