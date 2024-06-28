@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CommonSearch from '../../../components/common/commonSearch/commonSearch';
 import CommonTable from '../../../components/common/commonTable/commonTable';
 import CommonPagination from '../../../components/common/commonPagination/commonPagination';
-import ProposalStatusChangeModel from '../../../components/models/proposalStatusChangeModel/proposalStatusChangeModel';
+import MemberDetailsModal from '../../../components/models/viewMemberDetailsModel/viewMemberDetailsModel';
 import OuCard from "../../../components/common/oucard/ouCard";
 
 import sbLogo from "../../../assets/logo/sb_logo.png";
@@ -17,10 +17,14 @@ const ExcomLandingPage = () => {
     const [termFilter, setTermFilter] = useState(currentYear);
     const [availableTermYears, setAvailableTermYears] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [statusChangeModelShow, setStatusChangeModelShow] = useState(false);
+    const [memberDetailModalShow, setMemberDetailModalShow] = useState(false);
+    const [selectedMember, setSelectedMember] = useState(null);
 
-    const handleCloseStatusChangeModel = () => setStatusChangeModelShow(false);
-    const handleShowStatusChangeModel = () => setStatusChangeModelShow(true);
+    const handleCloseMemberDetailModal = () => setMemberDetailModalShow(false);
+    const handleShowMemberDetailModal = (member) => {
+        setSelectedMember(member);
+        setMemberDetailModalShow(true);
+    };
 
     useEffect(() => {
         const termYears = [...new Set(tableData.map((item) => item.termYear))].sort((a, b) => b - a);
@@ -32,15 +36,15 @@ const ExcomLandingPage = () => {
     const handleTermChange = (e) => setTermFilter(e.target.value);
 
     const tableHeading = [
-        { lable: "First Name", value: "fname" },
-        { lable: "Last Name", value: "lname" },
-        { lable: "Email", value: "email" },
-        { lable: "Contact Number", value: "contactNo" },
-        { lable: "Entity", value: "entity" },
-        { lable: "Position", value: "position" },
-        { lable: "Academic Year", value: "academicYear" },
-        { lable: "Term Year", value: "termYear" },
-        { lable: "", value: "ACTION", type: ["VIEW"] },
+        { label: "First Name", value: "fname" },
+        { label: "Last Name", value: "lname" },
+        { label: "Email", value: "email" },
+        { label: "Contact Number", value: "contactNo" },
+        { label: "Entity", value: "entity" },
+        { label: "Position", value: "position" },
+        { label: "Academic Year", value: "academicYear" },
+        { label: "Term Year", value: "termYear" },
+        { label: "Action", value: "ACTION", type: ["VIEW"] },
     ];
 
     const tableData = [
@@ -173,14 +177,23 @@ const ExcomLandingPage = () => {
                     </div>
 
                     <div className='mt-3 p-3 rounded-4 bg-white d-flex flex-column justify-content-between table-container'>
-                        <CommonTable tableHeading={tableHeading} tableData={filteredData} primary={true} loading={false} editAction={(id) => { handleShowStatusChangeModel() }} />
+                        <CommonTable
+                            tableHeading={tableHeading}
+                            tableData={filteredData}
+                            primary={true}
+                            loading={false}
+                            viewAction={(id) => { 
+                                const member = tableData.find(item => item.id === id);
+                                handleShowMemberDetailModal(member);
+                            }}
+                        />
                         <div className='mt-4 d-flex justify-content-end'>
                             <CommonPagination pages={10} currentPage={currentPage} setCurrentPage={setCurrentPage} />
                         </div>
                     </div>
                 </div>
             </div>
-            <ProposalStatusChangeModel show={statusChangeModelShow} onHide={handleCloseStatusChangeModel} />
+            <MemberDetailsModal show={memberDetailModalShow} onHide={handleCloseMemberDetailModal} memberData={selectedMember} />
         </>
     );
 }
