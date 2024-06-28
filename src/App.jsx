@@ -4,6 +4,7 @@ import { Route, Routes, } from 'react-router-dom';
 import DashboardLayout from './components/layouts/dashboardLayout/dashboardLayout';
 import ExcomLandingPage from './pages/excomFLow/excomLandingPage/excomLandingPage';
 import ExecutiveCommitteePage from './pages/excomFLow/executiveCommitteePage/executiveCommitteePage';
+import ExcomDetailPage from './pages/excomFLow/excomDetailPage/excomDetailPage';
 import SignIN from './pages/authFlow/signIn/signIn';
 import SignUp from './pages/authFlow/signUp/signUp';
 import VerifyCode from './pages/authFlow/verifyCode/verifyCode';
@@ -35,6 +36,7 @@ function App() {
           <Route path='' >
             <Route path='executive-committee' element={<ExcomLandingPage />} />
             <Route path='executiveCommitteePage' element={<ExecutiveCommitteePage />} />
+            <Route path='excomDetailPage' element={<ExcomDetailPage />} />
           </Route>
           <Route path='project'>
             <Route path='' element={<ProjectLandingPage />} />
