@@ -43,9 +43,7 @@ const TaskModel = ({ onHide, show }) => {
                     </div>
                 </Modal.Body>
                 <Modal.Footer className='d-flex justify-content-end'>
-                    <div>
-                        <CommonButton onClick={onHide} close={true} text={"Close"} />
-                    </div>
+                    
                     <div>
                         <CommonButton onClick={onHide} text={"Create"} />
                     </div>
