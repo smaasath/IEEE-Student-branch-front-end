@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import CommonPieChart from '../../../components/common/commonPieChart/commonPieChart';
 import CommonStatusCountCard from '../../../components/common/commonStatusCountCard/commonStatusCountCard';
@@ -6,22 +6,32 @@ import CommonButton from '../../../components/common/commonButton/commonButton';
 import { useNavigate } from 'react-router-dom';
 import CommonSearch from '../../../components/common/commonSearch/commonSearch';
 import CommonDropAndDrag from '../../../components/common/commonDropAndDrag/commonDropAndDrag';
-import Profile from '../../../assets/images/profile.png'; // Import your profile image here
-import BalloonImage from '../../../assets/images/balloon.png'; // Import balloon image
+import Profile from '../../../assets/images/profile.png'; 
+import BalloonImage from '../../../assets/images/balloon.png'; 
+import TaskModel from '../../../components/models/createTaskModel/createTaskModel'; 
 
-const ExecutiveCommitteePage = () => {
+function ExecutiveCommitteePage() {
     const params = useParams();
     const navigate = useNavigate();
+    const [showTaskModal, setShowTaskModal] = useState(false);
 
     function navigateToFinance() {
         navigate('finance');
     }
 
+    const openTaskModal = () => {
+        setShowTaskModal(true);
+    };
+
+    const closeTaskModal = () => {
+        setShowTaskModal(false);
+    };
+
     return (
         <div className='p-3'>
             <div className='d-flex justify-content-end gap-4 align-items-center flex-wrap'>
-                <div><CommonButton onClick={() => { }} text={"Design Tasks"} /></div>
-                <div><CommonButton onClick={() => { navigateToFinance() }} text={"Excom Details"} /></div>
+                <div><CommonButton onClick={openTaskModal} text={"Design Tasks"} /></div>
+                <div><CommonButton onClick={navigateToFinance} text={"Excom Details"} /></div>
             </div>
 
             <div className='text-cl-primary mt-4'>Tasks</div>
@@ -72,69 +82,70 @@ const ExecutiveCommitteePage = () => {
                     <div className="col-md-3">
                         <div className="card">
                             <div className="card-body d-flex align-items-center">
-                                <img 
-                                    src={Profile} 
-                                    alt="Profile" 
-                                    className="rounded-circle me-3" 
-                                    style={{ width: '50px', height: '50px', objectFit: 'cover' }} 
-                                />
+                                <img
+                                    src={Profile}
+                                    alt="Profile"
+                                    className="rounded-circle me-3"
+                                    style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
                                 <h6>Ishara Suvini</h6>
                             </div>
                             <div className="card-footer">
-                                <small className="text-muted">22th October<img src={BalloonImage} alt="Balloon" style={{ width: '30px', marginLeft: '100px' }} /></small>
+                                <small className="text-muted">22nd October<img src={BalloonImage} alt="Balloon" style={{ width: '30px', marginLeft: '100px' }} /></small>
                             </div>
                         </div>
                     </div>
                     <div className="col-md-3">
                         <div className="card">
                             <div className="card-body d-flex align-items-center">
-                                <img 
-                                    src={Profile} 
-                                    alt="Profile" 
-                                    className="rounded-circle me-3" 
-                                    style={{ width: '50px', height: '50px', objectFit: 'cover' }} 
-                                />
+                                <img
+                                    src={Profile}
+                                    alt="Profile"
+                                    className="rounded-circle me-3"
+                                    style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
                                 <h6>Ishara Suvini</h6>
                             </div>
                             <div className="card-footer">
-                                <small className="text-muted">22th October<img src={BalloonImage} alt="Balloon" style={{ width: '30px', marginLeft: '100px' }} /></small>
+                                <small className="text-muted">22nd October<img src={BalloonImage} alt="Balloon" style={{ width: '30px', marginLeft: '100px' }} /></small>
                             </div>
                         </div>
                     </div>
                     <div className="col-md-3">
                         <div className="card">
                             <div className="card-body d-flex align-items-center">
-                                <img 
-                                    src={Profile} 
-                                    alt="Profile" 
-                                    className="rounded-circle me-3" 
-                                    style={{ width: '50px', height: '50px', objectFit: 'cover' }} 
-                                />
+                                <img
+                                    src={Profile}
+                                    alt="Profile"
+                                    className="rounded-circle me-3"
+                                    style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
                                 <h6>Ishara Suvini</h6>
                             </div>
                             <div className="card-footer">
-                                <small className="text-muted">22th October<img src={BalloonImage} alt="Balloon" style={{ width: '30px', marginLeft: '100px' }} /></small>
+                                <small className="text-muted">22nd October<img src={BalloonImage} alt="Balloon" style={{ width: '30px', marginLeft: '100px' }} /></small>
                             </div>
                         </div>
                     </div>
                     <div className="col-md-3">
                         <div className="card">
                             <div className="card-body d-flex align-items-center">
-                                <img 
-                                    src={Profile} 
-                                    alt="Profile" 
-                                    className="rounded-circle me-3" 
-                                    style={{ width: '50px', height: '50px', objectFit: 'cover' }} 
-                                />
+                                <img
+                                    src={Profile}
+                                    alt="Profile"
+                                    className="rounded-circle me-3"
+                                    style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
                                 <h6>Ishara Suvini</h6>
                             </div>
                             <div className="card-footer">
-                                <small className="text-muted">22th October<img src={BalloonImage} alt="Balloon" style={{ width: '30px', marginLeft: '100px' }} /></small>
+                                <small className="text-muted">22nd October<img src={BalloonImage} alt="Balloon" style={{ width: '30px', marginLeft: '100px' }} /></small>
                             </div>
                         </div>
                     </div>
+                    
                 </div>
             </div>
+
+            {/* TaskModel modal */}
+            <TaskModel show={showTaskModal} onHide={closeTaskModal} />
+
         </div>
     );
 }
