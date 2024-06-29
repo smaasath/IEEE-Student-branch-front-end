@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CommonButton from '../../../components/common/commonButton/commonButton';
+import EditExcomModal from '../../../components/models/editExcomModel/editExcomModel';
 import Envelope from '../../../assets/icons/Circled Envelope.png';
 import WhatsApp from '../../../assets/icons/WhatsApp.png';
 import Facebook from '../../../assets/icons/Facebook.png';
@@ -7,10 +8,24 @@ import Linkedin from '../../../assets/icons/LinkedIn Circled.png';
 import profile from '../../../assets/images/profile.png';
 
 const CommitteeMemberCard = ({ photo, name, phone, email, academicYear }) => {
+  const [editExcomModelShow, setEditExcomModelShow] = useState(false);
+  const [selectedMember, setSelectedMember] = useState(null);
+
+  const handleCloseEditExcomModel = () => setEditExcomModelShow(false);
+  const handleShowEditExcomModel = (member) => {
+    setSelectedMember(member);
+    setEditExcomModelShow(true);
+  };
+
   return (
     <div className='card'>
       <div className='card-body d-flex'>
-        <img src={photo || profile} alt='Profile' className='img-thumbnail me-3 rounded-circle' style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
+        <img
+          src={photo || profile}
+          alt='Profile'
+          className='img-thumbnail me-3 rounded-circle'
+          style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+        />
         <div>
           <h5 className='card-title'>{name}</h5>
           <p className='card-text'>{email}</p>
@@ -26,9 +41,17 @@ const CommitteeMemberCard = ({ photo, name, phone, email, academicYear }) => {
       </div>
     </div>
   );
-}
+};
 
 const ExcomDetailPage = () => {
+  const [editExcomModelShow, setEditExcomModelShow] = useState(false);
+  const [selectedMember, setSelectedMember] = useState(null);
+
+  const handleShowEditExcomModel = (member) => {
+    setSelectedMember(member);
+    setEditExcomModelShow(true);
+  };
+
   const committeeMembers = [
     {
       position: 'Chair',
@@ -108,7 +131,7 @@ const ExcomDetailPage = () => {
           email: 'thilini@gmail.com',
           academicYear: '3rd Year',
         },
-      ]
+      ],
     },
     {
       name: 'Editorial Standing Committee',
@@ -137,7 +160,7 @@ const ExcomDetailPage = () => {
           email: 'thilini@gmail.com',
           academicYear: '3rd Year',
         },
-      ]
+      ],
     },
     {
       name: 'Membership Development Standing Committee',
@@ -166,7 +189,7 @@ const ExcomDetailPage = () => {
           email: 'thilini@gmail.com',
           academicYear: '3rd Year',
         },
-      ]
+      ],
     },
   ];
 
@@ -174,14 +197,14 @@ const ExcomDetailPage = () => {
     <div className='container'>
       <div className='d-flex justify-content-end gap-4 align-items-center flex-wrap'>
         <div>
-          <CommonButton onClick={() => { }} text={"Edit Excom"} />
+          <CommonButton onClick={() => setEditExcomModelShow(true)} text={"Edit Excom"} />
         </div>
         <div className="">
-          <select className="form-select w-100" aria-label="Large select example">
+          <select className="form-select w-100" aria-label="Term Year Select">
             <option selected>Term Year</option>
             <option value="1">1st Year</option>
-            <option value="1">2nd Year</option>
-            <option value="1">3rd Year</option>
+            <option value="2">2nd Year</option>
+            <option value="3">3rd Year</option>
           </select>
         </div>
       </div>
@@ -223,8 +246,11 @@ const ExcomDetailPage = () => {
         </div>
       ))}
 
+      {/* Edit Executive Committee Modal */}
+      <EditExcomModal show={editExcomModelShow} onHide={() => setEditExcomModelShow(false)} selectedMember={selectedMember} />
+
     </div>
   );
-}
+};
 
 export default ExcomDetailPage;
