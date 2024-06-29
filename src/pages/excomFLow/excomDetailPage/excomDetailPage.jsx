@@ -17,10 +17,10 @@ const CommitteeMemberCard = ({ photo, name, phone, email, academicYear }) => {
           <p className='card-text'>{phone}</p>
           <p className='card-text'>{academicYear}</p>
           <div className='d-flex gap-2'>
-          <img src={Envelope} alt='Envelope' />
-          <img src={WhatsApp} alt='WhatsApp' />
-          <img src={Facebook} alt='Facebook' />
-          <img src={Linkedin} alt='Linkedin' />
+            <img src={Envelope} alt='Envelope' />
+            <img src={WhatsApp} alt='WhatsApp' />
+            <img src={Facebook} alt='Facebook' />
+            <img src={Linkedin} alt='Linkedin' />
           </div>
         </div>
       </div>
@@ -80,6 +80,96 @@ const ExcomDetailPage = () => {
     },
   ];
 
+  const standingCommittees = [
+    {
+      name: 'Public Visibility Standing Committee',
+      members: [
+        {
+          position: 'Head',
+          photo: profile,
+          name: 'Thilini Priyangika',
+          phone: '+94712668316',
+          email: 'thilini@gmail.com',
+          academicYear: '3rd Year',
+        },
+        {
+          position: 'Member',
+          photo: profile,
+          name: 'Thilini Priyangika',
+          phone: '+94712668316',
+          email: 'thilini@gmail.com',
+          academicYear: '3rd Year',
+        },
+        {
+          position: 'Member',
+          photo: profile,
+          name: 'Thilini Priyangika',
+          phone: '+94712668316',
+          email: 'thilini@gmail.com',
+          academicYear: '3rd Year',
+        },
+      ]
+    },
+    {
+      name: 'Editorial Standing Committee',
+      members: [
+        {
+          position: 'Head',
+          photo: profile,
+          name: 'Thilini Priyangika',
+          phone: '+94712668316',
+          email: 'thilini@gmail.com',
+          academicYear: '3rd Year',
+        },
+        {
+          position: 'Member',
+          photo: profile,
+          name: 'Thilini Priyangika',
+          phone: '+94712668316',
+          email: 'thilini@gmail.com',
+          academicYear: '3rd Year',
+        },
+        {
+          position: 'Member',
+          photo: profile,
+          name: 'Thilini Priyangika',
+          phone: '+94712668316',
+          email: 'thilini@gmail.com',
+          academicYear: '3rd Year',
+        },
+      ]
+    },
+    {
+      name: 'Membership Development Standing Committee',
+      members: [
+        {
+          position: 'Head',
+          photo: profile,
+          name: 'Thilini Priyangika',
+          phone: '+94712668316',
+          email: 'thilini@gmail.com',
+          academicYear: '3rd Year',
+        },
+        {
+          position: 'Member',
+          photo: profile,
+          name: 'Thilini Priyangika',
+          phone: '+94712668316',
+          email: 'thilini@gmail.com',
+          academicYear: '3rd Year',
+        },
+        {
+          position: 'Member',
+          photo: profile,
+          name: 'Thilini Priyangika',
+          phone: '+94712668316',
+          email: 'thilini@gmail.com',
+          academicYear: '3rd Year',
+        },
+      ]
+    },
+  ];
+
   return (
     <div className='container'>
       <div className='d-flex justify-content-end gap-4 align-items-center flex-wrap'>
@@ -112,6 +202,27 @@ const ExcomDetailPage = () => {
           </div>
         ))}
       </div>
+
+      {standingCommittees.map((committee, index) => (
+        <div key={index} className='mt-4'>
+          <div className='fw-bold'>{committee.name}</div>
+          <div className='row mt-2'>
+            {committee.members.map((member, index) => (
+              <div className='col-6 col-md-4 mb-4' key={index}>
+                <div className='mb-2 fw-bold'>{member.position}</div>
+                <CommitteeMemberCard
+                  photo={member.photo}
+                  name={member.name}
+                  phone={member.phone}
+                  email={member.email}
+                  academicYear={member.academicYear}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+
     </div>
   );
 }
