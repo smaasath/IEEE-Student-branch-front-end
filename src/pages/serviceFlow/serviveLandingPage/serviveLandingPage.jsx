@@ -5,10 +5,15 @@ import CommonTable from '../../../components/common/commonTable/commonTable';
 import CommonSearch from '../../../components/common/commonSearch/commonSearch'
 import CommonPagination from '../../../components/common/commonPagination/commonPagination'
 import { useNavigate } from 'react-router-dom'
+import VolunteerStatusChangeModel from "../../../components/models/volunteerStatusChangeModel/volunteerStatusChangeModel";
 
 const serviveLandingPage = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [statusChangeModelShow, setStatusChangeModel] = useState(false);
+
+  const handleCloseStatusChangeModel = () => { setStatusChangeModel(false); }
+  const handleShowStatusChangeModel = () => { setStatusChangeModel(true); }
 
   const navigate = useNavigate()
     function navigateToVolunteerDetailsPage() {
@@ -72,6 +77,7 @@ const tableData = [
   },
 ]
   return (
+    <>
     <div className="container">
       <div className="conatiner bg-white rounded p-3 common-shadow">
         <h5 className="fw-semibold text-cl-primary">Request Form</h5>
@@ -195,6 +201,8 @@ const tableData = [
                     </div>
                     </div>
     </div>
+    <VolunteerStatusChangeModel show={statusChangeModelShow} onHide={handleCloseStatusChangeModel} />
+    </>
   )
 }
 
