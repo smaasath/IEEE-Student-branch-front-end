@@ -1,5 +1,8 @@
-import React from 'react'
+import React, { useState } from "react";
 import profile from '../../../assets/images/profile.png';
+import CommonTable from '../../../components/common/commonTable/commonTable';
+import CommonSearch from '../../../components/common/commonSearch/commonSearch'
+import CommonPagination from '../../../components/common/commonPagination/commonPagination'
 
 const BestVolunteerCard = ({ photo, name,completedTask, entrolledProjects }) => {
     return (
@@ -34,6 +37,7 @@ const BestVolunteerCard = ({ photo, name,completedTask, entrolledProjects }) => 
 }
 
 const VolunteerDetailsPage = () => {
+  const [currentPage, setCurrentPage] = useState(1);
     const bestVolunteer = [
         {
            
@@ -45,7 +49,74 @@ const VolunteerDetailsPage = () => {
         },
         
     ];
+
+    const tableHeading = [
+      {
+          lable: "Name",
+          value: "name"
+      },
+      {
+          lable: "Name With Initial",
+          value: "name_with_initial"
+      },
+      {
+          lable: "Email",
+          value: "email"
+      },
+      {
+          lable: "Contact No",
+          value: "contact_no"
+      },
+      {
+          lable: "Degree",
+          value: "degree"
+      },
+      {
+        lable: "Role",
+        value: "role"
+    },
+    {
+      lable: "Academic Year",
+      value: "academic_year"
+    },
+      {
+          lable: "",
+          value: "ACTION",
+          type: ["VIEW", "EDIT"]
+      },
+  ];
+
+  const tableData = [
+    {
+        name: "W.D.Kavindra Weerasinghe",
+        name_with_initial: "W.D.K.Weerasinghe",
+        email: "wdk@gmail.com",
+        contact_no: "0718596324",
+        degree: "CST",
+        role: "Chair",
+        academic_year: "3rd year",
+    },
+    {
+      name: "A.M.Thilini Priyangika",
+        name_with_initial: "A.M.T.P.Adhikari",
+        email: "thilini@gmail.com",
+        contact_no: "0712956874",
+        degree: "CST",
+        role: "Secretory",
+        academic_year: "3rd year",
+    },
+    {
+      name: "T.P.G.Senura Adithya",
+        name_with_initial: "T.P.G.S.Adithya",
+        email: "senura@gmail.com",
+        contact_no: "0701975648",
+        degree: "ICT",
+        role: "Member",
+        academic_year: "2nd year",
+    },
+  ];
     return (
+      <>
         <div className='container'>
         
         <div className='text-cl-primary mt-3'>Best Volunteer</div>
@@ -64,7 +135,28 @@ const VolunteerDetailsPage = () => {
             </div>
           ))}
         </div>
+
+        <div className='mt-5 d-flex justify-content-between align-items-center gap-4 flex-wrap'>
+                    <div className='text-cl-primary'>Volunteers</div>
+  
+                        </div>
+
+                        <div className='mt-4 d-flex flex-column gap-3 justify-content-center bg-white rounded-2 common-shadow p-3'>
+                       <div className='mt-4 table-container'>
+                       <div className='mt-2 d-flex flex-wrap justify-content-between align-items-center'>
+                       <CommonSearch primary={true} />
+                       </div>
+                       <div className='mt-4 table-container'>
+                        <CommonTable tableHeading={tableHeading} primary={true} tableData={tableData} loading={false}  editAction={(id) => {  }} />
+                        </div>
+                    </div>
+
+                    <div className='mt-4 d-flex justify-content-end'>
+                        <CommonPagination pages={10} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+                    </div>
+                    </div>
       </div>
+      </>
     )
   }
 
