@@ -6,6 +6,7 @@ import WhatsApp from '../../../assets/icons/WhatsApp.png';
 import Facebook from '../../../assets/icons/Facebook.png';
 import Linkedin from '../../../assets/icons/LinkedIn Circled.png';
 import profile from '../../../assets/images/profile.png';
+import Info from '../../../assets/images/Info.png';
 
 const CommitteeMemberCard = ({ photo, name, phone, email, academicYear }) => {
   const [editExcomModelShow, setEditExcomModelShow] = useState(false);
@@ -18,7 +19,7 @@ const CommitteeMemberCard = ({ photo, name, phone, email, academicYear }) => {
   };
 
   return (
-    <div className='card'>
+    <div className='card' style={{ borderRadius: '10px', padding: '20px', position: 'relative' }}>
       <div className='card-body d-flex'>
         <img
           src={photo || profile}
@@ -32,13 +33,18 @@ const CommitteeMemberCard = ({ photo, name, phone, email, academicYear }) => {
           <p className='card-text'>{phone}</p>
           <p className='card-text'>{academicYear}</p>
           <div className='d-flex gap-2'>
-            <img src={Envelope} alt='Envelope' />
-            <img src={WhatsApp} alt='WhatsApp' />
-            <img src={Facebook} alt='Facebook' />
-            <img src={Linkedin} alt='Linkedin' />
+            <img src={Envelope} alt='Envelope'/>
+            <img src={WhatsApp} alt='WhatsApp'/>
+            <img src={Facebook} alt='Facebook'/>
+            <img src={Linkedin} alt='Linkedin'/>
           </div>
         </div>
       </div>
+      <img
+        src={Info}
+        alt='Info'
+        style={{ position: 'absolute', bottom: '10px', right: '10px', width: '24px', height: '24px' }}
+      />
     </div>
   );
 };
@@ -247,7 +253,6 @@ const ExcomDetailPage = () => {
       ))}
 
       <EditExcomModal show={editExcomModelShow} onHide={() => setEditExcomModelShow(false)} selectedMember={selectedMember} />
-
     </div>
   );
 };
