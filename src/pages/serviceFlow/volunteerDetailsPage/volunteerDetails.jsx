@@ -6,7 +6,7 @@ import CommonPagination from '../../../components/common/commonPagination/common
 
 const BestVolunteerCard = ({ photo, name,completedTask, entrolledProjects }) => {
     return (
-        <div className='card bg-body-secondary rounded common-shadow text-center' style={{   width: '220px', height: '240px', position: 'relative' }}>
+        <div className='card bg-white rounded common-shadow text-center' style={{   width: '220px', height: '240px', position: 'relative' }}>
           <div className='header bg-third text-white py-2 rounded-top'style={{ fontSize: '18px', fontWeight: 'bold' }}>
           {name}
           </div>
