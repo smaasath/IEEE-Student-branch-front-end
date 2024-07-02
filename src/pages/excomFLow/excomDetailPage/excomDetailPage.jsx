@@ -246,7 +246,6 @@ const ExcomDetailPage = () => {
         </div>
       ))}
 
-      {/* Edit Executive Committee Modal */}
       <EditExcomModal show={editExcomModelShow} onHide={() => setEditExcomModelShow(false)} selectedMember={selectedMember} />
 
     </div>
