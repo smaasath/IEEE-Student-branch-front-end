@@ -7,8 +7,9 @@ import WhatsApp from '../../../assets/icons/WhatsApp.png';
 import Facebook from '../../../assets/icons/Facebook.png';
 import Linkedin from '../../../assets/icons/LinkedIn Circled.png';
 import SearchIcon from '../../../assets/icons/search.png'; 
+import CommonSearch from '../../common/commonSearch/commonSearch';
 
-const EditExcomModal = ({ onHide, show, selectedMember }) => {
+const EditExcomModel = ({ onHide, show, selectedMember }) => {
   const [selectedRole, setSelectedRole] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [members, setMembers] = useState([
@@ -37,10 +38,6 @@ const EditExcomModal = ({ onHide, show, selectedMember }) => {
 
   const handleSelectMember = (member) => {
     setSelectedMember(member);
-  };
-
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
   };
 
   const filteredMembers = members.filter((member) =>
@@ -84,18 +81,7 @@ const EditExcomModal = ({ onHide, show, selectedMember }) => {
             </div>
 
             <div className='mt-3'>
-              <div className="input-group">
-                <span className="input-group-text">
-                  <img src={SearchIcon} alt="Search" style={{ width: '20px', height: '20px' }} />
-                </span>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search..."
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                />
-              </div>
+              <CommonSearch/>
               <div className="list-group mt-2">
                 {filteredMembers.map((member, index) => (
                   <button
@@ -116,28 +102,6 @@ const EditExcomModal = ({ onHide, show, selectedMember }) => {
                 ))}
               </div>
             </div>
-
-            {selectedMember && (
-              <div className='mt-3'>
-                <div className='card'>
-                  <div className='card-body d-flex'>
-                    <img src={selectedMember.photo} alt='Profile' className='img-thumbnail me-3 rounded-circle' style={{ width: '75px', height: '75px', objectFit: 'cover' }} />
-                    <div>
-                      <h5 className='card-title'>{selectedMember.name}</h5>
-                      <p className='card-text'>{selectedMember.email}</p>
-                      <p className='card-text'>{selectedMember.phone}</p>
-                      <p className='card-text'>{selectedMember.academicYear}</p>
-                      <div className='d-flex gap-2 mt-2'>
-                        <img src={Envelope} alt='Envelope' style={{ width: '20px', height: '20px' }} />
-                        <img src={WhatsApp} alt='WhatsApp' style={{ width: '20px', height: '20px' }} />
-                        <img src={Facebook} alt='Facebook' style={{ width: '20px', height: '20px' }} />
-                        <img src={Linkedin} alt='Linkedin' style={{ width: '20px', height: '20px' }} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         </Modal.Body>
         <Modal.Footer className='d-flex justify-content-end'>
@@ -150,4 +114,4 @@ const EditExcomModal = ({ onHide, show, selectedMember }) => {
   );
 }
 
-export default EditExcomModal;
+export default EditExcomModel;
