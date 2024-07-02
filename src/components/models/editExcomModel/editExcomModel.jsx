@@ -6,7 +6,6 @@ import Envelope from '../../../assets/icons/Circled Envelope.png';
 import WhatsApp from '../../../assets/icons/WhatsApp.png';
 import Facebook from '../../../assets/icons/Facebook.png';
 import Linkedin from '../../../assets/icons/LinkedIn Circled.png';
-import SearchIcon from '../../../assets/icons/search.png'; 
 import CommonSearch from '../../common/commonSearch/commonSearch';
 
 const EditExcomModel = ({ onHide, show, selectedMember }) => {
@@ -104,10 +103,34 @@ const EditExcomModel = ({ onHide, show, selectedMember }) => {
             </div>
           </div>
         </Modal.Body>
-        <Modal.Footer className='d-flex justify-content-end'>
-          <div>
-            <CommonButton onClick={onHide} text={"Done"} />
+        
+        <div className='card mt-3' style={{ maxWidth: '300px', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)', marginLeft: '20px' }}>
+          <div className='card-body d-flex align-items-center'>
+            <img
+              src={profile}
+              alt='Profile'
+              className='img-thumbnail me-3 rounded-circle'
+              style={{ width: '80px', height: '80px', objectFit: 'cover' }}
+            />
+            <div>
+              <h5 className='card-title mb-1'>Thilini Priyangika</h5>
+              <p className='card-text mb-1'>thilini@gmail.com</p>
+              <p className='card-text mb-1'>+94712668316</p>
+              <p className='card-text mb-0'>3rd Year</p>
+              <div className='d-flex gap-2 mt-2'>
+                <img src={Envelope} alt='Envelope' style={{ width: '20px', height: '20px' }} />
+                <img src={WhatsApp} alt='WhatsApp' style={{ width: '20px', height: '20px' }} />
+                <img src={Facebook} alt='Facebook' style={{ width: '20px', height: '20px' }} />
+                <img src={Linkedin} alt='Linkedin' style={{ width: '20px', height: '20px' }} />
+              </div>
+            </div>
           </div>
+        </div>
+
+        <Modal.Footer className='d-flex justify-content-end mt-3'>
+                <div>
+                  <CommonButton onClick={onHide} text={"Done"} />
+                </div>
         </Modal.Footer>
       </Modal>
     </>
