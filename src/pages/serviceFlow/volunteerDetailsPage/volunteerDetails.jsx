@@ -3,6 +3,7 @@ import profile from '../../../assets/images/profile.png';
 import CommonTable from '../../../components/common/commonTable/commonTable';
 import CommonSearch from '../../../components/common/commonSearch/commonSearch'
 import CommonPagination from '../../../components/common/commonPagination/commonPagination'
+import VolunteerViewModel from "../../../components/models/volunteerViewModel/volunteerViewModel";
 
 const BestVolunteerCard = ({ photo, name,completedTask, entrolledProjects }) => {
     return (
@@ -38,6 +39,15 @@ const BestVolunteerCard = ({ photo, name,completedTask, entrolledProjects }) => 
 
 const VolunteerDetailsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [volunteerDetailModalShow, setVolunteerDetailModalShow] = useState(false);
+    const [selectedVolunteer, setSelectedVolunteer] = useState(null);
+
+    const handleCloseVolunteerDetailModal = () => setVolunteerDetailModalShow(false);
+    const handleShowVolunteerDetailModal = (volunteer) => {
+        setSelectedVolunteer(volunteer);
+        setVolunteerDetailModalShow(true);
+    };
     const bestVolunteer = [
         {
            
@@ -147,7 +157,8 @@ const VolunteerDetailsPage = () => {
                        <CommonSearch primary={true} />
                        </div>
                        <div className='mt-4 table-container'>
-                        <CommonTable tableHeading={tableHeading} primary={true} tableData={tableData} loading={false}  editAction={(id) => {  }} />
+                       <CommonTable tableHeading={tableHeading} primary={true} tableData={tableData} loading={false} viewAction={(id) => {const volunteer = tableData.find(item => item.id === id);
+                                handleShowVolunteerDetailModal(volunteer)  }}  editAction={(id) => {  }} />
                         </div>
                     </div>
 
@@ -156,6 +167,7 @@ const VolunteerDetailsPage = () => {
                     </div>
                     </div>
       </div>
+      <VolunteerViewModel show={volunteerDetailModalShow} onHide={handleCloseVolunteerDetailModal} volunteerData={selectedVolunteer} />
       </>
     )
   }
