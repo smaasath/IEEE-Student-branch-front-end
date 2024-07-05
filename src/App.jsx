@@ -20,6 +20,7 @@ import ProjectPage from './pages/projectFlow/projectPage/projectPage';
 import ProjectFinanceLanding from './pages/projectFlow/finance/projectFinanceLanding/projectFinanceLanding';
 import ServiceLanding from './pages/serviceFlow/serviveLandingPage/serviveLandingPage';
 import Volunteering from './pages/serviceFlow/VolunteeringPage/VolunteeringPage';
+import ProjectPrPlan from './pages/projectFlow/prPlan/projectPrPlan';
 
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
             <Route path='time-line' element={<TimeLinePage />} />
             <Route path=':id'  >
               <Route path='' element={<ProjectPage />} />
+              <Route path='prPlan' element={<ProjectPrPlan/>}/>
               <Route path='finance' element={<ProjectFinanceLanding />} />
             </Route>
           </Route>

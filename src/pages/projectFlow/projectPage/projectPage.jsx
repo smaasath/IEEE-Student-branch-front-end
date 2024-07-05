@@ -16,6 +16,9 @@ import CommonMemberContainer from '../../../components/common/commonMemberContai
 const ProjectPage = () => {
     const params = useParams();
     const navigate = useNavigate()
+    function navigateToPrPlan(){
+        navigate('prPlan');
+    }
     function navigateToFinance() {
         navigate('finance');
     }
@@ -57,7 +60,7 @@ const ProjectPage = () => {
             <div className='d-flex mt-5 justify-content-between align-items-center flex-wrap gap-4'>
                 <div className='text-cl-primary mt-4'>Board</div>
                 <div className='d-flex justify-content-end gap-4 align-items-center flex-wrap'>
-                    <div className=''><CommonButton onClick={() => { }} text={"PR Plan"} /></div>
+                    <div className=''><CommonButton onClick={() => { navigateToPrPlan() }} text={"PR Plan"} /></div>
                     <div className=''><CommonButton onClick={() => { navigateToFinance() }} text={"Finance"} /></div>
                     <div className=''><CommonButton onClick={() => { }} text={"Events"} /></div>
                 </div>

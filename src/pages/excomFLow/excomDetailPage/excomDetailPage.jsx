@@ -1,6 +1,6 @@
 import React from 'react';
 import CommonButton from '../../../components/common/commonButton/commonButton';
-import { FaEnvelope, FaWhatsapp, FaFacebook, FaLinkedin } from 'react-icons/fa';
+// import { FaEnvelope, FaWhatsapp, FaFacebook, FaLinkedin } from 'react-icons/fa';
 import profile from '../../../assets/images/profile.png';
 
 const CommitteeMemberCard = ({ photo, name, phone, email, academicYear }) => {
