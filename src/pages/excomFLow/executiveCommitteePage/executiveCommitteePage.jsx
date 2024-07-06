@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import CommonSearch from '../../../components/common/commonSearch/commonSearch';
 import CommonDropAndDrag from '../../../components/common/commonDropAndDrag/commonDropAndDrag';
 import Profile from '../../../assets/images/profile.png'; 
-import BalloonImage from '../../../assets/images/balloon.png'; 
+import BalloonImage from '../../../assets/images/Party Balloons.png'; 
 import TaskModel from '../../../components/models/createTaskModel/createTaskModel'; 
 
 function ExecutiveCommitteePage() {
@@ -16,7 +16,7 @@ function ExecutiveCommitteePage() {
     const [showTaskModal, setShowTaskModal] = useState(false);
 
     function navigateToexcomDetailPage() {
-        navigate('/dashboard/excomDetailPage');
+        navigate('/dashboard/executive-committee/1/detail');
     }
 
     const openTaskModal = () => {
@@ -30,7 +30,7 @@ function ExecutiveCommitteePage() {
     return (
         <div className='p-3'>
             <div className='d-flex justify-content-end gap-4 align-items-center flex-wrap'>
-                <div><CommonButton onClick={openTaskModal} text={"Design Tasks"} /></div>
+                <div><CommonButton onClick={openTaskModal} text={"Create Tasks"} /></div>
                 <div className=''><CommonButton onClick={() => { navigateToexcomDetailPage() }} text={"Excom Details"} /></div>
             </div>
 
@@ -80,64 +80,92 @@ function ExecutiveCommitteePage() {
             <div className="container mt-4">
                 <div className="row">
                     <div className="col-md-3">
-                        <div className="card">
-                            <div className="card-body d-flex align-items-center">
-                                <img
-                                    src={Profile}
-                                    alt="Profile"
-                                    className="rounded-circle me-3"
-                                    style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
-                                <h6>Ishara Suvini</h6>
+                    <div className="card">
+                        <div className="card-body d-flex align-items-center">
+                            <img
+                                src={Profile}
+                                alt="Profile"
+                                className="rounded-circle me-3"
+                                style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
+                            <div>
+                                <h5><b>Ishara Suvini</b></h5>
+                                <span>Web Master</span>
                             </div>
-                            <div className="card-footer">
-                                <small className="text-muted">22nd October<img src={BalloonImage} alt="Balloon" style={{ width: '30px', marginLeft: '100px' }} /></small>
+                        </div>
+                        <div className="card-footer" style={{ backgroundColor: '#0E2954', color: 'white' }}>
+                            <small className="text-white">Date of Birth</small>
+                            <div className="d-flex align-items-center">
+                                <span className="fs-4">22nd October</span>
+                                <img src={BalloonImage} alt="Balloon" style={{ width: '30px', marginLeft: 'auto' }} />
                             </div>
                         </div>
                     </div>
+                    </div>
                     <div className="col-md-3">
-                        <div className="card">
-                            <div className="card-body d-flex align-items-center">
-                                <img
-                                    src={Profile}
-                                    alt="Profile"
-                                    className="rounded-circle me-3"
-                                    style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
-                                <h6>Ishara Suvini</h6>
+                    <div className="card">
+                        <div className="card-body d-flex align-items-center">
+                            <img
+                                src={Profile}
+                                alt="Profile"
+                                className="rounded-circle me-3"
+                                style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
+                            <div>
+                                <h5><b>Ishara Suvini</b></h5>
+                                <span>Web Master</span>
                             </div>
-                            <div className="card-footer">
-                                <small className="text-muted">22nd October<img src={BalloonImage} alt="Balloon" style={{ width: '30px', marginLeft: '100px' }} /></small>
+                        </div>
+                        <div className="card-footer" style={{ backgroundColor: '#0E2954', color: 'white' }}>
+                            <small className="text-white">Date of Birth</small>
+                            <div className="d-flex align-items-center">
+                                <span className="fs-4">22nd October</span>
+                                <img src={BalloonImage} alt="Balloon" style={{ width: '30px', marginLeft: 'auto' }} />
                             </div>
                         </div>
                     </div>
+                    </div>
                     <div className="col-md-3">
-                        <div className="card">
-                            <div className="card-body d-flex align-items-center">
-                                <img
-                                    src={Profile}
-                                    alt="Profile"
-                                    className="rounded-circle me-3"
-                                    style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
-                                <h6>Ishara Suvini</h6>
+                    <div className="card">
+                        <div className="card-body d-flex align-items-center">
+                            <img
+                                src={Profile}
+                                alt="Profile"
+                                className="rounded-circle me-3"
+                                style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
+                            <div>
+                                <h5><b>Ishara Suvini</b></h5>
+                                <span>Web Master</span>
                             </div>
-                            <div className="card-footer">
-                                <small className="text-muted">22nd October<img src={BalloonImage} alt="Balloon" style={{ width: '30px', marginLeft: '100px' }} /></small>
+                        </div>
+                        <div className="card-footer" style={{ backgroundColor: '#0E2954', color: 'white' }}>
+                            <small className="text-white">Date of Birth</small>
+                            <div className="d-flex align-items-center">
+                                <span className="fs-4">22nd October</span>
+                                <img src={BalloonImage} alt="Balloon" style={{ width: '30px', marginLeft: 'auto' }} />
                             </div>
                         </div>
                     </div>
+                    </div>
                     <div className="col-md-3">
-                        <div className="card">
-                            <div className="card-body d-flex align-items-center">
-                                <img
-                                    src={Profile}
-                                    alt="Profile"
-                                    className="rounded-circle me-3"
-                                    style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
-                                <h6>Ishara Suvini</h6>
-                            </div>
-                            <div className="card-footer">
-                                <small className="text-muted">22nd October<img src={BalloonImage} alt="Balloon" style={{ width: '30px', marginLeft: '100px' }} /></small>
+                    <div className="card">
+                        <div className="card-body d-flex align-items-center">
+                            <img
+                                src={Profile}
+                                alt="Profile"
+                                className="rounded-circle me-3"
+                                style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
+                            <div>
+                                <h5><b>Ishara Suvini</b></h5>
+                                <span>Web Master</span>
                             </div>
                         </div>
+                        <div className="card-footer" style={{ backgroundColor: '#0E2954', color: 'white' }}>
+                            <small className="text-white">Date of Birth</small>
+                            <div className="d-flex align-items-center">
+                                <span className="fs-4">22nd October</span>
+                                <img src={BalloonImage} alt="Balloon" style={{ width: '30px', marginLeft: 'auto' }} />
+                            </div>
+                        </div>
+                    </div>
                     </div>
                     
                 </div>

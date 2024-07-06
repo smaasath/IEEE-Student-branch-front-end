@@ -40,27 +40,27 @@ const ProjectLandingPage = () => {
 
     const tableHeading = [
         {
-            lable: "Project Name",
+            label: "Project Name",
             value: "project_name"
         },
         {
-            lable: "Chapter",
+            label: "Chapter",
             value: "ou_name"
         },
         {
-            lable: "Start Date",
+            label: "Start Date",
             value: "start_date"
         },
         {
-            lable: "End Date",
+            label: "End Date",
             value: "end_date"
         },
         {
-            lable: "Status",
+            label: "Status",
             value: "status"
         },
         {
-            lable: "",
+            label: "",
             value: "ACTION",
             type: ["EDIT", "VIEW",]
         },
