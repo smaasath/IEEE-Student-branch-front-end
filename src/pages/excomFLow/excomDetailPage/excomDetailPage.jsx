@@ -19,31 +19,57 @@ const CommitteeMemberCard = ({ photo, name, phone, email, academicYear }) => {
   };
 
   return (
-    <div className='card' style={{ borderRadius: '10px', padding: '20px', position: 'relative' }}>
-      <div className='card-body d-flex'>
+    <div
+      className="card"
+      style={{
+        borderRadius: '10px',
+        padding: '10px',
+        position: 'relative',
+        width: '308px',
+        height: 'auto',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        display: 'flex',
+        alignItems: 'center'
+      }}
+    >
+      <div className="card-body d-flex">
         <img
           src={photo || profile}
-          alt='Profile'
-          className='img-thumbnail me-3 rounded-circle'
-          style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+          alt="Profile"
+          className="img-thumbnail me-3 rounded-circle"
+          style={{
+            width: '70px',
+            height: '70px',
+            objectFit: 'cover',
+            borderRadius: '50%',
+            border: '2px solid #ccc'
+          }}
         />
-        <div>
-          <h5 className='card-title'>{name}</h5>
-          <p className='card-text'>{email}</p>
-          <p className='card-text'>{phone}</p>
-          <p className='card-text'>{academicYear}</p>
-          <div className='d-flex gap-2'>
-            <img src={Envelope} alt='Envelope'/>
-            <img src={WhatsApp} alt='WhatsApp'/>
-            <img src={Facebook} alt='Facebook'/>
-            <img src={Linkedin} alt='Linkedin'/>
+        <div style={{ flex: 1 }}>
+          <h5 className="card-title" style={{ marginBottom: '8px', fontWeight: 'bold', fontSize: '16px' }}>{name}</h5>
+          <p className="card-text" style={{ marginBottom: '4px', fontSize: '12px', color: '#555' }}>{email}</p>
+          <p className="card-text" style={{ marginBottom: '4px', fontSize: '12px', color: '#555' }}>{phone}</p>
+          <p className="card-text" style={{ marginBottom: '8px', fontSize: '12px', color: '#555' }}>{academicYear}</p>
+          <div className="d-flex gap-2">
+            <img src={Envelope} alt="Envelope" style={{ width: '14px', height: '14px' }} />
+            <img src={WhatsApp} alt="WhatsApp" style={{ width: '14px', height: '14px' }} />
+            <img src={Facebook} alt="Facebook" style={{ width: '14px', height: '14px' }} />
+            <img src={Linkedin} alt="Linkedin" style={{ width: '14px', height: '14px' }} />
           </div>
         </div>
       </div>
       <img
         src={Info}
-        alt='Info'
-        style={{ position: 'absolute', bottom: '10px', right: '10px', width: '24px', height: '24px' }}
+        alt="Info"
+        style={{
+          position: 'absolute',
+          bottom: '10px',
+          right: '10px',
+          width: '20px',
+          height: '20px',
+          cursor: 'pointer'
+        }}
+        onClick={() => handleShowEditExcomModel({ photo, name, phone, email, academicYear })}
       />
     </div>
   );
@@ -200,12 +226,12 @@ const ExcomDetailPage = () => {
   ];
 
   return (
-    <div className='container'>
-      <div className='d-flex justify-content-end gap-4 align-items-center flex-wrap'>
+    <div className="container" style={{ padding: '20px' }}>
+      <div className="d-flex justify-content-end gap-4 align-items-center flex-wrap">
         <div>
           <CommonButton onClick={() => setEditExcomModelShow(true)} text={"Edit Excom"} />
         </div>
-        <div className="">
+        <div>
           <select className="form-select w-100" aria-label="Term Year Select">
             <option selected>Term Year</option>
             <option value="1">1st Year</option>
@@ -215,12 +241,12 @@ const ExcomDetailPage = () => {
         </div>
       </div>
 
-      <div className='text-cl-primary mt-4'>Committee Members Details</div>
+      <div className='text-cl-primary mt-4'>Committee Members details</div>
 
-      <div className='row mt-4'>
+      <div className="row mt-4">
         {committeeMembers.map((member, index) => (
-          <div className='col-6 col-md-6 mb-4' key={index}>
-            <div className='mb-2 fw-bold'>{member.position}</div>
+          <div className="col-12 col-md-6 mb-4" key={index}>
+            <div className="mb-2 fw-bold" style={{ fontSize: '18px', color: '#555' }}>{member.position}</div>
             <CommitteeMemberCard
               photo={member.photo}
               name={member.name}
@@ -233,12 +259,12 @@ const ExcomDetailPage = () => {
       </div>
 
       {standingCommittees.map((committee, index) => (
-        <div key={index} className='mt-4'>
-          <div className='fw-bold'>{committee.name}</div>
-          <div className='row mt-2'>
+        <div key={index} className="mt-4">
+          <div className="fw-bold" style={{ fontSize: '20px', color: '#333' }}>{committee.name}</div>
+          <div className="row mt-2">
             {committee.members.map((member, index) => (
-              <div className='col-6 col-md-4 mb-4' key={index}>
-                <div className='mb-2 fw-bold'>{member.position}</div>
+              <div className="col-12 col-md-4 mb-4" key={index}>
+                <div className="mb-2 fw-bold" style={{ fontSize: '18px', color: '#555' }}>{member.position}</div>
                 <CommitteeMemberCard
                   photo={member.photo}
                   name={member.name}
