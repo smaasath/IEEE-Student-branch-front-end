@@ -21,31 +21,31 @@ const serviveLandingPage = () => {
 
   const tableHeading = [
     {
-        lable: "ID",
+        label: "ID",
         value: "id"
     },
     {
-        lable: "Volunteer Name",
+        label: "Volunteer Name",
         value: "volunteer_name"
     },
     {
-        lable: "Academic Year",
+        label: "Academic Year",
         value: "academic_year"
     },
     {
-        lable: "Contact No",
+        label: "Contact No",
         value: "contact_no"
     },
     {
-        lable: "Status",
+        label: "Status",
         value: "status"
     },
     {
-      lable: "Requested Date",
+      label: "Requested Date",
       value: "requested_date"
   },
     {
-        lable: "",
+        label: "",
         value: "ACTION",
         type: ["VIEW", "EDIT"]
     },

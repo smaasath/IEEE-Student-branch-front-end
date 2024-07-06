@@ -62,35 +62,35 @@ const VolunteerDetailsPage = () => {
 
     const tableHeading = [
       {
-          lable: "Name",
+          label: "Name",
           value: "name"
       },
       {
-          lable: "Name With Initial",
+          label: "Name With Initial",
           value: "name_with_initial"
       },
       {
-          lable: "Email",
+          label: "Email",
           value: "email"
       },
       {
-          lable: "Contact No",
+          label: "Contact No",
           value: "contact_no"
       },
       {
-          lable: "Degree",
+          label: "Degree",
           value: "degree"
       },
       {
-        lable: "Role",
+        label: "Role",
         value: "role"
     },
     {
-      lable: "Academic Year",
+      label: "Academic Year",
       value: "academic_year"
     },
       {
-          lable: "",
+          label: "",
           value: "ACTION",
           type: ["VIEW", "EDIT"]
       },

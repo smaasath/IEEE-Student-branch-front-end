@@ -21,6 +21,8 @@ import ProjectFinanceLanding from './pages/projectFlow/finance/projectFinanceLan
 import ServiceLanding from './pages/serviceFlow/serviveLandingPage/serviveLandingPage';
 import VolunteerDetailsPage from './pages/serviceFlow/volunteerDetailsPage/volunteerDetails';
 import Volunteering from './pages/serviceFlow/VolunteeringPage/VolunteeringPage';
+import MainSettingPage from './pages/settingFlow/mainSettingPage';
+
 
 
 function App() {
@@ -56,6 +58,9 @@ function App() {
             <Route path='' element={<ServiceLanding />} />
             <Route path='volunteer' element={<VolunteerDetailsPage/>}/>
             <Route path='volunteering' element={<Volunteering />} />
+          </Route>
+          <Route path='setting'>
+            <Route path='' element={<MainSettingPage />} />
           </Route>
           <Route path='*' element={<NotFound />}>
           </Route>

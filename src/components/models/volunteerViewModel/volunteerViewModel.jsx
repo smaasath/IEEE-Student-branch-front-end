@@ -44,11 +44,11 @@ const VolunteerViewModel = ({show, onHide, volunteerData}) => {
 
   const tableHeadingExcom = [
     {
-        lable: "Position",
+        label: "Position",
         value: "position"
     },
     {
-        lable: "Time Period",
+        label: "Time Period",
         value: "time_period"
     },
     
@@ -68,23 +68,23 @@ const tableDataExcom = [
 
 const tableHeading = [
   {
-      lable: "Project Name",
+      label: "Project Name",
       value: "project_name"
   },
   {
-      lable: "Team",
+      label: "Team",
       value: "team"
   },
   {
-      lable: "Role",
+      label: "Role",
       value: "role"
   },
   {
-      lable: "Task",
+      label: "Task",
       value: "task"
   },
   {
-      lable: "Status",
+      label: "Status",
       value: "status"
   },
 ];
