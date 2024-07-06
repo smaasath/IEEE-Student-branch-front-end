@@ -15,35 +15,35 @@ const Proposal = () => {
     const handleShowStatusChangeModel = () => { setStatusChangeModel(true); }
     const tableHeading = [
         {
-            lable: "",
+            label: "",
             value: "STARTIMAGE"
         },
         {
-            lable: "ID",
+            label: "ID",
             value: "id"
         },
         {
-            lable: "Date",
+            label: "Date",
             value: "date"
         },
         {
-            lable: "From",
+            label: "From",
             value: "from"
         },
         {
-            lable: "Title",
+            label: "Title",
             value: "title"
         },
         {
-            lable: "Amount(LKR)",
+            label: "Amount(LKR)",
             value: "amount"
         },
         {
-            lable: "Status",
+            label: "Status",
             value: "status"
         },
         {
-            lable: "",
+            label: "",
             value: "ACTION",
             type: ["EDIT", "VIEW"]
         },

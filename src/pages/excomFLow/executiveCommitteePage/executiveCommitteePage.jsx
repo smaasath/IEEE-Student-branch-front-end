@@ -16,7 +16,7 @@ function ExecutiveCommitteePage() {
     const [showTaskModal, setShowTaskModal] = useState(false);
 
     function navigateToexcomDetailPage() {
-        navigate('/dashboard/excomDetailPage');
+        navigate('/dashboard/executive-committee/1/detail');
     }
 
     const openTaskModal = () => {
@@ -30,7 +30,7 @@ function ExecutiveCommitteePage() {
     return (
         <div className='p-3'>
             <div className='d-flex justify-content-end gap-4 align-items-center flex-wrap'>
-                <div><CommonButton onClick={openTaskModal} text={"Design Tasks"} /></div>
+                <div><CommonButton onClick={openTaskModal} text={"Create Tasks"} /></div>
                 <div className=''><CommonButton onClick={() => { navigateToexcomDetailPage() }} text={"Excom Details"} /></div>
             </div>
 
