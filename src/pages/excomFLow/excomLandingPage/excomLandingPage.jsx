@@ -47,6 +47,7 @@ const ExcomLandingPage = () => {
         { label: "Action", value: "ACTION", type: ["VIEW"] },
     ];
 
+
     const tableData = [
         {
             id: 1,
