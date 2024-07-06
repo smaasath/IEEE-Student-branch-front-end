@@ -16,7 +16,7 @@ function ExecutiveCommitteePage() {
     const [showTaskModal, setShowTaskModal] = useState(false);
 
     function navigateToexcomDetailPage() {
-        navigate('/dashboard/excomDetailPage');
+        navigate('/dashboard/executive-committee/1/detail');
     }
 
     const openTaskModal = () => {

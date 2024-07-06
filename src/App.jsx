@@ -35,8 +35,8 @@ function App() {
         <Route path='/dashboard' element={<DashboardLayout />}>
           <Route path='' >
             <Route path='executive-committee' element={<ExcomLandingPage />} />
-            <Route path='executiveCommitteePage' element={<ExecutiveCommitteePage />} />
-            <Route path='excomDetailPage' element={<ExcomDetailPage />} />
+            <Route path='executive-committee/:id' element={<ExecutiveCommitteePage />} />
+            <Route path='executive-committee/:id/detail' element={<ExcomDetailPage />} />
           </Route>
           <Route path='project'>
             <Route path='' element={<ProjectLandingPage />} />

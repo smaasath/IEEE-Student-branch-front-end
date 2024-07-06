@@ -9,6 +9,7 @@ import sbLogo from "../../../assets/logo/sb_logo.png";
 import wieLogo from "../../../assets/logo/wie_logo.png";
 import iasLogo from "../../../assets/logo/ias_logo.png";
 import rasLogo from "../../../assets/logo/ras_logo.png";
+import { useNavigate } from 'react-router-dom';
 
 const ExcomLandingPage = () => {
     const currentYear = new Date().getFullYear();
@@ -19,7 +20,7 @@ const ExcomLandingPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [memberDetailModalShow, setMemberDetailModalShow] = useState(false);
     const [selectedMember, setSelectedMember] = useState(null);
-
+    const navigate = useNavigate();
     const handleCloseMemberDetailModal = () => setMemberDetailModalShow(false);
     const handleShowMemberDetailModal = (member) => {
         setSelectedMember(member);
@@ -117,6 +118,11 @@ const ExcomLandingPage = () => {
         },
     ];
 
+    function navigateToexcomPage() {
+        navigate('/dashboard/executive-committee/1');
+    }
+
+
     // Filter excomData based on search, entity, and term
     const filteredData = tableData.filter((item) => {
         const matchesName = item.fname.toLowerCase().includes(searchByName.toLowerCase());
@@ -139,7 +145,7 @@ const ExcomLandingPage = () => {
                         { id: 4, name: "CS", type: "Technical Chapter", logo: iasLogo }
                     ].map((ou) => (
                         <div key={ou.id} className="col-10 col-sm-6 col-md-5 col-lg-3 me-0 mb-4">
-                            <OuCard name={ou.name} type={ou.type} logo={ou.logo} />
+                            <OuCard name={ou.name} type={ou.type} logo={ou.logo} onclick={navigateToexcomPage} />
                         </div>
                     ))}
                 </div>
