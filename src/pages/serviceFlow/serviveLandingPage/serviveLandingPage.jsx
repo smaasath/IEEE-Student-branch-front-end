@@ -1,9 +1,83 @@
-import React from "react";
+import React, { useState } from "react";
 import service from "../../../assets/images/serviceback.png";
 import CommonButton from "../../../components/common/commonButton/commonButton";
+import CommonTable from '../../../components/common/commonTable/commonTable';
+import CommonSearch from '../../../components/common/commonSearch/commonSearch'
+import CommonPagination from '../../../components/common/commonPagination/commonPagination'
+import { useNavigate } from 'react-router-dom'
+import VolunteerStatusChangeModel from "../../../components/models/volunteerStatusChangeModel/volunteerStatusChangeModel";
 
 const serviveLandingPage = () => {
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [statusChangeModelShow, setStatusChangeModel] = useState(false);
+
+  const handleCloseStatusChangeModel = () => { setStatusChangeModel(false); }
+  const handleShowStatusChangeModel = () => { setStatusChangeModel(true); }
+
+  const navigate = useNavigate()
+    function navigateToVolunteerDetailsPage() {
+        navigate('volunteer')}
+
+  const tableHeading = [
+    {
+        lable: "ID",
+        value: "id"
+    },
+    {
+        lable: "Volunteer Name",
+        value: "volunteer_name"
+    },
+    {
+        lable: "Academic Year",
+        value: "academic_year"
+    },
+    {
+        lable: "Contact No",
+        value: "contact_no"
+    },
+    {
+        lable: "Status",
+        value: "status"
+    },
+    {
+      lable: "Requested Date",
+      value: "requested_date"
+  },
+    {
+        lable: "",
+        value: "ACTION",
+        type: ["VIEW", "EDIT"]
+    },
+];
+const tableData = [
+  {
+      id: "1234",
+      volunteer_name: "Kavindra Weerasinghe",
+      academic_year: "3rd",
+      contact_no: "0718596324",
+      status: "REVIEWED",
+      requested_date: "2024/06/08",
+  },
+  {
+    id: "1235",
+    volunteer_name: "Thilini Priyangika",
+    academic_year: "3rd",
+    contact_no: "0708596624",
+    status: "REVIEWED",
+    requested_date: "2024/06/09",
+  },
+  {
+    id: "1236",
+    volunteer_name: "Ishara Herath",
+    academic_year: "2nd",
+    contact_no: "0708876984",
+    status: "REVIEWED",
+    requested_date: "2024/06/10",
+  },
+]
   return (
+    <>
     <div className="container">
       <div className="conatiner bg-white rounded p-3 common-shadow">
         <h5 className="fw-semibold text-cl-primary">Request Form</h5>
@@ -103,8 +177,33 @@ const serviveLandingPage = () => {
           </div>
         </div>
       </div>
+      <div className='mt-5 d-flex justify-content-between align-items-center gap-4 flex-wrap'>
+                    <div className='text-cl-primary'>Service letter requests</div>
+      <div className='d-flex gap-3 flex-row justify-content-end mt-4 '>
+                        <div >
+                            <CommonButton text={"Volunteer"} onClick={() => { navigateToVolunteerDetailsPage() }} />
+                        </div>
+                        </div>
+                        </div>
+
+                        <div className='mt-4 d-flex flex-column gap-3 justify-content-center bg-white rounded-2 common-shadow p-3'>
+                       <div className='mt-4 table-container'>
+                       <div className='mt-2 d-flex flex-wrap justify-content-between align-items-center'>
+                       <CommonSearch primary={true} />
+                       </div>
+                       <div className='mt-4 table-container'>
+                        <CommonTable tableHeading={tableHeading} primary={true} tableData={tableData} loading={false}  editAction={(id) => { handleShowStatusChangeModel() }} />
+                        </div>
+                    </div>
+
+                    <div className='mt-4 d-flex justify-content-end'>
+                        <CommonPagination pages={10} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+                    </div>
+                    </div>
     </div>
-  );
-};
+    <VolunteerStatusChangeModel show={statusChangeModelShow} onHide={handleCloseStatusChangeModel} />
+    </>
+  )
+}
 
 export default serviveLandingPage;

@@ -7,6 +7,12 @@ const CommonStatusContainer = ({ status }) => {
                 return { bgcolor: '#E9ECEF', color: '#5F6A6A', text: 'To Do' };
             case 'RECIEVED':
                 return { bgcolor: '#D1EB32', color: '#667085', text: 'Recieved' };
+            case 'REVIEWED':
+                return { bgcolor: '#D1EB32', color: '#667085', text: 'Reviewed'};
+            case 'COMPLETE':
+                return { bgcolor: '#A7DAA2', color: '#18713D', text: 'Complete' };
+            case 'ONGOING':
+                return { bgcolor: '#00B8D9', color: '#00629B ', text: 'Ongoing' };
             default:
                 return { bgcolor: '#FFFFFF', color: '#000000', text: 'Unknown' };
         }
