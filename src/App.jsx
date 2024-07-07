@@ -28,6 +28,7 @@ import OtherLandingPage from './pages/otherFlow/langingPage/landingPage';
 import TermYearPage from './pages/otherFlow/termYearPage/termYearPage'
 import PolicyPage from './pages/otherFlow/policyPage/policyPage'
 import UserRolePage from './pages/otherFlow/userRolePage/userRolePage'
+import ProjectEventPage from './pages/projectFlow/event/projectEventPage';
 
 
 
@@ -54,6 +55,7 @@ function App() {
               <Route path='' element={<ProjectPage />} />
               <Route path='prPlan' element={<ProjectPrPlan/>}/>
               <Route path='finance' element={<ProjectFinanceLanding />} />
+              <Route path='event' element={<ProjectEventPage />} />
             </Route>
           </Route>
           <Route path='finance'>
