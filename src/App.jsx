@@ -23,6 +23,12 @@ import VolunteerDetailsPage from './pages/serviceFlow/volunteerDetailsPage/volun
 import Volunteering from './pages/serviceFlow/VolunteeringPage/VolunteeringPage';
 import MainSettingPage from './pages/settingFlow/mainSettingPage/mainSettingPage';
 import ProfileEditPage from './pages/settingFlow/profileEditPage/profileEditPage';
+import MainSettingPage from './pages/settingFlow/mainSettingPage';
+import OtherLandingPage from './pages/otherFlow/langingPage/landingPage';
+import TermYearPage from './pages/otherFlow/termYearPage/termYearPage'
+import PolicyPage from './pages/otherFlow/policyPage/policyPage'
+import UserRolePage from './pages/otherFlow/userRolePage/userRolePage'
+
 
 
 
@@ -63,6 +69,12 @@ function App() {
           <Route path='setting'>
             <Route path='' element={<MainSettingPage />} />
             <Route path='edit-profile' element={<ProfileEditPage/>}/>
+          </Route>
+          <Route path='other'>
+            <Route path='' element={<OtherLandingPage />} />
+            <Route path='academic-year' element={<TermYearPage/>} />
+            <Route path='policy' element={<PolicyPage/>} />
+            <Route path='user-role' element={<UserRolePage/>} />
           </Route>
           <Route path='*' element={<NotFound />}>
           </Route>
