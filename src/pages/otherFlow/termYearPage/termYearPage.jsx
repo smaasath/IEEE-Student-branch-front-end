@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CommonSearch from '../../../components/common/commonSearch/commonSearch';
 import CommonTable from '../../../components/common/commonTable/commonTable';
 import CommonPagination from '../../../components/common/commonPagination/commonPagination';
-import CommonButton from '../../../components/common/commonButton/commonButton'; // Assuming this is the correct import path for CommonButton
-import EditPrimary from '../../../assets/icons/editPrimary.png';
+import CommonButton from '../../../components/common/commonButton/commonButton'; 
 import TermYearModel from '../../../components/models/addTermYearModel/addTermYearModel';
 import { getAllAcademicYear } from '../../../redux/actions/academicYear';
 
@@ -21,7 +20,7 @@ const TermYearPage = () => {
   const [searchItem, setsearchItem] = useState('');
 
   const tableHeading = [
-    { label: "id", value: "acedemicId" },
+    { label: "id", value: "id" },
     { label: "Enrolled Year", value: "enrolledYear" },
     { label: "Academic Year", value: "academicYear" },
     { label: "Status", value: "status" },
@@ -36,7 +35,8 @@ const TermYearPage = () => {
 
 
 
-  const editProject = (id) => {
+  const editYear = (id) => {
+    console.warn(id)
     setDisable(false);
     setId(id);
     setEditable(true);
@@ -55,7 +55,15 @@ const TermYearPage = () => {
     setLoader(true)
     getAllAcademicYear(currentPage-1,status,searchItem, (res) => {
       if(res.status == 200){
-        SetacademicYearData(res?.data?.data?.content)
+        
+        let data = res?.data?.data?.content?.map(({ acedemicId, enrolledYear, academicYear, status }) => ({
+          id: acedemicId,  
+          enrolledYear,
+          academicYear,
+          status
+      }));
+        console.warn(data)
+        SetacademicYearData(data)
         setTotalPage(res?.data?.data?.totalPages)
         console.warn(res?.data?.data?.totalPages)
         setLoader(false)
@@ -77,6 +85,7 @@ const TermYearPage = () => {
             tableData={academicYearData}
             primary={true}
             loading={loader}
+            editAction={(id)=>{editYear(id)}}
 
           />
           <div className='mt-4 d-flex justify-content-end'>
