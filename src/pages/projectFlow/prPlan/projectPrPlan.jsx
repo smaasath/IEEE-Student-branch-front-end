@@ -26,19 +26,23 @@ const ProjectPrPlan = () => {
 
   const tableHeading = [
     {
-      lable: "Date",
+      label: "Publish Date",
       value: "publish_date",
     },
     {
-      lable: "Time",
+      label: "Publish Time",
       value: "publish_time",
     },
     {
-      lable: "Status",
+      label: "Title",
+      value: "flyer_title",
+    },
+    {
+      label: "Status",
       value: "status",
     },
     {
-      lable: "",
+      label: "",
       value: "ACTION",
       type: ["MORE"],
     },
@@ -47,15 +51,31 @@ const ProjectPrPlan = () => {
   const tableData = [
     {
       id: "100",
-      publish_date: "2024/06/23",
+      publish_date: "2024 July 23",
       publish_time: "8.00 PM",
-      status: "TODO",
+      flyer_title:"Comming Soon",
+      status: "PUBLISHED",
     },
     {
       id: "101",
-      publish_date: "2024/06/25",
+      publish_date: "2024 July 25",
       publish_time: "8.00 PM",
-      status: "TODO",
+      flyer_title:"Event Briefing",
+      status: "READY",
+    },
+    {
+      id: "102",
+      publish_date: "2024 July 30",
+      publish_time: "8.00 PM",
+      flyer_title:"Event Briefing",
+      status: "INCOMPLETE",
+    },
+    {
+      id: "103",
+      publish_date: "2024 August 05",
+      publish_time: "8.00 PM",
+      flyer_title:"Event Briefing",
+      status: "NOTASSIGNED",
     },
   ];
 

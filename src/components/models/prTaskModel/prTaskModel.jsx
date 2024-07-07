@@ -84,7 +84,7 @@ const PrTaskModel = ({ onHide, show, prTaskData }) => {
                         alt="Title Icon"
                       />
                       <label
-                        for="exampleFormControlInput1"
+                        for="exampleFormControlInput"
                         className="form-label   w-100"
                       >
                         Publish Time
@@ -111,9 +111,8 @@ const PrTaskModel = ({ onHide, show, prTaskData }) => {
                         className="form-select"
                         aria-label="exampleFormControlInput1"
                       >
-                        <option selected>Todo</option>
-                        <option value="1">Complete</option>
-                        <option value="2">Published</option>
+                        <option selected>Ready</option>
+                        <option value="PUBLISHED">Published</option>
                       </select>
                     </div>
                   </div>

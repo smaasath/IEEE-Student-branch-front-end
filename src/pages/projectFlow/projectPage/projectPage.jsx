@@ -22,6 +22,9 @@ const ProjectPage = () => {
     function navigateToFinance() {
         navigate('finance');
     }
+    function navigateToEvents(){
+        navigate('event');
+    }
     return (
         <div className='p-3'>
             <div className='bg-white rounded-3 common-shadow p-3 row align-items-center'>
@@ -62,7 +65,7 @@ const ProjectPage = () => {
                 <div className='d-flex justify-content-end gap-4 align-items-center flex-wrap'>
                     <div className=''><CommonButton onClick={() => { navigateToPrPlan() }} text={"PR Plan"} /></div>
                     <div className=''><CommonButton onClick={() => { navigateToFinance() }} text={"Finance"} /></div>
-                    <div className=''><CommonButton onClick={() => { }} text={"Events"} /></div>
+                    <div className=''><CommonButton onClick={() => { navigateToEvents() }} text={"Events"} /></div>
                 </div>
             </div>
 
