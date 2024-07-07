@@ -19,8 +19,16 @@ import TimeLinePage from './pages/projectFlow/timeLinePage/timeLinePage';
 import ProjectPage from './pages/projectFlow/projectPage/projectPage';
 import ProjectFinanceLanding from './pages/projectFlow/finance/projectFinanceLanding/projectFinanceLanding';
 import ServiceLanding from './pages/serviceFlow/serviveLandingPage/serviveLandingPage';
+import VolunteerDetailsPage from './pages/serviceFlow/volunteerDetailsPage/volunteerDetails';
 import Volunteering from './pages/serviceFlow/VolunteeringPage/VolunteeringPage';
 import ProjectPrPlan from './pages/projectFlow/prPlan/projectPrPlan';
+import MainSettingPage from './pages/settingFlow/mainSettingPage/mainSettingPage';
+import ProfileEditPage from './pages/settingFlow/profileEditPage/profileEditPage';
+import OtherLandingPage from './pages/otherFlow/langingPage/landingPage';
+import TermYearPage from './pages/otherFlow/termYearPage/termYearPage'
+import PolicyPage from './pages/otherFlow/policyPage/policyPage'
+import UserRolePage from './pages/otherFlow/userRolePage/userRolePage'
+
 
 
 function App() {
@@ -36,8 +44,8 @@ function App() {
         <Route path='/dashboard' element={<DashboardLayout />}>
           <Route path='' >
             <Route path='executive-committee' element={<ExcomLandingPage />} />
-            <Route path='executiveCommitteePage' element={<ExecutiveCommitteePage />} />
-            <Route path='excomDetailPage' element={<ExcomDetailPage />} />
+            <Route path='executive-committee/:id' element={<ExecutiveCommitteePage />} />
+            <Route path='executive-committee/:id/detail' element={<ExcomDetailPage />} />
           </Route>
           <Route path='project'>
             <Route path='' element={<ProjectLandingPage />} />
@@ -55,7 +63,18 @@ function App() {
           </Route>
           <Route path='service'>
             <Route path='' element={<ServiceLanding />} />
+            <Route path='volunteer' element={<VolunteerDetailsPage/>}/>
             <Route path='volunteering' element={<Volunteering />} />
+          </Route>
+          <Route path='setting'>
+            <Route path='' element={<MainSettingPage />} />
+            <Route path='edit-profile' element={<ProfileEditPage/>}/>
+          </Route>
+          <Route path='other'>
+            <Route path='' element={<OtherLandingPage />} />
+            <Route path='academic-year' element={<TermYearPage/>} />
+            <Route path='policy' element={<PolicyPage/>} />
+            <Route path='user-role' element={<UserRolePage/>} />
           </Route>
           <Route path='*' element={<NotFound />}>
           </Route>

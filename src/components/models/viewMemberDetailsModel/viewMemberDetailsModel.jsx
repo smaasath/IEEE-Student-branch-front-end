@@ -56,8 +56,10 @@ const MemberDetailsModal = ({ onHide, show, memberData }) => {
           </div>
         </div>
       </Modal.Body>
-      <Modal.Footer className="d-flex justify-content-end">
-        <CommonButton onClick={onHide} close={true} text={"No, Close"} />
+      <Modal.Footer className="d-flex justify-content-end mt-3">
+        <div>
+        <CommonButton onClick={onHide} close={true} text={"No, cancel"} />
+        </div>
       </Modal.Footer>
     </Modal>
   );

@@ -10,19 +10,19 @@ const ReportPage = () => {
 
     const tableHeading = [
         {
-            lable: "Date",
+            label: "Date",
             value: "date"
         },
         {
-            lable: "Transection Details",
+            label: "Transection Details",
             value: "TRANSECTION"
         },
         {
-            lable: "Credit",
+            label: "Credit",
             value: "CREDIT"
         },
         {
-            lable: "Debit",
+            label: "Debit",
             value: "DEBIT"
         },
     ]

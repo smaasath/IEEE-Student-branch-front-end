@@ -40,50 +40,50 @@ const CommonFinanceTable = () => {
 
   const typeDetail = [
     {
-      lable: "All Transactions",
+      label: "All Transactions",
       value: "ALL"
     },
     {
-      lable: "Income",
+      label: "Income",
       value: "INCOME"
     },
     {
-      lable: "Expense",
+      label: "Expense",
       value: "EXPENSE"
     },
   ]
 
   const tableHeading = [
     {
-      lable: "",
+      label: "",
       value: "STARTIMAGE"
     },
     {
-      lable: "ID",
+      label: "ID",
       value: "id"
     },
     {
-      lable: "Description",
+      label: "Description",
       value: "description"
     },
     {
-      lable: "Type",
+      label: "Type",
       value: "type"
     },
     {
-      lable: "Date",
+      label: "Date",
       value: "date"
     },
     {
-      lable: "Balance",
+      label: "Balance",
       value: "balance"
     },
     {
-      lable: "Amount",
+      label: "Amount",
       value: "amount"
     },
     {
-      lable: "",
+      label: "",
       value: "ACTION",
       type: ["EDIT", "VIEW"]
     },

@@ -1,31 +1,89 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CommonButton from '../../../components/common/commonButton/commonButton';
-// import { FaEnvelope, FaWhatsapp, FaFacebook, FaLinkedin } from 'react-icons/fa';
+import EditExcomModal from '../../../components/models/editExcomModel/editExcomModel';
+import Envelope from '../../../assets/icons/Circled Envelope.png';
+import WhatsApp from '../../../assets/icons/WhatsApp.png';
+import Facebook from '../../../assets/icons/Facebook.png';
+import Linkedin from '../../../assets/icons/LinkedIn Circled.png';
 import profile from '../../../assets/images/profile.png';
+import Info from '../../../assets/images/Info.png';
 
 const CommitteeMemberCard = ({ photo, name, phone, email, academicYear }) => {
+  const [editExcomModelShow, setEditExcomModelShow] = useState(false);
+  const [selectedMember, setSelectedMember] = useState(null);
+
+  const handleCloseEditExcomModel = () => setEditExcomModelShow(false);
+  const handleShowEditExcomModel = (member) => {
+    setSelectedMember(member);
+    setEditExcomModelShow(true);
+  };
+
   return (
-    <div className='card'>
-      <div className='card-body d-flex'>
-        <img src={photo || profile} alt='Profile' className='img-thumbnail me-3 rounded-circle' style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
-        <div>
-          <h5 className='card-title'>{name}</h5>
-          <p className='card-text'>{email}</p>
-          <p className='card-text'>{phone}</p>
-          <p className='card-text'>{academicYear}</p>
-          <div className='d-flex gap-2'>
-            <a href={`mailto:${email}`} className='text-decoration-none'><FaEnvelope size={20} /></a>
-            <a href={`https://wa.me/${phone}`} className='text-decoration-none'><FaWhatsapp size={20} /></a>
-            <a href='#' className='text-decoration-none'><FaFacebook size={20} /></a>
-            <a href='#' className='text-decoration-none'><FaLinkedin size={20} /></a>
+    <div
+      className="card"
+      style={{
+        borderRadius: '10px',
+        padding: '10px',
+        position: 'relative',
+        width: '308px',
+        height: 'auto',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        display: 'flex',
+        alignItems: 'center'
+      }}
+    >
+      <div className="card-body d-flex">
+        <img
+          src={photo || profile}
+          alt="Profile"
+          className="img-thumbnail me-3 rounded-circle"
+          style={{
+            width: '70px',
+            height: '70px',
+            objectFit: 'cover',
+            borderRadius: '50%',
+            border: '2px solid #ccc'
+          }}
+        />
+        <div style={{ flex: 1 }}>
+          <h5 className="card-title" style={{ marginBottom: '8px', fontWeight: 'bold', fontSize: '16px' }}>{name}</h5>
+          <p className="card-text" style={{ marginBottom: '4px', fontSize: '12px', color: '#555' }}>{email}</p>
+          <p className="card-text" style={{ marginBottom: '4px', fontSize: '12px', color: '#555' }}>{phone}</p>
+          <p className="card-text" style={{ marginBottom: '8px', fontSize: '12px', color: '#555' }}>{academicYear}</p>
+          <div className="d-flex gap-2">
+            <img src={Envelope} alt="Envelope" style={{ width: '14px', height: '14px' }} />
+            <img src={WhatsApp} alt="WhatsApp" style={{ width: '14px', height: '14px' }} />
+            <img src={Facebook} alt="Facebook" style={{ width: '14px', height: '14px' }} />
+            <img src={Linkedin} alt="Linkedin" style={{ width: '14px', height: '14px' }} />
           </div>
         </div>
       </div>
+      <img
+        src={Info}
+        alt="Info"
+        style={{
+          position: 'absolute',
+          bottom: '10px',
+          right: '10px',
+          width: '20px',
+          height: '20px',
+          cursor: 'pointer'
+        }}
+        onClick={() => handleShowEditExcomModel({ photo, name, phone, email, academicYear })}
+      />
     </div>
   );
-}
+};
 
 const ExcomDetailPage = () => {
+  const [editExcomModelShow, setEditExcomModelShow] = useState(false);
+  const [selectedMember, setSelectedMember] = useState(null);
+
+  const handleShowEditExcomModel = (member) => {
+    setSelectedMember(member);
+    setEditExcomModelShow(true);
+  };
+
   const committeeMembers = [
     {
       position: 'Chair',
@@ -77,28 +135,118 @@ const ExcomDetailPage = () => {
     },
   ];
 
+  const standingCommittees = [
+    {
+      name: 'Public Visibility Standing Committee',
+      members: [
+        {
+          position: 'Head',
+          photo: profile,
+          name: 'Thilini Priyangika',
+          phone: '+94712668316',
+          email: 'thilini@gmail.com',
+          academicYear: '3rd Year',
+        },
+        {
+          position: 'Member',
+          photo: profile,
+          name: 'Thilini Priyangika',
+          phone: '+94712668316',
+          email: 'thilini@gmail.com',
+          academicYear: '3rd Year',
+        },
+        {
+          position: 'Member',
+          photo: profile,
+          name: 'Thilini Priyangika',
+          phone: '+94712668316',
+          email: 'thilini@gmail.com',
+          academicYear: '3rd Year',
+        },
+      ],
+    },
+    {
+      name: 'Editorial Standing Committee',
+      members: [
+        {
+          position: 'Head',
+          photo: profile,
+          name: 'Thilini Priyangika',
+          phone: '+94712668316',
+          email: 'thilini@gmail.com',
+          academicYear: '3rd Year',
+        },
+        {
+          position: 'Member',
+          photo: profile,
+          name: 'Thilini Priyangika',
+          phone: '+94712668316',
+          email: 'thilini@gmail.com',
+          academicYear: '3rd Year',
+        },
+        {
+          position: 'Member',
+          photo: profile,
+          name: 'Thilini Priyangika',
+          phone: '+94712668316',
+          email: 'thilini@gmail.com',
+          academicYear: '3rd Year',
+        },
+      ],
+    },
+    {
+      name: 'Membership Development Standing Committee',
+      members: [
+        {
+          position: 'Head',
+          photo: profile,
+          name: 'Thilini Priyangika',
+          phone: '+94712668316',
+          email: 'thilini@gmail.com',
+          academicYear: '3rd Year',
+        },
+        {
+          position: 'Member',
+          photo: profile,
+          name: 'Thilini Priyangika',
+          phone: '+94712668316',
+          email: 'thilini@gmail.com',
+          academicYear: '3rd Year',
+        },
+        {
+          position: 'Member',
+          photo: profile,
+          name: 'Thilini Priyangika',
+          phone: '+94712668316',
+          email: 'thilini@gmail.com',
+          academicYear: '3rd Year',
+        },
+      ],
+    },
+  ];
+
   return (
-    <div className='container'>
-      <div className='d-flex justify-content-end gap-4 align-items-center flex-wrap'>
+    <div className="container" style={{ padding: '20px' }}>
+      <div className="d-flex justify-content-end gap-4 align-items-center flex-wrap">
         <div>
-          <CommonButton onClick={() => { }} text={"Edit Excom"} />
+          <CommonButton onClick={() => setEditExcomModelShow(true)} text={"Edit Excom"} />
         </div>
-        <div className="">
-          <select className="form-select w-100" aria-label="Large select example">
+        <div>
+          <select className="form-select w-100" aria-label="Term Year Select">
             <option selected>Term Year</option>
             <option value="1">1st Year</option>
-            <option value="1">2nd Year</option>
-            <option value="1">3rd Year</option>
+            <option value="2">2nd Year</option>
+            <option value="3">3rd Year</option>
           </select>
         </div>
       </div>
 
-      <div className='text-cl-primary mt-4'>Committee Members Details</div>
+      <div className='text-cl-primary mt-4'>Committee Members details</div>
 
-      <div className='row mt-4'>
+      <div className="row mt-4">
         {committeeMembers.map((member, index) => (
-          <div className='col-6 col-md-6 mb-4' key={index}>
-            <div className='mb-2 fw-bold'>{member.position}</div>
+          <div className="col-12 col-md-6 mb-4" key={index}>
+            <div className="mb-2 fw-bold" style={{ fontSize: '18px', color: '#555' }}>{member.position}</div>
             <CommitteeMemberCard
               photo={member.photo}
               name={member.name}
@@ -109,8 +257,30 @@ const ExcomDetailPage = () => {
           </div>
         ))}
       </div>
+
+      {standingCommittees.map((committee, index) => (
+        <div key={index} className="mt-4">
+          <div className="fw-bold" style={{ fontSize: '20px', color: '#333' }}>{committee.name}</div>
+          <div className="row mt-2">
+            {committee.members.map((member, index) => (
+              <div className="col-12 col-md-4 mb-4" key={index}>
+                <div className="mb-2 fw-bold" style={{ fontSize: '18px', color: '#555' }}>{member.position}</div>
+                <CommitteeMemberCard
+                  photo={member.photo}
+                  name={member.name}
+                  phone={member.phone}
+                  email={member.email}
+                  academicYear={member.academicYear}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <EditExcomModal show={editExcomModelShow} onHide={() => setEditExcomModelShow(false)} selectedMember={selectedMember} />
     </div>
   );
-}
+};
 
 export default ExcomDetailPage;

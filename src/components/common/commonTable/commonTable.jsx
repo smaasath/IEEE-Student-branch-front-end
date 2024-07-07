@@ -19,7 +19,7 @@ const CommonTable = ({ tableHeading, tableData, finance, primary, viewAction, ed
                     <tr>
                         {tableHeading?.map((item, index) => {
                             return (
-                                <th key={index} scope="col" className={`${primary ? "bag-primary text-white" : finance ? "white text-cl-primary" : "bg-third text-white"}`}>{item.lable}</th>
+                                <th key={index} scope="col" className={`${primary ? "bag-primary text-white" : finance ? "white text-cl-primary" : "bg-third text-white"}`}>{item.label}</th>
                             )
                         })}
 
