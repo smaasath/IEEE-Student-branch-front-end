@@ -4,12 +4,13 @@ import financeExpence from '../../../assets/icons/financeExpence.png'
 import editPrimary from '../../../assets/icons/editPrimary.png'
 import viewPrimary from '../../../assets/icons/viewPrimary.png'
 import deleteicon from '../../../assets/icons/delete.png'
+import moreicon from '../../../assets/icons/info.png'
 import viewDark from '../../../assets/icons/darkView.png'
 import editDark from '../../../assets/icons/darkEdit.png'
 import CommonStatusContainer from '../commonStatusContainer/commonStatusContainer'
 
 
-const CommonTable = ({ tableHeading, tableData, finance, primary, viewAction, editAction, deleteAction, loading, report }) => {
+const CommonTable = ({ tableHeading, tableData, finance, primary, viewAction, editAction, deleteAction, moreAction, loading, report }) => {
 
     return (
         <div className='table-responsive overflow-y-scroll custom-scrollbar' style={{ maxHeight: report ? null : 500 }}>
@@ -60,6 +61,9 @@ const CommonTable = ({ tableHeading, tableData, finance, primary, viewAction, ed
                                                             } else if (action === "DELETE") {
                                                                 iconSrc = deleteicon;
                                                                 actionFunction = deleteAction;
+                                                            }else if (action === "MORE"){
+                                                                iconSrc = moreicon;
+                                                                actionFunction = moreAction;
                                                             }
 
                                                             return (

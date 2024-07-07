@@ -21,13 +21,13 @@ import ProjectFinanceLanding from './pages/projectFlow/finance/projectFinanceLan
 import ServiceLanding from './pages/serviceFlow/serviveLandingPage/serviveLandingPage';
 import VolunteerDetailsPage from './pages/serviceFlow/volunteerDetailsPage/volunteerDetails';
 import Volunteering from './pages/serviceFlow/VolunteeringPage/VolunteeringPage';
+import ProjectPrPlan from './pages/projectFlow/prPlan/projectPrPlan';
 import MainSettingPage from './pages/settingFlow/mainSettingPage/mainSettingPage';
 import ProfileEditPage from './pages/settingFlow/profileEditPage/profileEditPage';
 import OtherLandingPage from './pages/otherFlow/langingPage/landingPage';
 import TermYearPage from './pages/otherFlow/termYearPage/termYearPage'
 import PolicyPage from './pages/otherFlow/policyPage/policyPage'
 import UserRolePage from './pages/otherFlow/userRolePage/userRolePage'
-
 
 
 
@@ -52,6 +52,7 @@ function App() {
             <Route path='time-line' element={<TimeLinePage />} />
             <Route path=':id'  >
               <Route path='' element={<ProjectPage />} />
+              <Route path='prPlan' element={<ProjectPrPlan/>}/>
               <Route path='finance' element={<ProjectFinanceLanding />} />
             </Route>
           </Route>
