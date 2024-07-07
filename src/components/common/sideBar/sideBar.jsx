@@ -21,6 +21,7 @@ const SideBar = () => {
         { name: "Project", image: projecticon, path: "dashboard/project" },
         { name: "Finance", image: financeicon, path: "dashboard/finance" },
         { name: "Service", image: serviceicon, path: "dashboard/service" },
+        { name: "Other", image: serviceicon, path: "dashboard/other" },
 
     ];
 

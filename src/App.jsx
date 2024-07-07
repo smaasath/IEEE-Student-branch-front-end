@@ -22,6 +22,7 @@ import ServiceLanding from './pages/serviceFlow/serviveLandingPage/serviveLandin
 import VolunteerDetailsPage from './pages/serviceFlow/volunteerDetailsPage/volunteerDetails';
 import Volunteering from './pages/serviceFlow/VolunteeringPage/VolunteeringPage';
 import MainSettingPage from './pages/settingFlow/mainSettingPage';
+import OtherLandingPage from './pages/otherFlow/langingPage/landingPage';
 
 
 
@@ -61,6 +62,12 @@ function App() {
           </Route>
           <Route path='setting'>
             <Route path='' element={<MainSettingPage />} />
+          </Route>
+          <Route path='other'>
+            <Route path='' element={<OtherLandingPage />} />
+            <Route path='academic-year' element={<h1>h</h1>} />
+            <Route path='policy' element={<h1>h</h1>} />
+            <Route path='user-role' element={<h1>h</h1>} />
           </Route>
           <Route path='*' element={<NotFound />}>
           </Route>
