@@ -56,7 +56,8 @@ const TermYearPage = () => {
     getAllAcademicYear(currentPage-1,status,searchItem, (res) => {
       if(res.status == 200){
         SetacademicYearData(res?.data?.data?.content)
-        setTotalPage(res?.data?.data?.content?.totalPages)
+        setTotalPage(res?.data?.data?.totalPages)
+        console.warn(res?.data?.data?.totalPages)
         setLoader(false)
       }
      
@@ -76,7 +77,7 @@ const TermYearPage = () => {
             tableData={academicYearData}
             primary={true}
             loading={loader}
-            
+
           />
           <div className='mt-4 d-flex justify-content-end'>
             <CommonPagination pages={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
