@@ -14,9 +14,9 @@ const CommonStatusContainer = ({ status }) => {
       case "ONGOING":
         return { bgcolor: "#00B8D9", color: "#00629B ", text: "Ongoing" };
       case "ACTIVE":
-        return { bgcolor: "#00B8D9", color: "#00629B ", text: "Active" };
+        return { bgcolor: "rgb(0, 0, 255,0.1)", color: "rgb(0, 0, 255) ", text: "Active" };
       case "DEACTIVE":
-        return { bgcolor: "#00B8D9", color: "#00629B ", text: "Deactive" };
+        return { bgcolor: "rgb(128, 128, 128,0.1)", color: "rgb(128, 128, 128) ", text: "Deactive" };
       case "NOTASSIGNED":
         return { bgcolor: "#00B8D9", color: "#00629B ", text: "Not-Assigned" };
       case "READY":
@@ -40,7 +40,7 @@ const CommonStatusContainer = ({ status }) => {
   return (
     <div
       className="rounded-4 p-1 text-center ps-2 pe-2 fw-bold"
-      style={{ color: data.color, backgroundColor: data.bgcolor, fontSize: 14 }}
+      style={{ color: data.color, backgroundColor: data.bgcolor, fontSize: 14, maxWidth:150 }}
     >
       {data.text}
     </div>
