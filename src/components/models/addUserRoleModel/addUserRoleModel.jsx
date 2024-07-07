@@ -1,43 +1,36 @@
 import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import CommonButton from '../../common/commonButton/commonButton';
-import profile from '../../../assets/images/profile.png';
 import CommonSearch from '../../common/commonSearch/commonSearch';
 
 const UserRoleModel = ({ onHide, show, editable, disabled, id }) => {
-  const [selectedRole, setSelectedRole] = useState('');
-  const [selectedMember, setSelectedMember] = useState(null); 
+  const [selectedMembers, setSelectedMembers] = useState([]);
 
-  const members = [
+  const policies = [
     {
-      name: 'Thilina Kumara',
-      email: 'thilina@gmail.com',
-      phone: '+94712668316',
-      academicYear: '3rd Year',
-      photo: profile,
+      policy: 'Policy 1',
+      policyCode: 'P001',
     },
     {
-      name: 'Thilini Priyangika',
-      email: 'thilini@gmail.com',
-      phone: '+94712668316',
-      academicYear: '3rd Year',
-      photo: profile,
+      policy: 'Policy 2',
+      policyCode: 'P002',
     },
     {
-      name: 'Thihara Mallawaarachchi',
-      email: 'thihara@gmail.com',
-      phone: '+94712668316',
-      academicYear: '2nd Year',
-      photo: profile,
+      policy: 'Policy 3',
+      policyCode: 'P003',
     },
   ];
 
-  const handleSelectMember = (member) => {
-    setSelectedMember(member);
+  const handleSelectPolicy = (policyCode) => {
+    if (selectedMembers.includes(policyCode)) {
+      setSelectedMembers(selectedMembers.filter((code) => code !== policyCode));
+    } else {
+      setSelectedMembers([...selectedMembers, policyCode]);
+    }
   };
 
   const handleSubmit = () => {
-    onHide(); 
+    onHide();
   };
 
   return (
@@ -58,52 +51,65 @@ const UserRoleModel = ({ onHide, show, editable, disabled, id }) => {
         <Modal.Body>
           <div className='d-flex flex-column'>
             <div className='mt-3'>
-                <div className="">
-                <label htmlFor="exampleFormControlInput1" className="form-label text-dark">Role Name</label>
-                <input type="text" className="form-control" id="exampleFormControlInput1" placeholder="Role Name" disabled={disabled} />
-                </div>
+              <div className="">
+                <label htmlFor="roleInput" className="form-label text-dark">Role Name</label>
+                <input type="text" className="form-control" id="roleInput" placeholder="Role Name" disabled={disabled} />
+              </div>
             </div>
             <div className="mt-3">
-            <label htmlFor="exampleFormControlInput1" className="form-label text-dark">Type</label>
-            <select className="form-select w-100" aria-label="Large select example" disabled={disabled}>
-              <option>Select Type</option>
-              <option value="1">pl</option>
-            </select>
-          </div>
+              <label htmlFor="typeSelect" className="form-label text-dark">Type</label>
+              <select className="form-select w-100" aria-label="Large select example" disabled={disabled}>
+                <option>Select Type</option>
+                <option value="1">pl</option>
+              </select>
+            </div>
 
             <div className='mt-3'>
-              <CommonSearch /> 
-              <div className="list-group mt-2">
-                {members.map((member, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    className={`list-group-item list-group-item-action ${selectedMember === member ? 'active' : ''}`}
-                    onClick={() => handleSelectMember(member)}
-                  >
-                    <div className="d-flex align-items-center">
-                      <img src={member.photo} alt="Profile" className="rounded-circle me-3" style={{ width: '25px', height: '25px', objectFit: 'cover' }} />
-                      <div>
-                        <h6 className="mb-0">{member.name}</h6>
-                        <p className="mb-0 text-muted" style={{ fontSize: '12px' }}>{member.email} | {member.phone}</p>
-                      </div>
-                    </div>
-                  </button>
-                ))}
+              <CommonSearch />
+              <div className="table-responsive mt-2">
+                <table className="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th scope="col"></th>
+                      <th scope="col">Policy</th>
+                      <th scope="col">Policy Code</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {policies.map((policy, index) => (
+                      <tr key={index}>
+                        <td>
+                          <input 
+                            type="checkbox" 
+                            checked={selectedMembers.includes(policy.policyCode)} 
+                            onChange={() => handleSelectPolicy(policy.policyCode)} 
+                            disabled={disabled} 
+                          />
+                        </td>
+                        <td>{policy.policy}</td>
+                        <td>{policy.policyCode}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
         </Modal.Body>
         <Modal.Footer className='d-flex justify-content-end'>
-        <div>
-          <CommonButton onClick={onHide} close={true} text={"Close"} />
-        </div>
-        {disabled ? null : (
-          <div>
-            <CommonButton onClick={onHide} text={editable ? "Save" : "Add"} />
-          </div>
-        )}
-      </Modal.Footer>
+                    <div>
+                        <CommonButton onClick={onHide} close={true} text={"Close"} />
+                    </div>
+                    {
+                        disabled ? null : (
+                            <div>
+                                <CommonButton onClick={onHide} text={editable ? "Save" : "Add"} />
+                            </div>
+                        )
+                    }
+
+
+                </Modal.Footer>
       </Modal>
     </>
   );
