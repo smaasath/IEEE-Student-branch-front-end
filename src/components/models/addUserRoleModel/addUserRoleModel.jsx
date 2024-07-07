@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import CommonButton from '../../common/commonButton/commonButton';
 import CommonSearch from '../../common/commonSearch/commonSearch';
 
-const UserRoleModel = ({ onHide, show, editable, disabled, id }) => {
+const UserRoleModel = ({ onHide, show, editable, disabled, item }) => {
   const [selectedMembers, setSelectedMembers] = useState([]);
 
   const policies = [
@@ -27,6 +27,8 @@ const UserRoleModel = ({ onHide, show, editable, disabled, id }) => {
     } else {
       setSelectedMembers([...selectedMembers, policyCode]);
     }
+
+    console.warn(selectedMembers)
   };
 
   const handleSubmit = () => {

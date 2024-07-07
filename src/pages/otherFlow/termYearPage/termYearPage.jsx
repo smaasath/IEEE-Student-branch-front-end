@@ -50,6 +50,7 @@ const TermYearPage = () => {
   };
 
   const handleCloseTermYearModel = () => {
+    setEditable(false);
     setTermYearModelShow(false);
   };
 

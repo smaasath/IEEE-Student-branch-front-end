@@ -90,7 +90,7 @@ const PolicyPage = () => {
             tableHeading={tableHeading}
             tableData={policyData}
             primary={true}
-            loading={false}
+            loading={loader}
             editAction={(item) => { editPolicy(item) }}
           />
           <div className='mt-4 d-flex justify-content-end'>
