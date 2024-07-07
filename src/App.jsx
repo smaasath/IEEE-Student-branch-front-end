@@ -23,7 +23,6 @@ import VolunteerDetailsPage from './pages/serviceFlow/volunteerDetailsPage/volun
 import Volunteering from './pages/serviceFlow/VolunteeringPage/VolunteeringPage';
 import MainSettingPage from './pages/settingFlow/mainSettingPage/mainSettingPage';
 import ProfileEditPage from './pages/settingFlow/profileEditPage/profileEditPage';
-import MainSettingPage from './pages/settingFlow/mainSettingPage';
 import OtherLandingPage from './pages/otherFlow/langingPage/landingPage';
 import TermYearPage from './pages/otherFlow/termYearPage/termYearPage'
 import PolicyPage from './pages/otherFlow/policyPage/policyPage'
