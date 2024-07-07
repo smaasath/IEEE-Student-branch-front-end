@@ -21,11 +21,14 @@ import ProjectFinanceLanding from './pages/projectFlow/finance/projectFinanceLan
 import ServiceLanding from './pages/serviceFlow/serviveLandingPage/serviveLandingPage';
 import VolunteerDetailsPage from './pages/serviceFlow/volunteerDetailsPage/volunteerDetails';
 import Volunteering from './pages/serviceFlow/VolunteeringPage/VolunteeringPage';
+import MainSettingPage from './pages/settingFlow/mainSettingPage/mainSettingPage';
+import ProfileEditPage from './pages/settingFlow/profileEditPage/profileEditPage';
 import MainSettingPage from './pages/settingFlow/mainSettingPage';
 import OtherLandingPage from './pages/otherFlow/langingPage/landingPage';
 import TermYearPage from './pages/otherFlow/termYearPage/termYearPage'
 import PolicyPage from './pages/otherFlow/policyPage/policyPage'
 import UserRolePage from './pages/otherFlow/userRolePage/userRolePage'
+
 
 
 
@@ -65,6 +68,7 @@ function App() {
           </Route>
           <Route path='setting'>
             <Route path='' element={<MainSettingPage />} />
+            <Route path='edit-profile' element={<ProfileEditPage/>}/>
           </Route>
           <Route path='other'>
             <Route path='' element={<OtherLandingPage />} />
