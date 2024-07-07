@@ -5,6 +5,7 @@ import Linkedin from '../../../assets/icons/LinkedIn Circled.png';
 import profile from '../../../assets/images/profile.png';
 import CommonButton from '../../../components/common/commonButton/commonButton';
 
+
 const ProfileCard = ({photo, name, role, }) => {
 
   return(
@@ -162,7 +163,7 @@ const profileEditPage = () => {
                     <div className="mt-3 d-flex flex-wrap gap-lg-3">
                 <div className="">
                     <label htmlFor="email" className="form-label text-dark">Current Password</label>
-                    <input type="email" className="form-control" placeholder=""  style={{width:"520px"}} />
+                    <input type="email" className="form-control"  placeholder=""  style={{width:"520px"}} />
                 </div>
                 <div className="">
                     <label htmlFor="phone" className="form-label text-dark">New Password</label>
@@ -173,7 +174,9 @@ const profileEditPage = () => {
                 <div className="mt-3">
                 <div className="">
                     <label htmlFor="location" className="form-label text-dark">Confirm New Password</label>
+                    
                     <input type="text" className="form-control" placeholder=""  style={{width:"1055px"}} />
+                    
                     </div>
                     </div>
 
@@ -183,7 +186,7 @@ const profileEditPage = () => {
                     <div className='d-flex justify-content-end align-items-end gap-1 mt-5' style={{}}>
                     
                     <div className='d-flex gap-3 flex-row'>
-                        <div>
+                        <div className="">
                             <CommonButton text={"Cancel"} />
                         </div>
                         <div>

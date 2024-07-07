@@ -92,50 +92,50 @@ const MainSettingPage = () => {
                 <div className="mt-3 d-flex flex-wrap gap-lg-3">
                 <div className="">
                     <label htmlFor="firstName" className="form-label text-dark">First Name</label>
-                    <input type="text" className="form-control" placeholder="firstName" disabled style={{width:"520px"}} />
+                    <input type="text" className="form-control" placeholder="Suvini" disabled style={{width:"520px"}} />
                 </div>
                 <div className="">
                     <label htmlFor="lastName" className="form-label text-dark">Last Name</label>
-                    <input type="text" className="form-control" placeholder="lastName" disabled style={{width:"520px"}} />
+                    <input type="text" className="form-control" placeholder="Herath" disabled style={{width:"520px"}} />
                 </div>
                 </div>
 
                 <div className="mt-3">
                 <div className="">
                     <label htmlFor="userName" className="form-label text-dark">User Name</label>
-                    <input type="text" className="form-control" placeholder="userName" disabled style={{width:"1055px"}} />
+                    <input type="text" className="form-control" placeholder="suviniherath" disabled style={{width:"1055px"}} />
                 </div>
                 </div> 
 
                 <div className="mt-3 d-flex flex-wrap gap-lg-3">
                 <div className="">
                     <label htmlFor="email" className="form-label text-dark">Email Address</label>
-                    <input type="email" className="form-control" placeholder="email" disabled style={{width:"520px"}} />
+                    <input type="email" className="form-control" placeholder="suvi@gmail.com" disabled style={{width:"520px"}} />
                 </div>
                 <div className="">
                     <label htmlFor="phone" className="form-label text-dark">Phone Number</label>
-                    <input type="text" className="form-control" placeholder="phone" disabled style={{width:"520px"}}  />
+                    <input type="text" className="form-control" placeholder="0712458963" disabled style={{width:"520px"}}  />
                 </div>
                 </div>
 
                 <div className="mt-3">
                 <div className="">
                     <label htmlFor="ieeeEmail" className="form-label text-dark">IEEE Email Address</label>
-                    <input type="email" className="form-control" placeholder="ieeeEmail" disabled style={{width:"520px"}}  />
+                    <input type="email" className="form-control" placeholder="ieeesuvi@gmail.com" disabled style={{width:"520px"}}  />
                 </div>
                 </div>
 
                 <div className="mt-3">
                 <div className="">
                     <label htmlFor="ieeeNumber" className="form-label text-dark">IEEE Membership Number</label>
-                    <input type="text" className="form-control" placeholder="ieeeNumber" disabled style={{width:"520px"}}  />
+                    <input type="text" className="form-control" placeholder="ieee23" disabled style={{width:"520px"}}  />
                 </div>
                 </div>
 
                 <div className="mt-3 d-flex flex-wrap gap-lg-3">
                 <div className="">
                     <label htmlFor="academicId" className="form-label text-dark">Academic ID</label>
-                    <input type="text" className="form-control" placeholder="academicId" disabled style={{width:"520px"}}  />
+                    <input type="text" className="form-control" placeholder="CST20087" disabled style={{width:"520px"}}  />
                 </div>
                 <div className="">
                     <label htmlFor="academicYear" className="form-label text-dark">Academic Year</label>
@@ -149,7 +149,7 @@ const MainSettingPage = () => {
                 <div className="mt-3">
                 <div className="">
                     <label htmlFor="location" className="form-label text-dark">Location</label>
-                    <input type="text" className="form-control" placeholder="location" disabled style={{width:"1055px"}} />
+                    <input type="text" className="form-control" placeholder="Monaragala" disabled style={{width:"1055px"}} />
                     </div>
                     </div>
 
