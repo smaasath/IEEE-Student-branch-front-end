@@ -17,12 +17,11 @@ const TermYearModel = ({ onHide, show, disabled, editable, id }) => {
       </Modal.Header>
       <Modal.Body>
         <div className='d-flex flex-column'>
-          <div className="mt-3">
-            <label htmlFor="exampleFormControlInput1" className="form-label text-dark">Acadamic Year</label>
-            <select className="form-select w-100" aria-label="Large select example" disabled={disabled}>
-              <option selected>Select Acadamic Year</option>
-              <option value="1">2021</option>
-            </select>
+        <div className='mt-3'>
+            <div className="">
+              <label htmlFor="exampleFormControlInput1" className="form-label text-dark">Academic Year</label>
+              <input type="text" className="form-control" id="exampleFormControlInput1" placeholder="Enrolled Year" disabled={disabled} />
+            </div>
           </div>
           <div className='mt-3'>
             <div className="">

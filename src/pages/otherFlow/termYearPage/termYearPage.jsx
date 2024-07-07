@@ -14,9 +14,9 @@ const TermYearPage = () => {
   const [id, setId] = useState(null);
 
   const tableHeading = [
+    { label: "ID", value: "id" },
     { label: "Enrolled Year", value: "enrolledYear" },
     { label: "Academic Year", value: "academicYear" },
-    { label: "Status", value: "status" },
     { label: "", value: "action" },
   ];
 
@@ -25,42 +25,36 @@ const TermYearPage = () => {
       id: 1,
       enrolledYear: 2014,
       academicYear: "2021",
-      status: "ACTIVE",
       action: <img src={EditPrimary} alt="View" style={{ width: '23px', height: '24px' }} onClick={() => editProject(1)} />,
     },
     {
       id: 2,
       enrolledYear: 2014,
       academicYear: "2021",
-      status: "ACTIVE",
       action: <img src={EditPrimary} alt="View" style={{ width: '23px', height: '24px' }} onClick={() => editProject(2)} />,
     },
     {
       id: 3,
       enrolledYear: 2014,
       academicYear: "2021",
-      status: "ACTIVE",
       action: <img src={EditPrimary} alt="View" style={{ width: '23px', height: '24px' }} onClick={() => editProject(3)} />,
     },
     {
       id: 4,
       enrolledYear: 2014,
       academicYear: "2021",
-      status: "ACTIVE",
       action: <img src={EditPrimary} alt="View" style={{ width: '23px', height: '24px' }} onClick={() => editProject(4)} />,
     },
     {
       id: 5,
       enrolledYear: 2014,
       academicYear: "2021",
-      status: "ACTIVE",
       action: <img src={EditPrimary} alt="View" style={{ width: '23px', height: '24px' }} onClick={() => editProject(5)} />,
     },
     {
       id: 6,
       enrolledYear: 2014,
       academicYear: "2021",
-      status: "ACTIVE",
       action: <img src={EditPrimary} alt="View" style={{ width: '23px', height: '24px' }} onClick={() => editProject(6)} />,
     },
   ];
