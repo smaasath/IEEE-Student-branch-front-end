@@ -1,7 +1,7 @@
 import React from "react";
-import CommonEventCard from "../../../components/common/commonEventCard/commonEventCard";
+import CommonEventCard from "../../components/common/commonEventCard/commonEventCard";
 
-const ProjectEventPage = () => {
+const UpcommingEventsPage = () => {
 
   const events = [{
     id:1,
@@ -21,7 +21,7 @@ const ProjectEventPage = () => {
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi a ligula semper, porttitor mauris commodo, auctor massa. Nunc rutrum augue ac arcu pellentesque",
     eventUrl: "",
-    projectName: "Shecodress<V6.0>",
+    projectName: "UvaXtreme<V1.1>",
   },
   {
     id:2,
@@ -59,7 +59,7 @@ const ProjectEventPage = () => {
   return (
     <>
       <div className="container">
-        <div className="text-cl-primary">Events</div>
+        <div className="text-cl-primary">Upcomming Events</div>
         
         <div className="row mt-3">
           {events.map((event) => (
@@ -76,4 +76,4 @@ const ProjectEventPage = () => {
   );
 };
 
-export default ProjectEventPage;
+export default UpcommingEventsPage;

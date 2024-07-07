@@ -128,7 +128,7 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
           <div className='mt-3'>
             <div className="has-validation">
               <label htmlFor="exampleFormControlInput1" className="form-label text-dark">Academic Year</label>
-              <input type="number" className={`form-control ${error.academicYear ? "is-invalid" : ""}`} name='academicYear' value={formData.academicYear} onChange={handleInputChange} id="exampleFormControlInput1" placeholder="Enrolled Year" disabled={disabled} required />
+              <input type="text" className={`form-control ${error.academicYear ? "is-invalid" : ""}`} name='academicYear' value={formData.academicYear} onChange={handleInputChange} id="exampleFormControlInput1" placeholder="Enrolled Year" disabled={disabled} required />
               <div class="invalid-feedback">
                 This field is required.
               </div>
