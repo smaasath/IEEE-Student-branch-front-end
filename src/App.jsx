@@ -23,6 +23,9 @@ import VolunteerDetailsPage from './pages/serviceFlow/volunteerDetailsPage/volun
 import Volunteering from './pages/serviceFlow/VolunteeringPage/VolunteeringPage';
 import MainSettingPage from './pages/settingFlow/mainSettingPage';
 import OtherLandingPage from './pages/otherFlow/langingPage/landingPage';
+import TermYearPage from './pages/otherFlow/termYearPage/termYearPage'
+import PolicyPage from './pages/otherFlow/policyPage/policyPage'
+import UserRolePage from './pages/otherFlow/userRolePage/userRolePage'
 
 
 
@@ -65,9 +68,9 @@ function App() {
           </Route>
           <Route path='other'>
             <Route path='' element={<OtherLandingPage />} />
-            <Route path='academic-year' element={<h1>h</h1>} />
-            <Route path='policy' element={<h1>h</h1>} />
-            <Route path='user-role' element={<h1>h</h1>} />
+            <Route path='academic-year' element={<TermYearPage/>} />
+            <Route path='policy' element={<PolicyPage/>} />
+            <Route path='user-role' element={<UserRolePage/>} />
           </Route>
           <Route path='*' element={<NotFound />}>
           </Route>
