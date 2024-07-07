@@ -12,17 +12,18 @@ const TermYearPage = () => {
   const [termYearModelShow, setTermYearModelShow] = useState(false);
   const [editable, setEditable] = useState(false);
   const [disable, setDisable] = useState(false);
-  const [id, setId] = useState(null);
+  const [item, setitem] = useState(null);
   const [academicYearData, SetacademicYearData] = useState(null);
   const [loader, setLoader] = useState(false);
   const [totalPage, setTotalPage] = useState(1);
   const [status, setStatus] = useState('');
   const [searchItem, setsearchItem] = useState('');
+  const [refreshTable , setRefreshTable] = useState(0)
 
   const tableHeading = [
     { label: "id", value: "id" },
-    { label: "Enrolled Year", value: "enrolledYear" },
     { label: "Academic Year", value: "academicYear" },
+    { label: "Enrolled Year", value: "enrolledYear" },
     { label: "Status", value: "status" },
     { label: "", value: "ACTION", type: ["EDIT"] },
   ];
@@ -36,10 +37,10 @@ const TermYearPage = () => {
 
 
 
-  const editYear = (id) => {
-    console.warn(id)
+  const editYear = (item) => {
+    // console.warn(id)
     setDisable(false);
-    setId(id);
+    setitem(item);
     setEditable(true);
     handleShowTermYearModel();
   };
@@ -53,6 +54,7 @@ const TermYearPage = () => {
   };
 
   useEffect(() => {
+    
     setLoader(true)
     getAllAcademicYear(currentPage-1,status,searchItem, (res) => {
       if(res.status == 200){
@@ -71,10 +73,11 @@ const TermYearPage = () => {
       }
      
     })
-  }, [searchItem,currentPage])
+  }, [searchItem,currentPage,refreshTable])
 
   return (
     <>
+     <div className='text-cl-primary'>Academic Year</div>
       <div className='mt-4 d-flex justify-content-end'><div><CommonButton onClick={handleShowTermYearModel} text={"Add"} /></div></div>
       <div className='mt-3 pt-4 p-3 rounded-4 bg-white common-shadow'>
         <div className='d-flex justify-content-between flex-wrap align-items-center p-3'>
@@ -86,7 +89,7 @@ const TermYearPage = () => {
             tableData={academicYearData}
             primary={true}
             loading={loader}
-            editAction={(id)=>{editYear(id)}}
+            editAction={(item)=>{editYear(item)}}
 
           />
           <div className='mt-4 d-flex justify-content-end'>
@@ -99,7 +102,8 @@ const TermYearPage = () => {
         onHide={handleCloseTermYearModel}
         disabled={disable}
         editable={editable}
-        id={id}
+        item={item}
+        changed={()=>{setRefreshTable(refreshTable+1)}}
       />
     </>
   );
