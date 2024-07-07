@@ -4,7 +4,6 @@ import Facebook from '../../../assets/icons/Facebook.png';
 import Linkedin from '../../../assets/icons/LinkedIn Circled.png';
 import profile from '../../../assets/images/profile.png';
 import CommonButton from '../../../components/common/commonButton/commonButton';
-import Modal from 'react-bootstrap/Modal';
 import { useNavigate } from 'react-router-dom'
 
 
@@ -41,7 +40,7 @@ const MainSettingPage = () => {
 
     const navigate = useNavigate()
     function NavigateToProfileEditePage(){
-        navigate('profile-edit')
+        navigate('edit-profile')
     }
 
     const userProfile = [

@@ -62,7 +62,7 @@ function App() {
           </Route>
           <Route path='setting'>
             <Route path='' element={<MainSettingPage />} />
-            <Route path='profile-edit' element={<ProfileEditPage/>}/>
+            <Route path='edit-profile' element={<ProfileEditPage/>}/>
           </Route>
           <Route path='*' element={<NotFound />}>
           </Route>
