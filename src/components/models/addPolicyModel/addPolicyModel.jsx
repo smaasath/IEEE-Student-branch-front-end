@@ -30,12 +30,11 @@ const PolicyModel = ({ onHide, show, disabled, editable, id }) => {
               <option value="1">pl</option>
             </select>
           </div>
-          <div className="mt-3">
-            <label htmlFor="exampleFormControlInput1" className="form-label text-dark">Policy Code</label>
-            <select className="form-select w-100" aria-label="Large select example" disabled={disabled}>
-              <option>Select policy code</option>
-              <option value="1">1234</option>
-            </select>
+          <div className='mt-3'>
+            <div className="">
+              <label htmlFor="exampleFormControlInput1" className="form-label text-dark">Policy Code</label>
+              <input type="text" className="form-control" id="exampleFormControlInput1" placeholder="Policy Code" disabled={disabled} />
+            </div>
           </div>
           <div className='mt-3'>
             <div className="form-group">

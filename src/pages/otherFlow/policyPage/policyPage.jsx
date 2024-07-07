@@ -14,6 +14,7 @@ const PolicyPage = () => {
   const [id, setId] = useState(null);
 
   const tableHeading = [
+    { label: "ID", value: "id" },
     { label: "Policy", value: "policy" },
     { label: "Type", value: "type" },
     { label: "Policy Code", value: "policyCode" },
