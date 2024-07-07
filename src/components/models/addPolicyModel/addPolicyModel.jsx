@@ -36,12 +36,6 @@ const PolicyModel = ({ onHide, show, disabled, editable, id }) => {
               <input type="text" className="form-control" id="exampleFormControlInput1" placeholder="Policy Code" disabled={disabled} />
             </div>
           </div>
-          <div className='mt-3'>
-            <div className="form-group">
-              <label htmlFor="exampleFormControlTextarea1">Description</label>
-              <textarea className="form-control" id="exampleFormControlTextarea1" rows="3" disabled={disabled}></textarea>
-            </div>
-          </div>
         </div>
       </Modal.Body>
       <Modal.Footer className='d-flex justify-content-end'>
