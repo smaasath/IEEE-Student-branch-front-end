@@ -20,37 +20,37 @@ export const getAllRoles = (page, search, type, callback) => {
   }
 };
 
-// export const createPolicy = (body, callback) => {
-//     const endpoint = `${import.meta.env.VITE_API_HOST}policy`;
+export const createRole = (body, callback) => {
+    const endpoint = `${import.meta.env.VITE_API_HOST}role`;
   
-//     try {
-//       http
-//         .post(endpoint, body)
-//         .then((response) => {
-//           callback(response);
-//         })
-//         .catch((error) => {
-//           callback(error.response);
-//         });
-//     } catch (error) {
-//       callback(error.response);
-//     }
-//   };
+    try {
+      http
+        .post(endpoint, body)
+        .then((response) => {
+          callback(response);
+        })
+        .catch((error) => {
+          callback(error.response);
+        });
+    } catch (error) {
+      callback(error.response);
+    }
+  };
   
   
-//   export const updatePolicy = (body, callback) => {
-//     const endpoint = `${import.meta.env.VITE_API_HOST}policy`;
+  export const updateRole = (body, callback) => {
+    const endpoint = `${import.meta.env.VITE_API_HOST}role`;
   
-//     try {
-//       http
-//         .put(endpoint, body)
-//         .then((response) => {
-//           callback(response);
-//         })
-//         .catch((error) => {
-//           callback(error.response);
-//         });
-//     } catch (error) {
-//       callback(error.response);
-//     }
-//   };
+    try {
+      http
+        .put(endpoint, body)
+        .then((response) => {
+          callback(response);
+        })
+        .catch((error) => {
+          callback(error.response);
+        });
+    } catch (error) {
+      callback(error.response);
+    }
+  };

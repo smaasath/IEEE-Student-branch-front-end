@@ -54,3 +54,21 @@ export const createPolicy = (body, callback) => {
       callback(error.response);
     }
   };
+
+
+  export const assignPolicy = (body, callback) => {
+    const endpoint = `${import.meta.env.VITE_API_HOST}policy/assign`;
+  
+    try {
+      http
+        .post(endpoint, body)
+        .then((response) => {
+          callback(response);
+        })
+        .catch((error) => {
+          callback(error.response);
+        });
+    } catch (error) {
+      callback(error.response);
+    }
+  };

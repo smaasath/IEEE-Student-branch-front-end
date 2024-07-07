@@ -33,7 +33,7 @@ const UserRolePage = () => {
     console.warn(item?.target?.value);
   }
 
-  const editProject = (item) => {
+  const editRole = (item) => {
     setitem(item);
     setEditable(true);
     setDisable(false);
@@ -80,7 +80,7 @@ const UserRolePage = () => {
             tableData={roleData}
             primary={true}
             loading={loader}
-            editAction={(item) => { editPolicy(item) }}
+            editAction={(item) => { editRole(item) }}
           />
           <div className='mt-4 d-flex justify-content-end'>
             <CommonPagination pages={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
