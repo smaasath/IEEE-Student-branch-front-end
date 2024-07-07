@@ -1,6 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import timeLinefrom from "../../../assets/images/timeLine.png";
+import termyear from "../../../assets/images/termyear.png";
+import policy from "../../../assets/images/policy.png";
+import userrole from "../../../assets/images/userrole.png"
 
 const OtherLandingPage = () => {
   const navigate = useNavigate();
@@ -25,7 +27,7 @@ const OtherLandingPage = () => {
       >
         <div className="h4 fw-bold text-cl-primary">Term Year</div>
         <div>
-          <img src={timeLinefrom} width={70} />
+          <img src={termyear} width={70} />
         </div>
       </button>
       <button
@@ -37,7 +39,7 @@ const OtherLandingPage = () => {
       >
         <div className="h4 fw-bold text-cl-primary">Policy</div>
         <div>
-          <img src={timeLinefrom} width={70} />
+          <img src={policy} width={70} />
         </div>
       </button>
       <button
@@ -49,7 +51,7 @@ const OtherLandingPage = () => {
       >
         <div className="h4 fw-bold text-cl-primary">User Roles</div>
         <div>
-          <img src={timeLinefrom} width={70} />
+          <img src={userrole} width={70} />
         </div>
       </button>
     </div>

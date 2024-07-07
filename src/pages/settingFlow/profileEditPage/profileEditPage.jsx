@@ -73,7 +73,7 @@ const profileEditPage = () => {
                             <CommonButton text={"Upload New Photo"} />
                         </div>
                         <div>
-                            <CommonButton text={"Delete"} />
+                            <CommonButton text={"Delete"} close={true} />
                         </div>
                     </div>
 
@@ -187,7 +187,7 @@ const profileEditPage = () => {
                     
                     <div className='d-flex gap-3 flex-row'>
                         <div className="">
-                            <CommonButton text={"Cancel"} />
+                            <CommonButton text={"Cancel"} close={true} />
                         </div>
                         <div>
                             <CommonButton text={"Save Changes"} />
