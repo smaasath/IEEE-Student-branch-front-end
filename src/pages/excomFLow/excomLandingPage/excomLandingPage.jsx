@@ -183,7 +183,7 @@ const ExcomLandingPage = () => {
                             primary={true}
                             loading={false}
                             viewAction={(id) => { 
-                                const member = tableData.find(item => item.id === id);
+                                    const member = tableData.find(item => item.id === id);
                                 handleShowMemberDetailModal(member);
                             }}
                         />
