@@ -1,37 +1,176 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import CommonButton from '../../common/commonButton/commonButton';
 import CommonSearch from '../../common/commonSearch/commonSearch';
+import { createRole, updateRole } from '../../../redux/actions/role';
+import { assignPolicy, getAllPolicy } from '../../../redux/actions/policy';
 
-const UserRoleModel = ({ onHide, show, editable, disabled, id }) => {
-  const [selectedMembers, setSelectedMembers] = useState([]);
+const UserRoleModel = ({ onHide, show, editable, disabled, item, changed }) => {
+  const [formData, setFormData] = useState({
+    userRole: "",
+    type: "",
+  });
 
-  const policies = [
-    {
-      policy: 'Policy 1',
-      policyCode: 'P001',
-    },
-    {
-      policy: 'Policy 2',
-      policyCode: 'P002',
-    },
-    {
-      policy: 'Policy 3',
-      policyCode: 'P003',
-    },
-  ];
+  const [error, setError] = useState({
+    userRole: false,
+    type: false,
+  });
 
-  const handleSelectPolicy = (policyCode) => {
-    if (selectedMembers.includes(policyCode)) {
-      setSelectedMembers(selectedMembers.filter((code) => code !== policyCode));
+  const [policies, setPolicies] = useState(null)
+  const [selectError, SetSelectError] = useState('')
+  const [loading, setLoading] = useState(false);
+  const [exist, setExist] = useState('');
+  const [searchItem, setsearchItem] = useState('');
+
+  const [selectedPolicy, setSelectedPolicy] = useState([]);
+
+  function onSelectItem(data) {
+    const index = selectedPolicy.findIndex((item) => item.policyID === data.policyID);
+    if (index === -1) {
+      setSelectedPolicy([...selectedPolicy, data]);
     } else {
-      setSelectedMembers([...selectedMembers, policyCode]);
+      const updatedSelectedPolicy = [...selectedPolicy];
+      updatedSelectedPolicy.splice(index, 1);
+      setSelectedPolicy(updatedSelectedPolicy);
     }
+  }
+
+  function isSelected(policy) {
+    return selectedPolicy.some((item) => item.policyID === policy.policyID);
+  }
+
+  function search(item) {
+    setsearchItem(item?.target?.value)
+    console.warn(item?.target?.value);
+  }
+
+  useEffect(() => {
+    console.warn(item, "itemmm")
+
+    getAllPolicy(0, searchItem, "", (res) => {
+      if (res.status == 200) {
+        setPolicies(res?.data?.data?.content)
+
+      }
+
+    })
+  }, [searchItem])
+
+  useEffect(() => {
+    if (show == true) {
+      setSelectedPolicy(item.policies)
+    }
+
+  }, [show])
+
+  useEffect(() => {
+
+    if (!editable) {
+      setFormData({
+        userRole: "",
+        type: "",
+      });
+    } else {
+      setFormData(item)
+    }
+
+    setError({
+      userRole: false,
+      type: false,
+    });
+    SetSelectError('')
+    setExist('')
+
+  }, [show])
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setError((prevError) => ({ ...prevError, [name]: false }));
+    setExist('')
+    SetSelectError('')
   };
 
-  const handleSubmit = () => {
-    onHide();
-  };
+
+  function addRole() {
+    const idArray = selectedPolicy.map(({ policyID }) => policyID);
+    setExist('')
+    setError({
+      userRole: false,
+      type: false,
+    });
+
+    if (!formData.userRole || formData.type == '') {
+      setError({
+        ...error,
+        userRole: !formData.userRole,
+        type: formData.type == '' ? true : false,
+      });
+      return;
+    }
+
+    if (selectedPolicy.length > 0) {
+      setLoading(true)
+      if (editable) {
+        formData.roleID = item?.id;
+        updateRole(formData, (res) => {
+          if (res?.status == 200) {
+            assignPolicy({
+              roleId: res?.data?.data?.roleID,
+              policies: idArray
+            }, (res) => {
+              if (res.status == 200) {
+                console.warn(res)
+                setLoading(false)
+                changed()
+                onHide()
+              }
+
+            })
+
+          } else {
+            setLoading(false)
+            setExist("Role Edited Failed")
+          }
+        })
+      } else {
+
+        createRole(formData, (res) => {
+          if (res?.status == 201) {
+            console.warn()
+
+            assignPolicy({
+              roleId: res?.data?.data?.roleID,
+              policies: idArray
+            }, (res) => {
+              if (res.status == 200) {
+                console.warn(res)
+                setLoading(false)
+                changed()
+                onHide()
+              }
+
+            })
+
+
+
+          } else if (res?.status == 409) {
+            setLoading(false)
+            setExist("Role Already Exist")
+          } else {
+            setLoading(false)
+            setExist("Role Added Failed")
+          }
+
+
+        })
+      }
+
+    } else {
+      SetSelectError("Please Select a Policy")
+    }
+
+  }
 
   return (
     <>
@@ -53,22 +192,29 @@ const UserRoleModel = ({ onHide, show, editable, disabled, id }) => {
             <div className='mt-3'>
               <div className="">
                 <label htmlFor="roleInput" className="form-label text-dark">Role Name</label>
-                <input type="text" className="form-control" id="roleInput" placeholder="Role Name" disabled={disabled} />
+                <input type="text" className={`form-control ${error.userRole ? "is-invalid" : ""}`} name='userRole' value={formData.userRole} onChange={handleInputChange} id="roleInput" placeholder="Role Name" disabled={disabled} />
+                <div class="invalid-feedback">
+                  This field is required.
+                </div>
               </div>
             </div>
             <div className="mt-3">
               <label htmlFor="typeSelect" className="form-label text-dark">Type</label>
-              <select className="form-select w-100" aria-label="Large select example" disabled={disabled}>
-                <option>Select Type</option>
-                <option value="1">pl</option>
+              <select value={formData.type} name='type' onChange={handleInputChange} className={`form-select w-100 ${error.type ? "is-invalid" : ""}`} aria-label="Large select example" disabled={disabled}>
+                <option value=''>Select Type</option>
+                <option value="MAIN">Main</option>
+                <option value="SUB">Sub</option>
               </select>
+              <div class="invalid-feedback">
+                This field is required.
+              </div>
             </div>
 
             <div className='mt-3'>
-              <CommonSearch />
-              <div className="table-responsive mt-2">
+              <CommonSearch onChange={(item) => { search(item) }} />
+              <div className="table-responsive mt-2 overflow-scroll" style={{ maxHeight: 300 }}>
                 <table className="table table-bordered">
-                  <thead>
+                  <thead className='sticky-top z-1'>
                     <tr>
                       <th scope="col"></th>
                       <th scope="col">Policy</th>
@@ -76,14 +222,14 @@ const UserRoleModel = ({ onHide, show, editable, disabled, id }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {policies.map((policy, index) => (
+                    {policies?.map((policy, index) => (
                       <tr key={index}>
                         <td>
-                          <input 
-                            type="checkbox" 
-                            checked={selectedMembers.includes(policy.policyCode)} 
-                            onChange={() => handleSelectPolicy(policy.policyCode)} 
-                            disabled={disabled} 
+                          <input
+                            type="checkbox"
+                            checked={isSelected(policy)}
+                            onChange={() => onSelectItem(policy)}
+                            disabled={disabled}
                           />
                         </td>
                         <td>{policy.policy}</td>
@@ -93,23 +239,26 @@ const UserRoleModel = ({ onHide, show, editable, disabled, id }) => {
                   </tbody>
                 </table>
               </div>
+              <div className='text-danger text-center mt-4'>
+                {selectError}
+              </div>
             </div>
           </div>
         </Modal.Body>
         <Modal.Footer className='d-flex justify-content-end'>
-                    <div>
-                        <CommonButton onClick={onHide} close={true} text={"Close"} />
-                    </div>
-                    {
-                        disabled ? null : (
-                            <div>
-                                <CommonButton onClick={onHide} text={editable ? "Save" : "Add"} />
-                            </div>
-                        )
-                    }
+          <div>
+            <CommonButton onClick={onHide} close={true} text={"Close"} />
+          </div>
+          {
+            disabled ? null : (
+              <div>
+                <CommonButton load={loading} onClick={addRole} text={editable ? "Save" : "Add"} />
+              </div>
+            )
+          }
 
 
-                </Modal.Footer>
+        </Modal.Footer>
       </Modal>
     </>
   );
