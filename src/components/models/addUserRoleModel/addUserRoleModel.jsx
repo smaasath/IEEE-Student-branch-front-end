@@ -57,7 +57,7 @@ const UserRoleModel = ({ onHide, show, editable, disabled, item, changed }) => {
   }, [searchItem])
 
   useEffect(() => {
-    if (show == true) {
+    if (editable && show == true) {
       setSelectedPolicy(item.policies)
     }
 
