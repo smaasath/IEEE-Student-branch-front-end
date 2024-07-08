@@ -50,13 +50,13 @@ function ExecutiveCommitteePage() {
                     <CommonPieChart />
                 </div>
                 <div className='d-flex justify-content-between flex-wrap flex-grow-1 gap-4'>
-                    <div onClick={() => openTaskDetailModel('TODO')}>
+                    <div >
                         <CommonStatusCountCard type={"TODO"} count={44} />
                     </div>
-                    <div onClick={() => openTaskDetailModel('ONGOING')}>
+                    <div>
                         <CommonStatusCountCard type={"ONGOING"} count={55} />
                     </div>
-                    <div onClick={() => openTaskDetailModel('COMPLETE')}>
+                    <div>
                         <CommonStatusCountCard type={"COMPLETE"} count={41} />
                     </div>
                 </div>

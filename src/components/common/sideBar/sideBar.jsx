@@ -16,7 +16,7 @@ const SideBar = () => {
 
 
     const routes = [
-        { name: "Dashboard", image: dashboardIcon, path: "dashboard" },
+        // { name: "Dashboard", image: dashboardIcon, path: "dashboard" },
         { name: "Events", image: eventicon, path: "dashboard/event" },
         { name: "ExCom", image: dashboardIcon, path: "dashboard/executive-committee" },
         { name: "Project", image: projecticon, path: "dashboard/project" },
