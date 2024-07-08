@@ -67,7 +67,7 @@ const UpcommingEventsPage = () => {
               key={event.id}
               className="col-10 col-sm-6 col-md-5 col-lg-3 me-0 mb-4"
             >
-             <CommonEventCard eventDetails={event} editable={true} /> 
+             <CommonEventCard eventDetails={event} editable={false} /> 
             </div>
           ))}
         </div>
