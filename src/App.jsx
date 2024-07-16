@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { Route, Routes, } from 'react-router-dom';
+import { Navigate, Outlet, Route, Routes, } from 'react-router-dom';
 import DashboardLayout from './components/layouts/dashboardLayout/dashboardLayout';
 import ExcomLandingPage from './pages/excomFLow/excomLandingPage/excomLandingPage';
 import ExecutiveCommitteePage from './pages/excomFLow/executiveCommitteePage/executiveCommitteePage';
@@ -30,62 +30,77 @@ import PolicyPage from './pages/otherFlow/policyPage/policyPage'
 import UserRolePage from './pages/otherFlow/userRolePage/userRolePage'
 import ProjectEventPage from './pages/projectFlow/event/projectEventPage';
 import UpcommingEventsPage from './pages/eventFlow/upcommingEventsPage';
-
+import Cookies from "js-cookie";
 
 
 function App() {
-  
+
+  const PrivateRoute = () => {
+    const auth = Cookies.get('token', { path: '/' });
+    return auth ? <Outlet /> : <Navigate to="/" />;
+  }
+
+  const PublicRoute = () => {
+    const auth = Cookies.get('token', { path: '/' });
+    return auth ? <Navigate to="/dashboard" /> : <Outlet />;
+  }
+
   return (
     <>
       <Routes>
-        <Route path='/' element={<SignIN />} />
-        <Route path='/sign-up' element={<SignUp />} />
-        <Route path='*' element={<NotFound />} />
-        <Route path='/verify-code/:type' element={<VerifyCode />} />
-        <Route path='/forgot-password' element={<ForgotPassword />} />
-        <Route path='/forgot-password/change-password' element={<ChangePassword />} />
-        <Route path='/dashboard' element={<DashboardLayout />}>
-          <Route path='' >
-            <Route path='executive-committee' element={<ExcomLandingPage />} />
-            <Route path='executive-committee/:id' element={<ExecutiveCommitteePage />} />
-            <Route path='executive-committee/:id/detail' element={<ExcomDetailPage />} />
-          </Route>
-          <Route path='project'>
-            <Route path='' element={<ProjectLandingPage />} />
-            <Route path='time-line' element={<TimeLinePage />} />
-            <Route path=':id'  >
-              <Route path='' element={<ProjectPage />} />
-              <Route path='prPlan' element={<ProjectPrPlan/>}/>
-              <Route path='finance' element={<ProjectFinanceLanding />} />
-              <Route path='event' element={<ProjectEventPage />} />
+        <Route path='' element={<PublicRoute />}>
+          <Route path='/' element={<SignIN />} />
+          <Route path='/sign-up' element={<SignUp />} />
+          <Route path='*' element={<NotFound />} />
+          <Route path='/verify-code/:type' element={<VerifyCode />} />
+          <Route path='/forgot-password' element={<ForgotPassword />} />
+          <Route path='/forgot-password/change-password' element={<ChangePassword />} />
+        </Route>
+        <Route path='' element={<PrivateRoute />}>
+          <Route path='/dashboard' element={<DashboardLayout />}>
+            <Route path='' >
+              <Route path='executive-committee' element={<ExcomLandingPage />} />
+              <Route path='executive-committee/:id' element={<ExecutiveCommitteePage />} />
+              <Route path='executive-committee/:id/detail' element={<ExcomDetailPage />} />
+            </Route>
+            <Route path='project'>
+              <Route path='' element={<ProjectLandingPage />} />
+              <Route path='time-line' element={<TimeLinePage />} />
+              <Route path=':id'  >
+                <Route path='' element={<ProjectPage />} />
+                <Route path='prPlan' element={<ProjectPrPlan />} />
+                <Route path='finance' element={<ProjectFinanceLanding />} />
+                <Route path='event' element={<ProjectEventPage />} />
+              </Route>
+            </Route>
+            <Route path='event'>
+              <Route path='' element={<UpcommingEventsPage />} />
+            </Route>
+            <Route path='finance'>
+              <Route path='' element={<FinanceLanding />} />
+              <Route path='proposal' element={<Proposal />} />
+              <Route path='report' element={<ReportPage />} />
+            </Route>
+            <Route path='service'>
+              <Route path='' element={<ServiceLanding />} />
+              <Route path='volunteer' element={<VolunteerDetailsPage />} />
+              <Route path='volunteering' element={<Volunteering />} />
+            </Route>
+            <Route path='setting'>
+              <Route path='' element={<MainSettingPage />} />
+              <Route path='edit-profile' element={<ProfileEditPage />} />
+            </Route>
+            <Route path='other'>
+              <Route path='' element={<OtherLandingPage />} />
+              <Route path='academic-year' element={<TermYearPage />} />
+              <Route path='policy' element={<PolicyPage />} />
+              <Route path='user-role' element={<UserRolePage />} />
+            </Route>
+            <Route path='*' element={<NotFound />}>
             </Route>
           </Route>
-          <Route path='event'>
-            <Route path='' element={<UpcommingEventsPage />} />
-          </Route>
-          <Route path='finance'>
-            <Route path='' element={<FinanceLanding />} />
-            <Route path='proposal' element={<Proposal />} />
-            <Route path='report' element={<ReportPage />} />
-          </Route>
-          <Route path='service'>
-            <Route path='' element={<ServiceLanding />} />
-            <Route path='volunteer' element={<VolunteerDetailsPage/>}/>
-            <Route path='volunteering' element={<Volunteering />} />
-          </Route>
-          <Route path='setting'>
-            <Route path='' element={<MainSettingPage />} />
-            <Route path='edit-profile' element={<ProfileEditPage/>}/>
-          </Route>
-          <Route path='other'>
-            <Route path='' element={<OtherLandingPage />} />
-            <Route path='academic-year' element={<TermYearPage/>} />
-            <Route path='policy' element={<PolicyPage/>} />
-            <Route path='user-role' element={<UserRolePage/>} />
-          </Route>
-          <Route path='*' element={<NotFound />}>
-          </Route>
         </Route>
+
       </Routes>
     </>
 

@@ -114,6 +114,7 @@ const UserRoleModel = ({ onHide, show, editable, disabled, item, changed }) => {
       if (editable) {
         formData.roleID = item?.id;
         updateRole(formData, (res) => {
+          console.log(res.data)
           if (res?.status == 200) {
             assignPolicy({
               roleId: res?.data?.data?.roleID,

@@ -20,7 +20,7 @@ class HttpInterceptor {
                    
 
                     if (authToken) {
-                        request.headers.Authorization = "Bearer " + authToken;
+                        request.headers.Authorization = "Bearer " + authToken.toString();
                     }
                 } catch (error) {
                     console.log(error)
