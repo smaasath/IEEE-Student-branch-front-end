@@ -1,11 +1,30 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import AuthLayout from '../../../components/layouts/authLayout/authLayout'
 import { Link, useNavigate } from "react-router-dom";
 import CommonButton from '../../../components/common/commonButton/commonButton';
-
+import { getAllAcademicYear } from '../../../redux/actions/academicYear';
 
 const SignUp = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [academicYears, setAcademicYears] = useState([]);
+
+  useEffect(()=>{
+
+    getAllAcademicYear(0,'ACTIVE','', (res) => {
+      if(res.status == 200){
+        
+        let data = res?.data?.data?.content?.map(({ acedemicId, academicYear}) => ({
+          id: acedemicId,  
+          year: academicYear
+      }));
+        console.warn(data)
+        setAcademicYears(data) 
+      }
+     
+    })
+
+  },[]);
+
   function signUP() {
     navigate('/verify-code/signup')
   }
@@ -53,9 +72,9 @@ const SignUp = () => {
           <label for="exampleFormControlInput1" className="form-label text-dark">Academic Year</label>
           <select className="form-select w-100" aria-label="Large select example">
             <option selected>select year</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
+            {academicYears.map(({id, year})=>(
+              <option key={id} value={id}>{year}</option>
+            ))}
           </select>
         </div>
         <div className="mb-3">
