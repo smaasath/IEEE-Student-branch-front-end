@@ -23,7 +23,7 @@ const TermYearPage = () => {
   const tableHeading = [
     { label: "id", value: "id" },
     { label: "Academic Year", value: "academicYear" },
-    { label: "Enrolled Year", value: "enrolledYear" },
+    { label: "Enrolled Batch", value: "enrolledBatch" },
     { label: "Status", value: "status" },
     { label: "", value: "ACTION", type: ["EDIT"] },
   ];
@@ -60,9 +60,9 @@ const TermYearPage = () => {
     getAllAcademicYear(currentPage-1,status,searchItem, (res) => {
       if(res.status == 200){
         
-        let data = res?.data?.data?.content?.map(({ acedemicId, enrolledYear, academicYear, status }) => ({
+        let data = res?.data?.data?.content?.map(({ acedemicId, enrolledBatch, academicYear, status }) => ({
           id: acedemicId,  
-          enrolledYear,
+          enrolledBatch,
           academicYear,
           status
       }));

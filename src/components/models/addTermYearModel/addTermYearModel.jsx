@@ -8,13 +8,13 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
 
 
   const [formData, setFormData] = useState({
-    enrolledYear: "",
+    enrolledBatch: "",
     academicYear: "",
     status: "",
   });
 
   const [error, setError] = useState({
-    enrolledYear: false,
+    enrolledBatch: false,
     academicYear: false,
     status: false,
   });
@@ -26,7 +26,7 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
 
     if (!editable) {
       setFormData({
-        enrolledYear: "",
+        enrolledBatch: "",
         academicYear: "",
         status: "",
       });
@@ -35,7 +35,7 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
     }
 
     setError({
-      enrolledYear: false,
+      enrolledBatch: false,
       academicYear: false,
       status: false,
     });
@@ -56,16 +56,16 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
   function addAcademicYear() {
     setExist('')
     setError({
-      enrolledYear: false,
+      enrolledBatch: false,
       academicYear: false,
       status: false,
     });
 
-    if (!formData.academicYear || !formData.enrolledYear || formData.status == '') {
+    if (!formData.academicYear || !formData.enrolledBatch || formData.status == '') {
       setError({
         ...error,
         academicYear: !formData.academicYear,
-        enrolledYear: !formData.enrolledYear,
+        enrolledBatch: !formData.enrolledBatch,
         status: formData.status == '' ? true : false,
       });
       return;
@@ -128,7 +128,7 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
           <div className='mt-3'>
             <div className="has-validation">
               <label htmlFor="exampleFormControlInput1" className="form-label text-dark">Academic Year</label>
-              <input type="text" className={`form-control ${error.academicYear ? "is-invalid" : ""}`} name='academicYear' value={formData.academicYear} onChange={handleInputChange} id="exampleFormControlInput1" placeholder="Enrolled Year" disabled={disabled} required />
+              <input type="text" className={`form-control ${error.academicYear ? "is-invalid" : ""}`} name='academicYear' value={formData.academicYear} onChange={handleInputChange} id="exampleFormControlInput1" placeholder="Academic Year" disabled={disabled} required />
               <div class="invalid-feedback">
                 This field is required.
               </div>
@@ -136,8 +136,8 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
           </div>
           <div className='mt-3'>
             <div className="">
-              <label htmlFor="exampleFormControlInput1" className="form-label text-dark">Enrolled Year</label>
-              <input type="text" name='enrolledYear' value={formData.enrolledYear} onChange={handleInputChange} className={`form-control ${error.enrolledYear ? "is-invalid" : ""}`} id="exampleFormControlInput1" placeholder="Enrolled Year" disabled={disabled} />
+              <label htmlFor="exampleFormControlInput1" className="form-label text-dark">Enrolled Batch</label>
+              <input type="text" name='enrolledBatch' value={formData.enrolledBatch} onChange={handleInputChange} className={`form-control ${error.enrolledBatch ? "is-invalid" : ""}`} id="exampleFormControlInput1" placeholder="Enrolled Batch" disabled={disabled} />
               <div class="invalid-feedback">
                 This field is required.
               </div>
