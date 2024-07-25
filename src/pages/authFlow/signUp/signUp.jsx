@@ -15,19 +15,19 @@ const SignUp = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    firstname: "",
-    lastname: "",
-    academicyear: "",
-    contactno: "",
+    firstName: "",
+    lastName: "",
+    academicId: null,
+    contactNo: "",
   });
 
   const [error, setError] = useState({
     email: "",
     password: "",
-    firstname: "",
-    lastname: "",
-    academicyear: "",
-    contactno: "",
+    firstName: "",
+    lastName: "",
+    academicId: "",
+    contactNo: "",
     other: "",
   });
 
@@ -58,6 +58,10 @@ const SignUp = () => {
     setError({
       email: "",
       password: "",
+      firstName: "",
+      lastName: "",
+      academicId: "",
+      contactNo: "",
       other: "",
     });
 
@@ -65,30 +69,6 @@ const SignUp = () => {
       setError({
         ...error,
         email: "Email is not valid",
-      });
-      return;
-    }
-
-    if (formData.firstname == "") {
-      setError({
-        ...error,
-        password: "First name is required",
-      });
-      return;
-    }
-
-    if (formData.lastname == "") {
-      setError({
-        ...error,
-        password: "Last name is required",
-      });
-      return;
-    }
-
-    if (formData.contactno == "") {
-      setError({
-        ...error,
-        password: "Contact No is required",
       });
       return;
     }
@@ -101,17 +81,55 @@ const SignUp = () => {
       return;
     }
 
+    if (formData.firstName == "") {
+      setError({
+        ...error,
+        firstName: "First name is required",
+      });
+      return;
+    }
+
+    if (formData.lastName == "") {
+      setError({
+        ...error,
+        lastName: "Last name is required",
+      });
+      return;
+    }
+
+    if (formData.academicId == null) {
+      setError({
+        ...error,
+        academicId: "Academic Year is required",
+      });
+      return;
+    }
+
+    if (formData.contactNo == "") {
+      setError({
+        ...error,
+        contactNo: "Contact No is required",
+      });
+      return;
+    }
+
     setLoading(true);
     dispatch(
       userRegistration(formData, (res) => {
-        if (res.status == 200) {
+        if (res.status == 201) {
           setLoading(false);
-          navigate("/verify-code/signup");
+          navigate("/verify-code/signup", { state: { email: formData.email } });
+        } else if (res.status == 208) {
+          setLoading(false);
+          setError({
+            ...error,
+            other: "User is Already Registred",
+          });
         } else {
           setLoading(false);
           setError({
             ...error,
-            other: "Already Registred Account",
+            other: "System Error",
           });
         }
       })
@@ -152,101 +170,13 @@ const SignUp = () => {
           </label>
           <input
             type="email"
-            className={`form-control ${error.email != '' ? "is-invalid" : ""}`}
+            className={`form-control ${error.email !== "" ? "is-invalid" : ""}`}
             id="exampleFormControlInput1"
             placeholder="enter email"
             name="email"
             onChange={handleInputChange}
           />
-          <div class="invalid-feedback">
-            {error.email}
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-3 gap-3 d-flex justify-content-between align-items-center ">
-        <div className="mb-3">
-          <label
-            for="exampleFormControlInput1"
-            className="form-label text-dark"
-          >
-            First name
-          </label>
-          <input
-            type="text"
-            className={`form-control ${error.firstname != '' ? "is-invalid" : ""}`}
-            id="exampleFormControlInput1"
-            placeholder="first name"
-            name="firstname"
-            onChange={handleInputChange}
-          />
-          <div class="invalid-feedback">
-            {error.firstname}
-          </div>
-        </div>
-        <div className="mb-3">
-          <label
-            for="exampleFormControlInput1"
-            className="form-label text-dark"
-          >
-            Last name
-          </label>
-          <input
-            type="text"
-            className={`form-control ${error.lastname != '' ? "is-invalid" : ""}`}
-            id="exampleFormControlInput1"
-            placeholder="last name"
-            name="lastname"
-            onChange={handleInputChange}
-          />
-          <div class="invalid-feedback">
-            {error.lastname}
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-3 d-flex gap-3 justify-content-between align-items-center ">
-        <div className="mb-3 w-50">
-          <label
-            for="exampleFormControlInput1"
-            className="form-label text-dark"
-          >
-            Academic Year
-          </label>
-          <select
-            className="form-select w-100"
-            aria-label="Large select example"
-            name="academicYear"
-            onChange={handleInputChange}
-          >
-            <option value="" selected>select year</option>
-            {academicYears.map(({ id, year }) => (
-              <option key={id} value={id}>
-                {year}
-              </option>
-            ))}
-          </select>
-          <div class="invalid-feedback">
-            {error.academicYear}
-          </div>
-        </div>
-        <div className="mb-3">
-          <label
-            for="exampleFormControlInput1"
-            className="form-label text-dark"
-          >
-            Contact No
-          </label>
-          <input
-            type="text"
-            className={`form-control ${error.contactno != '' ? "is-invalid" : ""}`}
-            id="exampleFormControlInput1"
-            name="contactno"
-            placeholder="contact no"
-          />
-          <div class="invalid-feedback">
-            {error.contactno}
-          </div>
+          <div class="invalid-feedback">{error.email}</div>
         </div>
       </div>
 
@@ -260,14 +190,104 @@ const SignUp = () => {
           </label>
           <input
             type="password"
-            className={`form-control ${error.password != '' ? "is-invalid" : ""}`}
+            className={`form-control ${
+              error.password !== "" ? "is-invalid" : ""
+            }`}
             id="exampleFormControlInput1"
             name="password"
             placeholder="enter password"
+            onChange={handleInputChange}
           />
-          <div class="invalid-feedback">
-            {error.password}
-          </div>
+          <div class="invalid-feedback">{error.password}</div>
+        </div>
+      </div>
+
+      <div className="mt-3 gap-3 d-flex justify-content-between align-items-center ">
+        <div className="mb-3">
+          <label
+            for="exampleFormControlInput1"
+            className="form-label text-dark"
+          >
+            First name
+          </label>
+          <input
+            type="text"
+            className={`form-control ${
+              error.firstName !== "" ? "is-invalid" : ""
+            }`}
+            id="exampleFormControlInput1"
+            placeholder="first name"
+            name="firstName"
+            onChange={handleInputChange}
+          />
+          <div class="invalid-feedback">{error.firstName}</div>
+        </div>
+
+        <div className="mb-3">
+          <label
+            for="exampleFormControlInput1"
+            className="form-label text-dark"
+          >
+            Last name
+          </label>
+          <input
+            type="text"
+            className={`form-control ${
+              error.lastName !== "" ? "is-invalid" : ""
+            }`}
+            id="exampleFormControlInput1"
+            placeholder="last name"
+            name="lastName"
+            onChange={handleInputChange}
+          />
+          <div class="invalid-feedback">{error.lastName}</div>
+        </div>
+      </div>
+
+      <div className="mt-3 d-flex gap-3 justify-content-between align-items-center ">
+        <div className="mb-3 w-50">
+          <label
+            for="exampleFormControlInput1"
+            className="form-label text-dark"
+          >
+            Academic Year
+          </label>
+          <select
+            className={`form-select w-100 ${
+              error.academicId !== "" ? "is-invalid" : ""
+            }`}
+            aria-label="Large select example"
+            name="academicId"
+            onChange={handleInputChange}
+            defaultValue={null}
+          >
+            <option value={null}>select year</option>
+            {academicYears.map(({ id, year }) => (
+              <option key={id} value={id}>
+                {year}
+              </option>
+            ))}
+          </select>
+          {/* <div class="invalid-feedback">{error.academicId}</div> */}
+        </div>
+        <div className="mb-3">
+          <label
+            for="exampleFormControlInput1"
+            className="form-label text-dark"
+          >
+            Contact No
+          </label>
+          <input
+            type="text"
+            className={`form-control ${
+              error.contactNo !== "" ? "is-invalid" : ""
+            }`}
+            id="exampleFormControlInput1"
+            name="contactNo"
+            placeholder="Eg:- 07XXXXXXXX"
+            onChange={handleInputChange}
+          />
+          {/* <div class="invalid-feedback">{error.contactNo}</div> */}
         </div>
       </div>
 

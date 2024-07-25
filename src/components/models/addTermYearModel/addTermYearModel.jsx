@@ -22,7 +22,7 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
   const [loading, setLoading] = useState(false);
   const [exist, setExist] = useState('');
 
-  useEffect(() => {
+  useEffect(() => { 
 
     if (!editable) {
       setFormData({

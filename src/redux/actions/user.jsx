@@ -12,6 +12,7 @@ export const userLogin = (body, callback) => (dispatch) => {
       .then((response) => {
         callback(response);
         if (response.status === 200) {
+          // console.log("Response" + response);
           const cookieOptions = {
             path: "/",
           };
@@ -39,7 +40,26 @@ export const userRegistration = (body, callback) => (dispatch) => {
       .post(endpoint, body)
       .then((response) => {
         callback(response);
+      })
+      .catch((error) => {
+        callback(error.response);
+      });
+  } catch (error) {
+    callback(error.response);
+  }
+};
+
+
+export const verifyOTP = (body, callback) => (dispatch) => {
+  const endpoint = `${import.meta.env.VITE_API_HOST}auth/otp/check`;
+
+  try {
+    http
+      .post(endpoint, body)
+      .then((response) => {
+        callback(response);
         if (response.status === 200) {
+          // console.log("Response" + response);
           const cookieOptions = {
             path: "/",
           };
