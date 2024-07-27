@@ -8,7 +8,9 @@ import projecticon from '../../../assets/icons/project-icon.png'
 import settingsicon from '../../../assets/icons/settings-icon.png'
 import serviceicon from '../../../assets/icons/Service.png'
 import othericon from '../../../assets/icons/News.png'
+import sbLogoWhite from '../../../assets/logo_white.png'
 import { Link, useLocation } from "react-router-dom";
+
 
 const SideBar = () => {
     const location = useLocation();
@@ -33,7 +35,7 @@ const SideBar = () => {
         <div className="d-flex flex-column flex-shrink-0 p-3 w-100 side-bar-body z-1 sticky-top mt-2" style={{zIndex:1000}}>
             <div className="w-100 align-items-center align-content-center text-center">
                 <Link to="/dashboard" className="text-decoration-none">
-                    <img className="side-bar-logo" src="" loading="lazy" />
+                    <img className="side-bar-logo" src={sbLogoWhite} loading="lazy" />
                 </Link>
             </div>
             <hr className='text-white' />
