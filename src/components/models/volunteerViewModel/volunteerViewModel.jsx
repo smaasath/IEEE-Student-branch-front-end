@@ -7,7 +7,7 @@ import CommonTable from '../../../components/common/commonTable/commonTable'
 
 const ProgressVolunteerCard = ({ photo, name, academicYear, degree, email, contactNumber }) => {
   return (
-    <div className='d-flex justify-content-center card bg-body-secondary mt-0 align-items-center' style={{height:"180px" }} >
+    <div className='d-flex justify-content-center card bg-body-secondary mt-0 align-items-center' style={{height:"180px" }}  >
       <div className="card-body d-flex justify-content-center align-items-center ">
           <img src={photo || Profile}
             alt="Profile" className="mt-3" style={{ width: "100px", marginRight: "20px", height:"130px", marginBottom:"30px" }} />
