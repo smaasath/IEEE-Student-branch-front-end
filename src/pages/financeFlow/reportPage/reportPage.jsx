@@ -5,6 +5,7 @@ import CommonButton from '../../../components/common/commonButton/commonButton'
 import { usePDF } from 'react-to-pdf';
 import { useSelector } from 'react-redux';
 import CommonLoader from '../../../components/common/commonLoader/commonLoader';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -13,7 +14,7 @@ const ReportPage = () => {
     const { toPDF, targetRef } = usePDF({ filename: 'report.pdf' });
     const userData = useSelector((state) => state.user.userData);
     const [pageLoading, setPageLoading] = useState(true);
-
+    const navigate = useNavigate()
 
     useEffect(() => {
         setPageLoading(true)

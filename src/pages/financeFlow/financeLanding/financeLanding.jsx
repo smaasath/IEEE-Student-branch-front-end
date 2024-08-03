@@ -22,7 +22,7 @@ const FinanceLanding = () => {
     const [editable, setEditable] = useState(false);
     const [id, setId] = useState(null);
     const [pageLoading, setPageLoading] = useState(true);
-
+   
     useEffect(() => {
         setPageLoading(true)
         if (userData) {

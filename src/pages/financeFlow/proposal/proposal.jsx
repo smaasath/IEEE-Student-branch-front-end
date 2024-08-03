@@ -5,6 +5,7 @@ import CommonPagination from '../../../components/common/commonPagination/common
 import ProposalStatusChangeModel from '../../../components/models/proposalStatusChangeModel/proposalStatusChangeModel'
 import { useSelector } from 'react-redux'
 import CommonLoader from '../../../components/common/commonLoader/commonLoader'
+import { useNavigate } from 'react-router-dom'
 
 
 
@@ -13,7 +14,7 @@ const Proposal = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [statusChangeModelShow, setStatusChangeModel] = useState(false);
     const [pageLoading, setPageLoading] = useState(true);
-
+    const navigate = useNavigate();
     useEffect(() => {
         setPageLoading(true)
         if (userData) {

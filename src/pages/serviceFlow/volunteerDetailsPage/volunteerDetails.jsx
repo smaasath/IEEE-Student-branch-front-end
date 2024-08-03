@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import profile from '../../../assets/images/profile.png';
 import CommonTable from '../../../components/common/commonTable/commonTable';
 import CommonSearch from '../../../components/common/commonSearch/commonSearch'
 import CommonPagination from '../../../components/common/commonPagination/commonPagination'
 import VolunteerViewModel from "../../../components/models/volunteerViewModel/volunteerViewModel";
+import CommonLoader from "../../../components/common/commonLoader/commonLoader";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+
+
 
 const BestVolunteerCard = ({ photo, name, completedTask, entrolledProjects }) => {
   return (
@@ -42,6 +48,22 @@ const VolunteerDetailsPage = () => {
 
   const [volunteerDetailModalShow, setVolunteerDetailModalShow] = useState(false);
   const [selectedVolunteer, setSelectedVolunteer] = useState(null);
+  const userData = useSelector((state) => state.user.userData);
+  const [pageLoading, setPageLoading] = useState(true);
+  const navigate = useNavigate()
+  useEffect(() => {
+    setPageLoading(true)
+    if (userData) {
+      const isFinanceAvailable = userData?.role?.some(role =>
+        role.policies.some(policy => policy.policyCode === "SERVICE_VOLUNTEER")
+      );
+      if (!isFinanceAvailable) {
+        navigate('/dashboard')
+      } else {
+        setPageLoading(false);
+      }
+    }
+  }, [userData])
 
   const handleCloseVolunteerDetailModal = () => setVolunteerDetailModalShow(false);
   const handleShowVolunteerDetailModal = () => {
@@ -127,51 +149,55 @@ const VolunteerDetailsPage = () => {
   ];
   return (
     <>
-      <div className='container'>
+      {pageLoading ? (
+        <CommonLoader />
+      ) : (
+        <div className='container'>
 
-        <div className='text-cl-primary mt-3'>Best Volunteer</div>
+          <div className='text-cl-primary mt-3'>Best Volunteer</div>
 
-        <div className='row mt-4'>
-          {bestVolunteer.map((volunteer, index) => (
-            <div className='col-12 col-md-6 mb-4' key={index}>
+          <div className='row mt-4'>
+            {bestVolunteer.map((volunteer, index) => (
+              <div className='col-12 col-md-6 mb-4' key={index}>
 
-              <BestVolunteerCard
-                photo={volunteer.photo}
-                name={volunteer.name}
-                completedTask={volunteer.completedTask}
-                entrolledProjects={volunteer.entrolledProjects}
+                <BestVolunteerCard
+                  photo={volunteer.photo}
+                  name={volunteer.name}
+                  completedTask={volunteer.completedTask}
+                  entrolledProjects={volunteer.entrolledProjects}
 
-              />
-            </div>
-          ))}
-        </div>
+                />
+              </div>
+            ))}
+          </div>
 
-        <div className='mt-5 d-flex justify-content-between align-items-center gap-4 flex-wrap'>
-          <div className='text-cl-primary'>Volunteers</div>
+          <div className='mt-5 d-flex justify-content-between align-items-center gap-4 flex-wrap'>
+            <div className='text-cl-primary'>Volunteers</div>
 
-        </div>
+          </div>
 
-        <div className='mt-4 d-flex flex-column gap-3 justify-content-center bg-white rounded-2 common-shadow p-3'>
-          <div className='mt-4 table-container'>
-            <div className='mt-2 d-flex flex-wrap justify-content-between align-items-center'>
-              <CommonSearch primary={true} />
-            </div>
+          <div className='mt-4 d-flex flex-column gap-3 justify-content-center bg-white rounded-2 common-shadow p-3'>
             <div className='mt-4 table-container'>
-              <CommonTable
-                tableHeading={tableHeading}
-                primary={true}
-                tableData={tableData}
-                loading={false}
-                viewAction={() => { handleShowVolunteerDetailModal() }}
-                editAction={(id) => { handleShowVolunteerDetailModal() }} />
+              <div className='mt-2 d-flex flex-wrap justify-content-between align-items-center'>
+                <CommonSearch primary={true} />
+              </div>
+              <div className='mt-4 table-container'>
+                <CommonTable
+                  tableHeading={tableHeading}
+                  primary={true}
+                  tableData={tableData}
+                  loading={false}
+                  viewAction={() => { handleShowVolunteerDetailModal() }}
+                  editAction={(id) => { handleShowVolunteerDetailModal() }} />
+              </div>
+            </div>
+
+            <div className='mt-4 d-flex justify-content-end'>
+              <CommonPagination pages={10} currentPage={currentPage} setCurrentPage={setCurrentPage} />
             </div>
           </div>
-
-          <div className='mt-4 d-flex justify-content-end'>
-            <CommonPagination pages={10} currentPage={currentPage} setCurrentPage={setCurrentPage} />
-          </div>
         </div>
-      </div>
+      )}
       <VolunteerViewModel show={volunteerDetailModalShow} onHide={handleCloseVolunteerDetailModal} volunteerData={selectedVolunteer} />
     </>
   )
