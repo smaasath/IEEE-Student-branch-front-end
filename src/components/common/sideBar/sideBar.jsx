@@ -34,7 +34,7 @@ const SideBar = () => {
         );
 
         const updatedRoutes = [
-            { name: "Events", image: eventicon, path: "dashboard/event", available: true },
+            { name: "Events", image: eventicon, path: "dashboard", available: true },
             { name: "ExCom", image: dashboardIcon, path: "dashboard/executive-committee", available: isExcomAvailable },
             { name: "Project", image: projecticon, path: "dashboard/project", available: true },
             { name: "Finance", image: financeicon, path: "dashboard/finance", available: isFinanceAvailable },
