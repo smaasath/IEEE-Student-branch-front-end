@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useMemo, useState } from 'react';
 import "./sideBar.css";
 import dashboardIcon from '../../../assets/icons/dashboard-icon.png'
 import eventicon from '../../../assets/icons/event-icon.png'
@@ -10,29 +10,49 @@ import serviceicon from '../../../assets/icons/Service.png'
 import othericon from '../../../assets/icons/News.png'
 import sbLogoWhite from '../../../assets/logo_white.png'
 import { Link, useLocation } from "react-router-dom";
+import { useSelector } from 'react-redux';
 
 
 const SideBar = () => {
+
+    const userData = useSelector((state) => state.user.userData);
     const location = useLocation();
     const { pathname } = location;
+    const [routes, setRoutes] = useState([]);
+
+    useEffect(() => {
+        const isOtherAvailable = userData?.role?.some(role =>
+            role.policies.some(policy => policy.policyCode === "OTHER")
+        );
+
+        const isExcomAvailable = userData?.role?.some(role =>
+            role.policies.some(policy => policy.policyCode === "EXCOM")
+        );
+
+        const isFinanceAvailable = userData?.role?.some(role =>
+            role.policies.some(policy => policy.policyCode === "FINANCE")
+        );
+
+        const updatedRoutes = [
+            { name: "Events", image: eventicon, path: "dashboard/event", available: true },
+            { name: "ExCom", image: dashboardIcon, path: "dashboard/executive-committee", available: isExcomAvailable },
+            { name: "Project", image: projecticon, path: "dashboard/project", available: true },
+            { name: "Finance", image: financeicon, path: "dashboard/finance", available: isFinanceAvailable },
+            { name: "Service", image: serviceicon, path: "dashboard/service", available: true },
+            { name: "Other", image: othericon, path: "dashboard/other", available: isOtherAvailable },
+        ];
+
+        setRoutes(updatedRoutes);
+
+    }, [userData])
 
 
-    const routes = [
-        // { name: "Dashboard", image: dashboardIcon, path: "dashboard" },
-        { name: "Events", image: eventicon, path: "dashboard/event" },
-        { name: "ExCom", image: dashboardIcon, path: "dashboard/executive-committee" },
-        { name: "Project", image: projecticon, path: "dashboard/project" },
-        { name: "Finance", image: financeicon, path: "dashboard/finance" },
-        { name: "Service", image: serviceicon, path: "dashboard/service" },
-        { name: "Other", image: othericon, path: "dashboard/other" },
-
-    ];
 
     const routesOther = [
         { name: "Settings", image: settingsicon, path: "dashboard/setting" },
     ]
     return (
-        <div className="d-flex flex-column flex-shrink-0 p-3 w-100 side-bar-body z-1 sticky-top mt-2" style={{zIndex:1000}}>
+        <div className="d-flex flex-column flex-shrink-0 p-3 w-100 side-bar-body z-1 sticky-top mt-2" style={{ zIndex: 1000 }}>
             <div className="w-100 align-items-center align-content-center text-center">
                 <Link to="/dashboard" className="text-decoration-none">
                     <img className="side-bar-logo" src={sbLogoWhite} loading="lazy" />
@@ -40,14 +60,12 @@ const SideBar = () => {
             </div>
             <hr className='text-white' />
             <ul className="nav nav-pills flex-column mb-auto mt-4 gap-2">
-                {routes.map((item, index) => {
-                    return (
+                {routes?.map((item, index) =>
+                    item.available ? (
                         <div className="" key={index}>
                             <li className="nav-item">
                                 <Link
-                        
-                                    className={`nav-link ${pathname == '/dashboard' && item.path == 'dashboard' ? 'active' : (pathname.startsWith(`/${item.path}`) && item.path != 'dashboard' ? "active" : "")
-                                        }`}
+                                    className={`nav-link ${pathname === '/dashboard' && item.path === 'dashboard' ? 'active' : (pathname.startsWith(`/${item.path}`) && item.path !== 'dashboard' ? "active" : "")}`}
                                     to={`/${item.path}`}
                                 >
                                     <div className="d-flex gap-2 align-items-center">
@@ -64,8 +82,8 @@ const SideBar = () => {
                                 </Link>
                             </li>
                         </div>
-                    );
-                })}
+                    ) : null
+                )}
             </ul>
             <hr className='text-white' />
             <ul className="nav nav-pills flex-column mb-auto mt-4 gap-2">
@@ -74,7 +92,7 @@ const SideBar = () => {
                         <div className="" key={index}>
                             <li className="nav-item">
                                 <Link
-                                //NavLink add 
+                                    //NavLink add 
                                     className={`nav-link ${pathname == '/dashboard' && item.path == 'dashboard' ? 'active' : (pathname.startsWith(`/${item.path}`) && item.path != 'dashboard' ? "active" : "")
                                         }`}
                                     to={`/${item.path}`}

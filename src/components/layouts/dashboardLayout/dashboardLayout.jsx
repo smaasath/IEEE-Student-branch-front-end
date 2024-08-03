@@ -1,13 +1,37 @@
 
-import React from 'react'
+
+
+import React, { useEffect, useState } from 'react'
 import "./dashboardLayout.css";
 import CommonNavBar from '../../common/navBar/navBar';
 import SideBar from '../../common/sideBar/sideBar';
 import { Outlet } from 'react-router-dom';
+import { getCurrentUser, logout } from '../../../redux/actions/user';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { userData } from '../../../redux/reducers/userSlice';
 
 
 
 const DashboardLayout = () => {
+
+    const distpatch = useDispatch();
+    const userdetails = useSelector((state) => state.user.userData);
+    useEffect(() => {
+        if (userdetails == null) {
+            getCurrentUser((res) => {
+                console.warn("status",res?.status)
+                if (res?.status == 200) {
+                    distpatch(userData(res?.data?.data))
+                } else {
+                    logout();
+                    window.location.reload();
+                }
+            })
+        }
+
+    }, [])
+
     return (
         <div className="container-fluid">
             <div className="row">
