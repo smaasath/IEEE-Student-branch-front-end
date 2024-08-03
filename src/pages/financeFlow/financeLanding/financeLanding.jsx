@@ -29,15 +29,12 @@ const FinanceLanding = () => {
             const isFinanceAvailable = userData?.role?.some(role =>
                 role.policies.some(policy => policy.policyCode === "FINANCE")
             );
-            console.log("finaceeeeeee", userData)
             if (!isFinanceAvailable) {
                 navigate('/dashboard')
             } else {
                 setPageLoading(false);
             }
         }
-
-
     }, [userData])
 
     const handleCloseTransectionModel = () => { setTransectionModelShow(false); }

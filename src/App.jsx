@@ -44,6 +44,7 @@ function App() {
     const auth = Cookies.get('token', { path: '/' });
     return auth ? <Navigate to="/dashboard" /> : <Outlet />;
   }
+  
 
   return (
     <>
