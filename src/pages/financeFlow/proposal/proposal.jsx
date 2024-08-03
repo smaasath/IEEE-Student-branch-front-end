@@ -1,49 +1,67 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CommonSearch from '../../../components/common/commonSearch/commonSearch'
 import CommonTable from '../../../components/common/commonTable/commonTable'
 import CommonPagination from '../../../components/common/commonPagination/commonPagination'
 import ProposalStatusChangeModel from '../../../components/models/proposalStatusChangeModel/proposalStatusChangeModel'
+import { useSelector } from 'react-redux'
+import CommonLoader from '../../../components/common/commonLoader/commonLoader'
+import { useNavigate } from 'react-router-dom'
 
 
 
 const Proposal = () => {
-
+    const userData = useSelector((state) => state.user.userData);
     const [currentPage, setCurrentPage] = useState(1);
     const [statusChangeModelShow, setStatusChangeModel] = useState(false);
+    const [pageLoading, setPageLoading] = useState(true);
+    const navigate = useNavigate();
+    useEffect(() => {
+        setPageLoading(true)
+        if (userData) {
+            const isFinanceAvailable = userData?.role?.some(role =>
+                role.policies.some(policy => policy.policyCode === "FINANCE")
+            );
+            if (!isFinanceAvailable) {
+                navigate('/dashboard')
+            } else {
+                setPageLoading(false);
+            }
+        }
+    }, [userData])
 
     const handleCloseStatusChangeModel = () => { setStatusChangeModel(false); }
     const handleShowStatusChangeModel = () => { setStatusChangeModel(true); }
     const tableHeading = [
         {
-            lable: "",
+            label: "",
             value: "STARTIMAGE"
         },
         {
-            lable: "ID",
+            label: "ID",
             value: "id"
         },
         {
-            lable: "Date",
+            label: "Date",
             value: "date"
         },
         {
-            lable: "From",
+            label: "From",
             value: "from"
         },
         {
-            lable: "Title",
+            label: "Title",
             value: "title"
         },
         {
-            lable: "Amount(LKR)",
+            label: "Amount(LKR)",
             value: "amount"
         },
         {
-            lable: "Status",
+            label: "Status",
             value: "status"
         },
         {
-            lable: "",
+            label: "",
             value: "ACTION",
             type: ["EDIT", "VIEW"]
         },
@@ -70,32 +88,36 @@ const Proposal = () => {
     ]
     return (
         <>
-            <div className='container'>
-                <div className='text-cl-primary'>Proposal</div>
-                <div className='mt-3 pt-4 p-3 rounded-4 bg-white common-shadow'>
-                    <div className='d-flex justify-content-between flex-wrap align-items-center p-3'>
-                        <div>
-                            <CommonSearch primary={true} />
+            {pageLoading ? (
+                <CommonLoader />
+            ) : (
+                <div className='container'>
+                    <div className='text-cl-primary'>Proposal</div>
+                    <div className='mt-3 pt-4 p-3 rounded-4 bg-white common-shadow'>
+                        <div className='d-flex justify-content-between flex-wrap align-items-center p-3'>
+                            <div>
+                                <CommonSearch primary={true} />
+                            </div>
+                            <div>
+                                <select className="form-select" aria-label="Default select example">
+                                    <option selected>Select Status</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
                         </div>
-                        <div>
-                            <select className="form-select" aria-label="Default select example">
-                                <option selected>Select Status</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </div>
-                    </div>
 
-                    <div className='mt-3 p-3 rounded-4 bg-white d-flex flex-column justify-content-between table-container'>
-                        <CommonTable tableHeading={tableHeading} tableData={tableData} primary={true} loading={false} editAction={(id) => { handleShowStatusChangeModel() }} />
-                        <div className='mt-4 d-flex justify-content-end'>
-                            <CommonPagination pages={10} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+                        <div className='mt-3 p-3 rounded-4 bg-white d-flex flex-column justify-content-between table-container'>
+                            <CommonTable tableHeading={tableHeading} tableData={tableData} primary={true} loading={false} editAction={(id) => { handleShowStatusChangeModel() }} />
+                            <div className='mt-4 d-flex justify-content-end'>
+                                <CommonPagination pages={10} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+                            </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
-            </div>
+            )}
             <ProposalStatusChangeModel show={statusChangeModelShow} onHide={handleCloseStatusChangeModel} />
         </>
     )

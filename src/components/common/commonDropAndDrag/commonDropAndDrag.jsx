@@ -3,7 +3,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import AddTask from '../../../assets/icons/Add.png'
 import CommonTaskCard from '../commonTaskCard/commonTaskCard';
 
-const CommonDropAndDrag = () => {
+const CommonDropAndDrag = ({ project, excom }) => {
   const backendTasks = [
     { id: 'task-1', content: 'Take out the garbage' },
     { id: 'task-2', content: 'Watch my favorite show' },
@@ -118,18 +118,11 @@ const CommonDropAndDrag = () => {
                     <div>
                       <h5 style={{ color: column.id == "TODO" ? "#5F6A6A" : column.id == "PROGRESS" ? "#00629B" : column.id == "COMPLETE" ? "#229954" : "black" }}>{column.title}</h5>
                     </div>
-                    {column.id == "TODO" ? (
-                      <div>
-                        <button className='bg-transparent border-0 p-1'>
-                          <img src={AddTask} width={25} />
-                        </button>
-                      </div>
-                    ) : null}
 
                   </div>
                   <div className='d-flex mt-4 flex-column justify-content-center gap-4'>
                     {tasks.map((task, index) => (
-                      <CommonTaskCard task={task} key={index} />
+                      <CommonTaskCard project={project} excom={excom}  task={task} key={index} />
                     ))}
                   </div>
 

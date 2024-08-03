@@ -1,5 +1,4 @@
 import React from 'react';
-import { Pagination } from 'react-bootstrap'; // Assuming you are using react-bootstrap for pagination
 
 const CommonPagination = ({ pages, currentPage, setCurrentPage }) => {
     const renderPageNumbers = () => {

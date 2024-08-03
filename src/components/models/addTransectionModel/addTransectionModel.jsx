@@ -93,7 +93,7 @@ const AddTransectionModel = ({
         <Modal.Body>
           <div className="d-flex flex-column">
             {editable || disabled ? (
-              <h3>{id}</h3>
+              <h3></h3>
             ) : (
               <div
                 className="btn-group"
