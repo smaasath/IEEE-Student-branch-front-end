@@ -77,12 +77,8 @@ const UpcommingEventsPage = () => {
   return (
     <>
 
-      <input
-        type="file"
 
-        onChange={handleFileChange}
-      />
-      {/* <div className="container">
+      <div className="container">
         <div className="text-cl-primary">Upcomming Events</div>
 
         <div className="row mt-3">
@@ -95,7 +91,7 @@ const UpcommingEventsPage = () => {
             </div>
           ))}
         </div>
-      </div> */}
+      </div>
     </>
   );
 };
