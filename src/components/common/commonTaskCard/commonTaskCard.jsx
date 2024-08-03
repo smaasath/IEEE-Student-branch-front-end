@@ -9,10 +9,10 @@ import TaskDetailModel from '../../models/taskDetailModel/taskDetailModel';
 
 
 
-const CommonTaskCard = ({ task, onClick }) => {
+const CommonTaskCard = ({ task, onClick, project, excom }) => {
 
     const [showTaskModal, setShowTaskModal] = useState(false);
-    
+
     const openTaskModal = () => {
         setShowTaskModal(true);
     };
@@ -92,7 +92,7 @@ const CommonTaskCard = ({ task, onClick }) => {
                 )}
             </Draggable>
 
-            <TaskDetailModel show={showTaskModal} onHide={closeTaskModal} taskData={{ title: "lo" }} />
+            <TaskDetailModel project={project} excom={excom} show={showTaskModal} onHide={closeTaskModal} taskData={{ title: "lo" }} />
         </>
     )
 }
