@@ -44,6 +44,7 @@ function App() {
     const auth = Cookies.get('token', { path: '/' });
     return auth ? <Navigate to="/dashboard" /> : <Outlet />;
   }
+  
 
   return (
     <>
@@ -58,10 +59,11 @@ function App() {
         </Route>
         <Route path='' element={<PrivateRoute />}>
           <Route path='/dashboard' element={<DashboardLayout />}>
-            <Route path='' >
-              <Route path='executive-committee' element={<ExcomLandingPage />} />
-              <Route path='executive-committee/:id' element={<ExecutiveCommitteePage />} />
-              <Route path='executive-committee/:id/detail' element={<ExcomDetailPage />} />
+            <Route index element={<UpcommingEventsPage />} />
+            <Route path='executive-committee' >
+              <Route path='' element={<ExcomLandingPage />} />
+              <Route path=':id' element={<ExecutiveCommitteePage />} />
+              <Route path=':id/detail' element={<ExcomDetailPage />} />
             </Route>
             <Route path='project'>
               <Route path='' element={<ProjectLandingPage />} />
@@ -72,9 +74,6 @@ function App() {
                 <Route path='finance' element={<ProjectFinanceLanding />} />
                 <Route path='event' element={<ProjectEventPage />} />
               </Route>
-            </Route>
-            <Route path='event'>
-              <Route path='' element={<UpcommingEventsPage />} />
             </Route>
             <Route path='finance'>
               <Route path='' element={<FinanceLanding />} />

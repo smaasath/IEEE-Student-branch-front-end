@@ -1,5 +1,6 @@
 import HttpInterceptor from "../../service/http-interceptor";
 import Cookies from "js-cookie";
+import { userData } from "../reducers/userSlice";
 
 const http = new HttpInterceptor();
 
@@ -47,6 +48,29 @@ export const userRegistration = (body, callback) => (dispatch) => {
   } catch (error) {
     callback(error.response);
   }
+};
+
+
+export const getCurrentUser = (callback) => {
+  const endpoint = `${import.meta.env.VITE_API_HOST}user/currentuser`;
+
+  try {
+    http
+      .get(endpoint)
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        callback(error.response);
+      });
+  } catch (error) {
+    callback(error.response);
+  }
+};
+
+
+export const logout = () => {
+  Cookies.remove("token", { path: "/" });
 };
 
 

@@ -143,7 +143,8 @@ const PolicyModel = ({ onHide, show, disabled, editable, item, changed }) => {
           <div className='mt-3'>
             <div className="">
               <label htmlFor="exampleFormControlInput1" className="form-label text-dark">Policy Code</label>
-              <input type="text" name='policyCode' value={formData.policyCode} onChange={handleInputChange} className={`form-control ${error.policyCode ? "is-invalid" : ""}`} id="exampleFormControlInput1" placeholder="Policy Code" disabled={disabled} />
+              <input type="text" name='policyCode' value={formData.policyCode} onChange={handleInputChange} className={`
+                 ${error.policyCode ? "is-invalid" : ""}`} id="exampleFormControlInput1" placeholder="Policy Code" disabled={disabled} />
               <div class="invalid-feedback">
                 This field is required.
               </div>

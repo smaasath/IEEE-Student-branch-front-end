@@ -6,6 +6,10 @@ import EditPrimary from '../../../assets/icons/editPrimary.png';
 import CommonButton from '../../../components/common/commonButton/commonButton';
 import PolicyModel from '../../../components/models/addPolicyModel/addPolicyModel';
 import { getAllPolicy } from '../../../redux/actions/policy';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import CommonLoader from '../../../components/common/commonLoader/commonLoader';
+
 
 const PolicyPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,7 +23,24 @@ const PolicyPage = () => {
   const [status, setStatus] = useState('');
   const [searchItem, setsearchItem] = useState('');
   const [refreshTable, setRefreshTable] = useState(0)
+  const [pageLoading, setPageLoading] = useState(true);
+  const userData = useSelector((state) => state.user.userData);
+  const navigate = useNavigate();
 
+
+  useEffect(() => {
+    setPageLoading(true)
+    if (userData) {
+      const isOtherAvailable = userData?.role?.some(role =>
+        role.policies.some(policy => policy.policyCode === "OTHER")
+      );
+      if (!isOtherAvailable) {
+        navigate('/dashboard')
+      } else {
+        setPageLoading(false);
+      }
+    }
+  }, [userData])
 
   const tableHeading = [
     { label: "ID", value: "id" },
@@ -76,36 +97,42 @@ const PolicyPage = () => {
   }, [searchItem, currentPage, refreshTable, status])
 
 
-  
+
 
   return (
     <>
-      <div className='mt-4 d-flex justify-content-end'><div><CommonButton onClick={handleShowPolicyModel} text={"Add"} /></div></div>
-      <div className='mt-3 pt-4 p-3 rounded-4 bg-white common-shadow'>
-        <div className='d-flex justify-content-between flex-wrap align-items-center p-3'>
-          <CommonSearch primary={true} onChange={(item)=>{search(item)}} />
-        </div>
-        <div className='mt-3 p-3 rounded-4 bg-white d-flex flex-column justify-content-between table-container'>
-          <CommonTable
-            tableHeading={tableHeading}
-            tableData={policyData}
-            primary={true}
-            loading={loader}
-            editAction={(item) => { editPolicy(item) }}
-          />
-          <div className='mt-4 d-flex justify-content-end'>
-            <CommonPagination pages={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      {pageLoading ? (
+        <CommonLoader />
+      ) : (
+        <>
+          <div className='mt-4 d-flex justify-content-end'><div><CommonButton onClick={handleShowPolicyModel} text={"Add"} /></div></div>
+          <div className='mt-3 pt-4 p-3 rounded-4 bg-white common-shadow'>
+            <div className='d-flex justify-content-between flex-wrap align-items-center p-3'>
+              <CommonSearch primary={true} onChange={(item) => { search(item) }} />
+            </div>
+            <div className='mt-3 p-3 rounded-4 bg-white d-flex flex-column justify-content-between table-container'>
+              <CommonTable
+                tableHeading={tableHeading}
+                tableData={policyData}
+                primary={true}
+                loading={loader}
+                editAction={(item) => { editPolicy(item) }}
+              />
+              <div className='mt-4 d-flex justify-content-end'>
+                <CommonPagination pages={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <PolicyModel
-        show={policyModelShow}
-        onHide={handleClosePolicyModel}
-        disabled={disable}
-        editable={editable}
-        item={item}
-        changed={()=>{setRefreshTable(refreshTable+1)}}
-      />
+          <PolicyModel
+            show={policyModelShow}
+            onHide={handleClosePolicyModel}
+            disabled={disable}
+            editable={editable}
+            item={item}
+            changed={() => { setRefreshTable(refreshTable + 1) }}
+          />
+        </>
+      )}
     </>
   );
 };

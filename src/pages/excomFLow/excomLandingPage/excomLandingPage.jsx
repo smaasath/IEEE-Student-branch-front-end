@@ -4,12 +4,13 @@ import CommonTable from '../../../components/common/commonTable/commonTable';
 import CommonPagination from '../../../components/common/commonPagination/commonPagination';
 import MemberDetailsModal from '../../../components/models/viewMemberDetailsModel/viewMemberDetailsModel';
 import OuCard from "../../../components/common/oucard/ouCard";
-
 import sbLogo from "../../../assets/logo/sb_logo.png";
 import wieLogo from "../../../assets/logo/wie_logo.png";
 import iasLogo from "../../../assets/logo/ias_logo.png";
 import rasLogo from "../../../assets/logo/ras_logo.png";
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import CommonLoader from '../../../components/common/commonLoader/commonLoader';
 
 const ExcomLandingPage = () => {
     const currentYear = new Date().getFullYear();
@@ -21,16 +22,28 @@ const ExcomLandingPage = () => {
     const [memberDetailModalShow, setMemberDetailModalShow] = useState(false);
     const [selectedMember, setSelectedMember] = useState(null);
     const navigate = useNavigate();
+    const userData = useSelector((state) => state.user.userData);
+    const [pageLoading, setPageLoading] = useState(true);
+    useEffect(() => {
+        setPageLoading(true)
+        if (userData) {
+            const isOtherAvailable = userData?.role?.some(role =>
+                role.policies.some(policy => policy.policyCode === "EXCOM")
+            );
+            if (!isOtherAvailable) {
+                navigate('/dashboard')
+            } else {
+                setPageLoading(false);
+            }
+        }
+    }, [userData])
     const handleCloseMemberDetailModal = () => setMemberDetailModalShow(false);
     const handleShowMemberDetailModal = (member) => {
         setSelectedMember(member);
         setMemberDetailModalShow(true);
     };
 
-    useEffect(() => {
-        const termYears = [...new Set(tableData.map((item) => item.termYear))].sort((a, b) => b - a);
-        setAvailableTermYears(termYears);
-    }, []);
+
 
     const handleSearchChange = (e) => setSearchByName(e.target.value);
     const handleEntityChange = (e) => setEntityFilter(e.target.value);
@@ -123,84 +136,84 @@ const ExcomLandingPage = () => {
     }
 
 
-    // Filter excomData based on search, entity, and term
-    const filteredData = tableData.filter((item) => {
-        const matchesName = item.fname.toLowerCase().includes(searchByName.toLowerCase());
-        const matchesEntity = entityFilter === "All" || item.entity === entityFilter;
-        const matchesTerm = termFilter === currentYear || item.termYear.toString() === termFilter.toString();
 
-        return matchesName && matchesEntity && matchesTerm;
-    });
 
     return (
         <>
-            <div className='container'>
-                <div className='text-cl-primary'>Entities</div>
-                <div className="row mt-3">
-                    {[
-                        { id: 0, name: "SB", type: "Student Branch", logo: sbLogo },
-                        { id: 1, name: "WIE", type: "Affinity Group", logo: wieLogo },
-                        { id: 2, name: "RAS", type: "Technical Chapter", logo: rasLogo },
-                        { id: 3, name: "IAS", type: "Technical Chapter", logo: iasLogo },
-                        { id: 4, name: "CS", type: "Technical Chapter", logo: iasLogo }
-                    ].map((ou) => (
-                        <div key={ou.id} className="col-10 col-sm-6 col-md-5 col-lg-3 me-0 mb-4">
-                            <OuCard name={ou.name} type={ou.type} logo={ou.logo} onclick={navigateToexcomPage} />
+            {pageLoading ? (
+                <CommonLoader />
+            ) : (
+                <>
+                    <div className='container'>
+                        <div className='text-cl-primary'>Entities</div>
+                        <div className="row mt-3">
+                            {[
+                                { id: 0, name: "SB", type: "Student Branch", logo: sbLogo },
+                                { id: 1, name: "WIE", type: "Affinity Group", logo: wieLogo },
+                                { id: 2, name: "RAS", type: "Technical Chapter", logo: rasLogo },
+                                { id: 3, name: "IAS", type: "Technical Chapter", logo: iasLogo },
+                                { id: 4, name: "CS", type: "Technical Chapter", logo: iasLogo }
+                            ].map((ou) => (
+                                <div key={ou.id} className="col-10 col-sm-6 col-md-5 col-lg-3 me-0 mb-4">
+                                    <OuCard name={ou.name} type={ou.type} logo={ou.logo} onclick={navigateToexcomPage} />
+                                </div>
+                            ))}
                         </div>
-                    ))}
-                </div>
-                <div className='text-cl-primary mt-4'>Members details</div>
-                <div className='mt-3 pt-4 p-3 rounded-4 bg-white common-shadow'>
-                    <div className='d-flex justify-content-between flex-wrap align-items-center p-3'>
-                        <div>
-                            <CommonSearch primary={true} onChange={handleSearchChange} />
-                        </div>
-                        <div>
-                            <select className="form-select" aria-label="Select Entity" value={entityFilter} onChange={handleEntityChange}>
-                                <option value="All">Select Entity</option>
-                                {[
-                                    { id: 0, name: "SB", type: "Student Branch", logo: sbLogo },
-                                    { id: 1, name: "WIE", type: "Affinity Group", logo: wieLogo },
-                                    { id: 2, name: "RAS", type: "Technical Chapter", logo: rasLogo },
-                                    { id: 3, name: "IAS", type: "Technical Chapter", logo: iasLogo },
-                                    { id: 4, name: "CS", type: "Technical Chapter", logo: iasLogo }
-                                ].map((ou) => (
-                                    <option key={ou.id} value={ou.name}>
-                                        {ou.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div>
-                            <select className="form-select ms-2 me-1" value={termFilter} onChange={handleTermChange}>
-                                <option value={currentYear}>Select Term</option>
-                                {availableTermYears.map((year) => (
-                                    <option key={year} value={year}>
-                                        Term {year}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
+                        <div className='text-cl-primary mt-4'>Members details</div>
+                        <div className='mt-3 pt-4 p-3 rounded-4 bg-white common-shadow'>
+                            <div className='d-flex justify-content-between flex-wrap align-items-center p-3'>
+                                <div>
+                                    <CommonSearch primary={true} onChange={handleSearchChange} />
+                                </div>
+                                <div>
+                                    <select className="form-select" aria-label="Select Entity" value={entityFilter} onChange={handleEntityChange}>
+                                        <option value="All">Select Entity</option>
+                                        {[
+                                            { id: 0, name: "SB", type: "Student Branch", logo: sbLogo },
+                                            { id: 1, name: "WIE", type: "Affinity Group", logo: wieLogo },
+                                            { id: 2, name: "RAS", type: "Technical Chapter", logo: rasLogo },
+                                            { id: 3, name: "IAS", type: "Technical Chapter", logo: iasLogo },
+                                            { id: 4, name: "CS", type: "Technical Chapter", logo: iasLogo }
+                                        ].map((ou) => (
+                                            <option key={ou.id} value={ou.name}>
+                                                {ou.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div>
+                                    <select className="form-select ms-2 me-1" value={termFilter} onChange={handleTermChange}>
+                                        <option value={currentYear}>Select Term</option>
+                                        {availableTermYears.map((year) => (
+                                            <option key={year} value={year}>
+                                                Term {year}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
 
-                    <div className='mt-3 p-3 rounded-4 bg-white d-flex flex-column justify-content-between table-container'>
-                        <CommonTable
-                            tableHeading={tableHeading}
-                            tableData={filteredData}
-                            primary={true}
-                            loading={false}
-                            viewAction={(id) => { 
-                                    const member = tableData.find(item => item.id === id);
-                                handleShowMemberDetailModal(member);
-                            }}
-                        />
-                        <div className='mt-4 d-flex justify-content-end'>
-                            <CommonPagination pages={10} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+                            <div className='mt-3 p-3 rounded-4 bg-white d-flex flex-column justify-content-between table-container'>
+                                <CommonTable
+                                    tableHeading={tableHeading}
+                                    tableData={tableData}
+                                    primary={true}
+                                    loading={false}
+                                    viewAction={(id) => {
+                                        const member = tableData.find(item => item.id === id);
+                                        handleShowMemberDetailModal(member);
+                                    }}
+                                />
+                                <div className='mt-4 d-flex justify-content-end'>
+                                    <CommonPagination pages={10} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <MemberDetailsModal show={memberDetailModalShow} onHide={handleCloseMemberDetailModal} memberData={selectedMember} />
+                    <MemberDetailsModal show={memberDetailModalShow} onHide={handleCloseMemberDetailModal} memberData={selectedMember} />
+
+                </>
+            )}
         </>
     );
 }
