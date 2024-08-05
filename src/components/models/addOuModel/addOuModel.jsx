@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import CommonButton from '../../common/commonButton/commonButton';
 import uploadimage from '../.../../../../assets/icons/upload.png';
-import deleteimage from '../.../../../../assets/icons/delete.png'
+import deleteimage from '../.../../../../assets/icons/delete.png';
 import { createAcademicYear, updateAcademicYear } from '../../../redux/actions/academicYear';
 
-const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
+const AddOuModel = ({ onHide, show, disabled, editable, item, changed }) => {
   const [formData, setFormData] = useState({
     enrolledBatch: "",
     academicYear: "",
@@ -154,7 +154,7 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
               </div>
             </div>
           </div>
-          <div className="mt-3">
+          <div className="mt-3 d-flex justify-content-center">
             {formData.ouLogo ? (
               <div className="p-1 border border-2 border-black d-flex flex-column justify-content-center align-items-center">
                 <div style={{ position: 'relative', height: '180px', width: '360px', overflow: 'hidden' }}>
@@ -186,15 +186,14 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
                 style={{ borderStyle: 'dotted', height: '180px', width: '360px', cursor: 'pointer' }}
                 onClick={() => document.getElementById('customFile').click()}
               >
-                    <img
-                    src={uploadimage}
-                    alt="Upload the Logo"
-                    loading="lazy"
-                    className="text-center"
-                    height="90"
-                    width="90"
-                    />
-
+                <img
+                  src={uploadimage}
+                  alt="Upload the Logo"
+                  loading="lazy"
+                  className="text-center"
+                  height="90"
+                  width="90"
+                />
                 <input
                   type="file"
                   id="customFile"
@@ -230,4 +229,4 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
   );
 }
 
-export default TermYearModel;
+export default AddOuModel;
