@@ -201,7 +201,7 @@ const AddOuModel = ({ onHide, show, disabled, editable, item, changed }) => {
                   accept="image/png, image/jpeg"
                   onChange={handleImageChange}
                 />
-                <p>Click here to upload your image.</p>
+                <p>Click here to upload OU Logo.</p>
               </div>
             )}
             {error.ouLogo && (
