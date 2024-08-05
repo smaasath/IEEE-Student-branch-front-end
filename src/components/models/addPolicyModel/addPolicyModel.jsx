@@ -5,7 +5,6 @@ import { createPolicy, updatePolicy } from '../../../redux/actions/policy';
 
 const PolicyModel = ({ onHide, show, disabled, editable, item, changed }) => {
 
-
   const [formData, setFormData] = useState({
     policy: "",
     type: "",
@@ -22,7 +21,6 @@ const PolicyModel = ({ onHide, show, disabled, editable, item, changed }) => {
   const [exist, setExist] = useState('');
 
   useEffect(() => {
-
     if (!editable) {
       setFormData({
         policy: "",
@@ -30,7 +28,7 @@ const PolicyModel = ({ onHide, show, disabled, editable, item, changed }) => {
         policyCode: "",
       });
     } else {
-      setFormData(item)
+      setFormData(item);
     }
 
     setError({
@@ -39,72 +37,63 @@ const PolicyModel = ({ onHide, show, disabled, editable, item, changed }) => {
       policyCode: false,
     });
 
-    setExist('')
-
-  }, [show])
-
+    setExist('');
+  }, [show, editable, item]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
     setError((prevError) => ({ ...prevError, [name]: false }));
-    setExist('')
+    setExist('');
   };
 
   function addPolicy() {
-    setExist('')
+    setExist('');
     setError({
       policy: false,
       type: false,
       policyCode: false,
     });
 
-    if (!formData.policy || !formData.policyCode || formData.type == '') {
+    if (!formData.policy || !formData.policyCode || formData.type === '') {
       setError({
         ...error,
         policy: !formData.policy,
         policyCode: !formData.policyCode,
-        type: formData.type == '' ? true : false,
+        type: formData.type === '' ? true : false,
       });
       return;
     }
 
-    setLoading(true)
+    setLoading(true);
     if (editable) {
-      formData.policyID = item?.id
+      formData.policyID = item?.id;
       updatePolicy(formData, (res) => {
-        if (res?.status == 200) {
-          setLoading(false)
-          changed()
-          onHide()
-
+        if (res?.status === 200) {
+          setLoading(false);
+          changed();
+          onHide();
         } else {
-          setLoading(false)
-          setExist("Policy Added Failed")
+          setLoading(false);
+          setExist("Policy Update Failed");
         }
-      })
+      });
     } else {
-
       createPolicy(formData, (res) => {
-        if (res?.status == 201) {
-          setLoading(false)
-          changed()
-          onHide()
-
-        } else if (res?.status == 409) {
-          setLoading(false)
-          setExist("Policy Already Exist")
+        if (res?.status === 201) {
+          setLoading(false);
+          changed();
+          onHide();
+        } else if (res?.status === 409) {
+          setLoading(false);
+          setExist("Policy Already Exists");
         } else {
-          setLoading(false)
-          setExist("Policy Added Failed")
+          setLoading(false);
+          setExist("Policy Creation Failed");
         }
-
-
-      })
+      });
     }
-
   }
-
 
   return (
     <Modal
@@ -121,34 +110,64 @@ const PolicyModel = ({ onHide, show, disabled, editable, item, changed }) => {
       <Modal.Body>
         <div className='d-flex flex-column'>
           <div className='mt-3'>
-            <div className="">
-              <label htmlFor="exampleFormControlInput1" className="form-label text-dark">Policy Name</label>
-              <input type="text" name='policy' value={formData.policy} onChange={handleInputChange} className={`form-control ${error.policy ? "is-invalid" : ""}`} id="exampleFormControlInput1" placeholder="Policy Name" disabled={disabled} />
-              <div class="invalid-feedback">
+            <div className="has-validation">
+              <label htmlFor="policy" className="form-label text-dark">Policy Name</label>
+              <input
+                type="text"
+                name='policy'
+                value={formData.policy}
+                onChange={handleInputChange}
+                className={`form-control ${error.policy ? "is-invalid" : ""}`}
+                id="policy"
+                placeholder="Policy Name"
+                disabled={disabled}
+              />
+              <div className="invalid-feedback">
                 This field is required.
               </div>
             </div>
           </div>
           <div className="mt-3">
-            <label htmlFor="exampleFormControlInput1" className="form-label text-dark">Type</label>
-            <select name='type' value={formData.type} onChange={handleInputChange} className={`form-select w-100 ${error.type ? "is-invalid" : ""}`} aria-label="Large select example" disabled={disabled}>
-              <option value=''>Select Type</option>
-              <option value="MAIN">Main</option>
-              <option value="SUB">Sub</option>
-            </select>
-            <div class="invalid-feedback">
-                This field is required.
-              </div>
-          </div>
-          <div className='mt-3'>
-            <div className="">
-              <label htmlFor="exampleFormControlInput1" className="form-label text-dark">Policy Code</label>
-              <input type="text" name='policyCode' value={formData.policyCode} onChange={handleInputChange} className={`
-                 ${error.policyCode ? "is-invalid" : ""}`} id="exampleFormControlInput1" placeholder="Policy Code" disabled={disabled} />
-              <div class="invalid-feedback">
+            <div className="has-validation">
+              <label htmlFor="type" className="form-label text-dark">Type</label>
+              <select
+                name='type'
+                value={formData.type}
+                onChange={handleInputChange}
+                className={`form-select ${error.type ? "is-invalid" : ""}`}
+                aria-label="Select Type"
+                id="type"
+                disabled={disabled}
+              >
+                <option value=''>Select Type</option>
+                <option value="MAIN">Main</option>
+                <option value="SUB">Sub</option>
+              </select>
+              <div className="invalid-feedback">
                 This field is required.
               </div>
             </div>
+          </div>
+          <div className='mt-3'>
+            <div className="has-validation">
+              <label htmlFor="policyCode" className="form-label text-dark">Policy Code</label>
+              <input
+                type="text"
+                name='policyCode'
+                value={formData.policyCode}
+                onChange={handleInputChange}
+                className={`form-control ${error.policyCode ? "is-invalid" : ""}`}
+                id="policyCode"
+                placeholder="Policy Code"
+                disabled={disabled}
+              />
+              <div className="invalid-feedback">
+                This field is required.
+              </div>
+            </div>
+          </div>
+          <div className='text-danger text-center mt-4'>
+            {exist}
           </div>
         </div>
       </Modal.Body>
