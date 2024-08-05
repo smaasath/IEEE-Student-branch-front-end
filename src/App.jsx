@@ -28,6 +28,7 @@ import OtherLandingPage from './pages/otherFlow/langingPage/landingPage';
 import TermYearPage from './pages/otherFlow/termYearPage/termYearPage'
 import PolicyPage from './pages/otherFlow/policyPage/policyPage'
 import UserRolePage from './pages/otherFlow/userRolePage/userRolePage'
+import OuPage from './pages/otherFlow/ouPage/ouPage'
 import ProjectEventPage from './pages/projectFlow/event/projectEventPage';
 import UpcommingEventsPage from './pages/eventFlow/upcommingEventsPage';
 import Cookies from "js-cookie";
@@ -94,6 +95,7 @@ function App() {
               <Route path='academic-year' element={<TermYearPage />} />
               <Route path='policy' element={<PolicyPage />} />
               <Route path='user-role' element={<UserRolePage />} />
+              <Route path='ouPage' element={<OuPage />} />
             </Route>
             <Route path='*' element={<NotFound />}>
             </Route>
