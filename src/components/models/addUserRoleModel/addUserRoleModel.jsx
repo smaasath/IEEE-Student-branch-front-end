@@ -204,7 +204,8 @@ const UserRoleModel = ({ onHide, show, editable, disabled, item, changed }) => {
               <select value={formData.type} name='type' onChange={handleInputChange} className={`form-select w-100 ${error.type ? "is-invalid" : ""}`} aria-label="Large select example" disabled={disabled}>
                 <option value=''>Select Type</option>
                 <option value="MAIN">Main</option>
-                <option value="SUB">Sub</option>
+                <option value="EXCOM">Excom</option>
+                <option value="PROJECT">Project</option>
               </select>
               <div class="invalid-feedback">
                 This field is required.
