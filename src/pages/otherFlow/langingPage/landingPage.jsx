@@ -37,13 +37,7 @@ const OtherLandingPage = () => {
   };
 
   const navigateToNewPage1 = () => {
-    navigate("/dashboard/other/new-page-1");
-  };
-  const navigateToNewPage2 = () => {
-    navigate("/dashboard/other/new-page-2");
-  };
-  const navigateToNewPage3 = () => {
-    navigate("/dashboard/other/new-page-3");
+    navigate("/dashboard/other/ouPage");
   };
 
   return (
