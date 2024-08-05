@@ -24,17 +24,18 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
   useEffect(() => {
     setPageLoading(true)
     if (userData && show && excom) {
-      const isExcomAvailable = userData?.role?.some(role =>
-        role.policies.some(policy => policy.policyCode === "EXCOM")
-      );
+      const isExcomAvailable = userData?.role?.policies.some(
+        policy => policy.policyCode === "EXCOM"
+      )
 
-      const isExcomTaskAvailable = userData?.role?.some(role =>
-        role.policies.some(policy => policy.policyCode === "EXCOM_TASK")
-      );
+      const isExcomTaskAvailable = userData?.role?.policies.some(
+        policy => policy.policyCode === "EXCOM_TASK"
+      )
 
-      const isExcomTaskAssignAvailable = userData?.role?.some(role =>
-        role.policies.some(policy => policy.policyCode === "EXCOM_TASK_ASSIGN")
-      );
+
+      const isExcomTaskAssignAvailable = userData?.role?.policies.some(
+        policy => policy.policyCode === "EXCOM_TASK_ASSIGN"
+      )
 
 
 
@@ -194,8 +195,8 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                   <div className="d-flex justify-content-between w-100 align-items-center">
                     <h6 className="text-third fw-bold">Assignees</h6>
                     {assignTask ? (
-                    <img src={add} alt="Add" style={{ width: '30px', height: '30px' }} />
-                  ) : null}
+                      <img src={add} alt="Add" style={{ width: '30px', height: '30px' }} />
+                    ) : null}
                   </div>
                 </div>
                 <div className="mt-3">

@@ -74,14 +74,13 @@ const ExcomDetailPage = () => {
   useEffect(() => {
     setPageLoading(true)
     if (userData) {
-      const isExcomAvailable = userData?.role?.some(role =>
-        role.policies.some(policy => policy.policyCode === "EXCOM")
+      const isExcomAvailable = userData?.role?.policies.some(
+        policy => policy.policyCode === "EXCOM"
       );
 
-
-      const isExcomAssignAvailable = userData?.role?.some(role =>
-        role.policies.some(policy => policy.policyCode === "EXCOM_ASSIGN")
-      );
+      const isExcomAssignAvailable = userData?.role?.policies.some(
+        policy => policy.policyCode === "EXCOM_ASSIGN"
+      )
 
 
 

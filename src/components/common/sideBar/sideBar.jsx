@@ -21,17 +21,18 @@ const SideBar = () => {
     const [routes, setRoutes] = useState([]);
 
     useEffect(() => {
-        const isOtherAvailable = userData?.role?.some(role =>
-            role.policies.some(policy => policy.policyCode === "OTHER")
-        );
+        const isOtherAvailable = userData?.role?.policies.some(
+            policy => policy.policyCode === "OTHER"
+        )
 
-        const isExcomAvailable = userData?.role?.some(role =>
-            role.policies.some(policy => policy.policyCode === "EXCOM")
-        );
+        const isExcomAvailable = userData?.role?.policies.some(
+            policy => policy.policyCode === "EXCOM"
+        )
 
-        const isFinanceAvailable = userData?.role?.some(role =>
-            role.policies.some(policy => policy.policyCode === "FINANCE")
-        );
+
+        const isFinanceAvailable = userData?.role?.policies.some(
+            policy => policy.policyCode === "FINANCE"
+        )
 
         const updatedRoutes = [
             { name: "Events", image: eventicon, path: "dashboard", available: true },

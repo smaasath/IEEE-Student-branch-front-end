@@ -26,13 +26,13 @@ const serviveLandingPage = () => {
   useEffect(() => {
     setPageLoading(true)
     if (userData) {
-      const isServiceAvailable = userData?.role?.some(role =>
-        role.policies.some(policy => policy.policyCode === "SERVICE")
-      );
+      const isServiceAvailable = userData?.role?.policies.some(
+        policy => policy.policyCode === "SERVICE"
+      )
 
-      const isServiceVolunteerAvailable = userData?.role?.some(role =>
-        role.policies.some(policy => policy.policyCode === "SERVICE_VOLUNTEER")
-      );
+      const isServiceVolunteerAvailable = userData?.role?.policies.some(
+        policy => policy.policyCode === "SERVICE_VOLUNTEER"
+      )
 
       if (isServiceAvailable) {
         setService(true);

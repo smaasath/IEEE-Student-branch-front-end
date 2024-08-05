@@ -28,14 +28,14 @@ function ExecutiveCommitteePage() {
     useEffect(() => {
         setPageLoading(true)
         if (userData) {
-            const isExcomAvailable = userData?.role?.some(role =>
-                role.policies.some(policy => policy.policyCode === "EXCOM")
-            );
+            const isExcomAvailable = userData?.role?.policies.some(
+                policy => policy.policyCode === "EXCOM"
+            )
 
 
-            const isExcomTaskAvailable = userData?.role?.some(role =>
-                role.policies.some(policy => policy.policyCode === "EXCOM_TASK")
-            );
+            const isExcomTaskAvailable = userData?.role?.policies.some(
+                policy => policy.policyCode === "EXCOM_TASK"
+            )
 
 
 

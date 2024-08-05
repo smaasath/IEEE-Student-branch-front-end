@@ -18,9 +18,9 @@ const Proposal = () => {
     useEffect(() => {
         setPageLoading(true)
         if (userData) {
-            const isFinanceAvailable = userData?.role?.some(role =>
-                role.policies.some(policy => policy.policyCode === "FINANCE")
-            );
+            const isFinanceAvailable = userData?.role?.policies.some(
+                policy => policy.policyCode === "FINANCE"
+            )
             if (!isFinanceAvailable) {
                 navigate('/dashboard')
             } else {
