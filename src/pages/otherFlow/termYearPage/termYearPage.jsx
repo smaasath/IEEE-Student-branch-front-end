@@ -28,9 +28,9 @@ const TermYearPage = () => {
   useEffect(() => {
     setPageLoading(true)
     if (userData) {
-      const isOtherAvailable = userData?.role?.policies.some(
-        policy => policy.policyCode === "OTHER"
-      )
+      const isOtherAvailable = userData?.some(userRoleDetail =>
+        userRoleDetail.role?.policies.some(policy => policy.policyCode === "OTHER")
+      );
       if (!isOtherAvailable) {
         navigate('/dashboard')
       } else {

@@ -19,9 +19,9 @@ const ReportPage = () => {
     useEffect(() => {
         setPageLoading(true)
         if (userData) {
-            const isFinanceAvailable = userData?.role?.policies.some(
-                policy => policy.policyCode === "FINANCE"
-            )
+            const isFinanceAvailable = userData?.some(userRoleDetail =>
+                userRoleDetail.role?.policies.some(policy => policy.policyCode === "FINANCE")
+              );
             if (!isFinanceAvailable) {
                 navigate('/dashboard')
             } else {

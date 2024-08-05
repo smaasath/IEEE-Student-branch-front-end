@@ -27,9 +27,9 @@ const ExcomLandingPage = () => {
     useEffect(() => {
         setPageLoading(true)
         if (userData) {
-            const isOtherAvailable = userData?.role?.policies.some(
-                policy => policy.policyCode === "EXCOM"
-            )
+            const isOtherAvailable = userData?.some(userRoleDetail =>
+                userRoleDetail.role?.policies.some(policy => policy.policyCode === "EXCOM")
+              );
             if (!isOtherAvailable) {
                 navigate('/dashboard')
             } else {
