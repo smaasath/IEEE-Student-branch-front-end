@@ -33,10 +33,11 @@ const ProjectPage = () => {
                 </div>
                 <div className='col-md-9 d-flex flex-column'>
                     <div>
-                        <h2>Project Title</h2>
+                        <h2>IEEE OpenDay 2024</h2>
                     </div>
                     <div>
-                        <p className='text-secondary text-wrap'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce id dignissim ex. In sem sem, efficitur vel varius lobortis, pretium a velit. Donec quis ligula quis sem dignissim bibendum. Fusce a quam in mauris feugiat rutrum. Integer sodales dui laoreet lectus eleifend dignissim. In sed metus sem. Integer nibh enim, ultricies vel eleifend eu, mattis a metus. Aenean tristique diam eleifend diam vestibulum, nec dapibus ipsum tempus.</p>
+                        <p className='text-secondary text-wrap'>IEEE Open Day 2024 is a highly anticipated event organized by the IEEE Uva Wellassa University Student Branch, aimed at fostering a culture of learning, engagement, and community within the student body. This year's event promises an exciting lineup of activities and initiatives designed to showcase the myriad opportunities available through IEEE membership while providing valuable insights into the world of technology and innovation.
+                        </p>
                     </div>
 
                 </div>
@@ -49,13 +50,13 @@ const ProjectPage = () => {
                 </div>
                 <div className='d-flex justify-content-between flex-wrap flex-grow-1 gap-4'>
                     <div>
-                        <CommonStatusCountCard type={"TODO"} count={44} />
+                        <CommonStatusCountCard type={"TODO"} count={3} />
                     </div>
                     <div>
-                        <CommonStatusCountCard type={"ONGOING"} count={55} />
+                        <CommonStatusCountCard type={"ONGOING"} count={1} />
                     </div>
                     <div>
-                        <CommonStatusCountCard type={"COMPLETE"} count={41} />
+                        <CommonStatusCountCard type={"COMPLETE"} count={2} />
                     </div>
                 </div>
             </div>
@@ -103,8 +104,6 @@ const ProjectPage = () => {
 
                         <div className='mt-4 d-flex justify-content-between align-items-center gap-4 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar pb-3 ps-2 pe-2 pt-1' style={{ maxHeight: 800 }}>
                             <CommonNoteContainer />
-                            <CommonNoteContainer />
-                            <CommonNoteContainer />
                         </div>
                         <div className='mt-3'>
                             <div className='d-flex justify-content-between align-items-center gap-3'>
@@ -136,12 +135,6 @@ const ProjectPage = () => {
                         </div>
 
                         <div className='mt-4 d-flex justify-content-between align-items-center gap-1 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar' style={{ maxHeight: 500 }}>
-                            <CommonMemberContainer />
-                            <CommonMemberContainer />
-                            <CommonMemberContainer />
-                            <CommonMemberContainer />
-                            <CommonMemberContainer />
-                            <CommonMemberContainer />
                             <CommonMemberContainer />
                         </div>
                     </div>

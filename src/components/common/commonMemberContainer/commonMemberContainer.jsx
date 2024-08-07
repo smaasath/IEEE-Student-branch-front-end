@@ -18,7 +18,7 @@ const CommonMemberContainer = () => {
             </div>
 
             <div>
-                <p className='m-0' style={{ color: "#41475" }}>12 Tasks</p>
+                <p className='m-0' style={{ color: "#41475" }}>6 Tasks</p>
             </div>
         </button>
     )
