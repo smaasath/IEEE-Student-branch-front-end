@@ -20,10 +20,6 @@ const SideBar = () => {
   const [routes, setRoutes] = useState([]);
 
 
-    const userData = useSelector((state) => state.user.userData);
-    const location = useLocation();
-    const { pathname } = location;
-    const [routes, setRoutes] = useState([]);
 
     useEffect(() => {
         const isOtherAvailable = userData?.some(userRoleDetail =>
@@ -40,9 +36,7 @@ const SideBar = () => {
           );
 
 
-    const isFinanceAvailable = userData?.role?.policies.some(
-      (policy) => policy.policyCode === "FINANCE"
-    );
+
 
     const updatedRoutes = [
       { name: "Events", image: eventicon, path: "dashboard", available: true },
