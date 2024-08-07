@@ -55,9 +55,9 @@ const VolunteerDetailsPage = () => {
   useEffect(() => {
     setPageLoading(true)
     if (userData) {
-      const isFinanceAvailable = userData?.role?.policies.some(
-        policy => policy.policyCode === "SERVICE_VOLUNTEER"
-      )
+      const isFinanceAvailable = userData?.some(userRoleDetail =>
+        userRoleDetail.role?.policies.some(policy => policy.policyCode === "SERVICE_VOLUNTEER")
+      );
       if (!isFinanceAvailable) {
         navigate('/dashboard')
       } else {

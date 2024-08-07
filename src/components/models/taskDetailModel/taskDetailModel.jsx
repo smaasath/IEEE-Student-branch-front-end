@@ -24,18 +24,18 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
   useEffect(() => {
     setPageLoading(true)
     if (userData && show && excom) {
-      const isExcomAvailable = userData?.role?.policies.some(
-        policy => policy.policyCode === "EXCOM"
-      )
+      const isExcomAvailable = userData?.some(userRoleDetail =>
+        userRoleDetail.role?.policies.some(policy => policy.policyCode === "EXCOM")
+      );
 
-      const isExcomTaskAvailable = userData?.role?.policies.some(
-        policy => policy.policyCode === "EXCOM_TASK"
-      )
+      const isExcomTaskAvailable = userData?.some(userRoleDetail =>
+        userRoleDetail.role?.policies.some(policy => policy.policyCode === "EXCOM_TASK")
+      );
 
 
-      const isExcomTaskAssignAvailable = userData?.role?.policies.some(
-        policy => policy.policyCode === "EXCOM_TASK_ASSIGN"
-      )
+      const isExcomTaskAssignAvailable = userData?.some(userRoleDetail =>
+        userRoleDetail.role?.policies.some(policy => policy.policyCode === "EXCOM_TASK_ASSIGN")
+      );
 
 
 

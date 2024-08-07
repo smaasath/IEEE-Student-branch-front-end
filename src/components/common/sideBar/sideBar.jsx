@@ -19,14 +19,26 @@ const SideBar = () => {
   const { pathname } = location;
   const [routes, setRoutes] = useState([]);
 
-  useEffect(() => {
-    const isOtherAvailable = userData?.role?.policies.some(
-      (policy) => policy.policyCode === "OTHER"
-    );
 
-    const isExcomAvailable = userData?.role?.policies.some(
-      (policy) => policy.policyCode === "EXCOM"
-    );
+    const userData = useSelector((state) => state.user.userData);
+    const location = useLocation();
+    const { pathname } = location;
+    const [routes, setRoutes] = useState([]);
+
+    useEffect(() => {
+        const isOtherAvailable = userData?.some(userRoleDetail =>
+            userRoleDetail.role?.policies.some(policy => policy.policyCode === "OTHER")
+          );
+
+        const isExcomAvailable = userData?.some(userRoleDetail =>
+            userRoleDetail.role?.policies.some(policy => policy.policyCode === "EXCOM")
+          );
+
+
+        const isFinanceAvailable = userData?.some(userRoleDetail =>
+            userRoleDetail.role?.policies.some(policy => policy.policyCode === "FINANCE")
+          );
+
 
     const isFinanceAvailable = userData?.role?.policies.some(
       (policy) => policy.policyCode === "FINANCE"
