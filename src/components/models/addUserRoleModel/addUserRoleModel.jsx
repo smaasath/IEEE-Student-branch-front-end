@@ -47,14 +47,14 @@ const UserRoleModel = ({ onHide, show, editable, disabled, item, changed }) => {
   useEffect(() => {
     console.warn(item, "itemmm")
 
-    getAllPolicy(0, searchItem, "", (res) => {
+    getAllPolicy(0, searchItem, formData.type, (res) => {
       if (res.status == 200) {
         setPolicies(res?.data?.data?.content)
 
       }
 
     })
-  }, [searchItem])
+  }, [searchItem, formData.type])
 
   useEffect(() => {
     if (editable && show == true) {
