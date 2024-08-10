@@ -20,6 +20,7 @@ const UserRoleModel = ({ onHide, show, editable, disabled, item, changed }) => {
   const [selectError, SetSelectError] = useState('')
   const [loading, setLoading] = useState(false);
   const [exist, setExist] = useState('');
+  const [type, setType] = useState('');
   const [searchItem, setsearchItem] = useState('');
 
   const [selectedPolicy, setSelectedPolicy] = useState([]);
@@ -47,14 +48,14 @@ const UserRoleModel = ({ onHide, show, editable, disabled, item, changed }) => {
   useEffect(() => {
     console.warn(item, "itemmm")
 
-    getAllPolicy(0, searchItem, formData.type, (res) => {
+    getAllPolicy(0, searchItem, type, (res) => {
       if (res.status == 200) {
         setPolicies(res?.data?.data?.content)
 
       }
 
     })
-  }, [searchItem, formData.type])
+  }, [searchItem, type])
 
   useEffect(() => {
     if (editable && show == true) {
@@ -82,6 +83,13 @@ const UserRoleModel = ({ onHide, show, editable, disabled, item, changed }) => {
     setExist('')
 
   }, [show])
+
+
+
+  const handleTypeChange = (e) => {
+    const { value } = e.target;
+    setType(value)
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -212,8 +220,20 @@ const UserRoleModel = ({ onHide, show, editable, disabled, item, changed }) => {
               </div>
             </div>
 
-            <div className='mt-3'>
-              <CommonSearch onChange={(item) => { search(item) }} />
+            <div className='mt-5'>
+            <label htmlFor="roleInput" className="form-label text-dark">Policy</label>
+              <div className='d-flex justify-content-between'>
+                <CommonSearch onChange={(item) => { search(item) }} />
+                <div>
+                  <select name='type' onChange={handleTypeChange} className={`form-select`} aria-label="Large select example">
+                    <option value=''>Select Type</option>
+                    <option value="MAIN">Main</option>
+                    <option value="EXCOM">Excom</option>
+                    <option value="PROJECT">Project</option>
+                  </select>
+                </div>
+              </div>
+
               <div className="table-responsive mt-2 overflow-scroll" style={{ maxHeight: 300 }}>
                 <table className="table table-bordered">
                   <thead className='sticky-top z-1'>
