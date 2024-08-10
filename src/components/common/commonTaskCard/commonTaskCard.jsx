@@ -45,10 +45,10 @@ const CommonTaskCard = ({ task, onClick, project, excom }) => {
                         </div>
 
                         <div className='mt-3'>
-                            <h6 className='fw-bold'>Task Title</h6>
+                            <h6 className='fw-bold'>Create project banner</h6>
                         </div>
                         <div className='mt-1'>
-                            <p className=''>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce id dignissim ex. In sem sem, efficitur vel varius lobortis, pretium a velit.</p>
+                            <p className=''>Choose an image that represents the essence of your project. This could be a high-tech graphic, a creative concept, or a visually appealing abstract design.</p>
                         </div>
                         <div className='d-flex justify-content-between align-items-center mt-3'>
                             <div className='d-flex ms-2'>
@@ -63,27 +63,16 @@ const CommonTaskCard = ({ task, onClick, project, excom }) => {
                                         className="rounded-circle"
                                     />
                                 </div>
-                                <div
-                                    style={{ width: 29, height: 29, marginRight: -5 }}
-                                    className="bg-white  rounded-circle d-flex justify-content-center align-items-center"
-                                >
-                                    <img
-                                        src={testUser}
-                                        width={25}
-                                        height={25}
-                                        className="rounded-circle"
-                                    />
-                                </div>
                             </div>
                             <div className='text-black-50' style={{ fontSize: 12 }}>
-                                + 15 people
+                                + 1 people
                             </div>
                             <div className='d-flex gap-2 align-items-center text-black-50'>
                                 <div>
                                     <img src={deadline} width={15} />
                                 </div>
                                 <div className='text-black-50' style={{ fontSize: 12 }}>
-                                    2024/12/11
+                                    2024/09/11
                                 </div>
                             </div>
                         </div>

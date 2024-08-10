@@ -75,14 +75,6 @@ const ProjectLandingPage = () => {
             end_date: "2024/12/08",
             status: "TODO",
         },
-        {
-            id: "12548796",
-            project_name: "IEEE OpenDay 2024",
-            ou_name: "CS Chapter",
-            start_date: "2024/08/13",
-            end_date: "2024/12/08",
-            status: "TODO",
-        },
     ]
 
     const navigate = useNavigate()
@@ -112,9 +104,9 @@ const ProjectLandingPage = () => {
                 <div className='text-cl-primary'>Project</div>
                 <div className='mt-2 d-flex justify-content-between align-items-center gap-4 flex-wrap'>
                     <div className='d-flex justify-content-between gap-4 rounded-4 bg-body-secondary p-4 flex-wrap flex-grow-1'>
-                        <CommonStatusCountCard type={"TODO"} count={"05"} />
-                        <CommonStatusCountCard type={"ONGOING"} count={"05"} />
-                        <CommonStatusCountCard type={"COMPLETE"} count={"05"} />
+                        <CommonStatusCountCard type={"TODO"} count={1} />
+                        <CommonStatusCountCard type={"ONGOING"} count={1} />
+                        <CommonStatusCountCard type={"COMPLETE"} count={1} />
                     </div>
                     <button onClick={() => { navigateToTimeLine() }} className='bg-white border-0 rounded-4 common-transition common-shadow d-flex justify-content-between align-items-center p-3' style={{ width: 350 }}>
                         <div className='h4 fw-bold text-cl-primary'>

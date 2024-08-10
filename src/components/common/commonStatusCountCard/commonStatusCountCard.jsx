@@ -33,7 +33,7 @@ const CommonStatusCountCard = ({ type, count }) => {
                     <img src={data.image} width={85} />
                 </div>
                 <div className='bg-body-secondary p-3 rounded-circle d-flex justify-content-center align-items-center' style={{ maxWidth: 180, width: "100%", aspectRatio: 1 / 1, margin: "autto" }}>
-                    <h2 className='m-0 fw-bolder'>05</h2>
+                    <h2 className='m-0 fw-bolder'>{count}</h2>
                 </div>
             </div>
         </div>

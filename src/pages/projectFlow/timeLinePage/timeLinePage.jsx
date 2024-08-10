@@ -11,36 +11,8 @@ const TimeLinePage = () => {
         {
             start: new Date(2020, 1, 1),
             end: new Date(2020, 3, 2),
-            name: 'Idea',
+            name: 'IEEE OpenDay 2024',
             id: '1',
-            type: 'task',
-        },
-        {
-            start: new Date(2020, 1, 1),
-            end: new Date(2020, 3, 2),
-            name: 'Idea',
-            id: '2',
-            type: 'task',
-        },
-        {
-            start: new Date(2021, 1, 1),
-            end: new Date(2022, 3, 2),
-            name: 'Idea',
-            id: '3',
-            type: 'task',
-        },
-        {
-            start: new Date(2022, 1, 1),
-            end: new Date(2023, 3, 2),
-            name: 'Idea',
-            id: '4',
-            progress: 100,
-        },
-        {
-            start: new Date(2023, 1, 1),
-            end: new Date(2024, 3, 2),
-            name: 'Idea',
-            id: '5',
             type: 'task',
         },
     ]);

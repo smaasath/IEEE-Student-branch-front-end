@@ -25,7 +25,7 @@ const ProjectFinanceLanding = () => {
 
             <CommonBalanceCard text={"Income"} amount={"5,680.00"} />
 
-            <CommonBalanceCard text={"Expense"} amount={"5,680.00"} />
+            <CommonBalanceCard text={"Expense"} amount={"2,000.00"} />
           </div>
 
           <div className="mt-5 d-flex justify-content-between align-items-center gap-4 flex-wrap">

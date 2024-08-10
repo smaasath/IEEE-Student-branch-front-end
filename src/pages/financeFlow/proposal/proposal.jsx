@@ -75,16 +75,7 @@ const Proposal = () => {
             title: "Fund for Shopping",
             amount: "2500.00",
             status: "RECIEVED"
-        },
-        {
-            id: "P001",
-            date: "28 Jan, 12.30 AM",
-            from: "CS chapter",
-            title: "Fund for Shopping",
-            amount: "2500.00",
-            status: "RECIEVED"
         }
-
     ]
     return (
         <>

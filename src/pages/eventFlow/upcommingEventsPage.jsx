@@ -9,54 +9,25 @@ const UpcommingEventsPage = () => {
 
   const events = [{
     id: 1,
-    eventName: "Hackathon Awareness-1",
-    date: "August 01, 2024",
+    eventName: "Hackathon Awareness",
+    date: "August 10, 2024",
     venue: "UWU Main Hall",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi a ligula semper, porttitor mauris commodo, auctor massa. Nunc rutrum augue ac arcu pellentesque",
+      "The Shecorder is a revolutionary audio recording device designed with the unique needs and perspectives of women in mind.",
     eventUrl: "",
     projectName: "Shecodress<V6.0>",
   },
   {
     id: 2,
     eventName: "Hackathon First Round",
-    date: "August 05, 2024",
+    date: "August 20, 2024",
     venue: "UWU D1 Lab",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi a ligula semper, porttitor mauris commodo, auctor massa. Nunc rutrum augue ac arcu pellentesque",
+      "Welcome to the UvaXtreme Hackathon—a dynamic, high-energy event where creativity, technology, and problem-solving converge! ",
     eventUrl: "",
     projectName: "UvaXtreme<V1.1>",
   },
-  {
-    id: 2,
-    eventName: "Hackathon Second Round",
-    date: "August 05, 2024",
-    venue: "UWU D1 Lab",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi a ligula semper, porttitor mauris commodo, auctor massa. Nunc rutrum augue ac arcu pellentesque",
-    eventUrl: "",
-    projectName: "Shecodress<V6.0>",
-  },
-  {
-    id: 2,
-    eventName: "Hackathon Awareness-2",
-    date: "August 15, 2024",
-    venue: "UWU D1 Lab",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi a ligula semper, porttitor mauris commodo, auctor massa. Nunc rutrum augue ac arcu pellentesque",
-    eventUrl: "",
-    projectName: "Shecodress<V6.0>",
-  },
-  {
-    id: 2,
-    eventName: "Hackathon Awareness-3 ",
-    date: "September 05, 2024",
-    venue: "UWU D1 Lab",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi a ligula semper, porttitor mauris commodo, auctor massa. Nunc rutrum augue ac arcu pellentesque",
-    eventUrl: "",
-    projectName: "Shecodress<V6.0>",
-  }
+
 
   ];
 
