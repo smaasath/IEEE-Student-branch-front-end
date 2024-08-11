@@ -145,3 +145,19 @@ body {
 .common-member-container:hover {
   background-color: #F0F5FC !important;
 }
+
+.delete-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+.delete-button:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.5);
+
+}

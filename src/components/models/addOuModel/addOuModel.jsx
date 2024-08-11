@@ -3,45 +3,49 @@ import Modal from 'react-bootstrap/Modal';
 import CommonButton from '../../common/commonButton/commonButton';
 import uploadimage from '../.../../../../assets/icons/upload.png';
 import deleteimage from '../.../../../../assets/icons/delete.png';
-import { createAcademicYear, updateAcademicYear } from '../../../redux/actions/academicYear';
+import { uploadImage } from '../../../redux/actions/imageUpload';
+import { useDispatch } from 'react-redux';
+import { CreateOU, updateOU } from '../../../redux/actions/ou';
+
 
 const AddOuModel = ({ onHide, show, disabled, editable, item, changed }) => {
+
+
   const [formData, setFormData] = useState({
-    enrolledBatch: "",
-    academicYear: "",
-    status: "",
-    ouLogo: null
+    ouName: "",
+    ou_logo: "",
+    ou_short_name: "",
   });
 
+
   const [error, setError] = useState({
-    enrolledBatch: false,
-    academicYear: false,
-    status: false,
-    ouLogo: false
+    ouName: false,
+    ou_logo: false,
+    ou_short_name: false,
   });
 
   const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState(null);
   const [exist, setExist] = useState('');
+  const distpatch = useDispatch();
 
-  useEffect(() => { 
+  useEffect(() => {
     if (!editable) {
       setFormData({
-        enrolledBatch: "",
-        academicYear: "",
-        status: "",
-        ouLogo: null
+        ouName: "",
+        ou_logo: "",
+        ou_short_name: "",
       });
     } else {
       setFormData(item);
     }
 
     setError({
-      enrolledBatch: false,
-      academicYear: false,
-      status: false,
-      ouLogo: false
+      ouName: false,
+      ou_logo: false,
+      ou_short_name: false,
     });
-
+    setImage(null)
     setExist('');
   }, [show, editable, item]);
 
@@ -53,70 +57,94 @@ const AddOuModel = ({ onHide, show, disabled, editable, item, changed }) => {
   };
 
   const handleImageChange = (e) => {
+    setExist('');
+    setError(prevData => ({ ...prevData, ou_logo: false }))
     const file = e.target.files[0];
     if (file) {
       if (file.size > 1024 * 1024) {
-        setError(prevError => ({ ...prevError, ouLogo: true }));
         setExist("Please select an image smaller than 1 MB.");
       } else if (!['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)) {
-        setError(prevError => ({ ...prevError, ouLogo: true }));
         setExist("Only PNG, JPG, and JPEG formats are allowed.");
       } else {
-        setFormData(prevData => ({ ...prevData, ouLogo: URL.createObjectURL(file) }));
-        setError(prevError => ({ ...prevError, ouLogo: false }));
+        console.log("fileeee")
+        setImage(file);
         setExist('');
       }
     }
   };
 
-  const handleDeleteClick = () => {
-    setFormData(prevData => ({ ...prevData, ouLogo: null }));
+
+  const handleProfileUpload = async (selectedFile) => {
+    if (!selectedFile) return;
+    const uploadedImageUrl = await distpatch(uploadImage(selectedFile));
+    console.warn(uploadedImageUrl)
+    return uploadedImageUrl
   };
 
-  function addAcademicYear() {
+  const handleDeleteClick = () => {
+    setImage(null)
+    setFormData(prevData => ({ ...prevData, ou_logo: '' }));
+  };
+
+  async function addAcademicYear() {
     setExist('');
     setError({
-      enrolledBatch: false,
-      academicYear: false,
-      status: false,
-      ouLogo: false
+      ouName: false,
+      ou_logo: false,
+      ou_short_name: false,
     });
 
-    if (!formData.academicYear || !formData.enrolledBatch || formData.status === '' || !formData.ouLogo) {
-      setError({
-        academicYear: !formData.academicYear,
-        enrolledBatch: !formData.enrolledBatch,
-        status: formData.status === '' ? true : false,
-        ouLogo: !formData.ouLogo
-      });
+    const hasErrors = {
+      ouName: !formData.ouName,
+      ou_logo: !formData.ou_logo && !image,
+      ou_short_name: !formData.ou_short_name
+    };
+
+
+
+    if (hasErrors.ouName || hasErrors.ou_logo || hasErrors.ou_short_name) {
+      if (image) {
+        hasErrors.ou_logo = false;
+      }
+
+      setError(hasErrors);
       return;
     }
 
+
+
     setLoading(true);
     if (editable) {
-      formData.academicId = item?.id;
-      updateAcademicYear(formData, (res) => {
+      let updatedFormData = { ...formData };
+      if(image){
+        const imgurl = await handleProfileUpload(image);
+        updatedFormData = { ...updatedFormData, ou_logo: imgurl };
+      }
+
+      updatedFormData.ouID = item?.id;
+      updateOU(updatedFormData, (res) => {
         if (res?.status === 200) {
           setLoading(false);
           changed();
           onHide();
         } else {
           setLoading(false);
-          setExist("Academic Year Update Failed");
+          setExist("OU Update Failed");
         }
       });
     } else {
-      createAcademicYear(formData, (res) => {
+      let updatedFormData = { ...formData };
+      const imgurl = await handleProfileUpload(image);
+      updatedFormData = { ...updatedFormData, ou_logo: imgurl };
+
+      CreateOU(updatedFormData, (res) => {
         if (res?.status === 201) {
           setLoading(false);
           changed();
           onHide();
-        } else if (res?.status === 409) {
-          setLoading(false);
-          setExist("Academic Year Already Exists");
         } else {
           setLoading(false);
-          setExist("Academic Year Creation Failed");
+          setExist("OU added Failed");
         }
       });
     }
@@ -139,7 +167,17 @@ const AddOuModel = ({ onHide, show, disabled, editable, item, changed }) => {
           <div className='mt-3'>
             <div className="has-validation">
               <label htmlFor="academicYear" className="form-label text-dark">OU Name</label>
-              <input type="text" className={`form-control ${error.academicYear ? "is-invalid" : ""}`} name='academicYear' value={formData.academicYear} onChange={handleInputChange} id="academicYear" placeholder="OU Name" disabled={disabled} required />
+              <input
+                type="text"
+                className={`form-control ${error.ouName ? "is-invalid" : ""}`}
+                name='ouName'
+                value={formData.ouName}
+                onChange={handleInputChange}
+                id="ouName"
+                placeholder="OU Name"
+                disabled={disabled}
+                required
+              />
               <div className="invalid-feedback">
                 This field is required.
               </div>
@@ -148,35 +186,47 @@ const AddOuModel = ({ onHide, show, disabled, editable, item, changed }) => {
           <div className='mt-3'>
             <div className="">
               <label htmlFor="enrolledBatch" className="form-label text-dark">OU Short Name</label>
-              <input type="text" name='enrolledBatch' value={formData.enrolledBatch} onChange={handleInputChange} className={`form-control ${error.enrolledBatch ? "is-invalid" : ""}`} id="enrolledBatch" placeholder="OU Short Name" disabled={disabled} />
+              <input type="text"
+                name='ou_short_name'
+                value={formData.ou_short_name}
+                onChange={handleInputChange}
+                className={`form-control ${error.ou_short_name ? "is-invalid" : ""}`}
+                id="ou_short_name" placeholder="OU Short Name"
+                disabled={disabled} />
               <div className="invalid-feedback">
                 This field is required.
               </div>
             </div>
           </div>
-          <div className="mt-3 d-flex justify-content-center">
-            {formData.ouLogo ? (
+
+
+          <label htmlFor="academicYear" className="form-label mt-3 text-dark">OU logo</label>
+          <div className=" d-flex flex-column align-items-center justify-content-center">
+            {image != null || formData.ou_logo != '' ? (
               <div className="p-1 border border-2 border-black d-flex flex-column justify-content-center align-items-center">
                 <div style={{ position: 'relative', height: '180px', width: '360px', overflow: 'hidden' }}>
                   <img
-                    src={formData.ouLogo}
-                    className="img-fluid"
+                    src={image != null ? URL.createObjectURL(image) : formData.ou_logo}
+                    className="img-fluid object-fit-cover"
                     alt="OU Logo"
                     style={{ width: '100%', height: '100%' }}
                     loading="lazy"
                   />
                   <div
                     className="delete-button w-100 h-100 text-center d-flex align-items-center justify-content-center"
-                    style={{ position: 'absolute', top: 0, left: 0, cursor: 'pointer' }}
-                    onClick={handleDeleteClick}
                   >
-                    <img
-                      src={deleteimage}
-                      alt="Delete"
-                      width="30"
-                      height="30"
-                      loading="lazy"
-                    />
+                    <div>
+                      <img
+                        style={{ cursor: "pointer" }}
+                        onClick={handleDeleteClick}
+                        src={deleteimage}
+                        alt="Delete"
+                        width="30"
+                        height="30"
+                        loading="lazy"
+                      />
+                    </div>
+
                   </div>
                 </div>
               </div>
@@ -204,13 +254,13 @@ const AddOuModel = ({ onHide, show, disabled, editable, item, changed }) => {
                 <p>Click here to upload OU Logo.</p>
               </div>
             )}
-            {error.ouLogo && (
+          </div>
+          <div className='text-danger text-center mt-4'>
+            {error.ou_logo && (
               <div className="mt-3">
                 <p className="text-danger text-center">OU Logo is required</p>
               </div>
             )}
-          </div>
-          <div className='text-danger text-center mt-4'>
             {exist}
           </div>
         </div>
