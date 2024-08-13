@@ -92,13 +92,13 @@ function ExecutiveCommitteePage() {
                             </div>
                             <div className='d-flex justify-content-between flex-wrap flex-grow-1 gap-4'>
                                 <div >
-                                    <CommonStatusCountCard type={"TODO"} count={44} />
+                                    <CommonStatusCountCard type={"TODO"} count={1} />
                                 </div>
                                 <div>
-                                    <CommonStatusCountCard type={"ONGOING"} count={55} />
+                                    <CommonStatusCountCard type={"ONGOING"} count={2} />
                                 </div>
                                 <div>
-                                    <CommonStatusCountCard type={"COMPLETE"} count={41} />
+                                    <CommonStatusCountCard type={"COMPLETE"} count={4} />
                                 </div>
                             </div>
                         </div>
@@ -130,7 +130,7 @@ function ExecutiveCommitteePage() {
 
                         <div className="container mt-4">
                             <div className="row">
-                                {[1, 2, 3, 4].map((index) => (
+                                {[1].map((index) => (
                                     <div key={index} className="col-md-3">
                                         <div className="card" onClick={() => openTaskDetailModel(`Task ${index}`)}>
                                             <div className="card-body d-flex align-items-center">

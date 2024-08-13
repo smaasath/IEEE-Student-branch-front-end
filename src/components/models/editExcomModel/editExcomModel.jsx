@@ -15,20 +15,6 @@ const EditExcomModel = ({ onHide, show, selectedMember }) => {
       academicYear: '3rd Year',
       photo: profile,
     },
-    {
-      name: 'Thilini Priyangika',
-      email: 'thilini@gmail.com',
-      phone: '+94712668316',
-      academicYear: '3rd Year',
-      photo: profile,
-    },
-    {
-      name: 'Thihara Mallawaarachchi',
-      email: 'thihara@gmail.com',
-      phone: '+94712668316',
-      academicYear: '2nd Year',
-      photo: profile,
-    },
   ]);
 
   const handleSelectMember = (member) => {

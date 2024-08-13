@@ -118,9 +118,9 @@ const ProjectLandingPage = () => {
                 <div className='text-cl-primary'>Project</div>
                 <div className='mt-2 d-flex justify-content-between align-items-center gap-4 flex-wrap'>
                     <div className='d-flex justify-content-between gap-4 rounded-4 bg-body-secondary p-4 flex-wrap flex-grow-1'>
-                        <CommonStatusCountCard type={"TODO"} count={"01"} />
-                        <CommonStatusCountCard type={"ONGOING"} count={"01"} />
-                        <CommonStatusCountCard type={"COMPLETE"} count={"00"} />    
+                        <CommonStatusCountCard type={"TODO"} count={1} />
+                        <CommonStatusCountCard type={"ONGOING"} count={1} />
+                        <CommonStatusCountCard type={"COMPLETE"} count={1} />
                     </div>
                     <button onClick={() => { navigateToTimeLine() }} className='bg-white border-0 rounded-4 common-transition common-shadow d-flex justify-content-between align-items-center p-3' style={{ width: 350 }}>
                         <div className='h4 fw-bold text-cl-primary'>

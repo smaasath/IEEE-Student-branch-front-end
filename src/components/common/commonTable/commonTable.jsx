@@ -30,7 +30,7 @@ const CommonTable = ({ tableHeading, tableData, finance, primary, viewAction, ed
                         loading ? (
 
                             <tr>
-                                <td colspan={tableHeading.length}>
+                                <td colSpan={tableHeading.length}>
                                     <div className="d-flex justify-content-center p-5 m-5">
                                         <div className={`spinner-border ${finance || primary ? "text-cl-primary" : "text-third"}`} role="status">
                                         </div>

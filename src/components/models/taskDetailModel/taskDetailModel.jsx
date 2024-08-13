@@ -53,7 +53,6 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
   }, [userData, show])
 
   const notes = [
-    { date: "2023-01-01", author: "John Doe", content: "Sample note 1" },
     { date: "2023-01-02", author: "Jane Doe", content: "Sample note 2" },
   ];
 
@@ -82,27 +81,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
   ];
 
   const tableData = [
-    {
-      Task_title: "Lorem ipsum dolor sit amet, cons",
-      priority: "Medium",
-      due: "2024/12/11",
-      status: "COMPLETE",
 
-    },
-    {
-      Task_title: "Lorem ipsum dolor sit amet, cons",
-      priority: "Medium",
-      due: "2024/12/11",
-      status: "COMPLETE",
-
-    },
-    {
-      Task_title: "Lorem ipsum dolor sit amet, cons",
-      priority: "Medium",
-      due: "2024/12/11",
-      status: "COMPLETE",
-
-    },
   ];
 
   return (
@@ -125,7 +104,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 ) : null}
 
               </div>
-              <h5><b>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b></h5>
+              <h5><b>Create project banner.</b></h5>
               <div className="mb-3">
                 <div className="text-cl-primary mb-1">Status</div>
                 <div className="d-inline-block px-3 py-2 bg-light text-success rounded">{taskData.status}</div>
@@ -203,12 +182,6 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                   <CommonSearch primary={false} />
                 </div>
                 <div className="mt-4 d-flex justify-content-between align-items-center gap-1 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar" style={{ maxHeight: 500 }}>
-                  <CommonMemberContainer />
-                  <CommonMemberContainer />
-                  <CommonMemberContainer />
-                  <CommonMemberContainer />
-                  <CommonMemberContainer />
-                  <CommonMemberContainer />
                   <CommonMemberContainer />
                 </div>
               </div>

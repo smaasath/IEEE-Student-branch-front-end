@@ -50,13 +50,13 @@ const ProjectPage = () => {
                 </div>
                 <div className='d-flex justify-content-between flex-wrap flex-grow-1 gap-4'>
                     <div>
-                        <CommonStatusCountCard type={"TODO"} count={3} />
+                        <CommonStatusCountCard type={"TODO"} count={1} />
                     </div>
                     <div>
-                        <CommonStatusCountCard type={"ONGOING"} count={1} />
+                        <CommonStatusCountCard type={"ONGOING"} count={0} />
                     </div>
                     <div>
-                        <CommonStatusCountCard type={"COMPLETE"} count={2} />
+                        <CommonStatusCountCard type={"COMPLETE"} count={0} />
                     </div>
                 </div>
             </div>
@@ -64,7 +64,7 @@ const ProjectPage = () => {
             <div className='d-flex mt-5 justify-content-between align-items-center flex-wrap gap-4'>
                 <div className='text-cl-primary mt-4'>Board</div>
                 <div className='d-flex justify-content-end gap-4 align-items-center flex-wrap'>
-                    <div className=''><CommonButton onClick={() => { navigateToPrPlan() }} text={"PR Plan"} /></div>
+                    {/* <div className=''><CommonButton onClick={() => { navigateToPrPlan() }} text={"PR Plan"} /></div> */}
                     <div className=''><CommonButton onClick={() => { navigateToFinance() }} text={"Finance"} /></div>
                     <div className=''><CommonButton onClick={() => { navigateToEvents() }} text={"Events"} /></div>
                 </div>

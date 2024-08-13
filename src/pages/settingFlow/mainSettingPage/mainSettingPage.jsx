@@ -82,12 +82,6 @@ const MainSettingPage = () => {
                 </div>
                 </div>
 
-                <div className="mt-3">
-                <div className="">
-                    <label htmlFor="role" className="form-label text-dark">Role</label>
-                    <input type="text" className="form-control" placeholder="Web Master" disabled style={{width:"520px"}} />
-                </div>
-                </div>
 
                 <div className="mt-3 d-flex flex-wrap gap-lg-3">
                 <div className="">
