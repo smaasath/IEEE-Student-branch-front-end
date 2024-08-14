@@ -19,10 +19,14 @@ const ProjectModel = ({ onHide, show, disabled, editable, id }) => {
                 <Modal.Body>
                     <div className='d-flex flex-column'>
                         <div className="mt-3">
-                            <label for="exampleFormControlInput1" className="form-label text-dark">Bank</label>
+                            <label for="exampleFormControlInput1" className="form-label text-dark">Entity</label>
                             <select className="form-select w-100" aria-label="Large select example" disabled={disabled}>
                                 <option selected>Select Entity</option>
-                                <option value="1">CS Chapter</option>
+                                <option value="1">SB</option>
+                                <option value="2">WIE</option>
+                                <option value="3">RAS</option>
+                                <option value="4">IAS</option>
+                                <option value="5">CS</option>
                             </select>
                         </div>
                         <div className='mt-3'>

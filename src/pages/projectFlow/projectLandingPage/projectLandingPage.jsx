@@ -70,7 +70,15 @@ const ProjectLandingPage = () => {
         {
             id: "12548796",
             project_name: "IEEE OpenDay 2024",
-            ou_name: "CS Chapter",
+            ou_name: "SB",
+            start_date: "2024/06/01",
+            end_date: "2024/09/08",
+            status: "ONGOING",
+        },
+        {
+            id: "12548796",
+            project_name: "UvaXtreme V1.0",
+            ou_name: "CS",
             start_date: "2024/08/13",
             end_date: "2024/12/08",
             status: "TODO",
@@ -90,7 +98,11 @@ const ProjectLandingPage = () => {
                     <div className="">
                         <select className="form-select w-100" aria-label="Large select example">
                             <option selected>Select Entity</option>
-                            <option value="1">CS chapter</option>
+                            <option value="1">SB</option>
+                            <option value="1">WIE</option>
+                            <option value="1">RAS</option>
+                            <option value="1">IAS</option>
+                            <option value="1">CS</option>
                         </select>
                     </div>
 
@@ -98,6 +110,8 @@ const ProjectLandingPage = () => {
                         <select className="form-select w-100" aria-label="Large select example">
                             <option selected>Select Year</option>
                             <option value="1">2024</option>
+                            <option value="1">2023</option>
+                            <option value="1">2022</option>
                         </select>
                     </div>
                 </div>
@@ -124,7 +138,9 @@ const ProjectLandingPage = () => {
                         <div className="">
                             <select className="form-select w-100" aria-label="Large select example">
                                 <option selected>Select Status</option>
-                                <option value="1">To Do</option>
+                                <option value="TODO">To Do</option>
+                                <option value="ONGOING">Ongoing</option>
+                                <option value="COMPLETE">Complete</option>
                             </select>
                         </div>
                     </div>

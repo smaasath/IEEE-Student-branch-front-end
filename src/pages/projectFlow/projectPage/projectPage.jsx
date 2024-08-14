@@ -33,10 +33,11 @@ const ProjectPage = () => {
                 </div>
                 <div className='col-md-9 d-flex flex-column'>
                     <div>
-                        <h2>Empowering Women Through Sound</h2>
+                        <h2>IEEE OpenDay 2024</h2>
                     </div>
                     <div>
-                        <p className='text-secondary text-wrap'>The Shecorder is a revolutionary audio recording device designed with the unique needs and perspectives of women in mind. Combining cutting-edge technology with elegant design, the Shecorder offers high-fidelity sound recording, effortless usability, and a sleek, compact form that fits comfortably in your hand or pocket.</p>
+                        <p className='text-secondary text-wrap'>IEEE Open Day 2024 is a highly anticipated event organized by the IEEE Uva Wellassa University Student Branch, aimed at fostering a culture of learning, engagement, and community within the student body. This year's event promises an exciting lineup of activities and initiatives designed to showcase the myriad opportunities available through IEEE membership while providing valuable insights into the world of technology and innovation.
+                        </p>
                     </div>
 
                 </div>

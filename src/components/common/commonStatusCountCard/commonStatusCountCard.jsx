@@ -18,7 +18,7 @@ const CommonStatusCountCard = ({ type, count }) => {
             case "TODO":
                 return { color: "#5F6A6A", text: "To Do", image: toDoCount };
             case "ONGOING":
-                return { color: "#00629B", text: "On going", image: onGoingCount };
+                return { color: "#00629B", text: "Ongoing", image: onGoingCount };
             default:
                 break;
         }
