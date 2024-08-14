@@ -4,10 +4,6 @@ import CommonTable from "../../../components/common/commonTable/commonTable";
 import CommonPagination from "../../../components/common/commonPagination/commonPagination";
 import MemberDetailsModal from "../../../components/models/viewMemberDetailsModel/viewMemberDetailsModel";
 import OuCard from "../../../components/common/oucard/ouCard";
-import sbLogo from "../../../assets/logo/sb_logo.png";
-import wieLogo from "../../../assets/logo/wie_logo.png";
-import iasLogo from "../../../assets/logo/ias_logo.png";
-import rasLogo from "../../../assets/logo/ras_logo.png";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
@@ -27,22 +23,35 @@ const ExcomLandingPage = () => {
   const [pageLoading, setPageLoading] = useState(true);
 
   const [entities, setEntities] = useState([]);
+  const [entityCards, setentityCard] = useState([]);
 
   useEffect(() => {
-    getAllOU ((res) => {
+    getAllOU((res) => {
       if (res.status == 200) {
-        let data = res?.data?.data?.map(
-          ({ ouID, ou_short_name }) => ({
-            id: ouID,
-            shorName: ou_short_name,
-          })
-        );
+        let data = res?.data?.data?.map(({ ouID, ouName, ou_logo, ou_short_name }) => ({
+            ID: ouID,
+            name: ouName,
+            logo: ou_logo,
+            shortName: ou_short_name
+        }));
+        console.warn(data);
+        setentityCard(data);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    getAllOU((res) => {
+      if (res.status == 200) {
+        let data = res?.data?.data?.map(({ ouID, ou_short_name }) => ({
+          id: ouID,
+          shorName: ou_short_name,
+        }));
         console.warn(data);
         setEntities(data);
       }
     });
   }, []);
-
 
   useEffect(() => {
     setPageLoading(true);
@@ -150,17 +159,17 @@ const ExcomLandingPage = () => {
     },
   ];
 
-  function navigateToexcomPage() {
+  function navigateToExcomPage() {
     navigate("/dashboard/executive-committee/1");
   }
 
-//   const entities = [
-//     { id: 0, name: "SB", type: "Student Branch", logo: sbLogo },
-//     { id: 1, name: "WIE", type: "Affinity Group", logo: wieLogo },
-//     { id: 2, name: "RAS", type: "Technical Chapter", logo: rasLogo },
-//     { id: 3, name: "IAS", type: "Technical Chapter", logo: iasLogo },
-//     { id: 4, name: "CS", type: "Technical Chapter", logo: iasLogo }
-//   ];
+  //   const entities = [
+  //     { id: 0, name: "SB", type: "Student Branch", logo: sbLogo },
+  //     { id: 1, name: "WIE", type: "Affinity Group", logo: wieLogo },
+  //     { id: 2, name: "RAS", type: "Technical Chapter", logo: rasLogo },
+  //     { id: 3, name: "IAS", type: "Technical Chapter", logo: iasLogo },
+  //     { id: 4, name: "CS", type: "Technical Chapter", logo: iasLogo }
+  //   ];
 
   return (
     <>
@@ -171,36 +180,21 @@ const ExcomLandingPage = () => {
           <div className="container">
             <div className="text-cl-primary">Entities</div>
             <div className="row mt-3">
-              {[
-                { id: 0, name: "SB", type: "Student Branch", logo: sbLogo },
-                { id: 1, name: "WIE", type: "Affinity Group", logo: wieLogo },
-                {
-                  id: 2,
-                  name: "RAS",
-                  type: "Technical Chapter",
-                  logo: rasLogo,
-                },
-                {
-                  id: 3,
-                  name: "IAS",
-                  type: "Technical Chapter",
-                  logo: iasLogo,
-                },
-                { id: 4, name: "CS", type: "Technical Chapter", logo: iasLogo },
-              ].map((ou) => (
-                <div
-                  key={ou.id}
-                  className="col-10 col-sm-6 col-md-5 col-lg-3 me-0 mb-4"
-                >
-                  <OuCard
-                    name={ou.name}
-                    type={ou.type}
-                    logo={ou.logo}
-                    onclick={navigateToexcomPage}
-                  />
-                </div>
-              ))}
+            {entityCards.map((ou) => (
+              <div
+                key={ou.ID}
+                className="col-10 col-sm-6 col-md-5 col-lg-3 me-0 mb-4"
+              >
+                <OuCard
+                  name={ou.name}
+                  logo={ou.logo}
+                  shorName={ou.shortName}
+                  onclick={navigateToExcomPage}
+                />
+              </div>
+            ))}
             </div>
+
             <div className="text-cl-primary mt-4">Members details</div>
             <div className="mt-3 pt-4 p-3 rounded-4 bg-white common-shadow">
               <div className="d-flex justify-content-between flex-wrap align-items-center p-3">
