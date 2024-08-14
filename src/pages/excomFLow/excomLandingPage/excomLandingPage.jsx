@@ -22,17 +22,19 @@ const ExcomLandingPage = () => {
   const navigate = useNavigate();
   const userData = useSelector((state) => state.user.userData);
   const [pageLoading, setPageLoading] = useState(true);
-const [entityCards, setentityCard] = useState([]);
+  const [entityCards, setentityCard] = useState([]);
   const [refreshTable, setRefreshTable] = useState(0);
   const [totalPage, setTotalPage] = useState(1);
   const [entities, setEntities] = useState([""]);
   const [excomData, SetExcomData] = useState(null);
   const [loader, setLoader] = useState(false);
+
+
   useEffect(() => {
     getAllOU((res) => {
       if (res.status == 200) {
         let data = res?.data?.data?.map(({ouID, ouName, ou_logo, ou_short_name }) => ({
-              ID: ouID,
+              id: ouID,
             name: ouName,
             logo: ou_logo,
             shortName: ou_short_name
@@ -143,7 +145,7 @@ const [entityCards, setentityCard] = useState([]);
             <div className="row mt-3">
             {entityCards.map((ou) => (
               <div
-                key={ou.ID}
+                key={ou.id}
                 className="col-10 col-sm-6 col-md-5 col-lg-3 me-0 mb-4"
               >
                 <OuCard
@@ -170,7 +172,7 @@ const [entityCards, setentityCard] = useState([]);
                     onChange={handleEntityChange}
                   >
                     <option value={''}>Select Entity</option>
-                    {entities.map((ou) => (
+                    {entityCards.map((ou) => (
                       <option key={ou.id} value={ou.id}>
                         {ou.shortName}
                       </option>
