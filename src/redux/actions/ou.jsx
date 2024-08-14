@@ -57,3 +57,19 @@ export const updateOU = (data, callback) => {
 };
 
 
+export const getAllExcomMember = (page, search, ouid, callback) => {
+    const endpoint = `${import.meta.env.VITE_API_HOST}ou/getExcom?search=${search}&ouid=${ouid}&page=${page}`;
+  
+    try {
+      http
+        .get(endpoint)
+        .then((response) => {
+          callback(response);
+        })
+        .catch((error) => {
+          callback(error.response);
+        });
+    } catch (error) {
+      callback(error.response);
+    }
+  };

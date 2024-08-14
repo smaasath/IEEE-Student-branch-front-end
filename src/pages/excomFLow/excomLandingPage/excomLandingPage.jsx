@@ -7,13 +7,14 @@ import OuCard from "../../../components/common/oucard/ouCard";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
-import { getAllOU } from "../../../redux/actions/ou";
+import { getAllExcomMember, getAllOU } from "../../../redux/actions/ou";
 
 const ExcomLandingPage = () => {
   const currentYear = new Date().getFullYear();
-  const [searchByName, setSearchByName] = useState("");
-  const [entityFilter, setEntityFilter] = useState("All");
+  const [searchItem, setsearchItem] = useState("");
+  const [entityFilter, setEntityFilter] = useState('');
   const [termFilter, setTermFilter] = useState(currentYear);
+
   const [availableTermYears, setAvailableTermYears] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [memberDetailModalShow, setMemberDetailModalShow] = useState(false);
@@ -21,15 +22,17 @@ const ExcomLandingPage = () => {
   const navigate = useNavigate();
   const userData = useSelector((state) => state.user.userData);
   const [pageLoading, setPageLoading] = useState(true);
-
-  const [entities, setEntities] = useState([]);
-  const [entityCards, setentityCard] = useState([]);
-
+const [entityCards, setentityCard] = useState([]);
+  const [refreshTable, setRefreshTable] = useState(0);
+  const [totalPage, setTotalPage] = useState(1);
+  const [entities, setEntities] = useState([""]);
+  const [excomData, SetExcomData] = useState(null);
+  const [loader, setLoader] = useState(false);
   useEffect(() => {
     getAllOU((res) => {
       if (res.status == 200) {
-        let data = res?.data?.data?.map(({ ouID, ouName, ou_logo, ou_short_name }) => ({
-            ID: ouID,
+        let data = res?.data?.data?.map(({ouID, ouName, ou_logo, ou_short_name }) => ({
+              ID: ouID,
             name: ouName,
             logo: ou_logo,
             shortName: ou_short_name
@@ -41,17 +44,38 @@ const ExcomLandingPage = () => {
   }, []);
 
   useEffect(() => {
-    getAllOU((res) => {
+  
+    setLoader(true);
+    getAllExcomMember(currentPage - 1, searchItem, entityFilter, (res) => {
       if (res.status == 200) {
-        let data = res?.data?.data?.map(({ ouID, ou_short_name }) => ({
-          id: ouID,
-          shorName: ou_short_name,
-        }));
+        let data = res?.data?.data?.content?.map(
+          ({  userRoleDetailsId, 
+            user: { firstName, lastName, email, contactNo, academicYear: {academicYear} }, 
+            ou: { ou_short_name }, 
+            role: { userRole }
+        }) => ({
+            id: userRoleDetailsId,
+            fname: firstName,
+            lname: lastName,
+            email: email,
+            contactNo: contactNo,
+            entity: ou_short_name,
+            position: userRole,
+            academicYear: academicYear,
+            termYear: "2024",
+          })
+        );
         console.warn(data);
-        setEntities(data);
+        SetExcomData(data);
+        setTotalPage(res?.data?.data?.totalPages);
+        console.warn(res?.data?.data?.totalPages);
+        setLoader(false);
+      }else{
+        setLoader(false);
       }
     });
-  }, []);
+  }, [searchItem, currentPage, refreshTable, entityFilter]);
+
 
   useEffect(() => {
     setPageLoading(true);
@@ -67,14 +91,19 @@ const ExcomLandingPage = () => {
         setPageLoading(false);
       }
     }
-  }, [userData]);
+  }, [userData, navigate]);
+
   const handleCloseMemberDetailModal = () => setMemberDetailModalShow(false);
   const handleShowMemberDetailModal = (member) => {
     setSelectedMember(member);
     setMemberDetailModalShow(true);
   };
 
-  const handleSearchChange = (e) => setSearchByName(e.target.value);
+//   function search(item) {
+//     setsearchItem(item?.target?.value || "");
+//     console.warn(item?.target?.value);
+//   }
+    const handleSearchChange = (e) => setsearchItem(e.target.value);
   const handleEntityChange = (e) => setEntityFilter(e.target.value);
   const handleTermChange = (e) => setTermFilter(e.target.value);
 
@@ -89,75 +118,7 @@ const ExcomLandingPage = () => {
     { label: "Term Year", value: "termYear" },
     { label: "Action", value: "ACTION", type: ["VIEW"] },
   ];
-
-  const tableData = [
-    {
-      id: 1,
-      fname: "Kavindra",
-      lname: "Weerasinghe",
-      email: "wdilshankavindra@gmail.com",
-      contactNo: "0774743603",
-      entity: "SB",
-      position: "Chairperson",
-      academicYear: "3rd Year",
-      termYear: "2024",
-    },
-    {
-      id: 2,
-      fname: "Sanjana",
-      lname: "Attanayake",
-      email: "sanajan@gamil.com",
-      contactNo: "0742365896",
-      entity: "SB",
-      position: "Secretary",
-      academicYear: "3rd Year",
-      termYear: "2022",
-    },
-    {
-      id: 3,
-      fname: "Kasun",
-      lname: "Janith",
-      email: "kasun@gamil.com",
-      contactNo: "0712365896",
-      entity: "IAS",
-      position: "Vice Chair",
-      academicYear: "2nd Year",
-      termYear: "2024",
-    },
-    {
-      id: 4,
-      fname: "Joshiga",
-      lname: "Ravikumar",
-      email: "joshi@gamil.com",
-      contactNo: "0712365895",
-      entity: "WIE",
-      position: "Chairperson",
-      academicYear: "3rd Year",
-      termYear: "2023",
-    },
-    {
-      id: 5,
-      fname: "Sasan",
-      lname: "Dilantha",
-      email: "sasan@gamil.com",
-      contactNo: "0712364596",
-      entity: "IAS",
-      position: "Chairperson",
-      academicYear: "3rd Year",
-      termYear: "2024",
-    },
-    {
-      id: 6,
-      fname: "Nipuna",
-      lname: "Deshan",
-      email: "nipuna@gamil.com",
-      contactNo: "0712367586",
-      entity: "IAS",
-      position: "PV Head",
-      academicYear: "3rd Year",
-      termYear: "2024",
-    },
-  ];
+ 
 
   function navigateToExcomPage() {
     navigate("/dashboard/executive-committee/1");
@@ -199,7 +160,7 @@ const ExcomLandingPage = () => {
             <div className="mt-3 pt-4 p-3 rounded-4 bg-white common-shadow">
               <div className="d-flex justify-content-between flex-wrap align-items-center p-3">
                 <div>
-                  <CommonSearch primary={true} onChange={handleSearchChange} />
+                  <CommonSearch primary={true} onChange={handleSearchChange}/>
                 </div>
                 <div>
                   <select
@@ -208,10 +169,10 @@ const ExcomLandingPage = () => {
                     value={entityFilter}
                     onChange={handleEntityChange}
                   >
-                    <option value="All">Select Entity</option>
+                    <option value={''}>Select Entity</option>
                     {entities.map((ou) => (
-                      <option key={ou.id} value={ou.shorName}>
-                        {ou.shorName}
+                      <option key={ou.id} value={ou.id}>
+                        {ou.shortName}
                       </option>
                     ))}
                   </select>
@@ -235,17 +196,17 @@ const ExcomLandingPage = () => {
               <div className="mt-3 p-3 rounded-4 bg-white d-flex flex-column justify-content-between table-container">
                 <CommonTable
                   tableHeading={tableHeading}
-                  tableData={tableData}
+                  tableData={excomData}
                   primary={true}
-                  loading={false}
+                  loading={loader}
                   viewAction={(id) => {
-                    const member = tableData.find((item) => item.id === id);
+                    const member = excomData.find((item) => item.id === id);
                     handleShowMemberDetailModal(member);
                   }}
                 />
                 <div className="mt-4 d-flex justify-content-end">
                   <CommonPagination
-                    pages={10}
+                    pages={totalPage}
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
                   />
