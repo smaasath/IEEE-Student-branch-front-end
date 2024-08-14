@@ -170,9 +170,9 @@ const ExcomLandingPage = () => {
                     >
                       <OuCard
                         id={ou.id}
-                        name={ou.name}
+                        name={ou.shortName}
                         logo={ou.logo}
-                        shorName={ou.shortName}
+                        type={ou.name}
                         onclick={(id) => navigateToExcomPage(id)}
                       />
                     </div>
