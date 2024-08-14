@@ -28,34 +28,40 @@ const ExcomLandingPage = () => {
   const [entities, setEntities] = useState([""]);
   const [excomData, SetExcomData] = useState(null);
   const [loader, setLoader] = useState(false);
+  const [ouloader, setouloader] = useState(false);
 
 
   useEffect(() => {
+    setouloader(true)
     getAllOU((res) => {
       if (res.status == 200) {
-        let data = res?.data?.data?.map(({ouID, ouName, ou_logo, ou_short_name }) => ({
-              id: ouID,
-            name: ouName,
-            logo: ou_logo,
-            shortName: ou_short_name
+        let data = res?.data?.data?.map(({ ouID, ouName, ou_logo, ou_short_name }) => ({
+          id: ouID,
+          name: ouName,
+          logo: ou_logo,
+          shortName: ou_short_name
         }));
         console.warn(data);
         setentityCard(data);
+        setouloader(false)
+      }else{
+        setentityCard([]);
+        setouloader(false)
       }
     });
   }, []);
 
   useEffect(() => {
-  
+
     setLoader(true);
     getAllExcomMember(currentPage - 1, searchItem, entityFilter, (res) => {
       if (res.status == 200) {
         let data = res?.data?.data?.content?.map(
-          ({  userRoleDetailsId, 
-            user: { firstName, lastName, email, contactNo, academicYear: {academicYear} }, 
-            ou: { ou_short_name }, 
+          ({ userRoleDetailsId,
+            user: { firstName, lastName, email, contactNo, academicYear: { academicYear } },
+            ou: { ou_short_name },
             role: { userRole }
-        }) => ({
+          }) => ({
             id: userRoleDetailsId,
             fname: firstName,
             lname: lastName,
@@ -72,7 +78,7 @@ const ExcomLandingPage = () => {
         setTotalPage(res?.data?.data?.totalPages);
         console.warn(res?.data?.data?.totalPages);
         setLoader(false);
-      }else{
+      } else {
         setLoader(false);
       }
     });
@@ -101,11 +107,11 @@ const ExcomLandingPage = () => {
     setMemberDetailModalShow(true);
   };
 
-//   function search(item) {
-//     setsearchItem(item?.target?.value || "");
-//     console.warn(item?.target?.value);
-//   }
-    const handleSearchChange = (e) => setsearchItem(e.target.value);
+  //   function search(item) {
+  //     setsearchItem(item?.target?.value || "");
+  //     console.warn(item?.target?.value);
+  //   }
+  const handleSearchChange = (e) => setsearchItem(e.target.value);
   const handleEntityChange = (e) => setEntityFilter(e.target.value);
   const handleTermChange = (e) => setTermFilter(e.target.value);
 
@@ -120,7 +126,7 @@ const ExcomLandingPage = () => {
     { label: "Term Year", value: "termYear" },
     { label: "Action", value: "ACTION", type: ["VIEW"] },
   ];
- 
+
 
   function navigateToExcomPage() {
     navigate("/dashboard/executive-committee/1");
@@ -143,26 +149,43 @@ const ExcomLandingPage = () => {
           <div className="container">
             <div className="text-cl-primary">Entities</div>
             <div className="row mt-3">
-            {entityCards.map((ou) => (
-              <div
-                key={ou.id}
-                className="col-10 col-sm-6 col-md-5 col-lg-3 me-0 mb-4"
-              >
-                <OuCard
-                  name={ou.name}
-                  logo={ou.logo}
-                  shorName={ou.shortName}
-                  onclick={navigateToExcomPage}
-                />
-              </div>
-            ))}
+              {
+                ouloader ? (
+                  [0, 0, 0].map((ou) => (
+                    <div
+                      key={ou.id}
+                      className="col-10 col-sm-6 col-md-5 col-lg-3 me-0 mb-4"
+                    >
+                      <OuCard
+                        loading={true}
+                      />
+                    </div>
+                  ))
+                ) : (
+                  entityCards.map((ou) => (
+                    <div
+                      key={ou.id}
+                      className="col-10 col-sm-6 col-md-5 col-lg-3 me-0 mb-4"
+                    >
+                      <OuCard
+                        name={ou.name}
+                        logo={ou.logo}
+                        shorName={ou.shortName}
+                        onclick={navigateToExcomPage}
+                      />
+                    </div>
+                  ))
+                )
+              }
+
+
             </div>
 
             <div className="text-cl-primary mt-4">Members details</div>
             <div className="mt-3 pt-4 p-3 rounded-4 bg-white common-shadow">
               <div className="d-flex justify-content-between flex-wrap align-items-center p-3">
                 <div>
-                  <CommonSearch primary={true} onChange={handleSearchChange}/>
+                  <CommonSearch primary={true} onChange={handleSearchChange} />
                 </div>
                 <div>
                   <select
