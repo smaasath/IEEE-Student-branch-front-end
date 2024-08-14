@@ -1,6 +1,6 @@
 import React from "react";
 
-const OuCard = ({ name, type, logo, onclick, loading }) => {
+const OuCard = ({ name, type, logo, onclick, loading, id }) => {
   return (
     <>
       {
@@ -28,7 +28,7 @@ const OuCard = ({ name, type, logo, onclick, loading }) => {
         ) : (
           <>
             <div
-              onClick={onclick}
+              onClick={()=>onclick(id)}
               className="card btn m-0 p-0 shadow-sm rounded-5"
               style={{ width: "100%", height: "180px", cursor: "pointer" }}
             >

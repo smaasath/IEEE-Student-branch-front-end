@@ -44,7 +44,7 @@ const ExcomLandingPage = () => {
         console.warn(data);
         setentityCard(data);
         setouloader(false)
-      }else{
+      } else {
         setentityCard([]);
         setouloader(false)
       }
@@ -128,9 +128,10 @@ const ExcomLandingPage = () => {
   ];
 
 
-  function navigateToExcomPage() {
-    navigate("/dashboard/executive-committee/1");
+  function navigateToExcomPage(id) {
+    navigate(`/dashboard/executive-committee/${id}`);
   }
+    
 
   //   const entities = [
   //     { id: 0, name: "SB", type: "Student Branch", logo: sbLogo },
@@ -168,10 +169,11 @@ const ExcomLandingPage = () => {
                       className="col-10 col-sm-6 col-md-5 col-lg-3 me-0 mb-4"
                     >
                       <OuCard
+                        id={ou.id}
                         name={ou.name}
                         logo={ou.logo}
                         shorName={ou.shortName}
-                        onclick={navigateToExcomPage}
+                        onclick={(id) => navigateToExcomPage(id)}
                       />
                     </div>
                   ))
