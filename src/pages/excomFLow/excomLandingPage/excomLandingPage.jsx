@@ -128,8 +128,8 @@ const ExcomLandingPage = () => {
   ];
 
 
-  function navigateToExcomPage(id) {
-    navigate(`/dashboard/executive-committee/${id}`);
+  function navigateToExcomPage(ouid) {
+    navigate(`/dashboard/executive-committee/${ouid}`);
   }
     
 
