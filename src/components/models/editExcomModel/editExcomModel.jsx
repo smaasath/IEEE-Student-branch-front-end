@@ -1,29 +1,63 @@
-import React, { useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
-import CommonButton from '../../common/commonButton/commonButton';
-import profile from '../../../assets/images/profile.png';
-import CommonSearch from '../../common/commonSearch/commonSearch';
+import React, { useState } from "react";
+import './editExcomModel.css';
+import Modal from "react-bootstrap/Modal";
+import CommonButton from "../../common/commonButton/commonButton";
+import profile from "../../../assets/images/profile.png";
+import CommonSearch from "../../common/commonSearch/commonSearch";
+import selectIcon from "../../../assets/icons/check_mark_dark.png";
+
 
 const EditExcomModel = ({ onHide, show, selectedMember }) => {
-  const [selectedRole, setSelectedRole] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [members, setMembers] = useState([
+  const [selectedRoleId, setSelectedRoleId] = useState();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedMemberID, setSelectedMemberID] = useState();
+
+  const handleSelectMember = (memberID) => {
+    setSelectedMemberID(memberID)
+  };
+  const handleSelectRole = (roleID) => {
+    setSelectedRoleId(roleID);
+  };
+  // const filteredMembers = members.filter((member) =>
+  //   member.name.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
+
+  const memberList = [
     {
-      name: 'Thilina Kumara',
-      email: 'thilina@gmail.com',
-      phone: '+94712668316',
-      academicYear: '3rd Year',
+      id: 1,
+      name: "Thilina Kumara",
+      email: "thilina@gmail.com",
+      phone: "+94712668316",
+      academicYear: "3rd Year",
       photo: profile,
     },
-  ]);
 
-  const handleSelectMember = (member) => {
-    setSelectedMember(member);
-  };
+    {
+      id: 2,
+      name: "Ruwan Kumara",
+      email: "thilina@gmail.com",
+      phone: "+94712668316",
+      academicYear: "3rd Year",
+      photo: profile,
+    },
 
-  const filteredMembers = members.filter((member) =>
-    member.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    {
+      id: 3,
+      name: "Kamal Kumara",
+      email: "thilina@gmail.com",
+      phone: "+94712668316",
+      academicYear: "3rd Year",
+      photo: profile,
+    },
+  ];
+
+  const roleData = [
+    { id: 1, role: "chairperson" },
+    { id: 2, role: "Tresurer" },
+    { id: 3, role: "PV Head" },
+    { id: 4, role: "Editorial Head" },
+    { id: 5, role: "Secretary" },
+  ];
 
   return (
     <>
@@ -36,46 +70,85 @@ const EditExcomModel = ({ onHide, show, selectedMember }) => {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title className='text-cl-primary' id="contained-modal-title-vcenter">
+          <Modal.Title
+            className="text-third"
+            id="contained-modal-title-vcenter"
+          >
             Assign Executive Committee
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className='d-flex flex-column'>
+          <div className="d-flex flex-column">
             <div className="mt-3">
-              <label htmlFor="roleSelect" className="form-label text-dark">Select Role</label>
-              <select
-                id="roleSelect"
-                className="form-select w-100"
-                aria-label="Select Role"
-                value={selectedRole}
-                onChange={(e) => setSelectedRole(e.target.value)}
+              <label htmlFor="roleSelect" className="form-label text-dark">
+                Select Role
+              </label>
+              <CommonSearch />
+              <div
+                className="list-group mt-2"
+                style={{ maxHeight: "150px", overflowY: "auto" }}
               >
-                <option value="" disabled>Select Role</option>
-                <option value="Chair">Chair</option>
-                <option value="Vice Chair">Vice Chair</option>
-                <option value="Secretary">Secretary</option>
-                <option value="Assistant Secretary">Assistant Secretary</option>
-                <option value="Treasurer">Treasurer</option>
-                <option value="Webmaster">Webmaster</option>
-              </select>
-            </div>
-
-            <div className='mt-3'>
-              <CommonSearch/>
-              <div className="list-group mt-2">
-                {filteredMembers.map((member, index) => (
+                {roleData.map((data, index) => (
                   <button
                     key={index}
                     type="button"
-                    className={`list-group-item list-group-item-action ${selectedMember === member ? 'active' : ''}`}
-                    onClick={() => handleSelectMember(member)}
+                    value={data.id}
+                    className={`list-group-item list-group-item-action`}
+                    onClick={() => handleSelectRole(data.id)}
                   >
                     <div className="d-flex align-items-center">
-                      <img src={member.photo} alt="Profile" className="rounded-circle me-3" style={{ width: '25px', height: '25px', objectFit: 'cover' }} />
+                      <div className="d-flex w-100">
+                        <h6 className="my-auto ms-2 me-auto">{data.role}</h6>
+                        {selectedRoleId === data.id && (
+                          <img
+                            className="ms-auto me-2"
+                            src={selectIcon}
+                            alt="Select"
+                            style={{ width: "25px", height: "25px" }}
+                          />
+                        )}
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-3">
+              <CommonSearch />
+              <div
+                className="list-group mt-2"
+                style={{ maxHeight: "150px", overflowY: "auto" }}
+              >
+                {memberList.map((member, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    value={member.id}
+                    className={`list-group-item list-group-item-action ${
+                      selectedMemberID === member.id ? "active1" : ""
+                    }`}
+                    onClick={() => handleSelectMember(member.id)}
+                  >
+                    <div className="d-flex align-items-center">
+                      <img
+                        src={member.photo}
+                        alt="Profile"
+                        className="rounded-circle me-3"
+                        style={{
+                          width: "25px",
+                          height: "25px",
+                          objectFit: "cover",
+                        }}
+                      />
                       <div>
                         <h6 className="mb-0">{member.name}</h6>
-                        <p className="mb-0 text-muted" style={{ fontSize: '12px' }}>{member.email} | {member.phone}</p>
+                        <p
+                          className="mb-0 text-muted"
+                          style={{ fontSize: "12px" }}
+                        >
+                          {member.email} | {member.phone}
+                        </p>
                       </div>
                     </div>
                   </button>
@@ -84,14 +157,14 @@ const EditExcomModel = ({ onHide, show, selectedMember }) => {
             </div>
           </div>
         </Modal.Body>
-        <Modal.Footer className='d-flex justify-content-end mt-3'>
-                <div>
-                  <CommonButton onClick={onHide} text={"Done"} />
-                </div>
+        <Modal.Footer className="d-flex justify-content-end mt-3">
+          <div>
+            <CommonButton onClick={onHide} text={"Done"} />
+          </div>
         </Modal.Footer>
       </Modal>
     </>
   );
-}
+};
 
 export default EditExcomModel;
