@@ -1,63 +1,106 @@
-import React, { useState } from "react";
-import './editExcomModel.css';
+import React, { useEffect, useState } from "react";
+import "./editExcomModel.css";
 import Modal from "react-bootstrap/Modal";
 import CommonButton from "../../common/commonButton/commonButton";
 import profile from "../../../assets/images/profile.png";
 import CommonSearch from "../../common/commonSearch/commonSearch";
 import selectIcon from "../../../assets/icons/check_mark_dark.png";
-
+import { assignOuExcomRole, getAllRoles } from "../../../redux/actions/role";
+import { getAllUsers } from "../../../redux/actions/user";
+import { useParams } from "react-router-dom";
 
 const EditExcomModel = ({ onHide, show, selectedMember }) => {
   const [selectedRoleId, setSelectedRoleId] = useState();
-  const [searchTerm, setSearchTerm] = useState("");
+  // const [searchTerm, setSearchTerm] = useState("");
   const [selectedMemberID, setSelectedMemberID] = useState();
+  const [roleData, setRoleData] = useState([]);
+  const [totalPage, setTotalPage] = useState(1);
+  const [loader, setLoader] = useState(false);
+  const [userLoader, setUserLoader] = useState(false);
+  const [assignLoading, setAssignLoading] = useState(false);
+  const [searchRoleItem, setsearchRoleItem] = useState("");
+  const [searchUserItem, setsearchUserItem] = useState("");
+
+  // const [refreshTable, setRefreshTable] = useState(0);
+
+  const [userData, setUserData] = useState([]);
+  const { id: ouId } = useParams();
 
   const handleSelectMember = (memberID) => {
-    setSelectedMemberID(memberID)
+    setSelectedMemberID(memberID);
   };
   const handleSelectRole = (roleID) => {
     setSelectedRoleId(roleID);
   };
-  // const filteredMembers = members.filter((member) =>
-  //   member.name.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
+  const handleSearchChangeofRoles = (e) => setsearchRoleItem(e.target.value);
+  const handleSearchChangeofUsers = (e) => setsearchUserItem(e.target.value);
 
-  const memberList = [
-    {
-      id: 1,
-      name: "Thilina Kumara",
-      email: "thilina@gmail.com",
-      phone: "+94712668316",
-      academicYear: "3rd Year",
-      photo: profile,
-    },
+  const handleAssignRole = () => {
+    setAssignLoading(true);
+    if (selectedRoleId && selectedMemberID && ouId) {
+      assignOuExcomRole(selectedRoleId, selectedMemberID, ouId, (response) => {
+        if (response.status === 200) {
+          console.log("Role assigned successfully:", response);
+          onHide();
+          setAssignLoading(false);
+        } else {
+          console.error("Failed to assign role:", response);
+          setAssignLoading(false);
+        }
+      });
+    } else {
+      console.error("Please select both a role and a member.");
+      setAssignLoading(false);
+    }
+  };
 
-    {
-      id: 2,
-      name: "Ruwan Kumara",
-      email: "thilina@gmail.com",
-      phone: "+94712668316",
-      academicYear: "3rd Year",
-      photo: profile,
-    },
 
-    {
-      id: 3,
-      name: "Kamal Kumara",
-      email: "thilina@gmail.com",
-      phone: "+94712668316",
-      academicYear: "3rd Year",
-      photo: profile,
-    },
-  ];
 
-  const roleData = [
-    { id: 1, role: "chairperson" },
-    { id: 2, role: "Tresurer" },
-    { id: 3, role: "PV Head" },
-    { id: 4, role: "Editorial Head" },
-    { id: 5, role: "Secretary" },
-  ];
+  useEffect(() => {
+    setLoader(true);
+    getAllRoles(0, searchRoleItem, "EXCOM", (res) => {
+      if (res.status == 200) {
+        let data = res?.data?.data?.content?.map(({ roleID, userRole }) => ({
+          id: roleID,
+          role: userRole,
+        }));
+        console.warn(data);
+        setRoleData(data);
+        // setTotalPage(res?.data?.data?.totalPages);
+        // console.warn(res?.data?.data?.totalPages);
+        setLoader(false);
+      } else {
+        console.error("Failed to load roles");
+        setLoader(false);
+      }
+    });
+  }, [searchRoleItem]);
+
+  useEffect(() => {
+    setUserLoader(true);
+    getAllUsers(0, searchUserItem, (res) => {
+      if (res.status == 200) {
+        let data = res?.data?.data?.content?.map((user) => ({
+          id: user?.userID,
+          fname: user?.firstName,
+          lname: user?.lastName,
+          email: user?.email,
+          phone: user?.contactNo,
+          academicYear: user?.academicYear?.academicYear || "N/A",
+          status: user?.academicYear?.status || "N/A",
+          photo: profile,
+        }));
+        console.warn(data);
+        setUserData(data);
+        // setTotalPage(res?.data?.data?.totalPages);
+        // console.warn(res?.data?.data?.totalPages);
+        setUserLoader(false);
+      } else {
+        console.error("Failed to load Users");
+        setUserLoader(false);
+      }
+    });
+  }, [searchUserItem]);
 
   return (
     <>
@@ -83,14 +126,14 @@ const EditExcomModel = ({ onHide, show, selectedMember }) => {
               <label htmlFor="roleSelect" className="form-label text-dark">
                 Select Role
               </label>
-              <CommonSearch />
+              <CommonSearch onChange={handleSearchChangeofRoles} />
               <div
                 className="list-group mt-2"
                 style={{ maxHeight: "150px", overflowY: "auto" }}
               >
-                {roleData.map((data, index) => (
+                {roleData.map((data) => (
                   <button
-                    key={index}
+                    key={data.id}
                     type="button"
                     value={data.id}
                     className={`list-group-item list-group-item-action`}
@@ -115,24 +158,24 @@ const EditExcomModel = ({ onHide, show, selectedMember }) => {
             </div>
 
             <div className="mt-3">
-              <CommonSearch />
+              <CommonSearch onChange={handleSearchChangeofUsers} />
               <div
                 className="list-group mt-2"
                 style={{ maxHeight: "150px", overflowY: "auto" }}
               >
-                {memberList.map((member, index) => (
+                {userData.map((user) => (
                   <button
-                    key={index}
+                    key={user.id}
                     type="button"
-                    value={member.id}
+                    value={user.id}
                     className={`list-group-item list-group-item-action ${
-                      selectedMemberID === member.id ? "active1" : ""
+                      selectedMemberID === user.id ? "active1" : ""
                     }`}
-                    onClick={() => handleSelectMember(member.id)}
+                    onClick={() => handleSelectMember(user.id)}
                   >
                     <div className="d-flex align-items-center">
                       <img
-                        src={member.photo}
+                        src={user.photo}
                         alt="Profile"
                         className="rounded-circle me-3"
                         style={{
@@ -142,12 +185,14 @@ const EditExcomModel = ({ onHide, show, selectedMember }) => {
                         }}
                       />
                       <div>
-                        <h6 className="mb-0">{member.name}</h6>
+                        <h6 className="mb-0">
+                          {user.fname} {user.lname}
+                        </h6>
                         <p
                           className="mb-0 text-muted"
                           style={{ fontSize: "12px" }}
                         >
-                          {member.email} | {member.phone}
+                          {user.email} | {user.phone}
                         </p>
                       </div>
                     </div>
@@ -159,7 +204,7 @@ const EditExcomModel = ({ onHide, show, selectedMember }) => {
         </Modal.Body>
         <Modal.Footer className="d-flex justify-content-end mt-3">
           <div>
-            <CommonButton onClick={onHide} text={"Done"} />
+            <CommonButton onClick={handleAssignRole} load={assignLoading} text={"Done"} />
           </div>
         </Modal.Footer>
       </Modal>

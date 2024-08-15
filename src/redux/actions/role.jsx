@@ -54,3 +54,21 @@ export const createRole = (body, callback) => {
       callback(error.response);
     }
   };
+
+  export const assignOuExcomRole = (roleid, userid, ouid, callback) => {
+    const endpoint = `${import.meta.env.VITE_API_HOST}role/${roleid}/assign/${userid}/${ouid}`;
+  
+    try {
+      http
+        .post(endpoint)
+        .then((response) => {
+          callback(response);
+        })
+        .catch((error) => {
+          callback(error.response);
+        });
+    } catch (error) {
+      callback(error.response);
+    }
+  };
+  
