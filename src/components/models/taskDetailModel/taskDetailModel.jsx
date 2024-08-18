@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Form } from "react-bootstrap";
+import { Modal, Dropdown, DropdownButton } from "react-bootstrap";
 import CommonButton from "../../common/commonButton/commonButton";
 import CommonMemberContainer from "../../common/commonMemberContainer/commonMemberContainer";
 import CommonSearch from "../../common/commonSearch/commonSearch";
@@ -19,10 +19,12 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
   const navigate = useNavigate();
   const [assignTask, setAssignTask] = useState(false);
   const [createTask, setCreateTask] = useState(false);
+  const [selectedPriority, setSelectedPriority] = useState("HIGH"); // Set default priority
   const userData = useSelector((state) => state.user.userData);
   const [pageLoading, setPageLoading] = useState(true);
+
   useEffect(() => {
-    setPageLoading(true)
+    setPageLoading(true);
     if (userData && show && excom) {
       const isExcomAvailable = userData?.some(userRoleDetail =>
         userRoleDetail.role?.policies.some(policy => policy.policyCode === "EXCOM")
@@ -32,25 +34,23 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
         userRoleDetail.role?.policies.some(policy => policy.policyCode === "EXCOM_TASK")
       );
 
-
       const isExcomTaskAssignAvailable = userData?.some(userRoleDetail =>
         userRoleDetail.role?.policies.some(policy => policy.policyCode === "EXCOM_TASK_ASSIGN")
       );
 
-
-
-
       if (!isExcomAvailable) {
-        navigate('/dashboard')
+        navigate('/dashboard');
       } else {
         setAssignTask(isExcomTaskAssignAvailable);
         setCreateTask(isExcomTaskAvailable);
         setPageLoading(false);
-
-
       }
     }
-  }, [userData, show])
+  }, [userData, show]);
+
+  const handlePrioritySelect = (eventKey) => {
+    setSelectedPriority(eventKey);
+  };
 
   const notes = [
     { date: "2023-01-02", author: "Jane Doe", content: "Sample note 2" },
@@ -80,9 +80,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
     },
   ];
 
-  const tableData = [
-
-  ];
+  const tableData = [];
 
   return (
     <Modal show={show} onHide={onHide} size="lg" centered fullscreen={true}>
@@ -102,12 +100,15 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                     <img src={deleted} width={25} alt="Delete" />
                   </button>
                 ) : null}
-
               </div>
               <h5><b>Create project banner.</b></h5>
-              <div className="mb-3">
-                <div className="text-cl-primary mb-1">Status</div>
-                <div className="d-inline-block px-3 py-2 bg-light text-success rounded">{taskData.status}</div>
+              <div className="d-flex align-items-center mb-3">
+                <div className="text-cl-primary mb-1 d-flex align-items-center">
+                  <span className="ms-4">Status</span>
+                </div>
+                <button className="btn btn-success ms-3" style={{ backgroundColor: '#dff0d8', color: '#3c763d', border: 'none', padding: '5px 10px', borderRadius: '5px' }}>
+                  Reviewed
+                </button>
               </div>
               <div className="d-flex justify-content-between align-items-center mb-3" style={{ width: '250px', height: '38px' }}>
                 <div className="text-cl-primary mb-1 d-flex align-items-center">
@@ -115,11 +116,28 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 </div>
                 <input type="date" className="form-control ms-3" id="date" value={taskData.date} />
               </div>
-              <div className="d-flex justify-content-between align-items-center mb-3">
+              <div className="d-flex align-items-center mb-3">
                 <div className="text-cl-primary mb-1 d-flex align-items-center">
-                  <img src={star} style={{ width: '25px', height: '25px' }} alt="Star" /> <span className="ms-2">Priority</span>
+                  <img src={star} style={{ width: '20px', height: '20px' }} alt="Star" className="me-2" /> 
+                  <span>Priority</span>
                 </div>
-                <div className="d-inline-block px-3 py-2 bg-light text-danger rounded">{taskData.priority}</div>
+                <DropdownButton
+                  title={selectedPriority}
+                  onSelect={handlePrioritySelect}
+                  id="priority-dropdown"
+                  variant="light"
+                  className="ms-3"
+                  style={{
+                    backgroundColor: selectedPriority === "HIGH" ? "#fdecea" : selectedPriority === "MEDIUM" ? "#fff4e5" : "#e9f5f2",
+                    border: "none",
+                    borderRadius: "3px",
+                    padding: "5px 10px",
+                  }}
+                >
+                  <Dropdown.Item eventKey="HIGH" >High</Dropdown.Item>
+                  <Dropdown.Item eventKey="MEDIUM" >Medium</Dropdown.Item>
+                  <Dropdown.Item eventKey="LOW">Low</Dropdown.Item>
+                </DropdownButton>
               </div>
               <div className="mb-3">
                 <div className="text-cl-primary">
@@ -128,7 +146,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
               </div>
               <div className="mb-3">
                 <div className="text-cl-primary">Description</div>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <textarea className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
               </div>
               <div className="mt-4">
                 <div className="d-flex justify-content-between align-items-center">
@@ -136,7 +154,6 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                   {createTask ? (
                     <img src={add} alt="Add" style={{ width: '30px', height: '30px' }} />
                   ) : null}
-
                 </div>
                 <div className="d-flex">
                   <CommonSearch primary={true} />
