@@ -4,6 +4,7 @@ import CommonButton from "../../common/commonButton/commonButton";
 import CommonMemberContainer from "../../common/commonMemberContainer/commonMemberContainer";
 import CommonSearch from "../../common/commonSearch/commonSearch";
 import add from "../../../assets/icons/Add.png";
+import send from '../../../assets/icons/Sent.png';
 import flag from "../../../assets/images/Flag.png";
 import star from "../../../assets/images/Star.png";
 import deleted from '../../../assets/icons/delete.png';
@@ -178,6 +179,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
           </div>
           <div className="col-lg-4">
             <div className="bg-white rounded-3 common-shadow p-3">
+              <div className="bg-white common-shadow p-2 rounded-3 mb-2">
               <h6 className="text-third fw-bold">Notes</h6>
               <div className="p-2">
                 <CommonSearch primary={false} />
@@ -187,6 +189,20 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                   <CommonNoteContainer date={note.date} author={note.author} content={note.content} />
                 </div>
               ))}
+
+<div className='mt-3'>
+                            <div className='d-flex justify-content-between align-items-center gap-3'>
+                                <div class="form-group w-100">
+                                    <textarea class="form-control" placeholder='Add note here' id="exampleFormControlTextarea1"></textarea>
+                                </div>
+                                <button className='bg-transparent border-0'>
+                                    <img src={send} width={30} />
+                                </button>
+                            </div>
+                        </div>
+              </div>
+
+
               <div className="d-flex bg-white common-shadow flex-column p-2 rounded-3">
                 <div className="d-flex justify-content-between align-items-center gap-4 flex-wrap mt-4 p-2">
                   <div className="d-flex justify-content-between w-100 align-items-center">
@@ -196,6 +212,9 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                     ) : null}
                   </div>
                 </div>
+
+
+
                 <div className="mt-3">
                   <CommonSearch primary={false} />
                 </div>
