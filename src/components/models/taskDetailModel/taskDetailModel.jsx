@@ -10,6 +10,7 @@ import deleted from '../../../assets/icons/delete.png';
 import viewPrimary from '../../../assets/icons/viewPrimary.png'
 import CommonTable from "../../common/commonTable/commonTable";
 import CommonNoteContainer from "../../common/commonNoteContainer/commonNoteContainer";
+import AddSubTaskModel from "../addSubTaskModel/addSubTaskModel";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -21,6 +22,14 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
   const [createTask, setCreateTask] = useState(false);
   const userData = useSelector((state) => state.user.userData);
   const [pageLoading, setPageLoading] = useState(true);
+
+  const [addSubTaskModelShow, setAddSubTaskModelShow] = useState(false);
+  const [subTasks, setSubTasks] = useState([]); // Manage sub-tasks data here
+
+  const handleAddSubTaskModel = (newSubTask) => {
+    
+  };
+
   useEffect(() => {
     setPageLoading(true)
     if (userData && show && excom) {
@@ -134,7 +143,16 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 <div className="d-flex justify-content-between align-items-center">
                   <div className="text-cl-primary">Sub Tasks</div>
                   {createTask ? (
-                    <img src={add} alt="Add" style={{ width: '30px', height: '30px' }} />
+                    <div className='mt-4 d-flex justify-content-end'>
+                    <div>
+                  <img
+                    src={add}
+                    alt="Add"
+                    style={{ width: '30px', height: '30px', cursor: 'pointer' }}
+                    onClick={() => setAddSubTaskModelShow(true)} // Trigger modal on click
+                  />
+                  </div>
+                  </div>
                   ) : null}
 
                 </div>
@@ -194,6 +212,13 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
           <CommonButton onClick={onHide} close={true} text={"Cancel"} />
         </div>
       </Modal.Footer>
+
+      {/* AddSubTaskModel modal */}
+      <AddSubTaskModel
+        show={addSubTaskModelShow}
+        onHide={() => setAddSubTaskModelShow(false)}
+        
+      />
     </Modal>
   );
 };
