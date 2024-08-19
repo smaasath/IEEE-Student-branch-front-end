@@ -9,9 +9,9 @@ import flag from "../../../assets/images/Flag.png";
 import star from "../../../assets/images/Star.png";
 import deleted from '../../../assets/icons/delete.png';
 import viewPrimary from '../../../assets/icons/viewPrimary.png'
+import TaskModel from '../createTaskModel/createTaskModel';
 import CommonTable from "../../common/commonTable/commonTable";
 import CommonNoteContainer from "../../common/commonNoteContainer/commonNoteContainer";
-import AddSubTaskModel from "../addSubTaskModel/addSubTaskModel";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -24,12 +24,8 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
   const userData = useSelector((state) => state.user.userData);
   const [pageLoading, setPageLoading] = useState(true);
 
-  const [addSubTaskModelShow, setAddSubTaskModelShow] = useState(false);
-  const [subTasks, setSubTasks] = useState([]); // Manage sub-tasks data here
-
-  const handleAddSubTaskModel = (newSubTask) => {
-    
-  };
+  const [showTaskModal, setShowTaskModal] = useState(false);
+    const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {
     setPageLoading(true)
@@ -65,6 +61,15 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
   const notes = [
     { date: "2023-01-02", author: "Jane Doe", content: "Sample note 2" },
   ];
+
+  const openTaskModal = () => {
+    setShowTaskModal(true);
+};
+
+const closeTaskModal = () => {
+    setShowTaskModal(false);
+};
+
 
   const tableHeading = [
     {
@@ -150,7 +155,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                     src={add}
                     alt="Add"
                     style={{ width: '30px', height: '30px', cursor: 'pointer' }}
-                    onClick={() => setAddSubTaskModelShow(true)} // Trigger modal on click
+                    onClick={openTaskModal} text={"Add Sub Tasks"} // Trigger modal on click
                   />
                   </div>
                   </div>
@@ -232,10 +237,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
         </div>
       </Modal.Footer>
 
-      {/* AddSubTaskModel modal */}
-      <AddSubTaskModel
-        show={addSubTaskModelShow}
-        onHide={() => setAddSubTaskModelShow(false)}
+      <TaskModel show={showTaskModal} onHide={closeTaskModal}
         
       />
     </Modal>
