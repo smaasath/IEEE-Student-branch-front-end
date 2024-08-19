@@ -7,7 +7,7 @@ import add from "../../../assets/icons/Add.png";
 import flag from "../../../assets/images/Flag.png";
 import star from "../../../assets/images/Star.png";
 import deleted from '../../../assets/icons/delete.png';
-import viewPrimary from '../../../assets/icons/viewPrimary.png'
+import viewPrimary from '../../../assets/icons/viewPrimary.png';
 import CommonTable from "../../common/commonTable/commonTable";
 import CommonNoteContainer from "../../common/commonNoteContainer/commonNoteContainer";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +19,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
   const navigate = useNavigate();
   const [assignTask, setAssignTask] = useState(false);
   const [createTask, setCreateTask] = useState(false);
-  const [selectedPriority, setSelectedPriority] = useState("HIGH"); // Set default priority
+  const [selectedPriority, setSelectedPriority] = useState("High"); // Set default priority
   const userData = useSelector((state) => state.user.userData);
   const [pageLoading, setPageLoading] = useState(true);
 
@@ -46,10 +46,14 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
         setPageLoading(false);
       }
     }
-  }, [userData, show]);
+  }, [userData, show, excom, navigate]);
 
   const handlePrioritySelect = (eventKey) => {
     setSelectedPriority(eventKey);
+  };
+
+  const handleDateChange = (e) => {
+    // Handle the date change here
   };
 
   const notes = [
@@ -96,7 +100,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
               <div className="mb-3 d-flex justify-content-between align-items-center">
                 <div className="text-cl-primary">Main Task Title / Sub Task Title</div>
                 {createTask ? (
-                  <button className="bg-transparent border-0">
+                  <button className="bg-transparent border-0" aria-label="Delete Task">
                     <img src={deleted} width={25} alt="Delete" />
                   </button>
                 ) : null}
@@ -106,15 +110,22 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 <div className="text-cl-primary mb-1 d-flex align-items-center">
                   <span className="ms-4">Status</span>
                 </div>
-                <button className="btn btn-success ms-3" style={{ backgroundColor: '#dff0d8', color: '#3c763d', border: 'none', padding: '5px 10px', borderRadius: '5px' }}>
-                  Reviewed
-                </button>
+                <DropdownButton
+                  id="status-dropdown"
+                  title="Reviewed"
+                  className="ms-2"
+                  variant="success"
+                >
+                  <Dropdown.Item href="#">Reviewed</Dropdown.Item>
+                  <Dropdown.Item href="#">Pending</Dropdown.Item>
+                  <Dropdown.Item href="#">In Progress</Dropdown.Item>
+                </DropdownButton>
               </div>
               <div className="d-flex justify-content-between align-items-center mb-3" style={{ width: '250px', height: '38px' }}>
                 <div className="text-cl-primary mb-1 d-flex align-items-center">
                   <img src={flag} style={{ width: '25px', height: '25px' }} alt="Flag" /> <span className="ms-2">Date</span>
                 </div>
-                <input type="date" className="form-control ms-3" id="date" value={taskData.date} />
+                <input type="date" className="form-control ms-3" id="date" value={taskData.date} onChange={handleDateChange} />
               </div>
               <div className="d-flex align-items-center mb-3">
                 <div className="text-cl-primary mb-1 d-flex align-items-center">
@@ -122,21 +133,15 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                   <span>Priority</span>
                 </div>
                 <DropdownButton
+                  id="priority-dropdown"
                   title={selectedPriority}
                   onSelect={handlePrioritySelect}
-                  id="priority-dropdown"
-                  variant="light"
-                  className="ms-3"
-                  style={{
-                    backgroundColor: selectedPriority === "HIGH" ? "#fdecea" : selectedPriority === "MEDIUM" ? "#fff4e5" : "#e9f5f2",
-                    border: "none",
-                    borderRadius: "3px",
-                    padding: "5px 10px",
-                  }}
+                  className="ms-2"
+                  variant="danger"
                 >
-                  <Dropdown.Item eventKey="HIGH" >High</Dropdown.Item>
-                  <Dropdown.Item eventKey="MEDIUM" >Medium</Dropdown.Item>
-                  <Dropdown.Item eventKey="LOW">Low</Dropdown.Item>
+                  <Dropdown.Item eventKey="High">High</Dropdown.Item>
+                  <Dropdown.Item eventKey="Medium">Medium</Dropdown.Item>
+                  <Dropdown.Item eventKey="Low">Low</Dropdown.Item>
                 </DropdownButton>
               </div>
               <div className="mb-3">
