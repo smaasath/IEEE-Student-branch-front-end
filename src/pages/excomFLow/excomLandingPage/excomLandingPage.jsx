@@ -56,23 +56,35 @@ const ExcomLandingPage = () => {
     setLoader(true);
     getAllExcomMember(currentPage - 1, searchItem, entityFilter, (res) => {
       if (res.status == 200) {
-        let data = res?.data?.data?.content?.map(
-          ({ userRoleDetailsId,
-            user: { firstName, lastName, email, contactNo, academicYear: { academicYear } },
-            ou: { ou_short_name },
-            role: { userRole }
-          }) => ({
-            id: userRoleDetailsId,
-            fname: firstName,
-            lname: lastName,
-            email: email,
-            contactNo: contactNo,
-            entity: ou_short_name,
-            position: userRole,
-            academicYear: academicYear,
-            termYear: "2024",
-          })
-        );
+        // let data = res?.data?.data?.content?.map(
+        //   ({ userRoleDetailsId,
+        //     user: { firstName, lastName, email, contactNo, academicYear: { academicYear } },
+        //     ou: { ou_short_name },
+        //     role: { userRole }
+        //   }) => ({
+        //     id: userRoleDetailsId,
+        //     fname: firstName,
+        //     lname: lastName,
+        //     email: email,
+        //     contactNo: contactNo,
+        //     entity: ou_short_name,
+        //     position: userRole,
+        //     academicYear: academicYear,
+        //     termYear: "2024",
+        //   })
+        // );
+
+        let data = res?.data?.data?.content?.map((user) => ({
+          id: user?.userRoleDetailsId,
+          fname: user?.user?.firstName,
+          lname: user?.user?.lastName,
+          email: user?.user?.email,
+          phone: user?.user?.contactNo,
+          entity: user?.ou?.ou_short_name,
+          position: user?.role?.userRole,
+          academicYear: user?.user?.academicYear?.academicYear || "N/A",
+          termYear: "2024",
+        }));
         console.warn(data);
         SetExcomData(data);
         setTotalPage(res?.data?.data?.totalPages);
