@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Form } from "react-bootstrap";
+import { Modal, Dropdown, DropdownButton } from "react-bootstrap";
 import CommonButton from "../../common/commonButton/commonButton";
 import CommonMemberContainer from "../../common/commonMemberContainer/commonMemberContainer";
 import CommonSearch from "../../common/commonSearch/commonSearch";
 import add from "../../../assets/icons/Add.png";
+import send from '../../../assets/icons/Sent.png';
 import flag from "../../../assets/images/Flag.png";
 import star from "../../../assets/images/Star.png";
 import deleted from '../../../assets/icons/delete.png';
 import viewPrimary from '../../../assets/icons/viewPrimary.png'
+import TaskModel from '../createTaskModel/createTaskModel';
 import CommonTable from "../../common/commonTable/commonTable";
 import CommonNoteContainer from "../../common/commonNoteContainer/commonNoteContainer";
 import { useNavigate } from "react-router-dom";
@@ -19,10 +21,16 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
   const navigate = useNavigate();
   const [assignTask, setAssignTask] = useState(false);
   const [createTask, setCreateTask] = useState(false);
+  const [selectedPriority, setSelectedPriority] = useState("High"); // Set default priority
   const userData = useSelector((state) => state.user.userData);
   const [pageLoading, setPageLoading] = useState(true);
+
+
+  const [showTaskModal, setShowTaskModal] = useState(false);
+    const [selectedTask, setSelectedTask] = useState(null);
+
   useEffect(() => {
-    setPageLoading(true)
+    setPageLoading(true);
     if (userData && show && excom) {
       const isExcomAvailable = userData?.some(userRoleDetail =>
         userRoleDetail.role?.policies.some(policy => policy.policyCode === "EXCOM")
@@ -32,29 +40,40 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
         userRoleDetail.role?.policies.some(policy => policy.policyCode === "EXCOM_TASK")
       );
 
-
       const isExcomTaskAssignAvailable = userData?.some(userRoleDetail =>
         userRoleDetail.role?.policies.some(policy => policy.policyCode === "EXCOM_TASK_ASSIGN")
       );
 
-
-
-
       if (!isExcomAvailable) {
-        navigate('/dashboard')
+        navigate('/dashboard');
       } else {
         setAssignTask(isExcomTaskAssignAvailable);
         setCreateTask(isExcomTaskAvailable);
         setPageLoading(false);
-
-
       }
     }
-  }, [userData, show])
+  }, [userData, show, excom, navigate]);
+
+  const handlePrioritySelect = (eventKey) => {
+    setSelectedPriority(eventKey);
+  };
+
+  const handleDateChange = (e) => {
+    // Handle the date change here
+  };
 
   const notes = [
     { date: "2023-01-02", author: "Jane Doe", content: "Sample note 2" },
   ];
+
+  const openTaskModal = () => {
+    setShowTaskModal(true);
+};
+
+const closeTaskModal = () => {
+    setShowTaskModal(false);
+};
+
 
   const tableHeading = [
     {
@@ -80,9 +99,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
     },
   ];
 
-  const tableData = [
-
-  ];
+  const tableData = [];
 
   return (
     <Modal show={show} onHide={onHide} size="lg" centered fullscreen={true}>
@@ -98,28 +115,49 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
               <div className="mb-3 d-flex justify-content-between align-items-center">
                 <div className="text-cl-primary">Main Task Title / Sub Task Title</div>
                 {createTask ? (
-                  <button className="bg-transparent border-0">
+                  <button className="bg-transparent border-0" aria-label="Delete Task">
                     <img src={deleted} width={25} alt="Delete" />
                   </button>
                 ) : null}
-
               </div>
               <h5><b>Create project banner.</b></h5>
-              <div className="mb-3">
-                <div className="text-cl-primary mb-1">Status</div>
-                <div className="d-inline-block px-3 py-2 bg-light text-success rounded">{taskData.status}</div>
+              <div className="d-flex align-items-center mb-3">
+                <div className="text-cl-primary mb-1 d-flex align-items-center">
+                  <span className="ms-4">Status</span>
+                </div>
+                <DropdownButton
+                  id="status-dropdown"
+                  title="Reviewed"
+                  className="ms-2"
+                  variant="success"
+                >
+                  <Dropdown.Item href="#">Reviewed</Dropdown.Item>
+                  <Dropdown.Item href="#">Pending</Dropdown.Item>
+                  <Dropdown.Item href="#">In Progress</Dropdown.Item>
+                </DropdownButton>
               </div>
               <div className="d-flex justify-content-between align-items-center mb-3" style={{ width: '250px', height: '38px' }}>
                 <div className="text-cl-primary mb-1 d-flex align-items-center">
                   <img src={flag} style={{ width: '25px', height: '25px' }} alt="Flag" /> <span className="ms-2">Date</span>
                 </div>
-                <input type="date" className="form-control ms-3" id="date" value={taskData.date} />
+                <input type="date" className="form-control ms-3" id="date" value={taskData.date} onChange={handleDateChange} />
               </div>
-              <div className="d-flex justify-content-between align-items-center mb-3">
+              <div className="d-flex align-items-center mb-3">
                 <div className="text-cl-primary mb-1 d-flex align-items-center">
-                  <img src={star} style={{ width: '25px', height: '25px' }} alt="Star" /> <span className="ms-2">Priority</span>
+                  <img src={star} style={{ width: '20px', height: '20px' }} alt="Star" className="me-2" /> 
+                  <span>Priority</span>
                 </div>
-                <div className="d-inline-block px-3 py-2 bg-light text-danger rounded">{taskData.priority}</div>
+                <DropdownButton
+                  id="priority-dropdown"
+                  title={selectedPriority}
+                  onSelect={handlePrioritySelect}
+                  className="ms-2"
+                  variant="danger"
+                >
+                  <Dropdown.Item eventKey="High">High</Dropdown.Item>
+                  <Dropdown.Item eventKey="Medium">Medium</Dropdown.Item>
+                  <Dropdown.Item eventKey="Low">Low</Dropdown.Item>
+                </DropdownButton>
               </div>
               <div className="mb-3">
                 <div className="text-cl-primary">
@@ -128,15 +166,23 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
               </div>
               <div className="mb-3">
                 <div className="text-cl-primary">Description</div>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <textarea className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
               </div>
               <div className="mt-4">
                 <div className="d-flex justify-content-between align-items-center">
                   <div className="text-cl-primary">Sub Tasks</div>
                   {createTask ? (
-                    <img src={add} alt="Add" style={{ width: '30px', height: '30px' }} />
+                    <div className='mt-4 d-flex justify-content-end'>
+                    <div>
+                  <img
+                    src={add}
+                    alt="Add"
+                    style={{ width: '30px', height: '30px', cursor: 'pointer' }}
+                    onClick={openTaskModal} text={"Add Sub Tasks"} // Trigger modal on click
+                  />
+                  </div>
+                  </div>
                   ) : null}
-
                 </div>
                 <div className="d-flex">
                   <CommonSearch primary={true} />
@@ -160,6 +206,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
           </div>
           <div className="col-lg-4">
             <div className="bg-white rounded-3 common-shadow p-3">
+              <div className="bg-white common-shadow p-2 rounded-3 mb-2">
               <h6 className="text-third fw-bold">Notes</h6>
               <div className="p-2">
                 <CommonSearch primary={false} />
@@ -169,6 +216,20 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                   <CommonNoteContainer date={note.date} author={note.author} content={note.content} />
                 </div>
               ))}
+
+<div className='mt-3'>
+                            <div className='d-flex justify-content-between align-items-center gap-3'>
+                                <div class="form-group w-100">
+                                    <textarea class="form-control" placeholder='Add note here' id="exampleFormControlTextarea1"></textarea>
+                                </div>
+                                <button className='bg-transparent border-0'>
+                                    <img src={send} width={30} />
+                                </button>
+                            </div>
+                        </div>
+              </div>
+
+
               <div className="d-flex bg-white common-shadow flex-column p-2 rounded-3">
                 <div className="d-flex justify-content-between align-items-center gap-4 flex-wrap mt-4 p-2">
                   <div className="d-flex justify-content-between w-100 align-items-center">
@@ -178,6 +239,9 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                     ) : null}
                   </div>
                 </div>
+
+
+
                 <div className="mt-3">
                   <CommonSearch primary={false} />
                 </div>
@@ -194,6 +258,10 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
           <CommonButton onClick={onHide} close={true} text={"Cancel"} />
         </div>
       </Modal.Footer>
+
+      <TaskModel show={showTaskModal} onHide={closeTaskModal}
+        
+      />
     </Modal>
   );
 };
