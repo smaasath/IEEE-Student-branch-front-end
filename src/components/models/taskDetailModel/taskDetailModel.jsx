@@ -4,13 +4,13 @@ import CommonButton from "../../common/commonButton/commonButton";
 import CommonMemberContainer from "../../common/commonMemberContainer/commonMemberContainer";
 import CommonSearch from "../../common/commonSearch/commonSearch";
 import add from "../../../assets/icons/Add.png";
-import send from '../../../assets/icons/Sent.png';
+import send from "../../../assets/icons/Sent.png";
 import flag from "../../../assets/images/Flag.png";
 import star from "../../../assets/images/Star.png";
-import deleted from '../../../assets/icons/delete.png';
-import loading from '../../../assets/images/Loading.png';
-import clock from '../../../assets/images/Clock.png';
-import TaskModel from '../createTaskModel/createTaskModel';
+import deleted from "../../../assets/icons/delete.png";
+import loading from "../../../assets/images/Loading.png";
+import clock from "../../../assets/images/Clock.png";
+import TaskModel from "../createTaskModel/createTaskModel";
 import CommonTable from "../../common/commonTable/commonTable";
 import CommonNoteContainer from "../../common/commonNoteContainer/commonNoteContainer";
 import { useNavigate } from "react-router-dom";
@@ -32,20 +32,26 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
   useEffect(() => {
     setPageLoading(true);
     if (userData && show && excom) {
-      const isExcomAvailable = userData?.some(userRoleDetail =>
-        userRoleDetail.role?.policies.some(policy => policy.policyCode === "EXCOM")
+      const isExcomAvailable = userData?.some((userRoleDetail) =>
+        userRoleDetail.role?.policies.some(
+          (policy) => policy.policyCode === "EXCOM"
+        )
       );
 
-      const isExcomTaskAvailable = userData?.some(userRoleDetail =>
-        userRoleDetail.role?.policies.some(policy => policy.policyCode === "EXCOM_TASK")
+      const isExcomTaskAvailable = userData?.some((userRoleDetail) =>
+        userRoleDetail.role?.policies.some(
+          (policy) => policy.policyCode === "EXCOM_TASK"
+        )
       );
 
-      const isExcomTaskAssignAvailable = userData?.some(userRoleDetail =>
-        userRoleDetail.role?.policies.some(policy => policy.policyCode === "EXCOM_TASK_ASSIGN")
+      const isExcomTaskAssignAvailable = userData?.some((userRoleDetail) =>
+        userRoleDetail.role?.policies.some(
+          (policy) => policy.policyCode === "EXCOM_TASK_ASSIGN"
+        )
       );
 
       if (!isExcomAvailable) {
-        navigate('/dashboard');
+        navigate("/dashboard");
       } else {
         setAssignTask(isExcomTaskAssignAvailable);
         setCreateTask(isExcomTaskAvailable);
@@ -58,9 +64,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
     setSelectedPriority(eventKey);
   };
 
-  const handleDateChange = (e) => {
-    
-  };
+  const handleDateChange = (e) => {};
 
   const notes = [
     { date: "2023-01-02", author: "Jane Doe", content: "Sample note 2" },
@@ -87,7 +91,10 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
   return (
     <Modal show={show} onHide={onHide} size="lg" centered fullscreen={true}>
       <Modal.Header closeButton>
-        <Modal.Title className="text-cl-primary" id="contained-modal-title-vcenter">
+        <Modal.Title
+          className="text-cl-primary"
+          id="contained-modal-title-vcenter"
+        >
           Task
         </Modal.Title>
       </Modal.Header>
@@ -96,65 +103,111 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
           <div className="col-lg-8">
             <div>
               <div className="mb-3 d-flex justify-content-between align-items-center">
-                <div className="text-cl-primary">Main Task Title / Sub Task Title</div>
+                <div className="text-cl-primary">
+                  Main Task Title / Sub Task Title
+                </div>
                 {createTask && (
-                  <button className="bg-transparent border-0" aria-label="Delete Task">
+                  <button
+                    className="bg-transparent border-0"
+                    aria-label="Delete Task"
+                  >
                     <img src={deleted} width={25} alt="Delete" />
                   </button>
                 )}
               </div>
-              <h5><b>Create project banner.</b></h5>
+              <h5>
+                <b>Create project banner.</b>
+              </h5>
               <div className="d-flex align-items-center mb-3">
                 <div className="text-cl-primary mb-1 d-flex align-items-center">
-                  <img src={loading} style={{ width: '20px', height: '20px' }} alt="Loading" className="me-2" />
+                  <img
+                    src={loading}
+                    style={{ width: "20px", height: "20px" }}
+                    alt="Loading"
+                    className="me-2"
+                  />
                   <span>Status</span>
                 </div>
-                <DropdownButton
-                  id="status-dropdown"
-                  title="Reviewed"
-                  className="ms-2"
-                  variant="success" 
-                >
-                  <Dropdown.Item href="#">Reviewed</Dropdown.Item>
-                  <Dropdown.Item href="#">Pending</Dropdown.Item>
-                  <Dropdown.Item href="#">In Progress</Dropdown.Item>
-                </DropdownButton>
+                <div class=" form-group">
+                  <select
+                    class="form-control ms-5"
+                    id="exampleFormControlSelect1"
+                  >
+                    <option>Reviewed</option>
+                    <option>Pending</option>
+                    <option>In progress</option>
+                  </select>
+                </div>
               </div>
-              <div className="d-flex justify-content-between align-items-center mb-3" style={{ width: '250px' }}>
-                <div className="text-cl-primary mb-1 d-flex align-items-center">
-                  <img src={flag} style={{ width: '25px', height: '25px' }} alt="Flag" /> 
+              <div
+                className="d-flex justify-content-between align-items-center mb-3"
+                style={{ width: "350px" }}
+              >
+                <div className="col-md-4 text-cl-primary mb-1 d-flex align-items-center">
+                  <img
+                    src={flag}
+                    style={{ width: "25px", height: "25px" }}
+                    alt="Flag"
+                  />
                   <span>Start Date</span>
                 </div>
-                <input type="date" className="form-control ms-3" value={taskData.startDate} onChange={handleDateChange} />
+                <input
+                  type="date"
+                  className="form-control ms-3"
+                  value={taskData.startDate}
+                  onChange={handleDateChange}
+                />
               </div>
-              <div className=" d-flex justify-content-between align-items-center mb-3" style={{ width: '250px' }}>
-                <div className="text-cl-primary mb-1 d-flex align-items-center">
-                  <img src={flag} style={{ width: '25px', height: '25px' }} alt="Flag" /> 
+              <div
+                className=" d-flex justify-content-between align-items-center mb-3"
+                style={{ width: "350px" }}
+              >
+                <div className="col-md-4 text-cl-primary mb-1 d-flex align-items-center">
+                  <img
+                    src={flag}
+                    style={{ width: "25px", height: "25px" }}
+                    alt="Flag"
+                  />
                   <span>End Date</span>
                 </div>
-                <input type="date" className="form-control ms-3" value={taskData.endDate} onChange={handleDateChange} />
+                <input
+                  type="date"
+                  className="form-control ms-3"
+                  value={taskData.endDate}
+                  onChange={handleDateChange}
+                />
               </div>
               <div className="d-flex align-items-center mb-3">
                 <div className="text-cl-primary mb-1 d-flex align-items-center">
-                  <img src={star} style={{ width: '20px', height: '20px' }} alt="Star" className="me-2" />
+                  <img
+                    src={star}
+                    style={{ width: "20px", height: "20px" }}
+                    alt="Star"
+                    className="me-2"
+                  />
                   <span>Priority</span>
                 </div>
-                <DropdownButton
-                  id="priority-dropdown"
-                  title={selectedPriority}
-                  onSelect={handlePrioritySelect}
-                  className="ms-2"
-                  variant="danger" 
-                >
-                  <Dropdown.Item eventKey="High">High</Dropdown.Item>
-                  <Dropdown.Item eventKey="Medium">Medium</Dropdown.Item>
-                  <Dropdown.Item eventKey="Low">Low</Dropdown.Item>
-                </DropdownButton>
+                <div class="form-group">
+                  <select
+                    class="form-control ms-5"
+                    id="exampleFormControlSelect1"
+                  >
+                    <option>Low</option>
+                    <option>Medium</option>
+                    <option>High</option>
+                  </select>
+                </div>
               </div>
               <div className="mb-3">
                 <div className="text-cl-primary mb-1 d-flex align-items-center">
-                  <img src={clock} style={{ width: '25px', height: '25px' }} alt="Clock" /> 
-                  <span className="ms-2">Created at <b>May, 15 2022 14:23 PM</b></span>
+                  <img
+                    src={clock}
+                    style={{ width: "25px", height: "25px" }}
+                    alt="Clock"
+                  />
+                  <span className="ms-2">
+                    Created at <b>May, 15 2022 14:23 PM</b>
+                  </span>
                 </div>
               </div>
               <div className="mb-3">
@@ -165,11 +218,15 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 <div className="d-flex justify-content-between align-items-center">
                   <div className="text-cl-primary">Sub Tasks</div>
                   {createTask && (
-                    <div className='d-flex justify-content-end'>
+                    <div className="d-flex justify-content-end">
                       <img
                         src={add}
                         alt="Add"
-                        style={{ width: '30px', height: '30px', cursor: 'pointer' }}
+                        style={{
+                          width: "30px",
+                          height: "30px",
+                          cursor: "pointer",
+                        }}
                         onClick={openTaskModal}
                       />
                     </div>
@@ -204,15 +261,22 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 </div>
                 {notes.map((note, index) => (
                   <div className="p-2" key={index}>
-                    <CommonNoteContainer date={note.date} author={note.author} content={note.content} />
+                    <CommonNoteContainer
+                      date={note.date}
+                      author={note.author}
+                      content={note.content}
+                    />
                   </div>
                 ))}
-                <div className='mt-3'>
-                  <div className='d-flex justify-content-between align-items-center gap-3'>
+                <div className="mt-3">
+                  <div className="d-flex justify-content-between align-items-center gap-3">
                     <div className="form-group w-100">
-                      <textarea className="form-control" placeholder='Add note here'></textarea>
+                      <textarea
+                        className="form-control"
+                        placeholder="Add note here"
+                      ></textarea>
                     </div>
-                    <button className='bg-transparent border-0'>
+                    <button className="bg-transparent border-0">
                       <img src={send} width={30} alt="Send" />
                     </button>
                   </div>
@@ -223,14 +287,21 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                   <div className="d-flex justify-content-between w-100 align-items-center">
                     <h6 className="text-third fw-bold">Assignees</h6>
                     {assignTask && (
-                      <img src={add} alt="Add" style={{ width: '30px', height: '30px' }} />
+                      <img
+                        src={add}
+                        alt="Add"
+                        style={{ width: "30px", height: "30px" }}
+                      />
                     )}
                   </div>
                 </div>
                 <div className="mt-3">
                   <CommonSearch primary={false} />
                 </div>
-                <div className="mt-4 d-flex justify-content-between align-items-center gap-1 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar" style={{ maxHeight: 500 }}>
+                <div
+                  className="mt-4 d-flex justify-content-between align-items-center gap-1 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar"
+                  style={{ maxHeight: 500 }}
+                >
                   <CommonMemberContainer />
                 </div>
               </div>
