@@ -9,7 +9,7 @@ import { assignOuExcomRole, getAllRoles } from "../../../redux/actions/role";
 import { getAllUsers } from "../../../redux/actions/user";
 import { useParams } from "react-router-dom";
 
-const EditExcomModel = ({ onHide, show, selectedMember }) => {
+const EditExcomModel = ({ onHide, show, selectedMember, changed }) => {
   const [selectedRoleId, setSelectedRoleId] = useState(null);
   // const [searchTerm, setSearchTerm] = useState("");
   const [selectedMemberID, setSelectedMemberID] = useState(null);
@@ -43,7 +43,7 @@ const EditExcomModel = ({ onHide, show, selectedMember }) => {
       assignOuExcomRole(selectedRoleId, selectedMemberID, ouId, (response) => {
         if (response.status === 200) {
           console.log("Role assigned successfully:", response);
-         
+          changed();
           onHide();
           setAssignLoading(false);
         } else {
