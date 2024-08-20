@@ -8,7 +8,8 @@ import send from '../../../assets/icons/Sent.png';
 import flag from "../../../assets/images/Flag.png";
 import star from "../../../assets/images/Star.png";
 import deleted from '../../../assets/icons/delete.png';
-import viewPrimary from '../../../assets/icons/viewPrimary.png'
+import loading from '../../../assets/images/Loading.png';
+import clock from '../../../assets/images/Clock.png';
 import TaskModel from '../createTaskModel/createTaskModel';
 import CommonTable from "../../common/commonTable/commonTable";
 import CommonNoteContainer from "../../common/commonNoteContainer/commonNoteContainer";
@@ -21,13 +22,12 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
   const navigate = useNavigate();
   const [assignTask, setAssignTask] = useState(false);
   const [createTask, setCreateTask] = useState(false);
-  const [selectedPriority, setSelectedPriority] = useState("High"); // Set default priority
+  const [selectedPriority, setSelectedPriority] = useState("High");
   const userData = useSelector((state) => state.user.userData);
   const [pageLoading, setPageLoading] = useState(true);
 
-
   const [showTaskModal, setShowTaskModal] = useState(false);
-    const [selectedTask, setSelectedTask] = useState(null);
+  const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {
     setPageLoading(true);
@@ -59,7 +59,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
   };
 
   const handleDateChange = (e) => {
-    // Handle the date change here
+    
   };
 
   const notes = [
@@ -68,35 +68,18 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
 
   const openTaskModal = () => {
     setShowTaskModal(true);
-};
+  };
 
-const closeTaskModal = () => {
+  const closeTaskModal = () => {
     setShowTaskModal(false);
-};
-
+  };
 
   const tableHeading = [
-    {
-      label: "Task Title",
-      value: "Task_title",
-    },
-    {
-      label: "Priority",
-      value: "priority",
-    },
-    {
-      label: "Due",
-      value: "due",
-    },
-    {
-      label: "Status",
-      value: "status",
-    },
-    {
-      label: "Action",
-      value: "ACTION",
-      type: ["VIEW"]
-    },
+    { label: "Task Title", value: "Task_title" },
+    { label: "Priority", value: "priority" },
+    { label: "Due", value: "due" },
+    { label: "Status", value: "status" },
+    { label: "Action", value: "ACTION", type: ["VIEW"] },
   ];
 
   const tableData = [];
@@ -114,37 +97,46 @@ const closeTaskModal = () => {
             <div>
               <div className="mb-3 d-flex justify-content-between align-items-center">
                 <div className="text-cl-primary">Main Task Title / Sub Task Title</div>
-                {createTask ? (
+                {createTask && (
                   <button className="bg-transparent border-0" aria-label="Delete Task">
                     <img src={deleted} width={25} alt="Delete" />
                   </button>
-                ) : null}
+                )}
               </div>
               <h5><b>Create project banner.</b></h5>
               <div className="d-flex align-items-center mb-3">
                 <div className="text-cl-primary mb-1 d-flex align-items-center">
-                  <span className="ms-4">Status</span>
+                  <img src={loading} style={{ width: '20px', height: '20px' }} alt="Loading" className="me-2" />
+                  <span>Status</span>
                 </div>
                 <DropdownButton
                   id="status-dropdown"
                   title="Reviewed"
                   className="ms-2"
-                  variant="success"
+                  variant="success" 
                 >
                   <Dropdown.Item href="#">Reviewed</Dropdown.Item>
                   <Dropdown.Item href="#">Pending</Dropdown.Item>
                   <Dropdown.Item href="#">In Progress</Dropdown.Item>
                 </DropdownButton>
               </div>
-              <div className="d-flex justify-content-between align-items-center mb-3" style={{ width: '250px', height: '38px' }}>
+              <div className="d-flex justify-content-between align-items-center mb-3" style={{ width: '250px' }}>
                 <div className="text-cl-primary mb-1 d-flex align-items-center">
-                  <img src={flag} style={{ width: '25px', height: '25px' }} alt="Flag" /> <span className="ms-2">Date</span>
+                  <img src={flag} style={{ width: '25px', height: '25px' }} alt="Flag" /> 
+                  <span>Start Date</span>
                 </div>
-                <input type="date" className="form-control ms-3" id="date" value={taskData.date} onChange={handleDateChange} />
+                <input type="date" className="form-control ms-3" value={taskData.startDate} onChange={handleDateChange} />
+              </div>
+              <div className=" d-flex justify-content-between align-items-center mb-3" style={{ width: '250px' }}>
+                <div className="text-cl-primary mb-1 d-flex align-items-center">
+                  <img src={flag} style={{ width: '25px', height: '25px' }} alt="Flag" /> 
+                  <span>End Date</span>
+                </div>
+                <input type="date" className="form-control ms-3" value={taskData.endDate} onChange={handleDateChange} />
               </div>
               <div className="d-flex align-items-center mb-3">
                 <div className="text-cl-primary mb-1 d-flex align-items-center">
-                  <img src={star} style={{ width: '20px', height: '20px' }} alt="Star" className="me-2" /> 
+                  <img src={star} style={{ width: '20px', height: '20px' }} alt="Star" className="me-2" />
                   <span>Priority</span>
                 </div>
                 <DropdownButton
@@ -152,7 +144,7 @@ const closeTaskModal = () => {
                   title={selectedPriority}
                   onSelect={handlePrioritySelect}
                   className="ms-2"
-                  variant="danger"
+                  variant="danger" 
                 >
                   <Dropdown.Item eventKey="High">High</Dropdown.Item>
                   <Dropdown.Item eventKey="Medium">Medium</Dropdown.Item>
@@ -160,29 +152,28 @@ const closeTaskModal = () => {
                 </DropdownButton>
               </div>
               <div className="mb-3">
-                <div className="text-cl-primary">
-                  Created at <b>May, 15 2022 14:23 PM</b>
+                <div className="text-cl-primary mb-1 d-flex align-items-center">
+                  <img src={clock} style={{ width: '25px', height: '25px' }} alt="Clock" /> 
+                  <span className="ms-2">Created at <b>May, 15 2022 14:23 PM</b></span>
                 </div>
               </div>
               <div className="mb-3">
                 <div className="text-cl-primary">Description</div>
-                <textarea className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <textarea className="form-control" rows="3"></textarea>
               </div>
               <div className="mt-4">
                 <div className="d-flex justify-content-between align-items-center">
                   <div className="text-cl-primary">Sub Tasks</div>
-                  {createTask ? (
-                    <div className='mt-4 d-flex justify-content-end'>
-                    <div>
-                  <img
-                    src={add}
-                    alt="Add"
-                    style={{ width: '30px', height: '30px', cursor: 'pointer' }}
-                    onClick={openTaskModal} text={"Add Sub Tasks"} // Trigger modal on click
-                  />
-                  </div>
-                  </div>
-                  ) : null}
+                  {createTask && (
+                    <div className='d-flex justify-content-end'>
+                      <img
+                        src={add}
+                        alt="Add"
+                        style={{ width: '30px', height: '30px', cursor: 'pointer' }}
+                        onClick={openTaskModal}
+                      />
+                    </div>
+                  )}
                 </div>
                 <div className="d-flex">
                   <CommonSearch primary={true} />
@@ -207,41 +198,35 @@ const closeTaskModal = () => {
           <div className="col-lg-4">
             <div className="bg-white rounded-3 common-shadow p-3">
               <div className="bg-white common-shadow p-2 rounded-3 mb-2">
-              <h6 className="text-third fw-bold">Notes</h6>
-              <div className="p-2">
-                <CommonSearch primary={false} />
-              </div>
-              {notes.map((note, index) => (
-                <div className="p-2" key={index}>
-                  <CommonNoteContainer date={note.date} author={note.author} content={note.content} />
+                <h6 className="text-third fw-bold">Notes</h6>
+                <div className="p-2">
+                  <CommonSearch primary={false} />
                 </div>
-              ))}
-
-<div className='mt-3'>
-                            <div className='d-flex justify-content-between align-items-center gap-3'>
-                                <div class="form-group w-100">
-                                    <textarea class="form-control" placeholder='Add note here' id="exampleFormControlTextarea1"></textarea>
-                                </div>
-                                <button className='bg-transparent border-0'>
-                                    <img src={send} width={30} />
-                                </button>
-                            </div>
-                        </div>
+                {notes.map((note, index) => (
+                  <div className="p-2" key={index}>
+                    <CommonNoteContainer date={note.date} author={note.author} content={note.content} />
+                  </div>
+                ))}
+                <div className='mt-3'>
+                  <div className='d-flex justify-content-between align-items-center gap-3'>
+                    <div className="form-group w-100">
+                      <textarea className="form-control" placeholder='Add note here'></textarea>
+                    </div>
+                    <button className='bg-transparent border-0'>
+                      <img src={send} width={30} alt="Send" />
+                    </button>
+                  </div>
+                </div>
               </div>
-
-
               <div className="d-flex bg-white common-shadow flex-column p-2 rounded-3">
                 <div className="d-flex justify-content-between align-items-center gap-4 flex-wrap mt-4 p-2">
                   <div className="d-flex justify-content-between w-100 align-items-center">
                     <h6 className="text-third fw-bold">Assignees</h6>
-                    {assignTask ? (
+                    {assignTask && (
                       <img src={add} alt="Add" style={{ width: '30px', height: '30px' }} />
-                    ) : null}
+                    )}
                   </div>
                 </div>
-
-
-
                 <div className="mt-3">
                   <CommonSearch primary={false} />
                 </div>
@@ -254,14 +239,9 @@ const closeTaskModal = () => {
         </div>
       </Modal.Body>
       <Modal.Footer className="d-flex justify-content-end mt-3">
-        <div>
-          <CommonButton onClick={onHide} close={true} text={"Cancel"} />
-        </div>
+        <CommonButton onClick={onHide} close={true} text={"Cancel"} />
       </Modal.Footer>
-
-      <TaskModel show={showTaskModal} onHide={closeTaskModal}
-        
-      />
+      <TaskModel show={showTaskModal} onHide={closeTaskModal} />
     </Modal>
   );
 };
