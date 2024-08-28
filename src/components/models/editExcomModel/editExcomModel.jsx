@@ -9,10 +9,10 @@ import { assignOuExcomRole, getAllRoles } from "../../../redux/actions/role";
 import { getAllUsers } from "../../../redux/actions/user";
 import { useParams } from "react-router-dom";
 
-const EditExcomModel = ({ onHide, show, selectedMember }) => {
-  const [selectedRoleId, setSelectedRoleId] = useState();
+const EditExcomModel = ({ onHide, show, selectedMember, changed }) => {
+  const [selectedRoleId, setSelectedRoleId] = useState(null);
   // const [searchTerm, setSearchTerm] = useState("");
-  const [selectedMemberID, setSelectedMemberID] = useState();
+  const [selectedMemberID, setSelectedMemberID] = useState(null);
   const [roleData, setRoleData] = useState([]);
   const [totalPage, setTotalPage] = useState(1);
   const [loader, setLoader] = useState(false);
@@ -20,6 +20,7 @@ const EditExcomModel = ({ onHide, show, selectedMember }) => {
   const [assignLoading, setAssignLoading] = useState(false);
   const [searchRoleItem, setsearchRoleItem] = useState("");
   const [searchUserItem, setsearchUserItem] = useState("");
+  const [error, setError] = useState("");
 
   // const [refreshTable, setRefreshTable] = useState(0);
 
@@ -37,24 +38,26 @@ const EditExcomModel = ({ onHide, show, selectedMember }) => {
 
   const handleAssignRole = () => {
     setAssignLoading(true);
+    setError("");
     if (selectedRoleId && selectedMemberID && ouId) {
       assignOuExcomRole(selectedRoleId, selectedMemberID, ouId, (response) => {
         if (response.status === 200) {
           console.log("Role assigned successfully:", response);
+          changed();
           onHide();
           setAssignLoading(false);
         } else {
-          console.error("Failed to assign role:", response);
+          console.log("Failed to assign role:", response?.data?.error);
+          setError(response?.data?.message);
           setAssignLoading(false);
         }
       });
     } else {
       console.error("Please select both a role and a member.");
+      setError("Select both a role and a member");
       setAssignLoading(false);
     }
   };
-
-
 
   useEffect(() => {
     setLoader(true);
@@ -158,6 +161,9 @@ const EditExcomModel = ({ onHide, show, selectedMember }) => {
             </div>
 
             <div className="mt-3">
+            <label htmlFor="memberSelect" className="form-label text-dark">
+                Select Member
+              </label>
               <CommonSearch onChange={handleSearchChangeofUsers} />
               <div
                 className="list-group mt-2"
@@ -200,11 +206,16 @@ const EditExcomModel = ({ onHide, show, selectedMember }) => {
                 ))}
               </div>
             </div>
+            <div className="text-center text-danger mt-3">{error}</div>
           </div>
         </Modal.Body>
         <Modal.Footer className="d-flex justify-content-end mt-3">
           <div>
-            <CommonButton onClick={handleAssignRole} load={assignLoading} text={"Done"} />
+            <CommonButton
+              onClick={handleAssignRole}
+              load={assignLoading}
+              text={"Done"}
+            />
           </div>
         </Modal.Footer>
       </Modal>

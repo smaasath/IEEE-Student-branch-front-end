@@ -42,6 +42,8 @@ const UserRolePage = () => {
     { label: "ID", value: "id" },
     { label: "Role", value: "userRole" },
     { label: "Type", value: "type" },
+    { label: "Main Priority", value: "priorityMain" },
+    { label: "Sub Priority", value: "prioritySub" },
     { label: "", value: "ACTION", type: ["EDIT"] },
   ];
 
@@ -68,10 +70,12 @@ const UserRolePage = () => {
     getAllRoles(currentPage - 1, searchItem, status, (res) => {
       if (res.status == 200) {
 
-        let data = res?.data?.data?.content?.map(({ roleID, userRole, type, policies }) => ({
+        let data = res?.data?.data?.content?.map(({ roleID, userRole, type, priorityMain, prioritySub ,policies }) => ({
           id: roleID,
           userRole,
           type,
+          priorityMain: priorityMain || "N/A",
+          prioritySub : prioritySub || "N/A",
           policies
         }));
         console.warn(data)
