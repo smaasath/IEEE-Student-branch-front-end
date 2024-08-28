@@ -16,7 +16,7 @@ const CommonNoteContainer = () => {
 
                     </div>
                     <div className=''>
-                        <p className='m-0 text-secondary'>Apr 2, 2023</p>
+                        <p className='m-0 text-secondary'>Aug 2, 2024</p>
                     </div>
                 </div>
                 <button className='bg-transparent border-0'>
@@ -24,7 +24,7 @@ const CommonNoteContainer = () => {
                 </button>
             </div>
             <div className='mt-2'>
-                <p style={{ color: "#4F4F4F" }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut id dui mi. Fusce varius bibendum ante, non lacinia. Fall usasc ce variu slorem ipsum dolor sit amet</p>
+                <p style={{ color: "#4F4F4F" }}>Provide a way for people to get in touch, such as an email address or social media handle.</p>
             </div>
             <div className=' d-flex justify-content-end align-items-center gap-2'>
                 <div>

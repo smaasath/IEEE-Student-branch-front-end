@@ -28,8 +28,8 @@ const UserRolePage = () => {
   useEffect(() => {
     setPageLoading(true)
     if (userData) {
-      const isOtherAvailable = userData?.role?.some(role =>
-        role.policies.some(policy => policy.policyCode === "OTHER")
+      const isOtherAvailable = userData?.some(userRoleDetail =>
+        userRoleDetail.role?.policies.some(policy => policy.policyCode === "OTHER")
       );
       if (!isOtherAvailable) {
         navigate('/dashboard')
@@ -123,5 +123,6 @@ const UserRolePage = () => {
     </>
   );
 };
+
 
 export default UserRolePage;

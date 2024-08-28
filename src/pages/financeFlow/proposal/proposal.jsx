@@ -18,9 +18,9 @@ const Proposal = () => {
     useEffect(() => {
         setPageLoading(true)
         if (userData) {
-            const isFinanceAvailable = userData?.role?.some(role =>
-                role.policies.some(policy => policy.policyCode === "FINANCE")
-            );
+            const isFinanceAvailable = userData?.some(userRoleDetail =>
+                userRoleDetail.role?.policies.some(policy => policy.policyCode === "FINANCE")
+              );
             if (!isFinanceAvailable) {
                 navigate('/dashboard')
             } else {
@@ -75,16 +75,7 @@ const Proposal = () => {
             title: "Fund for Shopping",
             amount: "2500.00",
             status: "RECIEVED"
-        },
-        {
-            id: "P001",
-            date: "28 Jan, 12.30 AM",
-            from: "CS chapter",
-            title: "Fund for Shopping",
-            amount: "2500.00",
-            status: "RECIEVED"
         }
-
     ]
     return (
         <>

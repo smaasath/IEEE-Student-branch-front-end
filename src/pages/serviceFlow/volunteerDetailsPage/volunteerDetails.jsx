@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import profile from '../../../assets/images/profile.png';
 import CommonTable from '../../../components/common/commonTable/commonTable';
@@ -38,12 +39,12 @@ const BestVolunteerCard = ({ photo, name, completedTask, entrolledProjects }) =>
 
       </div>
     </div>
-
   );
-
 }
 
 const VolunteerDetailsPage = () => {
+
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const [volunteerDetailModalShow, setVolunteerDetailModalShow] = useState(false);
@@ -54,8 +55,8 @@ const VolunteerDetailsPage = () => {
   useEffect(() => {
     setPageLoading(true)
     if (userData) {
-      const isFinanceAvailable = userData?.role?.some(role =>
-        role.policies.some(policy => policy.policyCode === "SERVICE_VOLUNTEER")
+      const isFinanceAvailable = userData?.some(userRoleDetail =>
+        userRoleDetail.role?.policies.some(policy => policy.policyCode === "SERVICE_VOLUNTEER")
       );
       if (!isFinanceAvailable) {
         navigate('/dashboard')
@@ -198,9 +199,14 @@ const VolunteerDetailsPage = () => {
           </div>
         </div>
       )}
-      <VolunteerViewModel show={volunteerDetailModalShow} onHide={handleCloseVolunteerDetailModal} volunteerData={selectedVolunteer} />
+      <VolunteerViewModel
+        show={volunteerDetailModalShow}
+        onHide={handleCloseVolunteerDetailModal}
+        volunteerData={selectedVolunteer}
+      />
     </>
   )
+
 }
 
-export default VolunteerDetailsPage
+export default VolunteerDetailsPage;

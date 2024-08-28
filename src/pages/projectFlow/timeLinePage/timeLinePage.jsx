@@ -9,37 +9,17 @@ import CommonButton from '../../../components/common/commonButton/commonButton';
 const TimeLinePage = () => {
     const [tasks] = useState([
         {
-            start: new Date(2020, 1, 1),
-            end: new Date(2020, 3, 2),
-            name: 'Idea',
+            start: new Date(2024, 6, 1),
+            end: new Date(2024, 9, 8),
+            name: 'IEEE OpenDay 2024',
             id: '1',
             type: 'task',
         },
+        
         {
-            start: new Date(2020, 1, 1),
-            end: new Date(2020, 3, 2),
-            name: 'Idea',
-            id: '2',
-            type: 'task',
-        },
-        {
-            start: new Date(2021, 1, 1),
-            end: new Date(2022, 3, 2),
-            name: 'Idea',
-            id: '3',
-            type: 'task',
-        },
-        {
-            start: new Date(2022, 1, 1),
-            end: new Date(2023, 3, 2),
-            name: 'Idea',
-            id: '4',
-            progress: 100,
-        },
-        {
-            start: new Date(2023, 1, 1),
-            end: new Date(2024, 3, 2),
-            name: 'Idea',
+            start: new Date(2024, 8, 13),
+            end: new Date(2024, 12, 8),
+            name: 'UvaXtreme V1.0',
             id: '5',
             type: 'task',
         },
@@ -109,12 +89,15 @@ const TimeLinePage = () => {
                     <select className="form-select w-100" aria-label="Large select example">
                         <option selected>Select Year</option>
                         <option value="1">2024</option>
+                        <option value="1">2023</option>
+                        <option value="1">2022</option>
                     </select>
                 </div>
                 <div className="">
                     <select className="form-select w-100" aria-label="Large select example">
                         <option selected>Select Entity</option>
-                        <option value="1">CS Chapter</option>
+                        <option value="1">SB</option>
+                        <option value="1">CS</option>
                     </select>
                 </div>
                 <div>
@@ -157,7 +140,7 @@ const TimeLinePage = () => {
             {/* model */}
             <Modal show={modalIsOpen} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Task Details</Modal.Title>
+                    <Modal.Title>Project Details</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {selectedTask && (

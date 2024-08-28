@@ -26,9 +26,9 @@ const FinanceLanding = () => {
     useEffect(() => {
         setPageLoading(true)
         if (userData) {
-            const isFinanceAvailable = userData?.role?.some(role =>
-                role.policies.some(policy => policy.policyCode === "FINANCE")
-            );
+            const isFinanceAvailable = userData?.some(userRoleDetail =>
+                userRoleDetail.role?.policies.some(policy => policy.policyCode === "FINANCE")
+              );
             if (!isFinanceAvailable) {
                 navigate('/dashboard')
             } else {
@@ -90,7 +90,7 @@ const FinanceLanding = () => {
                     <div className='d-flex flex-wrap mt-3 gap-4'>
                         <div className='pb-3 d-flex flex-column align-items-center gap-3 overflow-scroll hide-scrollbar' style={{ maxHeight: 410 }}>
                             <BankAccountCard ViewAction={viewAccount} editAction={editAccount} />
-                            <BankAccountCard />
+
 
 
                         </div>
@@ -102,7 +102,7 @@ const FinanceLanding = () => {
                     <div className='d-flex justify-content-center justify-content-lg-between align-items-center flex-wrap gap-3 mt-5'>
                         <CommonBalanceCard wallet={true} text={"Wallet Balance"} amount={"5,680.00"} />
                         <CommonBalanceCard text={"Income"} amount={"5,680.00"} />
-                        <CommonBalanceCard text={"Expense"} amount={"5,680.00"} />
+                        <CommonBalanceCard text={"Expense"} amount={"2,000.00"} />
                     </div>
 
                     <div className='mt-5 d-flex justify-content-between align-items-center gap-4 flex-wrap'>

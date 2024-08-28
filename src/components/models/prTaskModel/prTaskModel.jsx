@@ -54,6 +54,7 @@ const PrTaskModel = ({ onHide, show, prTaskData }) => {
                       </label>
                       <input
                         type="text"
+                        value={"Comming Soon"}
                         className="form-control"
                         id="exampleFormControlInput1"
                         placeholder="Flyer Title"
@@ -73,6 +74,7 @@ const PrTaskModel = ({ onHide, show, prTaskData }) => {
                       </label>
                       <input
                         type="date"
+                        value={"2024-07-23"}
                         className="form-control"
                         id="exampleFormControlInput1"
                       />
@@ -91,6 +93,7 @@ const PrTaskModel = ({ onHide, show, prTaskData }) => {
                       </label>
                       <input
                         type="time"
+                        value={"20:00"}
                         className="form-control"
                         id="exampleFormControlInput1"
                       />
@@ -111,8 +114,8 @@ const PrTaskModel = ({ onHide, show, prTaskData }) => {
                         className="form-select"
                         aria-label="exampleFormControlInput1"
                       >
-                        <option selected>Ready</option>
-                        <option value="PUBLISHED">Published</option>
+                        <option value="PUBLISHED" selected>Published</option>
+                        <option value="PUBLISHED">Ready</option>
                       </select>
                     </div>
                   </div>
@@ -123,6 +126,7 @@ const PrTaskModel = ({ onHide, show, prTaskData }) => {
                       </label>
                       <textarea
                         class="form-control"
+                        value={"COMING SOON"}
                         id="exampleFormControlTextarea1"
                         rows="6"
                         placeholder="Description about flyer"
@@ -150,8 +154,8 @@ const PrTaskModel = ({ onHide, show, prTaskData }) => {
                         className="form-select"
                         aria-label="exampleFormControlInput1"
                       >
-                        <option selected>Assign Designer</option>
-                        <option value="1">Kavidra Weerasinghe</option>
+                        <option >Assign Designer</option>
+                        <option value="1" selected>Kavidra Weerasinghe</option>
                         <option value="2">Ishara Suvini</option>
                       </select>
                     </div>
@@ -169,6 +173,7 @@ const PrTaskModel = ({ onHide, show, prTaskData }) => {
                       </label>
                       <input
                         type="text"
+                        value={"https://drive.google.com/file/d/1OIGXM3qcCJztjtDO9j67qaCU38nsu_Pc/view?usp=drive_link"}
                         className="form-control"
                         id="exampleFormControlInput1"
                         placeholder="Enter URL"
@@ -198,9 +203,10 @@ const PrTaskModel = ({ onHide, show, prTaskData }) => {
                         className="form-select"
                         aria-label="exampleFormControlInput1"
                       >
-                        <option selected>Todo</option>
-                        <option value="1">Complete</option>
-                        <option value="2">Published</option>
+                        <option value="TODO">Todo</option>
+                        <option value="ONGOING">Ongoing</option>
+                        <option value="COMPLETE" selected>Complete</option>
+                        
                       </select>
                     </div>
                     <div className="mt-3 d-flex align-items-center">
@@ -250,12 +256,12 @@ const PrTaskModel = ({ onHide, show, prTaskData }) => {
                         className="form-select"
                         aria-label="exampleFormControlInput1"
                       >
-                        <option selected>Assign Writer</option>
+                        <option >Assign Writer</option>
                         <option value="1">Kavidra Weerasinghe</option>
-                        <option value="2">Ishara Suvini</option>
+                        <option value="2" selected>Ishara Suvini</option>
                       </select>
                     </div>
-                    <div className="mt-3 d-flex align-items-center">
+                    {/* <div className="mt-3 d-flex align-items-center">
                       <img
                         src={UrlIcon}
                         className="mt-0 mb-auto me-2"
@@ -280,7 +286,7 @@ const PrTaskModel = ({ onHide, show, prTaskData }) => {
                           alt="URL Icon"
                         />
                       </button>
-                    </div>
+                    </div> */}
 
                     <div className="mt-3 d-flex align-items-center">
                       <img
@@ -298,9 +304,9 @@ const PrTaskModel = ({ onHide, show, prTaskData }) => {
                         className="form-select"
                         aria-label="exampleFormControlInput1"
                       >
-                        <option selected>Todo</option>
-                        <option value="1">Complete</option>
-                        <option value="2">Published</option>
+                        <option value="TODO">Todo</option>
+                        <option value="ONGOING">Ongoing</option>
+                        <option value="COMPLETE" selected>Complete</option>
                       </select>
                     </div>
                     <div className="mt-3 d-flex align-items-center">
@@ -320,8 +326,11 @@ const PrTaskModel = ({ onHide, show, prTaskData }) => {
                         className="form-check-input"
                         id="flexCheckDefault"
                         value={""}
+                        checked
                       />
-                      <div className="ms-3 fw-bold"></div>
+                      <div className="ms-3 fw-bold">
+                        By Mohomed Aasath
+                      </div>
                     </div>
                   </div>
                   <div className="d-flex w-75 justify-content-center mt-3">
@@ -329,6 +338,7 @@ const PrTaskModel = ({ onHide, show, prTaskData }) => {
                       <label for="exampleFormControlTextarea1">Caption</label>
                       <textarea
                         class="form-control"
+                        value={"Attention all tech enthusiasts! Get ready to unleash your tech potential and dive into the world of innovation!💡 Join us at IEEE Open Day 2024, hosted by the IEEE Uva Wellassa University Student Branch.Discover the incredible opportunities and pathways provided by the world's largest technical professional organization, committed to advancing technological innovation and excellence for the benefit of humanity. 🌐🙌🏼 COMING SOON 🌟 Stay tuned for more details!"}
                         id="exampleFormControlTextarea1"
                         rows="6"
                         placeholder="Insert Caption Here"
@@ -356,8 +366,7 @@ const PrTaskModel = ({ onHide, show, prTaskData }) => {
                     style={{ maxHeight: 500 }}
                   >
                     <CommonNoteContainer />
-                    <CommonNoteContainer />
-                    <CommonNoteContainer />
+                  
                   </div>
                   <div className="mt-3">
                     <div className="d-flex justify-content-between align-items-center gap-3">
