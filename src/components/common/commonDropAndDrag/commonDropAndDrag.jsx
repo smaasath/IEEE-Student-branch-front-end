@@ -13,29 +13,44 @@ const CommonDropAndDrag = ({ project, excom }) => {
     return acc;
   }, {});
 
-  const initialData = {
-    tasks: tasks,
-    columns: {
-      'TODO': {
-        id: 'TODO',
-        title: 'To do',
-        taskIds: backendTasks.map(task => task.id),
-      },
-      'PROGRESS': {
-        id: 'PROGRESS',
-        title: 'On Going',
-        taskIds: [],
-      },
-      'COMPLETE': {
-        id: 'COMPLETE',
-        title: 'Completed',
-        taskIds: [],
-      },
-    },
-    columnOrder: ['TODO', 'PROGRESS', 'COMPLETE'],
-  };
 
-  const [data, setData] = useState(initialData);
+
+  const [data, setData] = useState([]);
+  const [task, setTask] = useState([]);
+
+
+  useEffect(() => {
+    let initialData = {
+      tasks: tasks,
+      columns: {
+        'TODO': {
+          id: 'TODO',
+          title: 'To do',
+          taskIds: filterTaskIdByStatus('TODO') || [],
+        },
+        'PROGRESS': {
+          id: 'PROGRESS',
+          title: 'On Going',
+          taskIds: filterTaskIdByStatus('PROGRESS') || [],
+        },
+        'COMPLETE': {
+          id: 'COMPLETE',
+          title: 'Completed',
+          taskIds: filterTaskIdByStatus('COMPLETE') || [],
+        },
+      },
+      columnOrder: ['TODO', 'PROGRESS', 'COMPLETE'],
+    };
+ 
+    setData(initialData);
+  }, []); 
+  
+
+
+  function filterTaskIdByStatus(satus) {
+    return ['task-1']
+    // need to retutn id array
+  }
 
   const onDragEnd = result => {
     const { source, destination, draggableId } = result;
@@ -97,9 +112,9 @@ const CommonDropAndDrag = ({ project, excom }) => {
   return (
     <div className='d-flex justify-content-between'>
       <DragDropContext onDragEnd={onDragEnd}>
-        {data.columnOrder.map((columnId) => {
+        {data?.columnOrder?.map((columnId) => {
           const column = data.columns[columnId];
-          const tasks = column.taskIds.map(taskId => data.tasks[taskId]);
+          const tasks = column?.taskIds?.map(taskId => data.tasks[taskId]);
 
           return (
             <Droppable key={column.id} droppableId={column.id}>
@@ -119,7 +134,7 @@ const CommonDropAndDrag = ({ project, excom }) => {
                   </div>
                   <div className='d-flex mt-4 flex-column justify-content-center gap-4'>
                     {tasks.map((task, index) => (
-                      <CommonTaskCard project={project} excom={excom}  task={task} key={index} />
+                      <CommonTaskCard project={project} excom={excom} task={task} key={index} />
                     ))}
                   </div>
 
