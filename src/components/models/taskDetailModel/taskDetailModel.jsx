@@ -10,7 +10,7 @@ import star from "../../../assets/images/Star.png";
 import deleted from "../../../assets/icons/delete.png";
 import loading from "../../../assets/images/Loading.png";
 import clock from "../../../assets/images/Clock.png";
-import TaskModel from "../createTaskModel/createTaskModel";
+import CreateTaskModel from "../createTaskModel/createTaskModel";
 import CommonTable from "../../common/commonTable/commonTable";
 import CommonNoteContainer from "../../common/commonNoteContainer/commonNoteContainer";
 import { useNavigate } from "react-router-dom";
@@ -312,7 +312,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
       <Modal.Footer className="d-flex justify-content-end mt-3">
         <CommonButton onClick={onHide} close={true} text={"Cancel"} />
       </Modal.Footer>
-      <TaskModel show={showTaskModal} onHide={closeTaskModal} />
+      <CreateTaskModel show={showTaskModal} onHide={closeTaskModal} />
     </Modal>
   );
 };

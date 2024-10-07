@@ -8,7 +8,7 @@ import CommonSearch from "../../../components/common/commonSearch/commonSearch";
 import CommonDropAndDrag from "../../../components/common/commonDropAndDrag/commonDropAndDrag";
 import Profile from "../../../assets/images/profile.png";
 import BalloonImage from "../../../assets/images/Party Balloons.png";
-import TaskModel from "../../../components/models/createTaskModel/createTaskModel";
+import CreateTaskModel from "../../../components/models/createTaskModel/createTaskModel";
 import TaskDetailModel from "../../../components/models/taskDetailModel/taskDetailModel";
 import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
@@ -181,7 +181,7 @@ function ExecutiveCommitteePage() {
               </div>
             </div>
 
-            <TaskModel show={showTaskModal} onHide={closeTaskModal} />
+            <CreateTaskModel show={showTaskModal} onHide={closeTaskModal} type={'EXCOM'} ouID={id}/>
           </div>
         </>
       )}
