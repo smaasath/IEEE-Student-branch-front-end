@@ -72,6 +72,8 @@ const ExcomLandingPage = () => {
                         position: user?.role?.userRole,
                         academicYear: user?.user?.academicYear?.academicYear || "N/A",
                         termYear: "",
+                        status: user?.user?.status,
+                        createdDate: user?.user?.createdDate,
                     }));
                     console.log("Mapped Data: ", data);
                     SetExcomData(data);
