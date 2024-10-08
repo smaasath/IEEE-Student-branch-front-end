@@ -57,19 +57,23 @@ export const updateOU = (data, callback) => {
 };
 
 
-export const getAllExcomMember = (page, search, ouid, callback) => {
-    const endpoint = `${import.meta.env.VITE_API_HOST}ou/getExcom?search=${search}&ouid=${ouid}&page=${page}`;
-  
-    try {
-      http
-        .get(endpoint)
-        .then((response) => {
-          callback(response);
-        })
-        .catch((error) => {
-          callback(error.response);
-        });
-    } catch (error) {
-      callback(error.response);
-    }
-  };
+export const getAllExcomMember = (page, search, ouid, acedemicId, callback) => {
+        const endpoint = `${import.meta.env.VITE_API_HOST}ou/getExcom?search=${search}&ouid=${ouid}&acedemicId=${acedemicId}&page=${page}`;
+        console.log(`Calling API: ${endpoint}`);
+        try {
+            http
+                .get(endpoint)
+                .then((response) => {
+                    console.log("API Response: ", response); // Check what is returned
+                    callback(response);
+                })
+                .catch((error) => {
+                    console.error("API Error: ", error); // Log errors
+                    callback(error.response);
+                });
+        } catch (error) {
+            console.error("Catch Error: ", error); // Log catch block errors
+            callback(error.response);
+        }
+    };
+    

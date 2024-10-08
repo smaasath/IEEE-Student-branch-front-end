@@ -210,6 +210,7 @@ const CommitteeMemberCard = ({
 const ExcomDetailPage = () => {
   const [editExcomModelShow, setEditExcomModelShow] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
+  const [termFilter, setTermFilter] = useState('');
   const navigate = useNavigate();
   const [assignPolicy, setAssignPolicy] = useState(false);
   const userData = useSelector((state) => state.user.userData);
@@ -251,7 +252,7 @@ const ExcomDetailPage = () => {
 
   useEffect(() => {
     setExcomCardLoader(true);
-    getAllExcomMember(currentPage - 1, "", ouId, (res) => {
+    getAllExcomMember(currentPage - 1, "", ouId,termFilter, (res) => {
       if (res.status == 200) {
         let data = res?.data?.data?.content?.map((user) => ({
           id: user?.userRoleDetailsId,
@@ -264,7 +265,7 @@ const ExcomDetailPage = () => {
           position: user?.role?.userRole,
           priority: user?.role?.priorityMain,
           academicYear: user?.user?.academicYear?.academicYear || "N/A",
-          termYear: "2024",
+          termYear: "",
         }));
         console.warn(data);
         SetExcomData(data);
