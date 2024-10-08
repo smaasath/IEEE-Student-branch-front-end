@@ -18,6 +18,8 @@ const CommitteeMemberCard = ({
   phone,
   email,
   academicYear,
+  fbURL,
+  linkedInURL,
   loading,
 }) => {
   const [editExcomModelShow, setEditExcomModelShow] = useState(false);
@@ -188,16 +190,24 @@ const CommitteeMemberCard = ({
                 {academicYear}
               </p>
               <div className="d-flex gap-2">
-                <img
-                  src={Facebook}
-                  alt="Facebook"
-                  style={{ width: "25px", height: "25px" }}
-                />
-                <img
-                  src={Linkedin}
-                  alt="Linkedin"
-                  style={{ width: "25px", height: "25px" }}
-                />
+              {fbURL && (
+                  <a href={fbURL}> 
+                    <img
+                      src={Facebook}
+                      alt="Facebook"
+                      style={{ width: "25px", height: "25px" }}
+                    />
+                  </a>
+                )}
+                {linkedInURL && (
+                  <a href={linkedInURL}> 
+                    <img
+                      src={Linkedin}
+                      alt="LinkedIn"
+                      style={{ width: "25px", height: "25px" }}
+                    />
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -322,6 +332,7 @@ const ExcomDetailPage = () => {
                   excomData
                     .filter((member) => member.priority === raw + 1)
                     .map((member, index) => (
+                      
                       <div
                         className="col-12 col-sm-12 col-lg-4 col-md-4 mb-4"
                         key={index}
@@ -338,6 +349,8 @@ const ExcomDetailPage = () => {
                           phone={member.phone}
                           email={member.email}
                           academicYear={member.academicYear}
+                          fbURL={member.fbURL}
+                          linkedInURL={member.linkedInURL}
                         />
                       </div>
                     ))}
