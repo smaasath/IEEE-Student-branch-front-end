@@ -57,8 +57,8 @@ export const updateOU = (data, callback) => {
 };
 
 
-export const getAllExcomMember = (page, search, ouid, acedemicId, callback) => {
-        const endpoint = `${import.meta.env.VITE_API_HOST}ou/getExcom?search=${search}&ouid=${ouid}&acedemicId=${acedemicId}&page=${page}`;
+export const getAllExcomMember = (page, search, ouid, termyearId, callback) => {
+        const endpoint = `${import.meta.env.VITE_API_HOST}ou/getExcom?search=${search}&ouid=${ouid}&termyearId=${termyearId}&page=${page}`;
         console.log(`Calling API: ${endpoint}`);
         try {
             http

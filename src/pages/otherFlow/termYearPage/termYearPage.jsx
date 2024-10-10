@@ -117,6 +117,8 @@ useEffect(() => {
         }
       });
     }, [searchItem, currentPage, refreshTable]);
+
+    
     
 
   return (

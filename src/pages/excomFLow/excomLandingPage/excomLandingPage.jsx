@@ -6,6 +6,7 @@ import MemberDetailsModal from "../../../components/models/viewMemberDetailsMode
 import OuCard from "../../../components/common/oucard/ouCard";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { getAllTermYear } from '../../../redux/actions/termYear';
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
 import { getAllExcomMember, getAllOU } from "../../../redux/actions/ou";
 
@@ -15,7 +16,7 @@ const ExcomLandingPage = () => {
   const [entityFilter, setEntityFilter] = useState('');
   const [termFilter, setTermFilter] = useState('');
 
-  const [availableTermYears, setAvailableTermYears] = useState([2024,2023]);
+  const [availableTermYears, setAvailableTermYears] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [memberDetailModalShow, setMemberDetailModalShow] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
@@ -90,6 +91,26 @@ const ExcomLandingPage = () => {
             }
         });
     }, [searchItem, currentPage, refreshTable, entityFilter]);
+
+
+    
+    useEffect(() => {
+     console.log("work0")
+     setLoader(true); 
+      getAllTermYear(currentPage - 1, "", searchItem, (res) => {
+        console.log("work1", res);
+        if (res.status == 201) {
+          let termYears = res?.data?.data?.map(({ termyear }) => termyear); // Extract only termyear
+    
+          // Log the term years
+          console.log("work2", termYears);
+    
+          
+          setAvailableTermYears(termYears);  // This will store only the term years into availableTermYears state
+          setLoader(false);
+        }
+      });
+    }, [searchItem, currentPage, refreshTable]);
 
    
   useEffect(() => {
@@ -229,7 +250,7 @@ const ExcomLandingPage = () => {
                     <option value={currentYear}>Select Term</option>
                     {availableTermYears.map((year) => (
                       <option key={year} value={year}>
-                        Term {year}
+                         {year}
                       </option>
                     ))}
                   </select>
