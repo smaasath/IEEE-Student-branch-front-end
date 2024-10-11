@@ -1,114 +1,121 @@
-import React, { useEffect, useState } from 'react'
-import CommonStatusCountCard from '../../../components/common/commonStatusCountCard/commonStatusCountCard'
-import timeLinefrom from '../../../assets/images/timeLine.png'
-import CommonSearch from '../../../components/common/commonSearch/commonSearch'
-import CommonTable from '../../../components/common/commonTable/commonTable'
-import CommonPagination from '../../../components/common/commonPagination/commonPagination'
-import CommonButton from '../../../components/common/commonButton/commonButton'
-import { useNavigate } from 'react-router-dom'
-import ProjectModel from '../../../components/models/projectModel/projectModel'
-import { useSelector } from 'react-redux'
-import CommonLoader from '../../../components/common/commonLoader/commonLoader'
+import React, { useEffect, useState } from "react";
+import CommonStatusCountCard from "../../../components/common/commonStatusCountCard/commonStatusCountCard";
+import timeLinefrom from "../../../assets/images/timeLine.png";
+import CommonSearch from "../../../components/common/commonSearch/commonSearch";
+import CommonTable from "../../../components/common/commonTable/commonTable";
+import CommonPagination from "../../../components/common/commonPagination/commonPagination";
+import CommonButton from "../../../components/common/commonButton/commonButton";
+import { useNavigate } from "react-router-dom";
+import ProjectModel from "../../../components/models/projectModel/projectModel";
+import { useSelector } from "react-redux";
+import CommonLoader from "../../../components/common/commonLoader/commonLoader";
 
 const ProjectLandingPage = () => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [projectModelShow, setProjectModelShow] = useState(false);
-    const [disable, setDisable] = useState(false);
-    const [editable, setEditable] = useState(false);
-    const [id, setId] = useState(null);
-    const userData = useSelector((state) => state.user.userData);
-    const [projectPolicy, setProjectPolicy] = useState(false);
-    const [pageLoading, setPageLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [projectModelShow, setProjectModelShow] = useState(false);
+  const [disable, setDisable] = useState(false);
+  const [editable, setEditable] = useState(false);
+  const [id, setId] = useState(null);
+  const userData = useSelector((state) => state.user.userData);
+  const [projectPolicy, setProjectPolicy] = useState(false);
+  const [isProjectTimelineAvailable, setIsProjectTimelineAvailable] =
+    useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
 
+  useEffect(() => {
+    setPageLoading(true);
+    if (userData) {
+      const isProjectAvailable = userData?.some((userRoleDetail) =>
+        userRoleDetail.role?.policies.some(
+          (policy) => policy.policyCode === "PROJECT"
+        )
+      );
+      const isProjectTimelineAvailable = userData?.some((userRoleDetail) =>
+        userRoleDetail.role?.policies.some(
+          (policy) => policy.policyCode === "PROJECT_TIME"
+        )
+      );
 
-    useEffect(() => {
-        setPageLoading(true);
-        if (userData) {
-            const isProjectAvailable = userData?.some((userRoleDetail) =>
-                userRoleDetail.role?.policies.some(
-                    (policy) => policy.policyCode === "PROJECT"
-                )
-            );
+      setIsProjectTimelineAvailable(isProjectTimelineAvailable);
 
-            setProjectPolicy(isProjectAvailable);
-            setPageLoading(false)
-        }
-    }, [userData]);
-
-
-    const handleCloseProjectModel = () => {
-        setProjectModelShow(false);
-        setDisable(false)
-        setEditable(false)
-        setId(null)
+      setProjectPolicy(isProjectAvailable);
+      setPageLoading(false);
     }
+  }, [userData]);
 
-    function editProject(id) {
-        setDisable(false)
-        setId(id)
-        setEditable(true)
-        handleShowProjectModel()
-    }
+  const handleCloseProjectModel = () => {
+    setProjectModelShow(false);
+    setDisable(false);
+    setEditable(false);
+    setId(null);
+  };
 
-    function navigateToProject(id) {
-        const encodedId = encodeURIComponent(id);
-        navigate(encodedId);
-    }
-    const handleShowProjectModel = () => { setProjectModelShow(true); }
+  function editProject(id) {
+    setDisable(false);
+    setId(id);
+    setEditable(true);
+    handleShowProjectModel();
+  }
 
+  function navigateToProject(id) {
+    const encodedId = encodeURIComponent(id);
+    navigate(encodedId);
+  }
+  const handleShowProjectModel = () => {
+    setProjectModelShow(true);
+  };
 
-    const tableHeading = [
-        {
-            label: "Project Name",
-            value: "project_name"
-        },
-        {
-            label: "Chapter",
-            value: "ou_name"
-        },
-        {
-            label: "Start Date",
-            value: "start_date"
-        },
-        {
-            label: "End Date",
-            value: "end_date"
-        },
-        {
-            label: "Status",
-            value: "status"
-        },
-        {
-            label: "",
-            value: "ACTION",
-            type: ["EDIT", "VIEW",]
-        },
-    ]
+  const tableHeading = [
+    {
+      label: "Project Name",
+      value: "project_name",
+    },
+    {
+      label: "Chapter",
+      value: "ou_name",
+    },
+    {
+      label: "Start Date",
+      value: "start_date",
+    },
+    {
+      label: "End Date",
+      value: "end_date",
+    },
+    {
+      label: "Status",
+      value: "status",
+    },
+    {
+      label: "",
+      value: "ACTION",
+      type: [projectPolicy ? "EDIT" : "", "VIEW"],
+    },
+  ];
 
-    const tableData = [
-        {
-            id: "12548796",
-            project_name: "IEEE OpenDay 2024",
-            ou_name: "SB",
-            start_date: "2024/06/01",
-            end_date: "2024/09/08",
-            status: "ONGOING",
-        },
-        {
-            id: "12548796",
-            project_name: "UvaXtreme V1.0",
-            ou_name: "CS",
-            start_date: "2024/08/13",
-            end_date: "2024/12/08",
-            status: "TODO",
-        },
-    ]
+  const tableData = [
+    {
+      id: "12548796",
+      project_name: "IEEE OpenDay 2024",
+      ou_name: "SB",
+      start_date: "2024/06/01",
+      end_date: "2024/09/08",
+      status: "ONGOING",
+    },
+    {
+      id: "12548796",
+      project_name: "UvaXtreme V1.0",
+      ou_name: "CS",
+      start_date: "2024/08/13",
+      end_date: "2024/12/08",
+      status: "TODO",
+    },
+  ];
 
-    const navigate = useNavigate()
-    function navigateToTimeLine() {
-        navigate('time-line')
-    }
-
+  const navigate = useNavigate();
+  function navigateToTimeLine() {
+    navigate("time-line");
+  }
 
     return (
         <>
@@ -159,39 +166,68 @@ const ProjectLandingPage = () => {
                             </button>
                         </div>
 
-                        {
-                            projectPolicy ? (
-                                <div className='mt-4 d-flex justify-content-end'><div><CommonButton onClick={handleShowProjectModel} text={"Add Project"} /></div></div>
-                            ) : null
-                        }
+            {projectPolicy ? (
+              <div className="mt-4 d-flex justify-content-end">
+                <div>
+                  <CommonButton
+                    onClick={handleShowProjectModel}
+                    text={"Add Project"}
+                  />
+                </div>
+              </div>
+            ) : null}
 
-                        <div className='mt-4 d-flex flex-column gap-3 justify-content-center bg-white rounded-2 common-shadow p-3'>
-                            <div className='mt-2 d-flex flex-wrap justify-content-between align-items-center'>
-                                <CommonSearch primary={true} />
-                                <div className="">
-                                    <select className="form-select w-100" aria-label="Large select example">
-                                        <option selected>Select Status</option>
-                                        <option value="TODO">To Do</option>
-                                        <option value="ONGOING">Ongoing</option>
-                                        <option value="COMPLETE">Complete</option>
-                                    </select>
-                                </div>
-                            </div>
+            <div className="mt-4 d-flex flex-column gap-3 justify-content-center bg-white rounded-2 common-shadow p-3">
+              <div className="mt-2 d-flex flex-wrap justify-content-between align-items-center">
+                <CommonSearch primary={true} />
+                <div className="">
+                  <select
+                    className="form-select w-100"
+                    aria-label="Large select example"
+                  >
+                    <option selected>Select Status</option>
+                    <option value="TODO">To Do</option>
+                    <option value="ONGOING">Ongoing</option>
+                    <option value="COMPLETE">Complete</option>
+                  </select>
+                </div>
+              </div>
 
-                            <div className='mt-4 table-container'>
-                                <CommonTable tableHeading={tableHeading} primary={true} tableData={tableData} loading={false} viewAction={(id) => { navigateToProject(id) }} editAction={(id) => { editProject(id) }} />
-                            </div>
-                            <div className='mt-4 d-flex justify-content-end'>
-                                <CommonPagination pages={10} currentPage={currentPage} setCurrentPage={setCurrentPage} />
-                            </div>
-                        </div>
-                    </div>
+              <div className="mt-4 table-container">
+                <CommonTable
+                  tableHeading={tableHeading}
+                  primary={true}
+                  tableData={tableData}
+                  loading={false}
+                  viewAction={(id) => {
+                    navigateToProject(id);
+                  }}
+                  editAction={(id) => {
+                    editProject(id);
+                  }}
+                />
+              </div>
+              <div className="mt-4 d-flex justify-content-end">
+                <CommonPagination
+                  pages={10}
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                />
+              </div>
+            </div>
+          </div>
 
-                    <ProjectModel show={projectModelShow} onHide={handleCloseProjectModel} disabled={disable} editable={editable} id={id} />
-                </>
-            )}
+          <ProjectModel
+            show={projectModelShow}
+            onHide={handleCloseProjectModel}
+            disabled={disable}
+            editable={editable}
+            id={id}
+          />
         </>
-    )
-}
+      )}
+    </>
+  );
+};
 
-export default ProjectLandingPage
+export default ProjectLandingPage;
