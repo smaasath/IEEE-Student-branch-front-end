@@ -11,6 +11,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
 import { getAllExcomMember } from "../../../redux/actions/ou";
+import { getAllTermYear } from '../../../redux/actions/termYear';
 
 const CommitteeMemberCard = ({
   photo,
@@ -18,11 +19,14 @@ const CommitteeMemberCard = ({
   phone,
   email,
   academicYear,
+  fbURL,
+  linkedInURL,
   loading,
 }) => {
   const [editExcomModelShow, setEditExcomModelShow] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
   const handleCloseEditExcomModel = () => setEditExcomModelShow(false);
+
 
   const handleShowEditExcomModel = (member) => {
     setSelectedMember(member);
@@ -188,16 +192,24 @@ const CommitteeMemberCard = ({
                 {academicYear}
               </p>
               <div className="d-flex gap-2">
-                <img
-                  src={Facebook}
-                  alt="Facebook"
-                  style={{ width: "25px", height: "25px" }}
-                />
-                <img
-                  src={Linkedin}
-                  alt="Linkedin"
-                  style={{ width: "25px", height: "25px" }}
-                />
+              {fbURL && (
+                  <a href={fbURL}> 
+                    <img
+                      src={Facebook}
+                      alt="Facebook"
+                      style={{ width: "25px", height: "25px" }}
+                    />
+                  </a>
+                )}
+                {linkedInURL && (
+                  <a href={linkedInURL}> 
+                    <img
+                      src={Linkedin}
+                      alt="LinkedIn"
+                      style={{ width: "25px", height: "25px" }}
+                    />
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -210,7 +222,9 @@ const CommitteeMemberCard = ({
 const ExcomDetailPage = () => {
   const [editExcomModelShow, setEditExcomModelShow] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
+  const currentYear = new Date().getFullYear();
   const [termFilter, setTermFilter] = useState('');
+  const [availableTermYears, setAvailableTermYears] = useState([]);
   const navigate = useNavigate();
   const [assignPolicy, setAssignPolicy] = useState(false);
   const userData = useSelector((state) => state.user.userData);
@@ -278,6 +292,27 @@ const ExcomDetailPage = () => {
     });
   }, [refreshExcomData]);
 
+  const handleTermChange = (e) => setTermFilter(e.target.value);
+
+  useEffect(() => {
+    console.log("work0")
+    setLoader(true); 
+     getAllTermYear(currentPage - 1, "", searchItem, (res) => {
+       console.log("work1", res);
+       if (res.status == 201) {
+         let termYears = res?.data?.data?.map(({ termyear }) => termyear); // Extract only termyear
+   
+         // Log the term years
+         console.log("work2", termYears);
+   
+         
+         setAvailableTermYears(termYears);  // This will store only the term years into availableTermYears state
+         setLoader(false);
+       }
+     });
+   }, [searchItem, currentPage, refreshTable]);
+
+
   return (
     <>
       {pageLoading ? (
@@ -293,7 +328,7 @@ const ExcomDetailPage = () => {
                 />
               </div>
               <div>
-                <select
+                {/* <select
                   className="form-select w-100"
                   aria-label="Term Year Select"
                 >
@@ -301,7 +336,20 @@ const ExcomDetailPage = () => {
                   <option value="2024">2024 Term</option>
                   <option value="2023">2023 Term</option>
                   <option value="2022">2022 Term</option>
-                </select>
+                </select> */}
+
+                   <select
+                    className="form-select ms-2 me-1"
+                    value={termFilter}
+                    onChange={handleTermChange}
+                  >
+                    <option value={currentYear}>Select Term</option>
+                    {availableTermYears.map((year) => (
+                      <option key={year} value={year}>
+                         {year}
+                      </option>
+                    ))}
+                  </select>
               </div>
             </div>
           ) : null}
@@ -322,6 +370,7 @@ const ExcomDetailPage = () => {
                   excomData
                     .filter((member) => member.priority === raw + 1)
                     .map((member, index) => (
+                      
                       <div
                         className="col-12 col-sm-12 col-lg-4 col-md-4 mb-4"
                         key={index}
@@ -338,6 +387,8 @@ const ExcomDetailPage = () => {
                           phone={member.phone}
                           email={member.email}
                           academicYear={member.academicYear}
+                          fbURL={member.fbURL}
+                          linkedInURL={member.linkedInURL}
                         />
                       </div>
                     ))}
