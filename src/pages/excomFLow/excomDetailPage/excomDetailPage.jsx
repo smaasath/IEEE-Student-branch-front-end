@@ -192,8 +192,8 @@ const CommitteeMemberCard = ({
                 {academicYear}
               </p>
               <div className="d-flex gap-2">
-              {fbURL && (
-                  <a href={fbURL}> 
+                {fbURL && (
+                  <a href={fbURL}>
                     <img
                       src={Facebook}
                       alt="Facebook"
@@ -202,7 +202,7 @@ const CommitteeMemberCard = ({
                   </a>
                 )}
                 {linkedInURL && (
-                  <a href={linkedInURL}> 
+                  <a href={linkedInURL}>
                     <img
                       src={Linkedin}
                       alt="LinkedIn"
@@ -266,7 +266,7 @@ const ExcomDetailPage = () => {
 
   useEffect(() => {
     setExcomCardLoader(true);
-    getAllExcomMember(currentPage - 1, "", ouId,termFilter, (res) => {
+    getAllExcomMember(currentPage - 1, "", ouId, termFilter, (res) => {
       if (res.status == 200) {
         let data = res?.data?.data?.content?.map((user) => ({
           id: user?.userRoleDetailsId,
@@ -284,33 +284,23 @@ const ExcomDetailPage = () => {
         console.warn(data);
         SetExcomData(data);
         setTotalPage(res?.data?.data?.totalPages);
-        console.warn(res?.data?.data?.totalPages);
         setExcomCardLoader(false);
       } else {
         setExcomCardLoader(false);
       }
     });
-  }, [refreshExcomData]);
+  }, [refreshExcomData, termFilter]);
 
   const handleTermChange = (e) => setTermFilter(e.target.value);
 
   useEffect(() => {
-    console.log("work0")
-    setLoader(true); 
-     getAllTermYear(currentPage - 1, "", searchItem, (res) => {
-       console.log("work1", res);
-       if (res.status == 201) {
-         let termYears = res?.data?.data?.map(({ termyear }) => termyear); // Extract only termyear
-   
-         // Log the term years
-         console.log("work2", termYears);
-   
-         
-         setAvailableTermYears(termYears);  // This will store only the term years into availableTermYears state
-         setLoader(false);
-       }
-     });
-   }, [searchItem, currentPage, refreshTable]);
+    getAllTermYear((res) => {
+      if (res.status == 201) {
+        let termYears = res?.data?.data
+        setAvailableTermYears(termYears);
+      }
+    });
+  }, []);
 
 
   return (
@@ -338,18 +328,18 @@ const ExcomDetailPage = () => {
                   <option value="2022">2022 Term</option>
                 </select> */}
 
-                   <select
-                    className="form-select ms-2 me-1"
-                    value={termFilter}
-                    onChange={handleTermChange}
-                  >
-                    <option value={currentYear}>Select Term</option>
-                    {availableTermYears.map((year) => (
-                      <option key={year} value={year}>
-                         {year}
-                      </option>
-                    ))}
-                  </select>
+                <select
+                  className="form-select ms-2 me-1"
+                  value={termFilter}
+                  onChange={handleTermChange}
+                >
+                  <option value={currentYear}>Select Term</option>
+                  {availableTermYears.map((year) => (
+                    <option key={year.termyearId} value={year.termyearId}>
+                      {year.termyear}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           ) : null}
@@ -359,39 +349,39 @@ const ExcomDetailPage = () => {
             <div className="row mt-4" key={raw + 1}>
               {excomCardLoader
                 ? [0, 0, 0].map((_, index) => (
-                    <div
-                      key={index}
-                      className="col-12 col-sm-12 col-lg-4 col-md-4 mb-4"
-                    >
-                      <CommitteeMemberCard loading={true} />
-                    </div>
-                  ))
+                  <div
+                    key={index}
+                    className="col-12 col-sm-12 col-lg-4 col-md-4 mb-4"
+                  >
+                    <CommitteeMemberCard loading={true} />
+                  </div>
+                ))
                 : excomData &&
-                  excomData
-                    .filter((member) => member.priority === raw + 1)
-                    .map((member, index) => (
-                      
+                excomData
+                  .filter((member) => member.priority === raw + 1)
+                  .map((member, index) => (
+
+                    <div
+                      className="col-12 col-sm-12 col-lg-4 col-md-4 mb-4"
+                      key={index}
+                    >
                       <div
-                        className="col-12 col-sm-12 col-lg-4 col-md-4 mb-4"
-                        key={index}
+                        className="mb-2 fw-bold"
+                        style={{ fontSize: "18px", color: "#555" }}
                       >
-                        <div
-                          className="mb-2 fw-bold"
-                          style={{ fontSize: "18px", color: "#555" }}
-                        >
-                          {member.position}
-                        </div>
-                        <CommitteeMemberCard
-                          photo={member.photo}
-                          name={`${member.fname} ${member.lname}`}
-                          phone={member.phone}
-                          email={member.email}
-                          academicYear={member.academicYear}
-                          fbURL={member.fbURL}
-                          linkedInURL={member.linkedInURL}
-                        />
+                        {member.position}
                       </div>
-                    ))}
+                      <CommitteeMemberCard
+                        photo={member.photo}
+                        name={`${member.fname} ${member.lname}`}
+                        phone={member.phone}
+                        email={member.email}
+                        academicYear={member.academicYear}
+                        fbURL={member.fbURL}
+                        linkedInURL={member.linkedInURL}
+                      />
+                    </div>
+                  ))}
             </div>
           ))}
 

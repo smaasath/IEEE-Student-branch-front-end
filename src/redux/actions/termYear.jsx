@@ -3,14 +3,14 @@ import HttpInterceptor from "../../service/http-interceptor";
 
 const http = new HttpInterceptor();
 
-export const getAllTermYear = (page, status, year, callback) => {
-  const endpoint = `${import.meta.env.VITE_API_HOST}termyear?page=${page}&status=${status}&termYear=${year}`;
+export const getAllTermYear = (callback) => {
+  const endpoint = `${import.meta.env.VITE_API_HOST}termyear`;
 
   try {
     http
       .get(endpoint)
       .then((response) => {
-        console.log("res",response)
+        console.log("res", response)
         callback(response);
       })
       .catch((error) => {

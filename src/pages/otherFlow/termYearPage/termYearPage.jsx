@@ -71,55 +71,55 @@ const TermYearPage = () => {
     setTermYearModelShow(false);
   };
 
-//   useEffect(() => {
+  //   useEffect(() => {
 
-//     setLoader(true)
-//     getAllTermYear(currentPage - 1, status, searchItem, (res) => {
-//         console.log("work1", res)
-//       if (res.status == 201) {
+  //     setLoader(true)
+  //     getAllTermYear(currentPage - 1, status, searchItem, (res) => {
+  //         console.log("work1", res)
+  //       if (res.status == 201) {
 
-//         let data = res?.data?.data?.map(({ termyearId, termyear, status }) => ({
-//           id: termyearId,
-//           termyear,
-//           status
-//         }));
-//         console.log("work2", data)
-//         console.log("work2", data.termyear)
-//         SettermYearData(data)
-//         setTotalPage(res?.data?.data?.totalPages)
-//         console.warn(res?.data?.data?.totalPages)
-//         setLoader(false)
-//       }
+  //         let data = res?.data?.data?.map(({ termyearId, termyear, status }) => ({
+  //           id: termyearId,
+  //           termyear,
+  //           status
+  //         }));
+  //         console.log("work2", data)
+  //         console.log("work2", data.termyear)
+  //         SettermYearData(data)
+  //         setTotalPage(res?.data?.data?.totalPages)
+  //         console.warn(res?.data?.data?.totalPages)
+  //         setLoader(false)
+  //       }
 
-//     })
-//   }, [searchItem, currentPage, refreshTable])
+  //     })
+  //   }, [searchItem, currentPage, refreshTable])
 
 
 
-useEffect(() => {
-      setLoader(true);
-      getAllTermYear(currentPage - 1, status, searchItem, (res) => {
-        console.log("work1", res);
-        if (res.status == 201) {
-          let data = res?.data?.data?.map(({ termyearId, termyear, status }) => ({
-            id: termyearId,
-            termyear,
-            status
-          }));
-    
-          // Log the array and specific termyear values
-          console.log("work2", data);
-          data.forEach(item => console.log("Term Year:", item.termyear));
-    
-          SettermYearData(data);
-          setTotalPage(res?.data?.totalPages); // Access totalPages correctly
-          setLoader(false);
-        }
-      });
-    }, [searchItem, currentPage, refreshTable]);
+  useEffect(() => {
+    setLoader(true);
+    getAllTermYear((res) => {
+      console.log("work1", res);
+      if (res.status == 201) {
+        let data = res?.data?.data?.map(({ termyearId, termyear, status }) => ({
+          id: termyearId,
+          termyear,
+          status
+        }));
 
-    
-    
+        // Log the array and specific termyear values
+        console.log("work2", data);
+        data.forEach(item => console.log("Term Year:", item.termyear));
+
+        SettermYearData(data);
+        setTotalPage(res?.data?.totalPages); // Access totalPages correctly
+        setLoader(false);
+      }
+    });
+  }, [searchItem, currentPage, refreshTable]);
+
+
+
 
   return (
     <>
