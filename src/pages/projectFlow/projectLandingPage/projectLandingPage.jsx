@@ -128,15 +128,19 @@ const ProjectLandingPage = () => {
                                     <option value="1">CS</option>
                                 </select>
                             </div>
+                            {
+                                projectPolicy ? (
+                                    <div className="">
+                                        <select className="form-select w-100" aria-label="Large select example">
+                                            <option selected>Select Year</option>
+                                            <option value="1">2024</option>
+                                            <option value="1">2023</option>
+                                            <option value="1">2022</option>
+                                        </select>
+                                    </div>
+                                ) : null
+                            }
 
-                            <div className="">
-                                <select className="form-select w-100" aria-label="Large select example">
-                                    <option selected>Select Year</option>
-                                    <option value="1">2024</option>
-                                    <option value="1">2023</option>
-                                    <option value="1">2022</option>
-                                </select>
-                            </div>
                         </div>
                         <div className='text-cl-primary'>Project</div>
                         <div className='mt-2 d-flex justify-content-between align-items-center gap-4 flex-wrap'>
