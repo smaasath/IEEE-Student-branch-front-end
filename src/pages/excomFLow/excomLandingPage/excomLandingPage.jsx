@@ -15,7 +15,7 @@ const ExcomLandingPage = () => {
   const [entityFilter, setEntityFilter] = useState('');
   const [termFilter, setTermFilter] = useState('');
 
-  const [availableTermYears, setAvailableTermYears] = useState([2024,2023]);
+  const [availableTermYears, setAvailableTermYears] = useState([2024, 2023]);
   const [currentPage, setCurrentPage] = useState(1);
   const [memberDetailModalShow, setMemberDetailModalShow] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
@@ -55,41 +55,41 @@ const ExcomLandingPage = () => {
   useEffect(() => {
     setLoader(true);
     getAllExcomMember(currentPage - 1, searchItem, entityFilter, termFilter, (res) => {
-    if (res.status == 200) {
-    // Log raw response to inspect
-     console.log("Raw Data Response: ", res?.data);
-    
-                // Ensure data exists in the expected path before mapping
-                const content = res?.data?.data?.content;
-                if (content && content.length > 0) {
-                    let data = content.map((user) => ({
-                        id: user?.userRoleDetailsId,
-                        fname: user?.user?.firstName,
-                        lname: user?.user?.lastName,
-                        email: user?.user?.email,
-                        contactNo: user?.user?.contactNo,
-                        entity: user?.ou?.ou_short_name,
-                        position: user?.role?.userRole,
-                        academicYear: user?.user?.academicYear?.academicYear || "N/A",
-                        termYear: "",
-                    }));
-                    console.log("Mapped Data: ", data);
-                    SetExcomData(data);
-                    setTotalPage(res?.data?.data?.totalPages);
-                    console.warn("Total Pages: ", res?.data?.data?.totalPages);
-                } else {
-                    console.warn("No content found in response");
-                    SetExcomData([]); // Set to empty array if no content
-                }
-                setLoader(false);
-            } else {
-                console.error("Failed to load data: ", res);
-                setLoader(false);
-            }
-        });
-    }, [searchItem, currentPage, refreshTable, entityFilter]);
+      if (res.status == 200) {
+        // Log raw response to inspect
+        console.log("Raw Data Response: ", res?.data);
 
-   
+        // Ensure data exists in the expected path before mapping
+        const content = res?.data?.data?.content;
+        if (content && content.length > 0) {
+          let data = content.map((user) => ({
+            id: user?.userRoleDetailsId,
+            fname: user?.user?.firstName,
+            lname: user?.user?.lastName,
+            email: user?.user?.email,
+            contactNo: user?.user?.contactNo,
+            entity: user?.ou?.ou_short_name,
+            position: user?.role?.userRole,
+            academicYear: user?.user?.academicYear?.academicYear || "N/A",
+            termYear: "",
+          }));
+          console.log("Mapped Data: ", data);
+          SetExcomData(data);
+          setTotalPage(res?.data?.data?.totalPages);
+          console.warn("Total Pages: ", res?.data?.data?.totalPages);
+        } else {
+          console.warn("No content found in response");
+          SetExcomData([]); // Set to empty array if no content
+        }
+        setLoader(false);
+      } else {
+        console.error("Failed to load data: ", res);
+        setLoader(false);
+      }
+    });
+  }, [searchItem, currentPage, refreshTable, entityFilter]);
+
+
   useEffect(() => {
     setPageLoading(true);
     if (userData) {
@@ -107,7 +107,7 @@ const ExcomLandingPage = () => {
   }, [userData, navigate]);
 
   const handleCloseMemberDetailModal = () => setMemberDetailModalShow(false);
-  
+
 
   const handleShowMemberDetailModal = (member) => {
     if (member) {
@@ -118,8 +118,8 @@ const ExcomLandingPage = () => {
       console.error("No member data available");
     }
   };
-  
-  
+
+
 
   //   function search(item) {
   //     setsearchItem(item?.target?.value || "");
@@ -145,7 +145,7 @@ const ExcomLandingPage = () => {
   function navigateToExcomPage(ouid) {
     navigate(`/dashboard/executive-committee/${ouid}`);
   }
-    
+
 
   //   const entities = [
   //     { id: 0, name: "SB", type: "Student Branch", logo: sbLogo },
@@ -235,22 +235,22 @@ const ExcomLandingPage = () => {
               </div>
 
               <div className="mt-3 p-3 rounded-4 bg-white d-flex flex-column justify-content-between table-container">
-                
-
-<CommonTable
-  tableHeading={tableHeading}
-  tableData={excomData}
-  primary={true}
-  loading={loader}
-  viewAction={(member) => {
-    // Instead of finding by ID, just use the member directly
-    console.log("Member received: ", member);
-    handleShowMemberDetailModal(member); // Pass the member object directly
-  }}
-/>
 
 
-                
+                <CommonTable
+                  tableHeading={tableHeading}
+                  tableData={excomData}
+                  primary={true}
+                  loading={loader}
+                  viewAction={(member) => {
+                    // Instead of finding by ID, just use the member directly
+                    console.log("Member received: ", member);
+                    handleShowMemberDetailModal(member); // Pass the member object directly
+                  }}
+                />
+
+
+
                 <div className="mt-4 d-flex justify-content-end">
                   <CommonPagination
                     pages={totalPage}

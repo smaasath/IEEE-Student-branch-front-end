@@ -51,7 +51,7 @@ const OtherLandingPage = () => {
             className="bg-white border-0 rounded-4 common-transition common-shadow d-flex justify-content-between align-items-center p-3"
             style={{ width: 350 }}
           >
-            <div className="h4 fw-bold text-cl-primary">Term Year</div>
+            <div className="h4 fw-bold text-cl-primary">Academic Year</div>
             <div>
               <img src={termyear} width={70} />
             </div>

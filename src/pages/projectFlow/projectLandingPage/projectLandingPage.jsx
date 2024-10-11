@@ -7,7 +7,7 @@ import CommonPagination from '../../../components/common/commonPagination/common
 import CommonButton from '../../../components/common/commonButton/commonButton'
 import { useNavigate } from 'react-router-dom'
 import ProjectModel from '../../../components/models/projectModel/projectModel'
-
+import { useSelector } from 'react-redux'
 
 const ProjectLandingPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -15,6 +15,21 @@ const ProjectLandingPage = () => {
     const [disable, setDisable] = useState(false);
     const [editable, setEditable] = useState(false);
     const [id, setId] = useState(null);
+    const userData = useSelector((state) => state.user.userData);
+    const [projectPolicy, setProjectPolicy] = useState(false);
+
+    useEffect(() => {
+        setPageLoading(true);
+        if (userData) {
+            const isProjectAvailable = userData?.some((userRoleDetail) =>
+                userRoleDetail.role?.policies.some(
+                    (policy) => policy.policyCode === "PROJECT"
+                )
+            );
+
+            setProjectPolicy(isProjectAvailable);
+        }
+    }, [userData]);
 
 
     const handleCloseProjectModel = () => {
@@ -131,7 +146,13 @@ const ProjectLandingPage = () => {
                         </div>
                     </button>
                 </div>
-                <div className='mt-4 d-flex justify-content-end'><div><CommonButton onClick={handleShowProjectModel} text={"Add Project"} /></div></div>
+
+                {
+                    projectPolicy ? (
+                        <div className='mt-4 d-flex justify-content-end'><div><CommonButton onClick={handleShowProjectModel} text={"Add Project"} /></div></div>
+                    ) : null
+                }
+
                 <div className='mt-4 d-flex flex-column gap-3 justify-content-center bg-white rounded-2 common-shadow p-3'>
                     <div className='mt-2 d-flex flex-wrap justify-content-between align-items-center'>
                         <CommonSearch primary={true} />
