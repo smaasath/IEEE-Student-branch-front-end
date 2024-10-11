@@ -71,7 +71,7 @@ const ExcomLandingPage = () => {
             entity: user?.ou?.ou_short_name,
             position: user?.role?.userRole,
             academicYear: user?.user?.academicYear?.academicYear || "N/A",
-            termYear: "",
+            termYear: user?.termyear?.termyear || "N/A",
           }));
           console.log("Mapped Data: ", data);
           SetExcomData(data);
@@ -226,7 +226,7 @@ const ExcomLandingPage = () => {
                     <option value={currentYear}>Select Term</option>
                     {availableTermYears.map((year) => (
                       <option key={year} value={year}>
-                         {year}
+                        {year}
                       </option>
                     ))}
                   </select>

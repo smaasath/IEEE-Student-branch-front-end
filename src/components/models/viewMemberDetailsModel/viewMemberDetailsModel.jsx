@@ -53,12 +53,6 @@ const MemberDetailsModal = ({ onHide, show, memberData }) => {
             <div className="mb-3">
               <label className="form-label text-dark"><b>Term Year:</b></label> {memberData.termYear}
             </div>
-            <div className="mb-3">
-              <label className="form-label text-dark"><b>Status:</b></label> {memberData.status}
-            </div>
-            <div className="mb-3">
-              <label className="form-label text-dark"><b>Create Date:</b></label> {memberData.createdDate}
-            </div>
           </div>
         </div>
       </Modal.Body>
