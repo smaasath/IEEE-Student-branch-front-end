@@ -124,7 +124,7 @@ const AddOuModel = ({ onHide, show, disabled, editable, item, changed }) => {
       }
   
       updatedFormData.projectID = item?.id;
-      updateProject(updatedFormData, (res) => {
+      updateOU(updatedFormData, (res) => {
         if (res?.status === 200) {
           setLoading(false);
           changed();
@@ -138,7 +138,7 @@ const AddOuModel = ({ onHide, show, disabled, editable, item, changed }) => {
       let updatedFormData = { ...formData };
       const imgurl = await handleProfileUpload(image);
       updatedFormData = { ...updatedFormData, project_logo: imgurl };
-      CreateProject(updatedFormData, (res) => {
+      CreateOU(updatedFormData, (res) => {
         if (res?.status === 201) {
           setLoading(false);
           resetFields();
