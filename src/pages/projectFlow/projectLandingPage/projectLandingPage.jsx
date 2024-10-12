@@ -9,18 +9,24 @@ import { useNavigate } from "react-router-dom";
 import ProjectModel from "../../../components/models/projectModel/projectModel";
 import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
+import { getAllProject } from "../../../redux/actions/project";
 
 const ProjectLandingPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [projectModelShow, setProjectModelShow] = useState(false);
   const [disable, setDisable] = useState(false);
   const [editable, setEditable] = useState(false);
-  const [id, setId] = useState(null);
+  const [selectedProject, setselectedProject] = useState(null);
   const userData = useSelector((state) => state.user.userData);
   const [projectPolicy, setProjectPolicy] = useState(false);
+  const [tableData, SetProjectData] = useState(null);
   const [isProjectTimelineAvailable, setIsProjectTimelineAvailable] =
     useState(false);
   const [pageLoading, setPageLoading] = useState(true);
+  const [status, setStatus] = useState("");
+  const [searchItem, setsearchItem] = useState("");
+  const [loader, setLoader] = useState(false);
+  const [refreshTable, setRefreshTable] = useState(0);
 
   useEffect(() => {
     setPageLoading(true);
@@ -47,12 +53,11 @@ const ProjectLandingPage = () => {
     setProjectModelShow(false);
     setDisable(false);
     setEditable(false);
-    setId(null);
   };
 
-  function editProject(id) {
+  function editProject(project) {
     setDisable(false);
-    setId(id);
+    setselectedProject(project);
     setEditable(true);
     handleShowProjectModel();
   }
@@ -68,19 +73,19 @@ const ProjectLandingPage = () => {
   const tableHeading = [
     {
       label: "Project Name",
-      value: "project_name",
+      value: "projectName",
     },
     {
       label: "Chapter",
-      value: "ou_name",
+      value: "ouName",
     },
     {
       label: "Start Date",
-      value: "start_date",
+      value: "startDate",
     },
     {
       label: "End Date",
-      value: "end_date",
+      value: "endDate",
     },
     {
       label: "Status",
@@ -93,78 +98,87 @@ const ProjectLandingPage = () => {
     },
   ];
 
-  const tableData = [
-    {
-      id: "12548796",
-      project_name: "IEEE OpenDay 2024",
-      ou_name: "SB",
-      start_date: "2024/06/01",
-      end_date: "2024/09/08",
-      status: "ONGOING",
-    },
-    {
-      id: "12548796",
-      project_name: "UvaXtreme V1.0",
-      ou_name: "CS",
-      start_date: "2024/08/13",
-      end_date: "2024/12/08",
-      status: "TODO",
-    },
-  ];
+  useEffect(() => {
+    setLoader(true);
+    getAllProject(0, "", "", "", "", (res) => {
+      if (res.status == 200) {
+        let data = res?.data?.data?.content?.map((item) => ({
+          id: item.projectID,
+          ouName: item?.ous?.map((ou) => ou.ouName).join(","),
+          ...item,
+        }));
+        
+        console.log(data, "dataaa");
+        SetProjectData(data);
+        setTotalPage(res?.data?.data?.totalPages);
+        console.warn(res?.data?.data?.totalPages);
+        setLoader(false);
+      }
+    });
+  }, [searchItem, currentPage, refreshTable, status]);
 
   const navigate = useNavigate();
   function navigateToTimeLine() {
     navigate("time-line");
   }
 
-    return (
+  return (
+    <>
+      {pageLoading ? (
+        <CommonLoader />
+      ) : (
         <>
-            {pageLoading ? (
-                <CommonLoader />
-            ) : (
-                <>
-                    <div>
-                        <div className='d-flex justify-content-end gap-3 flex-wrap align-items-center'>
-                            <div className="">
-                                <select className="form-select w-100" aria-label="Large select example">
-                                    <option selected>Select Entity</option>
-                                    <option value="1">SB</option>
-                                    <option value="1">WIE</option>
-                                    <option value="1">RAS</option>
-                                    <option value="1">IAS</option>
-                                    <option value="1">CS</option>
-                                </select>
-                            </div>
-                            {
-                                projectPolicy ? (
-                                    <div className="">
-                                        <select className="form-select w-100" aria-label="Large select example">
-                                            <option selected>Select Year</option>
-                                            <option value="1">2024</option>
-                                            <option value="1">2023</option>
-                                            <option value="1">2022</option>
-                                        </select>
-                                    </div>
-                                ) : null
-                            }
-
-                        </div>
-                        <div className='text-cl-primary'>Project</div>
-                        <div className='mt-2 d-flex justify-content-between align-items-center gap-4 flex-wrap'>
-                            <div className='d-flex justify-content-between gap-4 rounded-4 bg-body-secondary p-4 flex-wrap flex-grow-1'>
-                                <CommonStatusCountCard type={"TODO"} count={1} />
-                                <CommonStatusCountCard type={"ONGOING"} count={1} />
-                                <CommonStatusCountCard type={"COMPLETE"} count={1} />
-                            </div>
-                            <button onClick={() => { navigateToTimeLine() }} className='bg-white border-0 rounded-4 common-transition common-shadow d-flex justify-content-between align-items-center p-3' style={{ width: 350 }}>
-                                <div className='h4 fw-bold text-cl-primary'>
-                                    Projects  time line
-                                </div>
-                                <div>
-                                    <img src={timeLinefrom} width={70} />
-                                </div>
-                            </button>
-                        </div>
+          <div>
+            <div className="d-flex justify-content-end gap-3 flex-wrap align-items-center">
+              <div className="">
+                <select
+                  className="form-select w-100"
+                  aria-label="Large select example"
+                >
+                  <option selected>Select Entity</option>
+                  <option value="1">SB</option>
+                  <option value="1">WIE</option>
+                  <option value="1">RAS</option>
+                  <option value="1">IAS</option>
+                  <option value="1">CS</option>
+                </select>
+              </div>
+              {projectPolicy ? (
+                <div className="">
+                  <select
+                    className="form-select w-100"
+                    aria-label="Large select example"
+                  >
+                    <option selected>Select Year</option>
+                    <option value="1">2024</option>
+                    <option value="1">2023</option>
+                    <option value="1">2022</option>
+                  </select>
+                </div>
+              ) : null}
+            </div>
+            <div className="text-cl-primary">Project</div>
+            <div className="mt-2 d-flex justify-content-between align-items-center gap-4 flex-wrap">
+              <div className="d-flex justify-content-between gap-4 rounded-4 bg-body-secondary p-4 flex-wrap flex-grow-1">
+                <CommonStatusCountCard type={"TODO"} count={1} />
+                <CommonStatusCountCard type={"ONGOING"} count={1} />
+                <CommonStatusCountCard type={"COMPLETE"} count={1} />
+              </div>
+              <button
+                onClick={() => {
+                  navigateToTimeLine();
+                }}
+                className="bg-white border-0 rounded-4 common-transition common-shadow d-flex justify-content-between align-items-center p-3"
+                style={{ width: 350 }}
+              >
+                <div className="h4 fw-bold text-cl-primary">
+                  Projects time line
+                </div>
+                <div>
+                  <img src={timeLinefrom} width={70} />
+                </div>
+              </button>
+            </div>
 
             {projectPolicy ? (
               <div className="mt-4 d-flex justify-content-end">
@@ -199,11 +213,11 @@ const ProjectLandingPage = () => {
                   primary={true}
                   tableData={tableData}
                   loading={false}
-                  viewAction={(id) => {
-                    navigateToProject(id);
+                  viewAction={(project) => {
+                    navigateToProject(project);
                   }}
-                  editAction={(id) => {
-                    editProject(id);
+                  editAction={(project) => {
+                    editProject(project);
                   }}
                 />
               </div>
@@ -222,7 +236,10 @@ const ProjectLandingPage = () => {
             onHide={handleCloseProjectModel}
             disabled={disable}
             editable={editable}
-            id={id}
+            changed={() => {
+              setRefreshTable(refreshTable + 1);
+            }}
+            item={selectedProject}
           />
         </>
       )}
