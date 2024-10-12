@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from 'react'
 import CommonEventCard from "../../../components/common/commonEventCard/commonEventCard";
+import CommonButton from '../../../components/common/commonButton/commonButton';
+import AddEventModel from '../../../components/models/addEventModel/addEventModel';
 
 const ProjectEventPage = () => {
+  const [addEventModelShow, setAddEventModelShow] = useState(false);
+  const [disable, setDisable] = useState(false);
+    const [editable, setEditable] = useState(false);
+    const [id, setId] = useState(null);
 
   const events = [{
     id: 1,
@@ -26,10 +32,27 @@ const ProjectEventPage = () => {
 
 ];
 
+const handleCloseAddEventModel = () => {
+  setAddEventModelShow(false);
+  setDisable(false)
+  setEditable(false)
+  setId(null)
+}
+
+const handleShowAddEventModel = () => { setAddEventModelShow(true); }
+
   return (
     <>
       <div className="container">
+      <div className='d-flex justify-content-between align-items-center gap-3'>
         <div className="text-cl-primary">Events</div>
+        <div className='d-flex gap-3 flex-row'>
+                            
+        <div>
+         <CommonButton onClick={handleShowAddEventModel} text={"Add Event"} />
+                            </div>
+                        </div>
+                        </div>
         
         <div className="row mt-3">
           {events.map((event) => (
@@ -42,6 +65,13 @@ const ProjectEventPage = () => {
           ))}
         </div>
       </div>
+      <AddEventModel
+        show={addEventModelShow}
+        onHide={handleCloseAddEventModel} 
+        disabled={disable}
+        editable={editable}
+        id={id}
+      />
     </>
   );
 };

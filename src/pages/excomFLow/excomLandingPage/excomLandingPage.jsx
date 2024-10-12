@@ -154,6 +154,17 @@ const ExcomLandingPage = () => {
   //     { id: 4, name: "CS", type: "Technical Chapter", logo: iasLogo }
   //   ];
 
+
+  useEffect(() => {
+    getAllTermYear((res) => {
+      if (res.status == 201) {
+        let termYears = res?.data?.data
+        setAvailableTermYears(termYears);
+      }
+    });
+  }, []);
+
+  
   return (
     <>
       {pageLoading ? (
@@ -218,18 +229,18 @@ const ExcomLandingPage = () => {
                   </select>
                 </div>
                 <div>
-                  <select
-                    className="form-select ms-2 me-1"
-                    value={termFilter}
-                    onChange={handleTermChange}
-                  >
-                    <option value={currentYear}>Select Term</option>
-                    {availableTermYears.map((year) => (
-                      <option key={year} value={year}>
-                        {year}
-                      </option>
-                    ))}
-                  </select>
+                <select
+                  className="form-select ms-2 me-1"
+                  value={termFilter}
+                  onChange={handleTermChange}
+                >
+                  <option value={currentYear}>Select Term</option>
+                  {availableTermYears.map((year) => (
+                    <option key={year.termyearId} value={year.termyearId}>
+                      {year.termyear}
+                    </option>
+                  ))}
+                </select>
                 </div>
               </div>
 

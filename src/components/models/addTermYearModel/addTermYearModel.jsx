@@ -19,6 +19,7 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
 
   const [loading, setLoading] = useState(false);
   const [exist, setExist] = useState('');
+  const [validationMessage, setValidationMessage] = useState('');
 
   useEffect(() => { 
 
@@ -37,6 +38,7 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
     });
 
     setExist('')
+    setValidationMessage('');
 
   }, [show])
 
@@ -44,6 +46,16 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    // Check if the value is not numeric
+    if (name === 'termyear' && isNaN(value)) {
+      setValidationMessage('Please only input numbers');
+      setError((prevError) => ({ ...prevError, termyear: true }));
+    } else {
+      setValidationMessage('');
+      setError((prevError) => ({ ...prevError, termyear: false }));
+    }
+
     setFormData((prevData) => ({ ...prevData, [name]: value }));
     setError((prevError) => ({ ...prevError, [name]: false }));
     setExist('')
@@ -70,7 +82,7 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
       formData.termyearId = item?.id;
       updateTermYear(formData, (res) => {
         console.log(res.data);
-        if (res?.status == 200) {
+        if (res?.status == 201) {
           setLoading(false)
           changed()
           onHide()
@@ -123,10 +135,26 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
           <div className='mt-3'>
             <div className="has-validation">
               <label htmlFor="exampleFormControlInput1" className="form-label text-dark">Term Year</label>
-              <input type="text" className={`form-control ${error.termyear ? "is-invalid" : ""}`} name='termyear' value={formData.termyear} onChange={handleInputChange} id="exampleFormControlInput1" placeholder="Term Year" disabled={disabled} required />
+              <input
+                type="text"
+                className={`form-control ${error.termyear ? "is-invalid" : ""}`}
+                name='termyear'
+                value={formData.termyear}
+                onChange={handleInputChange}
+                id="exampleFormControlInput1"
+                placeholder="Term Year"
+                disabled={disabled}
+                required
+              />
+
               <div class="invalid-feedback">
                 This field is required.
               </div>
+              {validationMessage && (
+                <div className="text-danger mt-1">
+                  {validationMessage}
+                </div>
+              )}
             </div>
           </div>
           <div className='mt-3'>

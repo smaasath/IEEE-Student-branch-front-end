@@ -44,9 +44,11 @@ export const updateTermYear = (body, callback) => {
   const endpoint = `${import.meta.env.VITE_API_HOST}termyear`;
 
   try {
+    console.log("word")
     http
       .put(endpoint, body)
       .then((response) => {
+        console.log("work",response)
         callback(response);
       })
       .catch((error) => {

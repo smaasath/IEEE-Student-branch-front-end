@@ -13,13 +13,12 @@ import CommonNoteContainer from "../../../components/common/commonNoteContainer/
 import CommonMemberContainer from "../../../components/common/commonMemberContainer/commonMemberContainer";
 import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
+import TaskModel from "../../../components/models/createTaskModel/createTaskModel";
 
 const ProjectPage = () => {
   const params = useParams();
   const navigate = useNavigate();
-  function navigateToPrPlan() {
-    navigate("prPlan");
-  }
+  
   function navigateToFinance() {
     navigate("finance");
   }
@@ -34,6 +33,7 @@ const ProjectPage = () => {
   const [isEventAvailable, setIsEventAvailable] = useState(false);
   const [isAssignAvailable, setIsAssignAvailable] = useState(false);
   const [isTaskAvailable, setIsTaskAvailable] = useState(false);
+  const [showTaskModal, setShowTaskModal] = useState(false);
 
   useEffect(() => {
     setPageLoading(true);
@@ -66,6 +66,15 @@ const ProjectPage = () => {
       setPageLoading(false);
     }
   }, [userData]);
+
+  const openTaskModal = () => {
+    setShowTaskModal(true);
+  };
+
+  const closeTaskModal = () => {
+    setShowTaskModal(false);
+  };
+
   return (
     <>
       {pageLoading ? (
@@ -117,14 +126,9 @@ const ProjectPage = () => {
             <div className="text-cl-primary mt-4">Board</div>
             <div className="d-flex justify-content-end gap-4 align-items-center flex-wrap">
               {isTaskAvailable && (
-                <div className="">
-                  <CommonButton
-                    onClick={() => {
-                      navigateToPrPlan();
-                    }}
-                    text={"ADD Task"}
-                  />
-                </div>
+                <div>
+                <CommonButton onClick={openTaskModal} text={"Add Tasks"} />
+              </div>
               )}
               {isFinanceAvailable && (
                 <div className="">
@@ -237,6 +241,7 @@ const ProjectPage = () => {
               </div>
             </div>
           </div>
+          <TaskModel show={showTaskModal} onHide={closeTaskModal} />
         </div>
       )}
     </>

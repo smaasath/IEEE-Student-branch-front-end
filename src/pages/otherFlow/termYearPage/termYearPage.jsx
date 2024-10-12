@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import CommonSearch from '../../../components/common/commonSearch/commonSearch';
 import CommonTable from '../../../components/common/commonTable/commonTable';
-import CommonPagination from '../../../components/common/commonPagination/commonPagination';
 import CommonButton from '../../../components/common/commonButton/commonButton';
 import TermYearModel from '../../../components/models/addTermYearModel/addTermYearModel';
 import { getAllTermYear } from '../../../redux/actions/termYear';
@@ -130,9 +128,7 @@ const TermYearPage = () => {
           <div className='text-cl-primary'>Term Year</div>
           <div className='mt-4 d-flex justify-content-end'><div><CommonButton onClick={handleShowTermYearModel} text={"Add"} /></div></div>
           <div className='mt-3 pt-4 p-3 rounded-4 bg-white common-shadow'>
-            <div className='d-flex justify-content-between flex-wrap align-items-center p-3'>
-              <CommonSearch primary={true} onChange={(item) => { search(item) }} />
-            </div>
+            
             <div className='mt-3 p-3 rounded-4 bg-white d-flex flex-column justify-content-between table-container'>
               <CommonTable
                 tableHeading={tableHeading}
@@ -142,9 +138,7 @@ const TermYearPage = () => {
                 editAction={(item) => { editYear(item) }}
 
               />
-              <div className='mt-4 d-flex justify-content-end'>
-                <CommonPagination pages={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
-              </div>
+             
             </div>
           </div>
           <TermYearModel
