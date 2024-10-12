@@ -2,21 +2,56 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import CommonButton from "../../common/commonButton/commonButton";
 import { getAllOU } from "../../../redux/actions/ou";
-import { CreateProject } from "../../../redux/actions/project";
+import { CreateProject, updateProject } from "../../../redux/actions/project";
 import { useDispatch } from "react-redux";
 import { uploadImage } from "../../../redux/actions/imageUpload";
 import deleteimage from "../.../../../../assets/icons/delete.png";
 import uploadimage from "../.../../../../assets/icons/upload.png";
 
-const ProjectModel = ({ onHide, show, disabled, editable, id, changed,item }) => {
+const ProjectModel = ({
+  onHide,
+  show,
+  disabled,
+  editable,
+  id,
+  changed,
+  item,
+}) => {
   const [ou, setOu] = useState([]);
   const [image, setImage] = useState(null);
   const distpatch = useDispatch();
+
   useEffect(() => {
     getAllOU((response) => {
-      setOu(response.data.data);
+      if (response && response.data && Array.isArray(response.data.data)) {
+        setOu(response.data.data);
+      } else {
+        setOu([]);
+      }
     });
   }, []);
+
+
+  useEffect(() => {
+    if (show && editable && item) {
+      const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toISOString().split('T')[0];
+      };
+
+      const data = {
+        project_name: item.projectName,
+        description: item.description,
+        start_date: formatDate(item.startDate),
+        end_date: formatDate(item.endDate),
+        project_logo: item.projectLogo,
+        status: item.status,
+        ou_id: [],
+      };
+
+      setFormData(data);
+    }
+  }, [show, item]);
 
   const [formData, setFormData] = useState({
     project_name: "",
@@ -24,6 +59,7 @@ const ProjectModel = ({ onHide, show, disabled, editable, id, changed,item }) =>
     start_date: "",
     end_date: "",
     project_logo: "",
+    status: "",
     ou_id: [],
   });
 
@@ -39,32 +75,31 @@ const ProjectModel = ({ onHide, show, disabled, editable, id, changed,item }) =>
   const [loading, setLoading] = useState(false);
   const [exist, setExist] = useState("");
 
+  // useEffect(() => {
+  //   if (!editable) {
+  //     setFormData({
+  //       project_name: "",
+  //       description: "",
+  //       start_date: "",
+  //       end_date: "",
+  //       project_logo: "",
+  //       ou_id: [],
+  //     });
+  //   } else {
+  //     setFormData(item);
+  //   }
 
-  useEffect(() => {
-    if (!editable) {
-      setFormData({
-        project_name: "",
-        description: "",
-        start_date: "",
-        end_date: "",
-        project_logo: "",
-        ou_id: [],
-      });
-    } else {
-      setFormData(item);
-    }
-
-    setError({
-      project_name: false,
-      description: false,
-      start_date: false,
-      end_date: false,
-      project_logo: false,
-      ou_id: false,
-    });
-    setImage(null)
-    setExist('');
-  }, [show, editable, item]);
+  //   setError({
+  //     project_name: false,
+  //     description: false,
+  //     start_date: false,
+  //     end_date: false,
+  //     project_logo: false,
+  //     ou_id: false,
+  //   });
+  //   setImage(null);
+  //   setExist("");
+  // }, [show, editable, item]);
 
   const resetFields = () => {
     setFormData({
@@ -175,22 +210,40 @@ const ProjectModel = ({ onHide, show, disabled, editable, id, changed,item }) =>
 
     setLoading(true);
 
-    let updatedFormData = { ...formData };
-    const imgurl = await handleProfileUpload(image);
-    updatedFormData = { ...updatedFormData, project_logo: imgurl };
-    CreateProject(updatedFormData, (res) => {
-      if (res?.status === 201) {
-        setLoading(false);
-        resetFields();
-        onHide();
-      } else if (res?.status === 409) {
-        setLoading(false);
-        setExist("Policy Already Exists");
-      } else {
-        setLoading(false);
-        setExist("Policy Creation Failed");
-      }
-    });
+    if (editable) {
+      let updatedFormData = { ...formData };
+      const imgurl = await handleProfileUpload(image);
+      updatedFormData = { ...updatedFormData, project_logo: imgurl };
+      const id=item?.projectID;
+      updateProject(id,updatedFormData, (res) => {
+        if (res?.status === 201) {
+          setLoading(false);
+          changed();
+          onHide();
+        } else {
+          setLoading(false);
+          setExist("Project Update Failed");
+        }
+      });
+    } else {
+      let updatedFormData = { ...formData };
+      const imgurl = await handleProfileUpload(image);
+      updatedFormData = { ...updatedFormData, project_logo: imgurl };
+      CreateProject(updatedFormData, (res) => {
+        if (res?.status === 201) {
+          setLoading(false);
+          resetFields();
+          changed();
+          onHide();
+        } else if (res?.status === 409) {
+          setLoading(false);
+          setExist("Policy Already Exists");
+        } else {
+          setLoading(false);
+          setExist("Policy Creation Failed");
+        }
+      });
+    }
   };
 
   return (
@@ -216,24 +269,29 @@ const ProjectModel = ({ onHide, show, disabled, editable, id, changed,item }) =>
             <div className="mt-3">
               <label className="form-label text-dark">OU</label>
               <div className="d-flex align-items-center gap-2 flex-wrap">
-                {ou?.map((item) => (
-                  <div className="form-check" key={item.ouID}>
-                    <input
-                      className={`form-check-input ${
-                        error.ou_id ? "is-invalid" : ""
-                      }`}
-                      type="checkbox"
-                      id={item.ouID}
-                      name="ouID"
-                      checked={formData.ou_id.includes(item.ouID)}
-                      onChange={(e) => handleCheckboxChange(e, item.ouID)}
-                    />
-                    <label className="form-check-label" htmlFor={item.ouID}>
-                      {item.ouName}
-                    </label>
-                  </div>
-                ))}
+                {ou?.map(
+                  (item) =>
+                    item?.ouID &&
+                    item?.ouName && (
+                      <div className="form-check" key={item.ouID}>
+                        <input
+                          className={`form-check-input ${
+                            error.ou_id ? "is-invalid" : ""
+                          }`}
+                          type="checkbox"
+                          id={item.ouID}
+                          name="ouID"
+                          // checked={formData.ou_id.includes(item.ouID)}
+                          onChange={(e) => handleCheckboxChange(e, item.ouID)}
+                        />
+                        <label className="form-check-label" htmlFor={item.ouID}>
+                          {item.ouName}
+                        </label>
+                      </div>
+                    )
+                )}
               </div>
+
               {error.ou_id && (
                 <div className="invalid-feedback d-block">
                   At least one OU must be selected.

@@ -18,3 +18,38 @@ export const CreateProject = (data, callback) => {
         callback(error.response);
     }
 };
+
+export const getAllProject= (page, search,termid,status ,ouid, callback) => {
+    const endpoint = `${import.meta.env.VITE_API_HOST}project?ouid=${ouid}&termYearId=${termid}&search=${search}&status=${status}&page=${page}`;
+  
+    try {
+      http
+        .get(endpoint)
+        .then((response) => {
+          callback(response);
+        })
+        .catch((error) => {
+          callback(error.response);
+        });
+    } catch (error) {
+      callback(error.response);
+    }
+  };
+
+
+  export const updateProject = (id,data, callback) => {
+    const endpoint = `${import.meta.env.VITE_API_HOST}project/${id}`;
+
+    try {
+        http
+            .put(endpoint, data)
+            .then((response) => {
+                callback(response);
+            })
+            .catch((error) => {
+                callback(error.response);
+            });
+    } catch (error) {
+        callback(error.response);
+    }
+};
