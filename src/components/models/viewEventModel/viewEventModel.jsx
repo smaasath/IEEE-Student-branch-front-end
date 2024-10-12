@@ -28,19 +28,46 @@ const ViewEventModal = ({ onHide, show, eventData }) => {
           
           <div className="w-100">
           <div className="mb-3">
-              <label className="form-label text-dark"><b>Event Name:</b></label> {eventData.eventName}
+              <label className="form-label text-dark"><b>Event Name:</b></label> 
+              <input
+              type="text"
+              className="form-control"
+              value={eventData.eventName} 
+              />
             </div>
             <div className="mb-3">
-              <label className="form-label text-dark"><b>Date:</b></label> {eventData.date}
+              <label className="form-label text-dark"><b>Date:</b></label> 
+              <input
+              type="text"
+              className="form-control"
+              value={eventData.date}
+              />
+              
             </div>
             <div className="mb-3">
-              <label className="form-label text-dark"><b>Venue:</b></label> {eventData.venue}
+              <label className="form-label text-dark"><b>Venue:</b></label>
+              <input
+              type="text"
+              className="form-control"
+              value={eventData.venue}
+              /> 
             </div>
             <div className="mb-3">
-              <label className="form-label text-dark"><b>Description:</b></label> {eventData.description}
+              <label className="form-label text-dark"><b>Description:</b></label>
+              <textarea
+             className="form-control"
+             value={eventData.description}
+             rows={4} // You can adjust the number of rows as needed
+  />
             </div>
             <div className="mb-3">
-              <label className="form-label text-dark"><b>Link:</b></label> {eventData.event_link}
+              <label className="form-label text-dark"><b>Link:</b></label> 
+              <input
+              type="text"
+              className="form-control"
+              value={eventData.event_link}
+              readOnly
+              /> 
             </div>
             
           </div>
