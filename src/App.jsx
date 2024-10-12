@@ -25,6 +25,7 @@ import ProjectPrPlan from './pages/projectFlow/prPlan/projectPrPlan';
 import MainSettingPage from './pages/settingFlow/mainSettingPage/mainSettingPage';
 import ProfileEditPage from './pages/settingFlow/profileEditPage/profileEditPage';
 import OtherLandingPage from './pages/otherFlow/langingPage/landingPage';
+import AcademicYearPage from './pages/otherFlow/academicYearPage/academicYearPage'
 import TermYearPage from './pages/otherFlow/termYearPage/termYearPage'
 import PolicyPage from './pages/otherFlow/policyPage/policyPage'
 import UserRolePage from './pages/otherFlow/userRolePage/userRolePage'
@@ -92,10 +93,11 @@ function App() {
             </Route>
             <Route path='other'>
               <Route path='' element={<OtherLandingPage />} />
-              <Route path='academic-year' element={<TermYearPage />} />
+              <Route path='academic-year' element={<AcademicYearPage />} />
               <Route path='policy' element={<PolicyPage />} />
               <Route path='user-role' element={<UserRolePage />} />
               <Route path='ouPage' element={<OuPage />} />
+              <Route path='termYear' element={<TermYearPage />} />
             </Route>
             <Route path='*' element={<NotFound />}>
             </Route>

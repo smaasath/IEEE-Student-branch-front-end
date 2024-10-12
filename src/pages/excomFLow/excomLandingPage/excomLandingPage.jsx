@@ -6,6 +6,7 @@ import MemberDetailsModal from "../../../components/models/viewMemberDetailsMode
 import OuCard from "../../../components/common/oucard/ouCard";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { getAllTermYear } from '../../../redux/actions/termYear';
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
 import { getAllExcomMember, getAllOU } from "../../../redux/actions/ou";
 
@@ -14,8 +15,7 @@ const ExcomLandingPage = () => {
   const [searchItem, setsearchItem] = useState("");
   const [entityFilter, setEntityFilter] = useState('');
   const [termFilter, setTermFilter] = useState('');
-
-  const [availableTermYears, setAvailableTermYears] = useState([2024, 2023]);
+  const [availableTermYears, setAvailableTermYears] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [memberDetailModalShow, setMemberDetailModalShow] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
@@ -71,7 +71,7 @@ const ExcomLandingPage = () => {
             entity: user?.ou?.ou_short_name,
             position: user?.role?.userRole,
             academicYear: user?.user?.academicYear?.academicYear || "N/A",
-            termYear: "",
+            termYear: user?.termyear?.termyear || "N/A",
           }));
           console.log("Mapped Data: ", data);
           SetExcomData(data);
@@ -88,7 +88,6 @@ const ExcomLandingPage = () => {
       }
     });
   }, [searchItem, currentPage, refreshTable, entityFilter]);
-
 
   useEffect(() => {
     setPageLoading(true);
@@ -227,7 +226,7 @@ const ExcomLandingPage = () => {
                     <option value={currentYear}>Select Term</option>
                     {availableTermYears.map((year) => (
                       <option key={year} value={year}>
-                        Term {year}
+                        {year}
                       </option>
                     ))}
                   </select>
