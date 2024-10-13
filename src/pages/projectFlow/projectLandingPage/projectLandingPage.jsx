@@ -9,13 +9,15 @@ import { useNavigate } from "react-router-dom";
 import ProjectModel from "../../../components/models/projectModel/projectModel";
 import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
-import { getAllProject, getProjectCount } from "../../../redux/actions/project";
+import { deleteProject, getAllProject, getProjectCount } from "../../../redux/actions/project";
 import { getAllOU } from "../../../redux/actions/ou";
 import { getAllTermYear } from "../../../redux/actions/termYear";
+import CommonDeleteModel from "../../../components/models/commonDeleteModel/commonDeleteModel";
 
 const ProjectLandingPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [projectModelShow, setProjectModelShow] = useState(false);
+  const [deleteModelShow, setDeleteModelShow] = useState(false);
   const [disable, setDisable] = useState(false);
   const [editable, setEditable] = useState(false);
   const [selectedProject, setselectedProject] = useState(null);
@@ -35,6 +37,9 @@ const ProjectLandingPage = () => {
   const [selectedYear, setSelectedYear] = useState("");
   const [searchItem, setSearchItem] = useState("");
   const [totalPage, setTotalPage] = useState(1);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteError, setdeleteError] = useState(false);
+
 
   useEffect(() => {
     setPageLoading(true);
@@ -51,7 +56,6 @@ const ProjectLandingPage = () => {
       );
 
       setIsProjectTimelineAvailable(isProjectTimelineAvailable);
-
       setProjectPolicy(isProjectAvailable);
       setPageLoading(false);
     }
@@ -63,11 +67,40 @@ const ProjectLandingPage = () => {
     setEditable(false);
   };
 
+  const handleCloseDeleteModel = () => {
+    setDeleteModelShow(false);
+  };
+
+  const handleOpenDeleteModel = (project) => {
+    setdeleteError(false);
+    setDeleteLoading(false);
+    setselectedProject(project);
+    setDeleteModelShow(true);
+  };
+
   function editProject(project) {
     setDisable(false);
     setselectedProject(project);
     setEditable(true);
     handleShowProjectModel();
+  }
+
+  function handleDeleteProject() {
+    setdeleteError(false);
+    setDeleteLoading(true);
+    deleteProject(selectedProject?.projectID,
+      (res) => {
+        if (res?.status == 200) {
+          handleCloseDeleteModel();
+          setRefreshTable(refreshTable + 1);
+          setDeleteLoading(false);
+        } else {
+          setDeleteLoading(false);
+          setdeleteError(true);
+        }
+      }
+    )
+
   }
 
   function navigateToProject(id) {
@@ -89,11 +122,11 @@ const ProjectLandingPage = () => {
     },
     {
       label: "Start Date",
-      value: "startDate",
+      value: "start_date",
     },
     {
       label: "End Date",
-      value: "endDate",
+      value: "end_date",
     },
     {
       label: "Status",
@@ -102,7 +135,7 @@ const ProjectLandingPage = () => {
     {
       label: "",
       value: "ACTION",
-      type: [projectPolicy ? "EDIT" : "", "VIEW"],
+      type: projectPolicy ? ["VIEW", "EDIT", "DELETE"] : ["VIEW"],
     },
   ];
 
@@ -121,13 +154,18 @@ const ProjectLandingPage = () => {
       selectedOU,
       (res) => {
         if (res.status === 200) {
-          const data = res?.data?.data?.content?.map((item) => ({
-            id: item.projectID,
-            ouName: item?.ous?.map((ou) => ou.ouName).join(","),
-            startDate: formatDate(item.startDate),
-            endDate: formatDate(item.endDate),
-            ...item,
-          }));
+          const data = res?.data?.data?.content?.map((item) => {
+            const stdate = formatDate(item.startDate);
+            const eDate = formatDate(item.endDate);
+            return {
+              id: item.projectID,
+              ouName: item?.ous?.map((ou) => ou.ouName).join(","),
+              start_date: stdate,
+              end_date: eDate,
+              ...item,
+            };
+          });
+
           SetProjectData(data);
           setTotalPage(res?.data?.data?.totalPages)
           setLoader(false);
@@ -182,7 +220,7 @@ const ProjectLandingPage = () => {
 
   const handleSearchChange = (e) => {
     setSearchItem(e.target.value);
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
   return (
@@ -244,20 +282,23 @@ const ProjectLandingPage = () => {
                   count={countData?.complete}
                 />
               </div>
-              <button
-                onClick={() => {
-                  navigateToTimeLine();
-                }}
-                className="bg-white border-0 rounded-4 common-transition common-shadow d-flex justify-content-between align-items-center p-3"
-                style={{ width: 350 }}
-              >
-                <div className="h4 fw-bold text-cl-primary">
-                  Projects time line
-                </div>
-                <div>
-                  <img src={timeLinefrom} width={70} />
-                </div>
-              </button>
+              {isProjectTimelineAvailable ? (
+                <button
+                  onClick={() => {
+                    navigateToTimeLine();
+                  }}
+                  className="bg-white border-0 rounded-4 common-transition common-shadow d-flex justify-content-between align-items-center p-3"
+                  style={{ width: 350 }}
+                >
+                  <div className="h4 fw-bold text-cl-primary">
+                    Projects time line
+                  </div>
+                  <div>
+                    <img src={timeLinefrom} width={70} />
+                  </div>
+                </button>
+              ) : null}
+
             </div>
 
             {projectPolicy ? (
@@ -305,11 +346,15 @@ const ProjectLandingPage = () => {
                   editAction={(project) => {
                     editProject(project);
                   }}
+
+                  deleteAction={(project) => {
+                    handleOpenDeleteModel(project);
+                  }}
                 />
               </div>
               <div className="mt-4 d-flex justify-content-end">
                 <CommonPagination
-                 pages={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage}
+                  pages={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage}
                 />
               </div>
             </div>
@@ -324,6 +369,16 @@ const ProjectLandingPage = () => {
               setRefreshTable(refreshTable + 1);
             }}
             item={selectedProject}
+          />
+
+          <CommonDeleteModel
+            onclick={handleDeleteProject}
+            loading={deleteLoading}
+            error={deleteError}
+            mode={"Project"}
+            onHide={handleCloseDeleteModel}
+            show={deleteModelShow}
+            text={selectedProject?.projectName}
           />
         </>
       )}

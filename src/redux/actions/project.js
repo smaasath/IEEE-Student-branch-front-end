@@ -73,3 +73,21 @@ export const getProjectCount = (search, termid, ouid, callback) => {
     callback(error.response);
   }
 };
+
+
+export const deleteProject = (id, callback) => {
+  const endpoint = `${import.meta.env.VITE_API_HOST}project/${id}`;
+
+  try {
+    http
+      .delete(endpoint)
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        callback(error.response);
+      });
+  } catch (error) {
+    callback(error.response);
+  }
+};
