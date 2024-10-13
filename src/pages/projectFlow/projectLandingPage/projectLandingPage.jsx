@@ -341,7 +341,7 @@ const ProjectLandingPage = () => {
                   tableData={tableData}
                   loading={false}
                   viewAction={(project) => {
-                    navigateToProject(project);
+                    navigateToProject(project.projectID);
                   }}
                   editAction={(project) => {
                     editProject(project);
