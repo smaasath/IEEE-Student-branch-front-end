@@ -26,7 +26,6 @@ const ProjectLandingPage = () => {
     useState(false);
   const [pageLoading, setPageLoading] = useState(true);
   const [status, setStatus] = useState("");
-  const [searchItem, setsearchItem] = useState("");
   const [loader, setLoader] = useState(false);
   const [refreshTable, setRefreshTable] = useState(0);
   const [countData, setCountData] = useState(0);
@@ -34,6 +33,8 @@ const ProjectLandingPage = () => {
   const [termYear, setTermYear] = useState(null);
   const [selectedOU, setSelectedOU] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
+  const [searchItem, setSearchItem] = useState("");
+  const [totalPage, setTotalPage] = useState(1);
 
   useEffect(() => {
     setPageLoading(true);
@@ -105,20 +106,34 @@ const ProjectLandingPage = () => {
     },
   ];
 
+  const formatDate = (dateString) => {
+    return new Date(dateString).toISOString().slice(0, 10); // Extract YYYY-MM-DD
+  };
+
   useEffect(() => {
     SetProjectData([]);
     setLoader(true);
-    getAllProject(currentPage - 1, searchItem, selectedOU, status, selectedYear, (res) => {
-      if (res.status === 200) {
-        const data = res?.data?.data?.content?.map(item => ({
-          id: item.projectID,
-          ouName: item?.ous?.map(ou => ou.ouName).join(","),
-          ...item,
-        }));
-        SetProjectData(data);
-        setLoader(false);
+    getAllProject(
+      currentPage - 1,
+      searchItem,
+      selectedYear,
+      status,
+      selectedOU,
+      (res) => {
+        if (res.status === 200) {
+          const data = res?.data?.data?.content?.map((item) => ({
+            id: item.projectID,
+            ouName: item?.ous?.map((ou) => ou.ouName).join(","),
+            startDate: formatDate(item.startDate),
+            endDate: formatDate(item.endDate),
+            ...item,
+          }));
+          SetProjectData(data);
+          setTotalPage(res?.data?.data?.totalPages)
+          setLoader(false);
+        }
       }
-    });
+    );
   }, [searchItem, currentPage, refreshTable, status, selectedOU, selectedYear]);
 
   const navigate = useNavigate();
@@ -146,7 +161,7 @@ const ProjectLandingPage = () => {
       }
     });
   }, []);
-  
+
   useEffect(() => {
     getAllTermYear((res) => {
       if (res.status === 200) {
@@ -155,7 +170,7 @@ const ProjectLandingPage = () => {
     });
   }, []);
 
-   const handleOUChange = (e) => {
+  const handleOUChange = (e) => {
     setSelectedOU(e.target.value);
     setCurrentPage(1);
   };
@@ -163,6 +178,11 @@ const ProjectLandingPage = () => {
   const handleYearChange = (e) => {
     setSelectedYear(e.target.value);
     setCurrentPage(1);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchItem(e.target.value);
+    setCurrentPage(1); 
   };
 
   return (
@@ -200,8 +220,11 @@ const ProjectLandingPage = () => {
                     <option value="">Select Year</option>
                     {termYear &&
                       termYear.map((yearItem) => (
-                        <option key={yearItem.id} value={yearItem.termYearID}>
-                          {yearItem.termYear}
+                        <option
+                          key={yearItem.termyearId}
+                          value={yearItem.termYearID}
+                        >
+                          {yearItem.termyear}
                         </option>
                       ))}
                   </select>
@@ -250,7 +273,11 @@ const ProjectLandingPage = () => {
 
             <div className="mt-4 d-flex flex-column gap-3 justify-content-center bg-white rounded-2 common-shadow p-3">
               <div className="mt-2 d-flex flex-wrap justify-content-between align-items-center">
-                <CommonSearch primary={true} />
+                <CommonSearch
+                  primary={true}
+                  value={searchItem}
+                  onChange={handleSearchChange}
+                />
                 <div className="">
                   <select
                     className="form-select w-100"
@@ -282,9 +309,7 @@ const ProjectLandingPage = () => {
               </div>
               <div className="mt-4 d-flex justify-content-end">
                 <CommonPagination
-                  pages={10}
-                  currentPage={currentPage}
-                  setCurrentPage={setCurrentPage}
+                 pages={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage}
                 />
               </div>
             </div>

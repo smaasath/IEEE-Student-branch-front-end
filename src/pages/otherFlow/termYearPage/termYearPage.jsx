@@ -98,7 +98,7 @@ const TermYearPage = () => {
     setLoader(true);
     getAllTermYear((res) => {
       console.log("work1", res);
-      if (res.status == 201) {
+      if (res.status == 200) {
         let data = res?.data?.data?.map(({ termyearId, termyear, status }) => ({
           id: termyearId,
           termyear,

@@ -82,7 +82,7 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
       formData.termyearId = item?.id;
       updateTermYear(formData, (res) => {
         console.log(res.data);
-        if (res?.status == 201) {
+        if (res?.status == 200) {
           setLoading(false)
           changed()
           onHide()
