@@ -74,6 +74,11 @@ const ProjectModel = ({
   const [loading, setLoading] = useState(false);
   const [exist, setExist] = useState("");
 
+  const handleStatusChange = (e) => {
+    const { value } = e.target;
+    setFormData((prevData) => ({ ...prevData, status: value }));
+  };
+
   useEffect(() => {
     if (!editable) {
       setFormData({
@@ -381,6 +386,29 @@ const ProjectModel = ({
                 <div className="invalid-feedback">This field is required.</div>
               </div>
             </div>
+            {editable && (
+              <div className="mt-3">
+                <div class="form-group">
+                  <label for="exampleFormControlTextarea1">Status</label>
+                  <select
+                    className="form-select w-100"
+                    aria-label="Large select example"
+                    value={formData.status}
+                    onChange={handleStatusChange}
+                  >
+                    <option value="">Select Status</option>
+                    <option value="TODO">To Do</option>
+                    <option value="PROGRESS">Progress</option>
+                    <option value="COMPLETE">Complete</option>
+                  </select>
+                  {error.status && (
+                    <div className="invalid-feedback d-block">
+                      This field is required.
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
             <div className="mt-3">
               <label
                 htmlFor="academicYear"

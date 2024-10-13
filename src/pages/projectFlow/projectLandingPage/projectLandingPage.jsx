@@ -146,6 +146,7 @@ const ProjectLandingPage = () => {
       }
     });
   }, []);
+  
   useEffect(() => {
     getAllTermYear((res) => {
       if (res.status === 200) {
