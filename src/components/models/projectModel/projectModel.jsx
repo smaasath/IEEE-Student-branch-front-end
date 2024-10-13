@@ -31,12 +31,11 @@ const ProjectModel = ({
     });
   }, []);
 
-
   useEffect(() => {
     if (show && editable && item) {
       const formatDate = (dateString) => {
         const date = new Date(dateString);
-        return date.toISOString().split('T')[0];
+        return date.toISOString().split("T")[0];
       };
 
       const data = {
@@ -46,7 +45,7 @@ const ProjectModel = ({
         end_date: formatDate(item.endDate),
         project_logo: item.projectLogo,
         status: item.status,
-        ou_id: [],
+        ou_id: item.ous.map((ou) => ou.ouID),
       };
 
       setFormData(data);
@@ -75,31 +74,28 @@ const ProjectModel = ({
   const [loading, setLoading] = useState(false);
   const [exist, setExist] = useState("");
 
-  // useEffect(() => {
-  //   if (!editable) {
-  //     setFormData({
-  //       project_name: "",
-  //       description: "",
-  //       start_date: "",
-  //       end_date: "",
-  //       project_logo: "",
-  //       ou_id: [],
-  //     });
-  //   } else {
-  //     setFormData(item);
-  //   }
-
-  //   setError({
-  //     project_name: false,
-  //     description: false,
-  //     start_date: false,
-  //     end_date: false,
-  //     project_logo: false,
-  //     ou_id: false,
-  //   });
-  //   setImage(null);
-  //   setExist("");
-  // }, [show, editable, item]);
+  useEffect(() => {
+    if (!editable) {
+      setFormData({
+        project_name: "",
+        description: "",
+        start_date: "",
+        end_date: "",
+        project_logo: "",
+        ou_id: [],
+      });
+    }
+    setError({
+      project_name: false,
+      description: false,
+      start_date: false,
+      end_date: false,
+      project_logo: false,
+      ou_id: false,
+    });
+    setImage(null);
+    setExist("");
+  }, [editable, item]);
 
   const resetFields = () => {
     setFormData({
@@ -214,8 +210,8 @@ const ProjectModel = ({
       let updatedFormData = { ...formData };
       const imgurl = await handleProfileUpload(image);
       updatedFormData = { ...updatedFormData, project_logo: imgurl };
-      const id=item?.projectID;
-      updateProject(id,updatedFormData, (res) => {
+      const id = item?.projectID;
+      updateProject(id, updatedFormData, (res) => {
         if (res?.status === 201) {
           setLoading(false);
           changed();
@@ -281,7 +277,7 @@ const ProjectModel = ({
                           type="checkbox"
                           id={item.ouID}
                           name="ouID"
-                          // checked={formData.ou_id.includes(item.ouID)}
+                          checked={formData.ou_id.includes(item.ouID)}
                           onChange={(e) => handleCheckboxChange(e, item.ouID)}
                         />
                         <label className="form-check-label" htmlFor={item.ouID}>
