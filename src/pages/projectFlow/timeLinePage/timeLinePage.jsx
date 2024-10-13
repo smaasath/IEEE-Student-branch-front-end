@@ -4,7 +4,7 @@ import "gantt-task-react/dist/index.css";
 import { Modal, Button } from 'react-bootstrap';
 import ViewSwitcher from '../../../components/common/viewSwitcher/viewSwitcher';
 import CommonButton from '../../../components/common/commonButton/commonButton';
-import { getAllProject } from '../../../redux/actions/project';
+import { getAllProject, updateDurationProject } from '../../../redux/actions/project';
 import { getAllOU } from '../../../redux/actions/ou';
 import { getAllTermYear } from '../../../redux/actions/termYear';
 import CommonLoader from '../../../components/common/commonLoader/commonLoader';
@@ -24,8 +24,14 @@ const TimeLinePage = () => {
     const [loader, setLoader] = useState(false);
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [modelError, setModelError] = useState(false);
 
     useEffect(() => {
+        getProjects();
+    }, [selectedOU, selectedYear]);
+
+    function getProjects() {
         SetProjectData([]);
         setLoader(true);
         getAllProject(
@@ -45,10 +51,12 @@ const TimeLinePage = () => {
                     }));
                     SetProjectData(data);
                     setLoader(false);
+                } else {
+                    setLoader(false);
                 }
             }
         );
-    }, [selectedOU, selectedYear]);
+    }
 
 
     const handleStartDateChange = (e) => {
@@ -80,7 +88,31 @@ const TimeLinePage = () => {
         });
     }, []);
 
+
+    function saveProject() {
+        setLoading(true);
+        setModelError(false);
+        const data = {
+            "start_date": startDate,
+            "end_date": endDate
+        }
+        updateDurationProject(selectedProject?.projectID, data,
+            (res) => {
+                if (res?.status == 200) {
+                    setLoading(false);
+                    getProjects();
+                    handleCloseModal();
+                } else {
+                    setLoading(false);
+                    setModelError(true);
+                }
+            }
+        )
+    }
+
     const handleTaskClick = (project) => {
+        setLoading(false);
+        setModelError(false);
         setSelectedProject(project);
         setStartDate(formatDate(project.startDate))
         setEndDate(formatDate(project.endDate))
@@ -235,44 +267,54 @@ const TimeLinePage = () => {
                 </Modal.Header>
                 <Modal.Body>
                     {selectedProject && (
-                        <div>
-                            <div className='d-flex justify-content-between align-items-center'>
-                                <div>
-                                    Start Date
+                        <>
+                            <div>
+                                <div className='d-flex justify-content-between align-items-center'>
+                                    <div>
+                                        Start Date
+                                    </div>
+                                    <div>
+                                        <div className="input-group input-group-sm">
+                                            <input
+                                                type="date"
+                                                className="form-control"
+                                                aria-label="Sizing example input"
+                                                aria-describedby="inputGroup-sizing-sm"
+                                                min={new Date().toISOString().split('T')[0]}
+                                                value={startDate}
+                                                onChange={handleStartDateChange}
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <div className="input-group input-group-sm">
-                                        <input
-                                            type="date"
-                                            className="form-control"
-                                            aria-label="Sizing example input"
-                                            aria-describedby="inputGroup-sizing-sm"
-                                            min={new Date().toISOString().split('T')[0]}
-                                            value={startDate}
-                                            onChange={handleStartDateChange}
-                                        />
+                                <div className='mt-4 d-flex justify-content-between align-items-center'>
+                                    <div>
+                                        End Date
+                                    </div>
+                                    <div>
+                                        <div className="input-group input-group-sm">
+                                            <input
+                                                type="date"
+                                                className="form-control"
+                                                aria-label="Sizing example input"
+                                                aria-describedby="inputGroup-sizing-sm"
+                                                min={startDate} // Set minimum end date to start date
+                                                value={endDate}
+                                                onChange={(e) => setEndDate(e.target.value)}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className='mt-4 d-flex justify-content-between align-items-center'>
-                                <div>
-                                    End Date
-                                </div>
-                                <div>
-                                    <div className="input-group input-group-sm">
-                                        <input
-                                            type="date"
-                                            className="form-control"
-                                            aria-label="Sizing example input"
-                                            aria-describedby="inputGroup-sizing-sm"
-                                            min={startDate} // Set minimum end date to start date
-                                            value={endDate}
-                                            onChange={(e) => setEndDate(e.target.value)}
-                                        />
+                            {
+                                modelError ? (
+                                    <div className='mt-4 text-center w-100 text-danger'>
+                                        Project duration changing is failed
                                     </div>
-                                </div>
-                            </div>
-                        </div>
+                                ) : null
+                            }
+
+                        </>
                     )}
                 </Modal.Body>
                 <Modal.Footer>
@@ -280,7 +322,7 @@ const TimeLinePage = () => {
                         <CommonButton onClick={handleCloseModal} close={true} text={"Close"} />
                     </div>
                     <div>
-                        <CommonButton text={"Save"} />
+                        <CommonButton load={loading} onClick={saveProject} text={"Save"} />
                     </div>
                 </Modal.Footer>
             </Modal>

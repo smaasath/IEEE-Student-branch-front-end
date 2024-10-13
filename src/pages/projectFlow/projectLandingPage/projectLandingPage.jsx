@@ -135,7 +135,7 @@ const ProjectLandingPage = () => {
     {
       label: "",
       value: "ACTION",
-      type: projectPolicy ? ["VIEW", "EDIT", "DELETE"] : ["VIEW"],
+      type: projectPolicy ? ["VIEW", "EDIT"] : ["VIEW"],
     },
   ];
 

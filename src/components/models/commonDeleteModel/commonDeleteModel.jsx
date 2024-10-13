@@ -25,7 +25,7 @@ const CommonDeleteModel = ({ show, onHide, onclick, text, mode, loading, error }
 
                     {
                         error ? (
-                            <div className="text-danger">
+                            <div className="text-danger w-100 mt-3 text-center">
                                 delete {mode} is failed.
                             </div>
                         ) : null
