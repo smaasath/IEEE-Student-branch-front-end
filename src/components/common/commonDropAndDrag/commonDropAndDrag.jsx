@@ -6,14 +6,14 @@ import { getExcomTask } from '../../../redux/actions/task';
 
 
 
-const CommonDropAndDrag = ({ project, excom }) => {
+const CommonDropAndDrag = ({ id, project, excom }) => {
   const [data, setData] = useState([]);
   const [taskArray, setTaskArray] = useState([]);
 
 
   useEffect(() => {
-    getExcomTask(1, (res) => {
-      if (res?.status == 300) {
+    getExcomTask(id, (res) => {
+      if (res?.status == 200) {
         convertTaskIntoDropdown(res?.data?.data);
         setTaskArray(res?.data?.data)
       }
