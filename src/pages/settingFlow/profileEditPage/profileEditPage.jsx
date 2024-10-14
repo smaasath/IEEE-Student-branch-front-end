@@ -65,8 +65,10 @@ const ProfileEditPage = () => {
     lastName: false,
     userName: false,
     email: false,
-    phone: false,
+    contactNo: false,
+    ieeeEmail: false,
     location: false,
+    ieeeNumber: false,
   });
 
   useEffect(() => {
@@ -356,22 +358,22 @@ const ProfileEditPage = () => {
         <div className="d-flex justify-content-end align-items-end gap-1 mt-5">
           <div className="d-flex gap-3 flex-row">
             <div>
-            {isEditable && (
-              <CommonButton
-                text={"Cancel"}
-                close={true}
-                onClick={() => setIsEditable(false)}
-              />
-            )}
+              {isEditable && (
+                <CommonButton
+                  text={"Cancel"}
+                  close={true}
+                  onClick={() => setIsEditable(false)}
+                />
+              )}
             </div>
             <div>
-            {isEditable && (
-              <CommonButton
-                text={"Save Changes"}
-                onClick={handleSubmit}
-                disabled={!isEditable}
-              />
-            )}
+              {isEditable && (
+                <CommonButton
+                  text={"Save Changes"}
+                  onClick={handleSubmit}
+                  disabled={!isEditable}
+                />
+              )}
             </div>
           </div>
         </div>
