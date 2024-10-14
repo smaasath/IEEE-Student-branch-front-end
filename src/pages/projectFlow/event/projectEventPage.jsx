@@ -50,7 +50,7 @@ const ProjectEventPage = () => {
         })
       }
     }
-  }, [userData, projectPolicyData])
+  }, [userData, projectPolicyData, id])
 
   const events = [{
     id: 1,

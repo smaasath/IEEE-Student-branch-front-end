@@ -74,7 +74,7 @@ const ProjectPage = () => {
       })
 
     }
-  }, [userData]);
+  }, [userData, id]);
 
   const openTaskModal = () => {
     setShowTaskModal(true);
