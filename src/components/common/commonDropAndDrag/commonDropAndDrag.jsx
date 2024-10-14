@@ -68,6 +68,8 @@ const CommonDropAndDrag = ({ id, project, excom, refresh }) => {
   const onDragEnd = result => {
     const { source, destination, draggableId } = result;
 
+    console.warn(result,"hhhhhhhhhhhhhhhhhhhhh")
+
     if (!destination || (source.droppableId === destination.droppableId && source.index === destination.index)) {
       return;
     }
@@ -131,7 +133,7 @@ const CommonDropAndDrag = ({ id, project, excom, refresh }) => {
             const tasks = column?.taskIds?.map(taskId => data.tasks[taskId]);
 
             return (
-              <Droppable key={column.id} droppableId={column.id}>
+              <Droppable key={column.id} droppableId={column.id} >
                 {(provided) => (
                   <div
                     ref={provided.innerRef}
