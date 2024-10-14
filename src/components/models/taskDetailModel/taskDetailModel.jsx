@@ -26,13 +26,13 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
   const [selectedPriority, setSelectedPriority] = useState("High");
   const userData = useSelector((state) => state.user.userData);
   const [pageLoading, setPageLoading] = useState(true);
-
+  const projectPolicyData = useSelector((state) => state.user.projectPolicy);
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
-    return dateString.split('T')[0]; // Split the date string and take only the first part (date)
+    return dateString.split('T')[0];
   };
 
   useEffect(() => {
@@ -53,18 +53,20 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
       }
 
     } else if (project) {
-      if (userData && show) {
-        const isExcomAvailable = PolicyValidate(userData,"EXCOM");
+      if (projectPolicyData && show) {
+        const isProjectAvailable = PolicyValidate(userData, "PROJECT");
 
-        const isExcomTaskAvailable = PolicyValidate(userData,"EXCOM_TASK");
+        const isProjecrTaskAvailable = PolicyValidate(projectPolicyData, "PROJECT_TASK");
 
-        const isExcomTaskAssignAvailable = PolicyValidate(userData,"EXCOM_TASK_ASSIGN");
+        const isPrjectTaskAssignAvailable = PolicyValidate(projectPolicyData, "PROJECT_ASSIGN");
 
-        if (!isExcomAvailable) {
-          navigate("/dashboard");
+        if (isProjectAvailable) {
+          setAssignTask(isPrjectTaskAssignAvailable);
+          setCreateTask(isProjecrTaskAvailable);
+          setPageLoading(false);
         } else {
-          setAssignTask(isExcomTaskAssignAvailable);
-          setCreateTask(isExcomTaskAvailable);
+          setAssignTask(isPrjectTaskAssignAvailable);
+          setCreateTask(isProjecrTaskAvailable);
           setPageLoading(false);
         }
       }
@@ -166,7 +168,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 <input
                   type="date"
                   className="form-control ms-3"
-                  value={2024/10/16}
+                  value={2024 / 10 / 16}
                   onChange={handleDateChange}
                 />
               </div>

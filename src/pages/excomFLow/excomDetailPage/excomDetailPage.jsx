@@ -251,7 +251,7 @@ const ExcomDetailPage = () => {
         setPageLoading(false);
       }
     }
-  }, [userData]);
+  }, [userData,ouId]);
   const handleShowEditExcomModel = (member) => {
     setSelectedMember(member);
     setEditExcomModelShow(true);
@@ -282,7 +282,7 @@ const ExcomDetailPage = () => {
         setExcomCardLoader(false);
       }
     });
-  }, [refreshExcomData, termFilter]);
+  }, [refreshExcomData, termFilter,ouId]);
 
   const handleTermChange = (e) => setTermFilter(e.target.value);
 
