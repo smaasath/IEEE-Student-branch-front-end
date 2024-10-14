@@ -6,15 +6,16 @@ import MemberDetailsModal from "../../../components/models/viewMemberDetailsMode
 import OuCard from "../../../components/common/oucard/ouCard";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { getAllTermYear } from '../../../redux/actions/termYear';
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
 import { getAllExcomMember, getAllOU } from "../../../redux/actions/ou";
+import { PolicyValidate } from "../../../utils/valitations/Valitation";
 
 const ExcomLandingPage = () => {
   const currentYear = new Date().getFullYear();
   const [searchItem, setsearchItem] = useState("");
   const [entityFilter, setEntityFilter] = useState('');
-  const [termFilter, setTermFilter] = useState(currentYear);
-
+  const [termFilter, setTermFilter] = useState('');
   const [availableTermYears, setAvailableTermYears] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [memberDetailModalShow, setMemberDetailModalShow] = useState(false);
@@ -51,60 +52,48 @@ const ExcomLandingPage = () => {
     });
   }, []);
 
+
   useEffect(() => {
-
     setLoader(true);
-    getAllExcomMember(currentPage - 1, searchItem, entityFilter, (res) => {
+    getAllExcomMember(currentPage - 1, searchItem, entityFilter, termFilter, (res) => {
       if (res.status == 200) {
-        // let data = res?.data?.data?.content?.map(
-        //   ({ userRoleDetailsId,
-        //     user: { firstName, lastName, email, contactNo, academicYear: { academicYear } },
-        //     ou: { ou_short_name },
-        //     role: { userRole }
-        //   }) => ({
-        //     id: userRoleDetailsId,
-        //     fname: firstName,
-        //     lname: lastName,
-        //     email: email,
-        //     contactNo: contactNo,
-        //     entity: ou_short_name,
-        //     position: userRole,
-        //     academicYear: academicYear,
-        //     termYear: "2024",
-        //   })
-        // );
+        // Log raw response to inspect
+        console.log("Raw Data Response: ", res?.data);
 
-        let data = res?.data?.data?.content?.map((user) => ({
-          id: user?.userRoleDetailsId,
-          fname: user?.user?.firstName,
-          lname: user?.user?.lastName,
-          email: user?.user?.email,
-          phone: user?.user?.contactNo,
-          entity: user?.ou?.ou_short_name,
-          position: user?.role?.userRole,
-          academicYear: user?.user?.academicYear?.academicYear || "N/A",
-          termYear: "2024",
-        }));
-        console.warn(data);
-        SetExcomData(data);
-        setTotalPage(res?.data?.data?.totalPages);
-        console.warn(res?.data?.data?.totalPages);
+        // Ensure data exists in the expected path before mapping
+        const content = res?.data?.data?.content;
+        if (content && content.length > 0) {
+          let data = content.map((user) => ({
+            id: user?.userRoleDetailsId,
+            fname: user?.user?.firstName,
+            lname: user?.user?.lastName,
+            email: user?.user?.email,
+            contactNo: user?.user?.contactNo,
+            entity: user?.ou?.ou_short_name,
+            position: user?.role?.userRole,
+            academicYear: user?.user?.academicYear?.academicYear || "N/A",
+            termYear: user?.termyear?.termyear || "N/A",
+          }));
+          console.log("Mapped Data: ", data);
+          SetExcomData(data);
+          setTotalPage(res?.data?.data?.totalPages);
+          console.warn("Total Pages: ", res?.data?.data?.totalPages);
+        } else {
+          console.warn("No content found in response");
+          SetExcomData([]); // Set to empty array if no content
+        }
         setLoader(false);
       } else {
+        console.error("Failed to load data: ", res);
         setLoader(false);
       }
     });
   }, [searchItem, currentPage, refreshTable, entityFilter]);
 
-
   useEffect(() => {
     setPageLoading(true);
     if (userData) {
-      const isOtherAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM"
-        )
-      );
+      const isOtherAvailable = PolicyValidate(userData,"EXCOM");
       if (!isOtherAvailable) {
         navigate("/dashboard");
       } else {
@@ -114,10 +103,19 @@ const ExcomLandingPage = () => {
   }, [userData, navigate]);
 
   const handleCloseMemberDetailModal = () => setMemberDetailModalShow(false);
+
+
   const handleShowMemberDetailModal = (member) => {
-    setSelectedMember(member);
-    setMemberDetailModalShow(true);
+    if (member) {
+      console.log("Selected Member: ", member); // Log the selected member to verify
+      setSelectedMember(member); // Set the selected member directly
+      setMemberDetailModalShow(true); // Show the modal
+    } else {
+      console.error("No member data available");
+    }
   };
+
+
 
   //   function search(item) {
   //     setsearchItem(item?.target?.value || "");
@@ -143,7 +141,7 @@ const ExcomLandingPage = () => {
   function navigateToExcomPage(ouid) {
     navigate(`/dashboard/executive-committee/${ouid}`);
   }
-    
+
 
   //   const entities = [
   //     { id: 0, name: "SB", type: "Student Branch", logo: sbLogo },
@@ -153,6 +151,17 @@ const ExcomLandingPage = () => {
   //     { id: 4, name: "CS", type: "Technical Chapter", logo: iasLogo }
   //   ];
 
+
+  useEffect(() => {
+    getAllTermYear((res) => {
+      if (res.status == 201) {
+        let termYears = res?.data?.data
+        setAvailableTermYears(termYears);
+      }
+    });
+  }, []);
+
+  
   return (
     <>
       {pageLoading ? (
@@ -217,32 +226,38 @@ const ExcomLandingPage = () => {
                   </select>
                 </div>
                 <div>
-                  <select
-                    className="form-select ms-2 me-1"
-                    value={termFilter}
-                    onChange={handleTermChange}
-                  >
-                    <option value={currentYear}>Select Term</option>
-                    {availableTermYears.map((year) => (
-                      <option key={year} value={year}>
-                        Term {year}
-                      </option>
-                    ))}
-                  </select>
+                <select
+                  className="form-select ms-2 me-1"
+                  value={termFilter}
+                  onChange={handleTermChange}
+                >
+                  <option value={currentYear}>Select Term</option>
+                  {availableTermYears.map((year) => (
+                    <option key={year.termyearId} value={year.termyearId}>
+                      {year.termyear}
+                    </option>
+                  ))}
+                </select>
                 </div>
               </div>
 
               <div className="mt-3 p-3 rounded-4 bg-white d-flex flex-column justify-content-between table-container">
+
+
                 <CommonTable
                   tableHeading={tableHeading}
                   tableData={excomData}
                   primary={true}
                   loading={loader}
-                  viewAction={(id) => {
-                    const member = excomData.find((item) => item.id === id);
-                    handleShowMemberDetailModal(member);
+                  viewAction={(member) => {
+                    // Instead of finding by ID, just use the member directly
+                    console.log("Member received: ", member);
+                    handleShowMemberDetailModal(member); // Pass the member object directly
                   }}
                 />
+
+
+
                 <div className="mt-4 d-flex justify-content-end">
                   <CommonPagination
                     pages={totalPage}
@@ -265,3 +280,15 @@ const ExcomLandingPage = () => {
 };
 
 export default ExcomLandingPage;
+
+
+
+
+
+
+
+
+
+
+
+

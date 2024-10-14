@@ -11,6 +11,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
 import { getAllExcomMember } from "../../../redux/actions/ou";
+import { getAllTermYear } from '../../../redux/actions/termYear';
+import { PolicyValidate } from "../../../utils/valitations/Valitation";
 
 const CommitteeMemberCard = ({
   photo,
@@ -18,11 +20,14 @@ const CommitteeMemberCard = ({
   phone,
   email,
   academicYear,
+  fbURL,
+  linkedInURL,
   loading,
 }) => {
   const [editExcomModelShow, setEditExcomModelShow] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
   const handleCloseEditExcomModel = () => setEditExcomModelShow(false);
+
 
   const handleShowEditExcomModel = (member) => {
     setSelectedMember(member);
@@ -188,16 +193,24 @@ const CommitteeMemberCard = ({
                 {academicYear}
               </p>
               <div className="d-flex gap-2">
-                <img
-                  src={Facebook}
-                  alt="Facebook"
-                  style={{ width: "25px", height: "25px" }}
-                />
-                <img
-                  src={Linkedin}
-                  alt="Linkedin"
-                  style={{ width: "25px", height: "25px" }}
-                />
+                {fbURL && (
+                  <a href={fbURL}>
+                    <img
+                      src={Facebook}
+                      alt="Facebook"
+                      style={{ width: "25px", height: "25px" }}
+                    />
+                  </a>
+                )}
+                {linkedInURL && (
+                  <a href={linkedInURL}>
+                    <img
+                      src={Linkedin}
+                      alt="LinkedIn"
+                      style={{ width: "25px", height: "25px" }}
+                    />
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -210,6 +223,9 @@ const CommitteeMemberCard = ({
 const ExcomDetailPage = () => {
   const [editExcomModelShow, setEditExcomModelShow] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
+  const currentYear = new Date().getFullYear();
+  const [termFilter, setTermFilter] = useState('');
+  const [availableTermYears, setAvailableTermYears] = useState([]);
   const navigate = useNavigate();
   const [assignPolicy, setAssignPolicy] = useState(false);
   const userData = useSelector((state) => state.user.userData);
@@ -224,17 +240,9 @@ const ExcomDetailPage = () => {
   useEffect(() => {
     setPageLoading(true);
     if (userData) {
-      const isExcomAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM"
-        )
-      );
+      const isExcomAvailable = PolicyValidate(userData,"EXCOM");
 
-      const isExcomAssignAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM_ASSIGN"
-        )
-      );
+      const isExcomAssignAvailable = PolicyValidate(userData,"EXCOM_ASSIGN");
 
       if (!isExcomAvailable) {
         navigate("/dashboard");
@@ -251,7 +259,7 @@ const ExcomDetailPage = () => {
 
   useEffect(() => {
     setExcomCardLoader(true);
-    getAllExcomMember(currentPage - 1, "", ouId, (res) => {
+    getAllExcomMember(currentPage - 1, "", ouId, termFilter, (res) => {
       if (res.status == 200) {
         let data = res?.data?.data?.content?.map((user) => ({
           id: user?.userRoleDetailsId,
@@ -264,18 +272,29 @@ const ExcomDetailPage = () => {
           position: user?.role?.userRole,
           priority: user?.role?.priorityMain,
           academicYear: user?.user?.academicYear?.academicYear || "N/A",
-          termYear: "2024",
+          termYear: "",
         }));
         console.warn(data);
         SetExcomData(data);
         setTotalPage(res?.data?.data?.totalPages);
-        console.warn(res?.data?.data?.totalPages);
         setExcomCardLoader(false);
       } else {
         setExcomCardLoader(false);
       }
     });
-  }, [refreshExcomData]);
+  }, [refreshExcomData, termFilter]);
+
+  const handleTermChange = (e) => setTermFilter(e.target.value);
+
+  useEffect(() => {
+    getAllTermYear((res) => {
+      if (res.status == 201) {
+        let termYears = res?.data?.data
+        setAvailableTermYears(termYears);
+      }
+    });
+  }, []);
+
 
   return (
     <>
@@ -292,7 +311,7 @@ const ExcomDetailPage = () => {
                 />
               </div>
               <div>
-                <select
+                {/* <select
                   className="form-select w-100"
                   aria-label="Term Year Select"
                 >
@@ -300,6 +319,19 @@ const ExcomDetailPage = () => {
                   <option value="2024">2024 Term</option>
                   <option value="2023">2023 Term</option>
                   <option value="2022">2022 Term</option>
+                </select> */}
+
+                <select
+                  className="form-select ms-2 me-1"
+                  value={termFilter}
+                  onChange={handleTermChange}
+                >
+                  <option value={currentYear}>Select Term</option>
+                  {availableTermYears.map((year) => (
+                    <option key={year.termyearId} value={year.termyearId}>
+                      {year.termyear}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -310,36 +342,39 @@ const ExcomDetailPage = () => {
             <div className="row mt-4" key={raw + 1}>
               {excomCardLoader
                 ? [0, 0, 0].map((_, index) => (
-                    <div
-                      key={index}
-                      className="col-12 col-sm-12 col-lg-4 col-md-4 mb-4"
-                    >
-                      <CommitteeMemberCard loading={true} />
-                    </div>
-                  ))
+                  <div
+                    key={index}
+                    className="col-12 col-sm-12 col-lg-4 col-md-4 mb-4"
+                  >
+                    <CommitteeMemberCard loading={true} />
+                  </div>
+                ))
                 : excomData &&
-                  excomData
-                    .filter((member) => member.priority === raw + 1)
-                    .map((member, index) => (
+                excomData
+                  .filter((member) => member.priority === raw + 1)
+                  .map((member, index) => (
+
+                    <div
+                      className="col-12 col-sm-12 col-lg-4 col-md-4 mb-4"
+                      key={index}
+                    >
                       <div
-                        className="col-12 col-sm-12 col-lg-4 col-md-4 mb-4"
-                        key={index}
+                        className="mb-2 fw-bold"
+                        style={{ fontSize: "18px", color: "#555" }}
                       >
-                        <div
-                          className="mb-2 fw-bold"
-                          style={{ fontSize: "18px", color: "#555" }}
-                        >
-                          {member.position}
-                        </div>
-                        <CommitteeMemberCard
-                          photo={member.photo}
-                          name={`${member.fname} ${member.lname}`}
-                          phone={member.phone}
-                          email={member.email}
-                          academicYear={member.academicYear}
-                        />
+                        {member.position}
                       </div>
-                    ))}
+                      <CommitteeMemberCard
+                        photo={member.photo}
+                        name={`${member.fname} ${member.lname}`}
+                        phone={member.phone}
+                        email={member.email}
+                        academicYear={member.academicYear}
+                        fbURL={member.fbURL}
+                        linkedInURL={member.linkedInURL}
+                      />
+                    </div>
+                  ))}
             </div>
           ))}
 

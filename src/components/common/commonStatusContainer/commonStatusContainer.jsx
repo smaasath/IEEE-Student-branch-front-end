@@ -11,8 +11,8 @@ const CommonStatusContainer = ({ status }) => {
         return { bgcolor: "#D1EB32", color: "#667085", text: "Reviewed" };
       case "COMPLETE":
         return { bgcolor: "#A7DAA2", color: "#18713D", text: "Complete" };
-      case "ONGOING":
-        return { bgcolor: "#00B8D9", color: "#00629B ", text: "Ongoing" };
+      case "PROGRESS":
+        return { bgcolor: "#00B8D9", color: "#00629B ", text: "Progress" };
       case "ACTIVE":
         return { bgcolor: "rgb(0, 0, 255,0.1)", color: "rgb(0, 0, 255) ", text: "Active" };
       case "DEACTIVE":

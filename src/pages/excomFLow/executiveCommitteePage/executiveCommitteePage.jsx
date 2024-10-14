@@ -12,6 +12,7 @@ import CreateTaskModel from "../../../components/models/createTaskModel/createTa
 import TaskDetailModel from "../../../components/models/taskDetailModel/taskDetailModel";
 import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
+import { PolicyValidate } from "../../../utils/valitations/Valitation";
 
 function ExecutiveCommitteePage() {
   const { id } = useParams();
@@ -24,17 +25,9 @@ function ExecutiveCommitteePage() {
   useEffect(() => {
     setPageLoading(true);
     if (userData) {
-      const isExcomAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM"
-        )
-      );
+      const isExcomAvailable = PolicyValidate(userData,"EXCOM");
 
-      const isExcomTaskAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM_TASK"
-        )
-      );
+      const isExcomTaskAvailable = PolicyValidate(userData,"EXCOM_TASK");
 
       if (!isExcomAvailable) {
         navigate("/dashboard");
@@ -127,61 +120,10 @@ function ExecutiveCommitteePage() {
                 className="mt-4 d-flex justify-content-between overflow-scroll overflow-y-hidden custom-scrollbar"
                 style={{ maxWidth: 1300 }}
               >
-                <CommonDropAndDrag excom={true} id={id}/>
+                <CommonDropAndDrag id={id} excom={true} />
               </div>
             </div>
-
-            <div className="d-flex mt-5 justify-content-between align-items-center flex-wrap gap-4">
-              <div className="text-cl-primary mt-4">Upcoming Birthday</div>
-            </div>
-
-            <div className="container mt-4">
-              <div className="row">
-                {[1].map((index) => (
-                  <div key={index} className="col-md-3">
-                    <div
-                      className="card"
-                      onClick={() => openTaskDetailModel(`Task ${index}`)}
-                    >
-                      <div className="card-body d-flex align-items-center">
-                        <img
-                          src={Profile}
-                          alt="Profile"
-                          className="rounded-circle me-3"
-                          style={{
-                            width: "50px",
-                            height: "50px",
-                            objectFit: "cover",
-                          }}
-                        />
-                        <div>
-                          <h5>
-                            <b>Ishara Suvini</b>
-                          </h5>
-                          <span>Web Master</span>
-                        </div>
-                      </div>
-                      <div
-                        className="card-footer"
-                        style={{ backgroundColor: "#0E2954", color: "white" }}
-                      >
-                        <small className="text-white">Date of Birth</small>
-                        <div className="d-flex align-items-center">
-                          <span className="fs-4">22nd October</span>
-                          <img
-                            src={BalloonImage}
-                            alt="Balloon"
-                            style={{ width: "30px", marginLeft: "auto" }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <CreateTaskModel show={showTaskModal} onHide={closeTaskModal} type={'EXCOM'} ouID={id}/>
+            <TaskModel show={showTaskModal} onHide={closeTaskModal} />
           </div>
         </>
       )}

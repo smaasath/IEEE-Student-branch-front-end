@@ -1,31 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import CommonButton from '../../common/commonButton/commonButton';
-import { createTermYear, updateTermYear } from '../../../redux/actions/termYear';
+import { createAcademicYear, updateAcademicYear } from '../../../redux/actions/academicYear';
 
 
-const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
+const AcademiYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
 
 
   const [formData, setFormData] = useState({
-    termyear: "",
+    enrolledBatch: "",
+    academicYear: "",
     status: "",
   });
 
   const [error, setError] = useState({
-    termyear: false,
+    enrolledBatch: false,
+    academicYear: false,
     status: false,
   });
 
   const [loading, setLoading] = useState(false);
   const [exist, setExist] = useState('');
-  const [validationMessage, setValidationMessage] = useState('');
 
   useEffect(() => { 
 
     if (!editable) {
       setFormData({
-        termyear: "",
+        enrolledBatch: "",
+        academicYear: "",
         status: "",
       });
     } else {
@@ -33,12 +35,12 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
     }
 
     setError({
-      termyear: false,
+      enrolledBatch: false,
+      academicYear: false,
       status: false,
     });
 
     setExist('')
-    setValidationMessage('');
 
   }, [show])
 
@@ -46,32 +48,24 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-    // Check if the value is not numeric
-    if (name === 'termyear' && isNaN(value)) {
-      setValidationMessage('Please only input numbers');
-      setError((prevError) => ({ ...prevError, termyear: true }));
-    } else {
-      setValidationMessage('');
-      setError((prevError) => ({ ...prevError, termyear: false }));
-    }
-
     setFormData((prevData) => ({ ...prevData, [name]: value }));
     setError((prevError) => ({ ...prevError, [name]: false }));
     setExist('')
   };
 
-  function addTermYear() {
+  function addAcademicYear() {
     setExist('')
     setError({
-      termyear: false,
+      enrolledBatch: false,
+      academicYear: false,
       status: false,
     });
 
-    if (!formData.termyear ||  formData.status == '') {
+    if (!formData.academicYear || !formData.enrolledBatch || formData.status == '') {
       setError({
         ...error,
-        termyear: !formData.termyear,
+        academicYear: !formData.academicYear,
+        enrolledBatch: !formData.enrolledBatch,
         status: formData.status == '' ? true : false,
       });
       return;
@@ -79,9 +73,8 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
 
     setLoading(true)
     if (editable) {
-      formData.termyearId = item?.id;
-      updateTermYear(formData, (res) => {
-        console.log(res.data);
+      formData.acedemicId = item?.id;
+      updateAcademicYear(formData, (res) => {
         if (res?.status == 200) {
           setLoading(false)
           changed()
@@ -89,12 +82,12 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
 
         } else {
           setLoading(false)
-          setExist("Term Year Added Failed")
+          setExist("Acedemic Year Added Failed")
         }
       })
     } else {
 
-      createTermYear(formData, (res) => {
+      createAcademicYear(formData, (res) => {
         if (res?.status == 201) {
           setLoading(false)
           changed()
@@ -102,10 +95,10 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
 
         } else if (res?.status == 409) {
           setLoading(false)
-          setExist("Term Year Already Exist")
+          setExist("Acedemic Year Already Exist")
         } else {
           setLoading(false)
-          setExist("Term Year Added Failed")
+          setExist("Acedemic Year Added Failed")
         }
 
 
@@ -134,30 +127,21 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
         <div className='d-flex flex-column'>
           <div className='mt-3'>
             <div className="has-validation">
-              <label htmlFor="exampleFormControlInput1" className="form-label text-dark">Term Year</label>
-              <input
-                type="text"
-                className={`form-control ${error.termyear ? "is-invalid" : ""}`}
-                name='termyear'
-                value={formData.termyear}
-                onChange={handleInputChange}
-                id="exampleFormControlInput1"
-                placeholder="Term Year"
-                disabled={disabled}
-                required
-              />
-
+              <label htmlFor="exampleFormControlInput1" className="form-label text-dark">Academic Year</label>
+              <input type="text" className={`form-control ${error.academicYear ? "is-invalid" : ""}`} name='academicYear' value={formData.academicYear} onChange={handleInputChange} id="exampleFormControlInput1" placeholder="Academic Year" disabled={disabled} required />
               <div class="invalid-feedback">
                 This field is required.
               </div>
-              {validationMessage && (
-                <div className="text-danger mt-1">
-                  {validationMessage}
-                </div>
-              )}
             </div>
           </div>
           <div className='mt-3'>
+            <div className="">
+              <label htmlFor="exampleFormControlInput1" className="form-label text-dark">Enrolled Batch</label>
+              <input type="text" name='enrolledBatch' value={formData.enrolledBatch} onChange={handleInputChange} className={`form-control ${error.enrolledBatch ? "is-invalid" : ""}`} id="exampleFormControlInput1" placeholder="Enrolled Batch" disabled={disabled} />
+              <div class="invalid-feedback">
+                This field is required.
+              </div>
+            </div>
           </div>
           <div className="mt-3">
             <label htmlFor="exampleFormControlInput1" className="form-label text-dark">Status</label>
@@ -184,7 +168,7 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
         </div>
         {disabled ? null : (
           <div>
-            <CommonButton load={loading} onClick={addTermYear} text={editable ? "Save" : "Add"} />
+            <CommonButton load={loading} onClick={addAcademicYear} text={editable ? "Save" : "Add"} />
           </div>
         )}
       </Modal.Footer>
@@ -192,4 +176,4 @@ const TermYearModel = ({ onHide, show, disabled, editable, item, changed }) => {
   );
 }
 
-export default TermYearModel;
+export default AcademiYearModel;

@@ -6,6 +6,7 @@ import { usePDF } from 'react-to-pdf';
 import { useSelector } from 'react-redux';
 import CommonLoader from '../../../components/common/commonLoader/commonLoader';
 import { useNavigate } from 'react-router-dom';
+import { PolicyValidate } from '../../../utils/valitations/Valitation';
 
 
 
@@ -19,9 +20,7 @@ const ReportPage = () => {
     useEffect(() => {
         setPageLoading(true)
         if (userData) {
-            const isFinanceAvailable = userData?.some(userRoleDetail =>
-                userRoleDetail.role?.policies.some(policy => policy.policyCode === "FINANCE")
-              );
+            const isFinanceAvailable = PolicyValidate(userData, "FINANCE");
             if (!isFinanceAvailable) {
                 navigate('/dashboard')
             } else {

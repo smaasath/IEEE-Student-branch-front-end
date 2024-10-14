@@ -120,8 +120,6 @@ const UserRoleModel = ({ onHide, show, editable, disabled, item, changed }) => {
       });
       return;
     }
-
-    if (selectedPolicy.length > 0) {
       setLoading(true);
       if (editable) {
         formData.roleID = item?.id;
@@ -175,9 +173,6 @@ const UserRoleModel = ({ onHide, show, editable, disabled, item, changed }) => {
           }
         });
       }
-    } else {
-      SetSelectError("Please Select a Policy");
-    }
   }
 
   return (

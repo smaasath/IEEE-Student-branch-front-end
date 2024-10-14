@@ -3,56 +3,66 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import AddTask from '../../../assets/icons/Add.png'
 import CommonTaskCard from '../commonTaskCard/commonTaskCard';
 import { getExcomTask } from '../../../redux/actions/task';
-getExcomTask
-
-const CommonDropAndDrag = ({ project, excom, id }) => {
 
 
+const CommonDropAndDrag = ({ id, project, excom }) => {
   const [data, setData] = useState([]);
-  const [task, setTask] = useState([]);
+  const [taskArray, setTaskArray] = useState([]);
 
 
   useEffect(() => {
-    console.log("ssssssssssssssssssss");
     getExcomTask(id, (res) => {
-      console.log(res, "aaaaaaaaaaaaaaaaaaaa");
       if (res?.status == 200) {
-        const taskData = res?.data?.data;
-        setTask(taskData);
-        let initialData = {
-          tasks: taskData,
-          columns: {
-            'TODO': {
-              id: 'TODO',
-              title: 'To do',
-              taskIds: filterTaskIdByStatus('TODO', taskData) || [],
-            },
-            'PROGRESS': {
-              id: 'PROGRESS',
-              title: 'On Going',
-              taskIds: filterTaskIdByStatus('PROGRESS', taskData) || [],
-            },
-            'COMPLETE': {
-              id: 'COMPLETE',
-              title: 'Completed',
-              taskIds: filterTaskIdByStatus('COMPLETE', taskData) || [],
-            },
-          },
-          columnOrder: ['TODO', 'PROGRESS', 'COMPLETE'],
-        };
-
-        console.log(initialData, "bbbbbbbbbbbbbbbbbbbb");
-        setData(initialData);
+        convertTaskIntoDropdown(res?.data?.data);
+        setTaskArray(res?.data?.data)
       }
     })
-  }, [id]);
+  }, []);
+
+
+  function convertTaskIntoDropdown(tasksArray) {
+    let data = tasksArray.map((item) => ({
+      id: item.taskId + item.task_name,
+      ...item,
+    }));
+    const task = data.reduce((acc, task) => {
+      acc[task.id] = task;
+      return acc;
+    }, {});
+    let initialData = {
+      tasks: task,
+      columns: {
+        'TODO': {
+          id: 'TODO',
+          title: 'To do',
+          taskIds: filterTaskIdByStatus('TODO', data) || [],
+        },
+        'PROGRESS': {
+          id: 'PROGRESS',
+          title: 'On Going',
+          taskIds: filterTaskIdByStatus('PROGRESS', data) || [],
+        },
+        'COMPLETE': {
+          id: 'COMPLETE',
+          title: 'Completed',
+          taskIds: filterTaskIdByStatus('COMPLETE', data) || [],
+        },
+      },
+      columnOrder: ['TODO', 'PROGRESS', 'COMPLETE'],
+    };
+    setData(initialData);
+  }
+
+
+
+
 
 
 
   function filterTaskIdByStatus(status, tasks) {
     return tasks
       .filter((task) => task.status === status)
-      .map((task) => task.taskId);
+      .map((task) => task.id);
   }
 
   const onDragEnd = result => {
@@ -113,42 +123,48 @@ const CommonDropAndDrag = ({ project, excom, id }) => {
   };
 
   return (
-    <div className='d-flex justify-content-between'>
-      <DragDropContext onDragEnd={onDragEnd}>
-        {data?.columnOrder?.map((columnId) => {
-          const column = data.columns[columnId];
-          const tasks = column?.taskIds?.map(taskId => data.tasks.find(task => task.taskId === taskId));
+    <>
+      <div className='d-flex justify-content-between'>
+        <DragDropContext onDragEnd={onDragEnd}>
+          {data?.columnOrder?.map((columnId) => {
+            const column = data.columns[columnId];
+            const tasks = column?.taskIds?.map(taskId => data.tasks[taskId]);
 
+            return (
+              <Droppable key={column.id} droppableId={column.id}>
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className='d-flex flex-column align-items-center m-3 p-4 rounded-3 overflow-scroll overflow-x-hidden custom-scrollbar'
+                    style={{ backgroundColor: "#EEF2F5", width: 330, maxHeight: 1000 }}
 
-          return (
-            <Droppable key={column.id} droppableId={column.id}>
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  className='d-flex flex-column align-items-center m-3 p-4 rounded-3 overflow-scroll overflow-x-hidden custom-scrollbar'
-                  style={{ backgroundColor: "#EEF2F5", width: 330, maxHeight: 1000 }}
+                  >
+                    <div className='d-flex justify-content-between align-items-center w-100'>
+                      <div>
+                        <h5 style={{ color: column.id == "TODO" ? "#5F6A6A" : column.id == "PROGRESS" ? "#00629B" : column.id == "COMPLETE" ? "#229954" : "black" }}>{column.title}</h5>
+                      </div>
 
-                >
-                  <div className='d-flex justify-content-between align-items-center w-100'>
-                    <div>
-                      <h5 style={{ color: column.id == "TODO" ? "#5F6A6A" : column.id == "PROGRESS" ? "#00629B" : column.id == "COMPLETE" ? "#229954" : "black" }}>{column.title}</h5>
+                    </div>
+                    <div className='d-flex mt-4 flex-column justify-content-center gap-4'>
+                      {tasks.map((task, index) => (
+                        <CommonTaskCard project={project} excom={excom} task={task} key={index} />
+                      ))}
                     </div>
 
                   </div>
-                  <div className='d-flex mt-4 flex-column justify-content-center gap-4'>
-                    {tasks.map((task, index) => (
-                      <CommonTaskCard project={project} excom={excom} task={task} key={index} />
-                    ))}
-                  </div>
+                )}
+              </Droppable>
+            );
+          })}
+        </DragDropContext>
+      </div>
+      {taskArray?.length > 0 ? null : (
+        <div className='text-center w-100'>No tasks found</div>
+      )}
 
-                </div>
-              )}
-            </Droppable>
-          );
-        })}
-      </DragDropContext>
-    </div>
+    </>
+
   );
 };
 
