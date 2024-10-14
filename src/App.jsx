@@ -22,7 +22,6 @@ import ServiceLanding from './pages/serviceFlow/serviveLandingPage/serviveLandin
 import VolunteerDetailsPage from './pages/serviceFlow/volunteerDetailsPage/volunteerDetails';
 import Volunteering from './pages/serviceFlow/VolunteeringPage/VolunteeringPage';
 import ProjectPrPlan from './pages/projectFlow/prPlan/projectPrPlan';
-import MainSettingPage from './pages/settingFlow/mainSettingPage/mainSettingPage';
 import ProfileEditPage from './pages/settingFlow/profileEditPage/profileEditPage';
 import OtherLandingPage from './pages/otherFlow/langingPage/landingPage';
 import AcademicYearPage from './pages/otherFlow/academicYearPage/academicYearPage'
@@ -88,8 +87,7 @@ function App() {
               <Route path='volunteering' element={<Volunteering />} />
             </Route>
             <Route path='setting'>
-              <Route path='' element={<MainSettingPage />} />
-              <Route path='edit-profile' element={<ProfileEditPage />} />
+              <Route path='' element={<ProfileEditPage />} />
             </Route>
             <Route path='other'>
               <Route path='' element={<OtherLandingPage />} />

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Facebook from "../../../assets/icons/Facebook.png";
 import Linkedin from "../../../assets/icons/LinkedIn Circled.png";
 import profile from "../../../assets/images/profile.png";
 import CommonButton from "../../../components/common/commonButton/commonButton";
 import EditProfileModal from "../../../components/models/editProfileModel/editProfileModel";
+import { useSelector } from "react-redux";
 
 const ProfileCard = ({ photo, name, role }) => {
   return (
@@ -18,7 +19,7 @@ const ProfileCard = ({ photo, name, role }) => {
     >
       <div className="card-body d-flex">
         <img
-          src={photo || profile}
+          src={photo}
           alt="Profile"
           className="img-thumbnail me-3 rounded-circle"
           style={{ width: "100px", height: "100px", objectFit: "cover" }}
@@ -37,27 +38,29 @@ const ProfileCard = ({ photo, name, role }) => {
 };
 
 const ProfileEditPage = () => {
-  const [showModal, setShowModal] = useState(false); // For modal visibility
-  const [profilePhoto, setProfilePhoto] = useState(profile); // For updating profile photo
+  const [showModal, setShowModal] = useState(false);
+  const [profilePhoto, setProfilePhoto] = useState(profile);
+  const [isEditable, setIsEditable] = useState(false);
+  const userData = useSelector((state) => state.user.userData);
+
   const [formData, setFormData] = useState({
     bio: "",
     role: "",
+    profilePic: "",
     firstName: "",
     lastName: "",
     userName: "",
     email: "",
-    phone: "",
+    contactNo: "",
     ieeeEmail: "",
     location: "",
     ieeeNumber: "",
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
   });
 
   const [error, setError] = useState({
     bio: false,
     role: false,
+    profilePic: false,
     firstName: false,
     lastName: false,
     userName: false,
@@ -66,13 +69,27 @@ const ProfileEditPage = () => {
     location: false,
   });
 
-  const userProfile = [
-    {
-      photo: profilePhoto,
-      name: "Thilini Priyangika",
-      role: "Web Master",
-    },
-  ];
+  useEffect(() => {
+    if (userData && userData.length > 0) {
+      const user = userData[0]?.user;
+      setFormData({
+        profilePic: user.profilePic || "",
+        bio: user.bio || "",
+        role: user.role || "",
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        fbURL: user.fbURL || "",
+        linkedInURL: user.linkedInURL || "",
+        userName: user.username || "",
+        email: user.email || "",
+        contactNo: user.contactNo || "",
+        ieeeEmail: user.ieeeEmail || "",
+        location: user.location || "",
+        ieeeNumber: user.ieeeNumber || "",
+      });
+      setProfilePhoto(user.profilePic || profile);
+    }
+  }, [userData]);
 
   const handleUploadClick = () => {
     setShowModal(true);
@@ -83,7 +100,7 @@ const ProfileEditPage = () => {
   };
 
   const handleSave = (imgUrl) => {
-    setProfilePhoto(imgUrl); // Update profile photo after uploading
+    setProfilePhoto(imgUrl);
     setShowModal(false);
   };
 
@@ -96,7 +113,20 @@ const ProfileEditPage = () => {
   const handleSubmit = () => {
     const newError = {};
     Object.keys(formData).forEach((field) => {
-      if (!formData[field] && ['bio', 'role', 'firstName', 'lastName', 'userName', 'email', 'phone', 'location'].includes(field)) {
+      if (
+        !formData[field] &&
+        [
+          "bio",
+          "role",
+          "profilePic",
+          "firstName",
+          "lastName",
+          "userName",
+          "email",
+          "phone",
+          "location",
+        ].includes(field)
+      ) {
         newError[field] = true;
       }
     });
@@ -106,9 +136,21 @@ const ProfileEditPage = () => {
       return;
     }
 
-    // Proceed to save changes
     console.log("Form submitted successfully", formData);
+    setIsEditable(false);
   };
+
+  const handleEditClick = () => {
+    setIsEditable(true);
+  };
+
+  const userProfile = [
+    {
+      photo: profilePhoto,
+      name: `${formData.firstName} ${formData.lastName}`,
+      role: formData.role,
+    },
+  ];
 
   return (
     <div className="container">
@@ -117,7 +159,7 @@ const ProfileEditPage = () => {
           {userProfile.map((user, index) => (
             <div className="col-6 col-md-6 mb-4" key={index}>
               <ProfileCard
-                photo={user.photo}
+                photo={user.profilePic}
                 name={user.name}
                 role={user.role}
               />
@@ -130,215 +172,206 @@ const ProfileEditPage = () => {
           style={{ marginRight: "150px" }}
         >
           <div className="d-flex gap-3 flex-row">
-            <div>
-              <CommonButton text={"Upload New Photo"} onClick={handleUploadClick} />
-            </div>
-            <div>
-              <CommonButton text={"Delete"} close={true} />
-            </div>
+            {isEditable && (
+              <div>
+                <CommonButton
+                  text={"Upload New Photo"}
+                  onClick={handleUploadClick}
+                />
+              </div>
+            )}
+
+            {!isEditable && (
+              <div>
+                <CommonButton text={"Edit Profile"} onClick={handleEditClick} />
+              </div>
+            )}
+            {isEditable && (
+              <div>
+                <CommonButton text={"Delete"} close={true} />
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       <div className="d-flex flex-column px-5">
-        <div className="mt-3">
-          <label htmlFor="bio" className="form-label text-dark">Bio</label>
-          <input
-            type="text"
-            name="bio"
-            value={formData.bio}
-            onChange={handleInputChange}
-            className={`form-control`}
-            placeholder="Don't worry be happy"
-            style={{ width: "520px" }}
-          />
-        </div>
+        {formData.bio && (
+          <div className="mt-3">
+            <label htmlFor="bio" className="form-label text-dark">
+              Bio
+            </label>
+            <input
+              type="text"
+              name="bio"
+              value={formData.bio}
+              onChange={handleInputChange}
+              className={`form-control`}
+              style={{ width: "520px" }}
+              readOnly={!isEditable}
+            />
+          </div>
+        )}
 
-        <div className="mt-3">
-          <label htmlFor="role" className="form-label text-dark">Role</label>
-          <input
-            type="text"
-            name="role"
-            value={formData.role}
-            onChange={handleInputChange}
-            className={`form-control ${error.role ? "is-invalid" : ""}`}
-            placeholder="Web Master"
-            style={{ width: "520px" }}
-            required
-          />
-          {error.role && <div className="invalid-feedback">This field is required.</div>}
-        </div>
+        {formData.role && (
+          <div className="mt-3">
+            <label htmlFor="role" className="form-label text-dark">
+              Role
+            </label>
+            <input
+              type="text"
+              name="role"
+              value={formData.role}
+              onChange={handleInputChange}
+              className={`form-control ${error.role ? "is-invalid" : ""}`}
+              style={{ width: "520px" }}
+              required
+              readOnly={!isEditable}
+            />
+            {error.role && (
+              <div className="invalid-feedback">This field is required.</div>
+            )}
+          </div>
+        )}
 
         <div className="mt-3 d-flex flex-wrap gap-lg-3">
           <div>
-            <label htmlFor="firstName" className="form-label text-dark">First Name</label>
+            <label htmlFor="firstName" className="form-label text-dark">
+              First Name
+            </label>
             <input
               type="text"
               name="firstName"
               value={formData.firstName}
               onChange={handleInputChange}
               className={`form-control ${error.firstName ? "is-invalid" : ""}`}
-              placeholder="Ishara"
               style={{ width: "520px" }}
               required
+              readOnly={!isEditable}
             />
-            {error.firstName && <div className="invalid-feedback">This field is required.</div>}
+            {error.firstName && (
+              <div className="invalid-feedback">This field is required.</div>
+            )}
           </div>
           <div>
-            <label htmlFor="lastName" className="form-label text-dark">Last Name</label>
+            <label htmlFor="lastName" className="form-label text-dark">
+              Last Name
+            </label>
             <input
               type="text"
               name="lastName"
               value={formData.lastName}
               onChange={handleInputChange}
               className={`form-control ${error.lastName ? "is-invalid" : ""}`}
-              placeholder="Herath"
               style={{ width: "520px" }}
               required
+              readOnly={!isEditable}
             />
-            {error.lastName && <div className="invalid-feedback">This field is required.</div>}
+            {error.lastName && (
+              <div className="invalid-feedback">This field is required.</div>
+            )}
           </div>
         </div>
 
         <div className="mt-3">
-          <label htmlFor="userName" className="form-label text-dark">User Name</label>
+          <label htmlFor="userName" className="form-label text-dark">
+            User Name
+          </label>
           <input
             type="text"
             name="userName"
             value={formData.userName}
             onChange={handleInputChange}
             className={`form-control ${error.userName ? "is-invalid" : ""}`}
-            placeholder="isharasuvini"
             style={{ width: "1055px" }}
             required
+            readOnly={!isEditable}
           />
-          {error.userName && <div className="invalid-feedback">This field is required.</div>}
+          {error.userName && (
+            <div className="invalid-feedback">This field is required.</div>
+          )}
         </div>
 
         <div className="mt-3 d-flex flex-wrap gap-lg-3">
           <div>
-            <label htmlFor="email" className="form-label text-dark">Email Address</label>
+            <label htmlFor="email" className="form-label text-dark">
+              Email
+            </label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleInputChange}
               className={`form-control ${error.email ? "is-invalid" : ""}`}
-              placeholder="suvi@gmail.com"
               style={{ width: "520px" }}
               required
+              readOnly={!isEditable}
             />
-            {error.email && <div className="invalid-feedback">This field is required.</div>}
+            {error.email && (
+              <div className="invalid-feedback">This field is required.</div>
+            )}
           </div>
+
           <div>
-            <label htmlFor="phone" className="form-label text-dark">Phone Number</label>
+            <label htmlFor="contactNo" className="form-label text-dark">
+              Contact No
+            </label>
             <input
               type="text"
-              name="phone"
-              value={formData.phone}
+              name="contactNo"
+              value={formData.contactNo}
               onChange={handleInputChange}
-              className={`form-control ${error.phone ? "is-invalid" : ""}`}
-              placeholder="0712458963"
+              className={`form-control ${error.contactNo ? "is-invalid" : ""}`}
               style={{ width: "520px" }}
               required
+              readOnly={!isEditable}
             />
-            {error.phone && <div className="invalid-feedback">This field is required.</div>}
+            {error.contactNo && (
+              <div className="invalid-feedback">This field is required.</div>
+            )}
           </div>
         </div>
 
-        <div className="mt-3 d-flex flex-wrap gap-lg-3">
-          <div>
-            <label htmlFor="email" className="form-label text-dark">IEEE Email Address</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.ieeeEmail}
-              onChange={handleInputChange}
-              className={`form-control ${error.ieeeEmail ? "is-invalid" : ""}`}
-              placeholder="ieeesuvi@gmail.com"
-              style={{ width: "520px" }}
-              required
-            />
-            {error.ieeeEmail && <div className="invalid-feedback">This field is required.</div>}
-          </div>
-          <div>
-            <label htmlFor="location" className="form-label text-dark">IEEE Membership Number</label>
+        {formData.location && (
+          <div className="mt-3">
+            <label htmlFor="location" className="form-label text-dark">
+              Location
+            </label>
             <input
               type="text"
-              name="ieeeNumber"
-              value={formData.ieeeNumber}
+              name="location"
+              value={formData.location}
               onChange={handleInputChange}
-              className={`form-control ${error.ieeeNumber ? "is-invalid" : ""}`}
-              placeholder="ieee23"
-              style={{ width: "520px" }}
+              className={`form-control ${error.location ? "is-invalid" : ""}`}
+              style={{ width: "1055px" }}
               required
+              readOnly={!isEditable}
             />
-            {error.ieeeNumber && <div className="invalid-feedback">This field is required.</div>}
+            {error.location && (
+              <div className="invalid-feedback">This field is required.</div>
+            )}
           </div>
-        </div>
-        <div className="mt-3">
-          <label htmlFor="userName" className="form-label text-dark">Location</label>
-          <input
-            type="text"
-            name="location"
-            value={formData.location}
-            onChange={handleInputChange}
-            className={`form-control ${error.location ? "is-invalid" : ""}`}
-            placeholder="Monaragala"
-            style={{ width: "1055px" }}
-            required
-          />
-          {error.location && <div className="invalid-feedback">This field is required.</div>}
-        </div>
-        <div className="mt-3 d-flex flex-wrap gap-lg-3">
-          <div>
-            <label htmlFor="email" className="form-label text-dark">Current Password</label>
-            <input
-              type="password"
-              name="currentPassword"
-              value={formData.currentPassword}
-              onChange={handleInputChange}
-              className={`form-control ${error.currentPassword ? "is-invalid" : ""}`}
-              style={{ width: "520px" }}
-              required
-            />
-            {error.currentPassword && <div className="invalid-feedback">This field is required.</div>}
-          </div>
-          <div>
-            <label htmlFor="location" className="form-label text-dark">New Password</label>
-            <input
-              type="password"
-              name="newPassword"
-              value={formData.newPassword}
-              onChange={handleInputChange}
-              className={`form-control ${error.newPassword ? "is-invalid" : ""}`}
-              style={{ width: "520px" }}
-              required
-            />
-            {error.newPassword && <div className="invalid-feedback">This field is required.</div>}
-          </div>
-        </div>
-        <div className="mt-3">
-          <label htmlFor="userName" className="form-label text-dark">Confirm New Password</label>
-          <input
-            type="password"
-            name="newPassword"
-            value={formData.newPassword}
-            onChange={handleInputChange}
-            className={`form-control ${error.newPassword ? "is-invalid" : ""}`}
-            style={{ width: "1055px" }}
-            required
-          />
-          {error.newPassword && <div className="invalid-feedback">This field is required.</div>}
-        </div>
+        )}
 
         <div className="d-flex justify-content-end align-items-end gap-1 mt-5">
           <div className="d-flex gap-3 flex-row">
             <div>
-              <CommonButton text={"Cancel"} close={true} />
+            {isEditable && (
+              <CommonButton
+                text={"Cancel"}
+                close={true}
+                onClick={() => setIsEditable(false)}
+              />
+            )}
             </div>
             <div>
-              <CommonButton text={"Save Changes"} onClick={handleSubmit} />
+            {isEditable && (
+              <CommonButton
+                text={"Save Changes"}
+                onClick={handleSubmit}
+                disabled={!isEditable}
+              />
+            )}
             </div>
           </div>
         </div>
