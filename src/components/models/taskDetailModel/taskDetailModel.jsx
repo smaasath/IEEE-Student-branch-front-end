@@ -31,40 +31,72 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
 
   useEffect(() => {
     setPageLoading(true);
-    if (userData && show && excom) {
-      const isExcomAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM"
-        )
-      );
+    if (excom) {
+      if (userData && show) {
+        const isExcomAvailable = userData?.some((userRoleDetail) =>
+          userRoleDetail.role?.policies.some(
+            (policy) => policy.policyCode === "EXCOM"
+          )
+        );
 
-      const isExcomTaskAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM_TASK"
-        )
-      );
+        const isExcomTaskAvailable = userData?.some((userRoleDetail) =>
+          userRoleDetail.role?.policies.some(
+            (policy) => policy.policyCode === "EXCOM_TASK"
+          )
+        );
 
-      const isExcomTaskAssignAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM_TASK_ASSIGN"
-        )
-      );
+        const isExcomTaskAssignAvailable = userData?.some((userRoleDetail) =>
+          userRoleDetail.role?.policies.some(
+            (policy) => policy.policyCode === "EXCOM_TASK_ASSIGN"
+          )
+        );
 
-      if (!isExcomAvailable) {
-        navigate("/dashboard");
-      } else {
-        setAssignTask(isExcomTaskAssignAvailable);
-        setCreateTask(isExcomTaskAvailable);
-        setPageLoading(false);
+        if (!isExcomAvailable) {
+          navigate("/dashboard");
+        } else {
+          setAssignTask(isExcomTaskAssignAvailable);
+          setCreateTask(isExcomTaskAvailable);
+          setPageLoading(false);
+        }
+      }
+
+    } else if (project) {
+      if (userData && show) {
+        const isExcomAvailable = userData?.some((userRoleDetail) =>
+          userRoleDetail.role?.policies.some(
+            (policy) => policy.policyCode === "EXCOM"
+          )
+        );
+
+        const isExcomTaskAvailable = userData?.some((userRoleDetail) =>
+          userRoleDetail.role?.policies.some(
+            (policy) => policy.policyCode === "EXCOM_TASK"
+          )
+        );
+
+        const isExcomTaskAssignAvailable = userData?.some((userRoleDetail) =>
+          userRoleDetail.role?.policies.some(
+            (policy) => policy.policyCode === "EXCOM_TASK_ASSIGN"
+          )
+        );
+
+        if (!isExcomAvailable) {
+          navigate("/dashboard");
+        } else {
+          setAssignTask(isExcomTaskAssignAvailable);
+          setCreateTask(isExcomTaskAvailable);
+          setPageLoading(false);
+        }
       }
     }
+
   }, [userData, show, excom, navigate]);
 
   const handlePrioritySelect = (eventKey) => {
     setSelectedPriority(eventKey);
   };
 
-  const handleDateChange = (e) => {};
+  const handleDateChange = (e) => { };
 
   const notes = [
     { date: "2023-01-02", author: "Jane Doe", content: "Sample note 2" },

@@ -14,11 +14,10 @@ import CommonMemberContainer from "../../../components/common/commonMemberContai
 import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
 import TaskModel from "../../../components/models/createTaskModel/createTaskModel";
+import { getProjectById } from "../../../redux/actions/project";
 
 const ProjectPage = () => {
-  const params = useParams();
   const navigate = useNavigate();
-  
   function navigateToFinance() {
     navigate("finance");
   }
@@ -26,44 +25,71 @@ const ProjectPage = () => {
     navigate("event");
   }
   const userData = useSelector((state) => state.user.userData);
-
+  const { id } = useParams();
   const [pageLoading, setPageLoading] = useState(true);
-
   const [isFinanceAvailable, setIsFinanceAvailable] = useState(false);
   const [isEventAvailable, setIsEventAvailable] = useState(false);
   const [isAssignAvailable, setIsAssignAvailable] = useState(false);
   const [isTaskAvailable, setIsTaskAvailable] = useState(false);
   const [showTaskModal, setShowTaskModal] = useState(false);
+  const [project, setProject] = useState([]);
+  const [myRoles, setMyroles] = useState([]);
+  const [otherRoles, setOtherRoles] = useState([]);
 
   useEffect(() => {
     setPageLoading(true);
     if (userData) {
-      const isProjectFinanceAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "PROJECT_FINANCE"
-        )
-      );
-      const isProjectEventAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "PROJECT_EVENT"
-        )
-      );
-      const isProjectAssignAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "PROJECT_ASSIGN"
-        )
-      );
-      const isProjectTaskAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "PROJECT_TASK"
-        )
-      );
-      setIsFinanceAvailable(isProjectFinanceAvailable);
-      setIsEventAvailable(isProjectEventAvailable);
-      setIsAssignAvailable(isProjectAssignAvailable);
-      setIsTaskAvailable(isProjectTaskAvailable);
+      getProjectById(id, (res) => {
+        if (res?.status == 200) {
+          setProject(res?.data?.data?.project);
 
-      setPageLoading(false);
+          const projectmain = userData?.some((userRoleDetail) =>
+            userRoleDetail.role?.policies.some(
+              (policy) => policy.policyCode === "PROJECT"
+            )
+          );
+          if (projectmain) {
+            setIsFinanceAvailable(true);
+            setIsEventAvailable(true);
+            setIsAssignAvailable(true);
+            setIsTaskAvailable(true);
+            setPageLoading(false);
+            return
+          }
+          setMyroles(res?.data?.data?.my_user_role_details);
+          setOtherRoles(res?.data?.data?.other_role_details);
+
+          const isProjectFinanceAvailable = res?.data?.data?.my_user_role_details?.some((userRoleDetail) =>
+            userRoleDetail.role?.policies.some(
+              (policy) => policy.policyCode === "PROJECT_FINANCE"
+            )
+          );
+          const isProjectEventAvailable = res?.data?.data?.my_user_role_details?.some((userRoleDetail) =>
+            userRoleDetail.role?.policies.some(
+              (policy) => policy.policyCode === "PROJECT_EVENT"
+            )
+          );
+          const isProjectAssignAvailable = res?.data?.data?.my_user_role_details?.some((userRoleDetail) =>
+            userRoleDetail.role?.policies.some(
+              (policy) => policy.policyCode === "PROJECT_ASSIGN"
+            )
+          );
+          const isProjectTaskAvailable = res?.data?.data?.my_user_role_details?.some((userRoleDetail) =>
+            userRoleDetail.role?.policies.some(
+              (policy) => policy.policyCode === "PROJECT_TASK"
+            )
+          );
+          setIsFinanceAvailable(isProjectFinanceAvailable);
+          setIsEventAvailable(isProjectEventAvailable);
+          setIsAssignAvailable(isProjectAssignAvailable);
+          setIsTaskAvailable(isProjectTaskAvailable);
+          setPageLoading(false);
+        } else {
+          setPageLoading(false);
+          navigate("/project");
+        }
+      })
+
     }
   }, [userData]);
 
@@ -127,8 +153,8 @@ const ProjectPage = () => {
             <div className="d-flex justify-content-end gap-4 align-items-center flex-wrap">
               {isTaskAvailable && (
                 <div>
-                <CommonButton onClick={openTaskModal} text={"Add Tasks"} />
-              </div>
+                  <CommonButton onClick={openTaskModal} text={"Add Tasks"} />
+                </div>
               )}
               {isFinanceAvailable && (
                 <div className="">
