@@ -11,14 +11,17 @@ import add from "../../../assets/icons/Add.png";
 import send from "../../../assets/icons/Sent.png";
 import CommonNoteContainer from "../../../components/common/commonNoteContainer/commonNoteContainer";
 import CommonMemberContainer from "../../../components/common/commonMemberContainer/commonMemberContainer";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
 import TaskModel from "../../../components/models/createTaskModel/createTaskModel";
 import { getProjectById } from "../../../redux/actions/project";
 import { PolicyValidate } from "../../../utils/valitations/Valitation";
+import { projectPolicy } from "../../../redux/reducers/userSlice";
+
 
 const ProjectPage = () => {
   const navigate = useNavigate();
+  const distpatch = useDispatch();
   function navigateToFinance() {
     navigate("finance");
   }
@@ -43,7 +46,7 @@ const ProjectPage = () => {
       getProjectById(id, (res) => {
         if (res?.status == 200) {
           setProject(res?.data?.data?.project);
-
+          distpatch(projectPolicy(res?.data?.data))
           const projectmain = PolicyValidate(userData, "PROJECT");
           if (projectmain) {
             setIsFinanceAvailable(true);
