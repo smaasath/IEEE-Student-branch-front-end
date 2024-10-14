@@ -14,8 +14,9 @@ const CommonDropAndDrag = ({ id, project, excom }) => {
   useEffect(() => {
     getExcomTask(id, (res) => {
       if (res?.status == 200) {
-        convertTaskIntoDropdown(res?.data?.data);
-        setTaskArray(res?.data?.data)
+        console.warn(res?.data?.data)
+        convertTaskIntoDropdown(res?.data?.data?.content);
+        setTaskArray(res?.data?.data?.content)
       }
     })
   }, []);
