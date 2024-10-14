@@ -15,8 +15,8 @@ const CreateTaskModel = ({ onHide, show, type, ouID, projectID}) => {
     start_date: "",
     end_date: "",
     priority: "",
-    ou_id: ouID,
-    project_id: projectID || null
+    ou_id: type === "EXCOM" ? ouID : null,
+    project_id: type === "PROJECT" ? projectID : null
   };
   const [formData, setFormData] = useState(initialFormData);
 

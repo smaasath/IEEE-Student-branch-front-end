@@ -139,7 +139,7 @@ function ExecutiveCommitteePage() {
                 <CommonDropAndDrag id={id} excom={true} />
               </div>
             </div>
-            <TaskModel show={showTaskModal} onHide={closeTaskModal} />
+            <TaskModel show={showTaskModal} onHide={closeTaskModal} type={"EXCOM"} ouID={id}/>
           </div>
         </>
       )}
