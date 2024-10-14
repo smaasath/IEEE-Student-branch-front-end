@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
 import TaskModel from "../../../components/models/createTaskModel/createTaskModel";
 import { getProjectById } from "../../../redux/actions/project";
+import { PolicyValidate } from "../../../utils/valitations/Valitation";
 
 const ProjectPage = () => {
   const navigate = useNavigate();
@@ -43,11 +44,7 @@ const ProjectPage = () => {
         if (res?.status == 200) {
           setProject(res?.data?.data?.project);
 
-          const projectmain = userData?.some((userRoleDetail) =>
-            userRoleDetail.role?.policies.some(
-              (policy) => policy.policyCode === "PROJECT"
-            )
-          );
+          const projectmain = PolicyValidate(userData, "PROJECT");
           if (projectmain) {
             setIsFinanceAvailable(true);
             setIsEventAvailable(true);
@@ -58,27 +55,10 @@ const ProjectPage = () => {
           }
           setMyroles(res?.data?.data?.my_user_role_details);
           setOtherRoles(res?.data?.data?.other_role_details);
-
-          const isProjectFinanceAvailable = res?.data?.data?.my_user_role_details?.some((userRoleDetail) =>
-            userRoleDetail.role?.policies.some(
-              (policy) => policy.policyCode === "PROJECT_FINANCE"
-            )
-          );
-          const isProjectEventAvailable = res?.data?.data?.my_user_role_details?.some((userRoleDetail) =>
-            userRoleDetail.role?.policies.some(
-              (policy) => policy.policyCode === "PROJECT_EVENT"
-            )
-          );
-          const isProjectAssignAvailable = res?.data?.data?.my_user_role_details?.some((userRoleDetail) =>
-            userRoleDetail.role?.policies.some(
-              (policy) => policy.policyCode === "PROJECT_ASSIGN"
-            )
-          );
-          const isProjectTaskAvailable = res?.data?.data?.my_user_role_details?.some((userRoleDetail) =>
-            userRoleDetail.role?.policies.some(
-              (policy) => policy.policyCode === "PROJECT_TASK"
-            )
-          );
+          const isProjectFinanceAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_FINANCE");
+          const isProjectEventAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_EVENT");
+          const isProjectAssignAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_ASSIGN");
+          const isProjectTaskAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_TASK");
           setIsFinanceAvailable(isProjectFinanceAvailable);
           setIsEventAvailable(isProjectEventAvailable);
           setIsAssignAvailable(isProjectAssignAvailable);

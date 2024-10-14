@@ -20,12 +20,7 @@ const ProjectFinanceLanding = () => {
   useEffect(() => {
     setPageLoading(true);
     if (userData) {
-      const isProjectFinaceAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "PROJECT"
-        )
-      );
-
+      const isProjectFinaceAvailable = PolicyValidate(userData,"PROJECT");
       setIsFinanceAvailable(isProjectFinaceAvailable);
       setPageLoading(false);
     }

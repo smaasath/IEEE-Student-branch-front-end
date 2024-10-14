@@ -12,6 +12,7 @@ import TaskModel from "../../../components/models/createTaskModel/createTaskMode
 import TaskDetailModel from "../../../components/models/taskDetailModel/taskDetailModel";
 import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
+import { PolicyValidate } from "../../../utils/valitations/Valitation";
 
 function ExecutiveCommitteePage() {
   const { id } = useParams();
@@ -24,17 +25,9 @@ function ExecutiveCommitteePage() {
   useEffect(() => {
     setPageLoading(true);
     if (userData) {
-      const isExcomAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM"
-        )
-      );
+      const isExcomAvailable = PolicyValidate(userData,"EXCOM");
 
-      const isExcomTaskAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM_TASK"
-        )
-      );
+      const isExcomTaskAvailable = PolicyValidate(userData,"EXCOM_TASK");
 
       if (!isExcomAvailable) {
         navigate("/dashboard");

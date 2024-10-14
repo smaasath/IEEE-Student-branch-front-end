@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import VolunteerStatusChangeModel from "../../../components/models/volunteerStatusChangeModel/volunteerStatusChangeModel";
 import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
+import { PolicyValidate } from "../../../utils/valitations/Valitation";
 
 
 
@@ -26,13 +27,9 @@ const serviveLandingPage = () => {
   useEffect(() => {
     setPageLoading(true)
     if (userData) {
-      const isServiceAvailable = userData?.some(userRoleDetail =>
-        userRoleDetail.role?.policies.some(policy => policy.policyCode === "SERVICE")
-      );
+      const isServiceAvailable = PolicyValidate(userData,"SERVICE");
 
-      const isServiceVolunteerAvailable = userData?.some(userRoleDetail =>
-        userRoleDetail.role?.policies.some(policy => policy.policyCode === "SERVICE_VOLUNTEER")
-      );
+      const isServiceVolunteerAvailable =  PolicyValidate(userData,"SERVICE_VOLUNTEER");
 
       if (isServiceAvailable) {
         setService(true);

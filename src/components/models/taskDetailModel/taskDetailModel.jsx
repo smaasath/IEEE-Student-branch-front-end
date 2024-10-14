@@ -15,6 +15,7 @@ import CommonTable from "../../common/commonTable/commonTable";
 import CommonNoteContainer from "../../common/commonNoteContainer/commonNoteContainer";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { PolicyValidate } from "../../../utils/valitations/Valitation";
 
 const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
   if (!taskData) return null;
@@ -33,23 +34,9 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
     setPageLoading(true);
     if (excom) {
       if (userData && show) {
-        const isExcomAvailable = userData?.some((userRoleDetail) =>
-          userRoleDetail.role?.policies.some(
-            (policy) => policy.policyCode === "EXCOM"
-          )
-        );
-
-        const isExcomTaskAvailable = userData?.some((userRoleDetail) =>
-          userRoleDetail.role?.policies.some(
-            (policy) => policy.policyCode === "EXCOM_TASK"
-          )
-        );
-
-        const isExcomTaskAssignAvailable = userData?.some((userRoleDetail) =>
-          userRoleDetail.role?.policies.some(
-            (policy) => policy.policyCode === "EXCOM_TASK_ASSIGN"
-          )
-        );
+        const isExcomAvailable = PolicyValidate(userData, "EXCOM");
+        const isExcomTaskAvailable = PolicyValidate(userData, "EXCOM_TASK");
+        const isExcomTaskAssignAvailable = PolicyValidate(userData, "EXCOM_TASK_ASSIGN");
 
         if (!isExcomAvailable) {
           navigate("/dashboard");
@@ -62,23 +49,11 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
 
     } else if (project) {
       if (userData && show) {
-        const isExcomAvailable = userData?.some((userRoleDetail) =>
-          userRoleDetail.role?.policies.some(
-            (policy) => policy.policyCode === "EXCOM"
-          )
-        );
+        const isExcomAvailable = PolicyValidate(userData,"EXCOM");
 
-        const isExcomTaskAvailable = userData?.some((userRoleDetail) =>
-          userRoleDetail.role?.policies.some(
-            (policy) => policy.policyCode === "EXCOM_TASK"
-          )
-        );
+        const isExcomTaskAvailable = PolicyValidate(userData,"EXCOM_TASK");
 
-        const isExcomTaskAssignAvailable = userData?.some((userRoleDetail) =>
-          userRoleDetail.role?.policies.some(
-            (policy) => policy.policyCode === "EXCOM_TASK_ASSIGN"
-          )
-        );
+        const isExcomTaskAssignAvailable = PolicyValidate(userData,"EXCOM_TASK_ASSIGN");
 
         if (!isExcomAvailable) {
           navigate("/dashboard");

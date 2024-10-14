@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
 import { getAllExcomMember } from "../../../redux/actions/ou";
 import { getAllTermYear } from '../../../redux/actions/termYear';
+import { PolicyValidate } from "../../../utils/valitations/Valitation";
 
 const CommitteeMemberCard = ({
   photo,
@@ -239,17 +240,9 @@ const ExcomDetailPage = () => {
   useEffect(() => {
     setPageLoading(true);
     if (userData) {
-      const isExcomAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM"
-        )
-      );
+      const isExcomAvailable = PolicyValidate(userData,"EXCOM");
 
-      const isExcomAssignAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM_ASSIGN"
-        )
-      );
+      const isExcomAssignAvailable = PolicyValidate(userData,"EXCOM_ASSIGN");
 
       if (!isExcomAvailable) {
         navigate("/dashboard");

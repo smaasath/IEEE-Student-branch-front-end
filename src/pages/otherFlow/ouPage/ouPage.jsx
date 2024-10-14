@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import CommonLoader from '../../../components/common/commonLoader/commonLoader';
 import { getAllOU } from '../../../redux/actions/ou';
+import { PolicyValidate } from '../../../utils/valitations/Valitation';
 
 
 const OuPage = () => {
@@ -26,9 +27,7 @@ const OuPage = () => {
   useEffect(() => {
     setPageLoading(true)
     if (userData) {
-      const isOtherAvailable = userData?.some(userRoleDetail =>
-        userRoleDetail.role?.policies.some(policy => policy.policyCode === "OTHER")
-      );
+      const isOtherAvailable = PolicyValidate(userData, "OTHER");
       if (!isOtherAvailable) {
         navigate('/dashboard')
       } else {
