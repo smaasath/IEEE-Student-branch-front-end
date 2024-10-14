@@ -6,7 +6,7 @@ import { getExcomTask } from '../../../redux/actions/task';
 
 
 
-const CommonDropAndDrag = ({ id, project, excom }) => {
+const CommonDropAndDrag = ({ id, project, excom, refresh }) => {
   const [data, setData] = useState([]);
   const [taskArray, setTaskArray] = useState([]);
 
@@ -18,7 +18,7 @@ const CommonDropAndDrag = ({ id, project, excom }) => {
         setTaskArray(res?.data?.data)
       }
     })
-  }, []);
+  }, [refresh]);
 
 
   function convertTaskIntoDropdown(tasksArray) {
