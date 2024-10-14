@@ -127,7 +127,7 @@ function ExecutiveCommitteePage() {
                 className="mt-4 d-flex justify-content-between overflow-scroll overflow-y-hidden custom-scrollbar"
                 style={{ maxWidth: 1300 }}
               >
-                <CommonDropAndDrag excom={true} />
+                <CommonDropAndDrag excom={true} id={id}/>
               </div>
             </div>
 

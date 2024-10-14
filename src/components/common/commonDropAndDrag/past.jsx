@@ -2,10 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import AddTask from '../../../assets/icons/Add.png'
 import CommonTaskCard from '../commonTaskCard/commonTaskCard';
-import { getExcomTask } from '../../../redux/actions/task';
-getExcomTask
 
-const CommonDropAndDrag = ({ project, excom, id }) => {
+const CommonDropAndDrag = ({ project, excom }) => {
+  const backendTasks = [
+    { id: 'task-1', content: 'Take out the garbage' },
+  ];
+
+  const tasks = backendTasks.reduce((acc, task) => {
+    acc[task.id] = task;
+    return acc;
+  }, {});
+
 
 
   const [data, setData] = useState([]);
@@ -13,46 +20,36 @@ const CommonDropAndDrag = ({ project, excom, id }) => {
 
 
   useEffect(() => {
-    console.log("ssssssssssssssssssss");
-    getExcomTask(id, (res) => {
-      console.log(res, "aaaaaaaaaaaaaaaaaaaa");
-      if (res?.status == 200) {
-        const taskData = res?.data?.data;
-        setTask(taskData);
-        let initialData = {
-          tasks: taskData,
-          columns: {
-            'TODO': {
-              id: 'TODO',
-              title: 'To do',
-              taskIds: filterTaskIdByStatus('TODO', taskData) || [],
-            },
-            'PROGRESS': {
-              id: 'PROGRESS',
-              title: 'On Going',
-              taskIds: filterTaskIdByStatus('PROGRESS', taskData) || [],
-            },
-            'COMPLETE': {
-              id: 'COMPLETE',
-              title: 'Completed',
-              taskIds: filterTaskIdByStatus('COMPLETE', taskData) || [],
-            },
-          },
-          columnOrder: ['TODO', 'PROGRESS', 'COMPLETE'],
-        };
-
-        console.log(initialData, "bbbbbbbbbbbbbbbbbbbb");
-        setData(initialData);
-      }
-    })
-  }, [id]);
+    let initialData = {
+      tasks: tasks,
+      columns: {
+        'TODO': {
+          id: 'TODO',
+          title: 'To do',
+          taskIds: filterTaskIdByStatus('TODO') || [],
+        },
+        'PROGRESS': {
+          id: 'PROGRESS',
+          title: 'On Going',
+          taskIds: filterTaskIdByStatus('PROGRESS') || [],
+        },
+        'COMPLETE': {
+          id: 'COMPLETE',
+          title: 'Completed',
+          taskIds: filterTaskIdByStatus('COMPLETE') || [],
+        },
+      },
+      columnOrder: ['TODO', 'PROGRESS', 'COMPLETE'],
+    };
+ 
+    setData(initialData);
+  }, []); 
+  
 
 
-
-  function filterTaskIdByStatus(status, tasks) {
-    return tasks
-      .filter((task) => task.status === status)
-      .map((task) => task.taskId);
+  function filterTaskIdByStatus(satus) {
+    return ['task-1']
+    // need to retutn id array
   }
 
   const onDragEnd = result => {
@@ -117,8 +114,7 @@ const CommonDropAndDrag = ({ project, excom, id }) => {
       <DragDropContext onDragEnd={onDragEnd}>
         {data?.columnOrder?.map((columnId) => {
           const column = data.columns[columnId];
-          const tasks = column?.taskIds?.map(taskId => data.tasks.find(task => task.taskId === taskId));
-
+          const tasks = column?.taskIds?.map(taskId => data.tasks[taskId]);
 
           return (
             <Droppable key={column.id} droppableId={column.id}>
