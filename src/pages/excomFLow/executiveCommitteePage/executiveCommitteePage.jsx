@@ -8,7 +8,7 @@ import CommonSearch from "../../../components/common/commonSearch/commonSearch";
 import CommonDropAndDrag from "../../../components/common/commonDropAndDrag/commonDropAndDrag";
 import Profile from "../../../assets/images/profile.png";
 import BalloonImage from "../../../assets/images/Party Balloons.png";
-import CreateTaskModel from "../../../components/models/createTaskModel/createTaskModel";
+import TaskModel from "../../../components/models/createTaskModel/createTaskModel";
 import TaskDetailModel from "../../../components/models/taskDetailModel/taskDetailModel";
 import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
