@@ -10,7 +10,7 @@ import star from "../../../assets/images/Star.png";
 import deleted from "../../../assets/icons/delete.png";
 import loading from "../../../assets/images/Loading.png";
 import clock from "../../../assets/images/Clock.png";
-import TaskModel from "../createTaskModel/createTaskModel";
+import CreateTaskModel from "../createTaskModel/createTaskModel";
 import CommonTable from "../../common/commonTable/commonTable";
 import CommonNoteContainer from "../../common/commonNoteContainer/commonNoteContainer";
 import { useNavigate } from "react-router-dom";
@@ -29,6 +29,11 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
 
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    return dateString.split('T')[0]; // Split the date string and take only the first part (date)
+  };
 
   useEffect(() => {
     setPageLoading(true);
@@ -111,7 +116,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
             <div>
               <div className="mb-3 d-flex justify-content-between align-items-center">
                 <div className="text-cl-primary">
-                  Main Task Title / Sub Task Title
+                  Main Task Title / Sub Task Title {/* need to discuss */}
                 </div>
                 {createTask && (
                   <button
@@ -123,7 +128,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 )}
               </div>
               <h5>
-                <b>Create project banner.</b>
+                <b>{formatDate(taskData.task_name)}</b>
               </h5>
               <div className="d-flex align-items-center mb-3">
                 <div className="text-cl-primary mb-1 d-flex align-items-center">
@@ -140,7 +145,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                     class="form-control ms-5"
                     id="exampleFormControlSelect1"
                   >
-                    <option>Reviewed</option>
+                    <option>TODO</option>
                     <option>Pending</option>
                     <option>In progress</option>
                   </select>
@@ -161,7 +166,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 <input
                   type="date"
                   className="form-control ms-3"
-                  value={taskData.startDate}
+                  value={2024/10/16}
                   onChange={handleDateChange}
                 />
               </div>
@@ -180,7 +185,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 <input
                   type="date"
                   className="form-control ms-3"
-                  value={taskData.endDate}
+                  value={taskData.start_date}
                   onChange={handleDateChange}
                 />
               </div>
@@ -319,7 +324,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
       <Modal.Footer className="d-flex justify-content-end mt-3">
         <CommonButton onClick={onHide} close={true} text={"Cancel"} />
       </Modal.Footer>
-      <TaskModel show={showTaskModal} onHide={closeTaskModal} />
+      <CreateTaskModel show={showTaskModal} onHide={closeTaskModal} />
     </Modal>
   );
 };

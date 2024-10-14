@@ -5,7 +5,6 @@ import CommonTaskCard from '../commonTaskCard/commonTaskCard';
 import { getExcomTask } from '../../../redux/actions/task';
 
 
-
 const CommonDropAndDrag = ({ id, project, excom }) => {
   const [data, setData] = useState([]);
   const [taskArray, setTaskArray] = useState([]);
@@ -53,6 +52,7 @@ const CommonDropAndDrag = ({ id, project, excom }) => {
     };
     setData(initialData);
   }
+
 
 
 
