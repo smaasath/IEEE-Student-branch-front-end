@@ -6,7 +6,7 @@ import { getExcomTask } from '../../../redux/actions/task';
 
 
 
-const CommonDropAndDrag = ({ id, project, excom }) => {
+const CommonDropAndDrag = ({ id, project, excom, refresh }) => {
   const [data, setData] = useState([]);
   const [taskArray, setTaskArray] = useState([]);
 
@@ -18,7 +18,7 @@ const CommonDropAndDrag = ({ id, project, excom }) => {
         setTaskArray(res?.data?.data)
       }
     })
-  }, []);
+  }, [refresh]);
 
 
   function convertTaskIntoDropdown(tasksArray) {
@@ -67,6 +67,8 @@ const CommonDropAndDrag = ({ id, project, excom }) => {
 
   const onDragEnd = result => {
     const { source, destination, draggableId } = result;
+
+    console.warn(result,"hhhhhhhhhhhhhhhhhhhhh")
 
     if (!destination || (source.droppableId === destination.droppableId && source.index === destination.index)) {
       return;
@@ -131,7 +133,7 @@ const CommonDropAndDrag = ({ id, project, excom }) => {
             const tasks = column?.taskIds?.map(taskId => data.tasks[taskId]);
 
             return (
-              <Droppable key={column.id} droppableId={column.id}>
+              <Droppable key={column.id} droppableId={column.id} >
                 {(provided) => (
                   <div
                     ref={provided.innerRef}

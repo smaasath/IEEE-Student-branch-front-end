@@ -5,7 +5,7 @@ import { createTask } from "../../../redux/actions/task";
 import { useDispatch } from "react-redux";
 
 
-const CreateTaskModel = ({ onHide, show, type, ouID, projectID}) => {
+const CreateTaskModel = ({ onHide, show, type, ouID, projectID, changed}) => {
   const dispatch = useDispatch();
   const today = new Date().toISOString().split('T')[0];
 
@@ -15,8 +15,8 @@ const CreateTaskModel = ({ onHide, show, type, ouID, projectID}) => {
     start_date: "",
     end_date: "",
     priority: "",
-    ou_id: ouID,
-    project_id: projectID || null
+    ou_id: type === "EXCOM" ? ouID : null,
+    project_id: type === "PROJECT" ? projectID : null
   };
   const [formData, setFormData] = useState(initialFormData);
 
@@ -80,6 +80,7 @@ const CreateTaskModel = ({ onHide, show, type, ouID, projectID}) => {
         createTask(formData, (res) => {
           if (res?.status === 201) {
             setLoading(false);
+            changed();
             onHide();
             setFormData(initialFormData);
           } else {
