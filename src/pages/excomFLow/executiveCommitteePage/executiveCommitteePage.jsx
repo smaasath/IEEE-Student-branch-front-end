@@ -13,6 +13,7 @@ import TaskDetailModel from "../../../components/models/taskDetailModel/taskDeta
 import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
 import { PolicyValidate } from "../../../utils/valitations/Valitation";
+import { getOUById } from "../../../redux/actions/ou";
 
 function ExecutiveCommitteePage() {
   const { id } = useParams();
@@ -22,19 +23,29 @@ function ExecutiveCommitteePage() {
   const [taskPolicy, settaskPolicy] = useState(false);
   const userData = useSelector((state) => state.user.userData);
   const [pageLoading, setPageLoading] = useState(true);
+  const [refreshTasks, setRefreshTasks] = useState(0);
+
   useEffect(() => {
     setPageLoading(true);
+
     if (userData) {
-      const isExcomAvailable = PolicyValidate(userData,"EXCOM");
+      const isExcomAvailable = PolicyValidate(userData, "EXCOM");
 
-      const isExcomTaskAvailable = PolicyValidate(userData,"EXCOM_TASK");
+      const isExcomTaskAvailable = PolicyValidate(userData, "EXCOM_TASK");
 
-      if (!isExcomAvailable) {
-        navigate("/dashboard");
-      } else {
-        settaskPolicy(isExcomTaskAvailable);
-        setPageLoading(false);
-      }
+      getOUById(id, (res) => {
+        if (res.status == 200) {
+          if (!isExcomAvailable) {
+            console.log("loading dashboard");
+            navigate("/dashboard");
+          } else {
+            settaskPolicy(isExcomTaskAvailable);
+            setPageLoading(false);
+          }
+        } else {
+          navigate("/dashboard/not-found");
+        }
+      });
     }
   }, [userData]);
   const navigateToexcomDetailPage = () => {
@@ -120,10 +131,18 @@ function ExecutiveCommitteePage() {
                 className="mt-4 d-flex justify-content-between overflow-scroll overflow-y-hidden custom-scrollbar"
                 style={{ maxWidth: 1300 }}
               >
-                <CommonDropAndDrag id={id} excom={true} />
+                <CommonDropAndDrag id={id} excom={true} refresh={refreshTasks}/>
               </div>
             </div>
-            <TaskModel show={showTaskModal} onHide={closeTaskModal} />
+            <TaskModel
+              show={showTaskModal}
+              onHide={closeTaskModal}
+              type={"EXCOM"}
+              ouID={id}
+              changed={() => {
+                setRefreshTasks(refreshTasks + 1);
+              }}
+            />
           </div>
         </>
       )}

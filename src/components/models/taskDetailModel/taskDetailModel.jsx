@@ -168,7 +168,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 <input
                   type="date"
                   className="form-control ms-3"
-                  value={2024 / 10 / 16}
+                  value={formatDate(taskData.start_date)}
                   onChange={handleDateChange}
                 />
               </div>
@@ -187,7 +187,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 <input
                   type="date"
                   className="form-control ms-3"
-                  value={taskData.start_date}
+                  value={formatDate(taskData.end_date)}
                   onChange={handleDateChange}
                 />
               </div>
