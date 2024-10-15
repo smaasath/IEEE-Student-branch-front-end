@@ -32,16 +32,34 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
-    return dateString.split('T')[0];
+    return dateString.split("T")[0];
   };
+  
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const [formData, setFormData] = useState({
+    taskName: taskData.task_name,
+    startDate: formatDate(taskData.start_date),
+    endDate: formatDate(taskData.end_date),
+    priority: taskData.priority,
+    status: taskData.status,
+    description: taskData.description,
+  });
 
   useEffect(() => {
     setPageLoading(true);
+    console.log(formData);
     if (excom) {
       if (userData && show) {
         const isExcomAvailable = PolicyValidate(userData, "EXCOM");
         const isExcomTaskAvailable = PolicyValidate(userData, "EXCOM_TASK");
-        const isExcomTaskAssignAvailable = PolicyValidate(userData, "EXCOM_TASK_ASSIGN");
+        const isExcomTaskAssignAvailable = PolicyValidate(
+          userData,
+          "EXCOM_TASK_ASSIGN"
+        );
 
         if (!isExcomAvailable) {
           navigate("/dashboard");
@@ -51,14 +69,19 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
           setPageLoading(false);
         }
       }
-
     } else if (project) {
       if (projectPolicyData && show) {
         const isProjectAvailable = PolicyValidate(userData, "PROJECT");
 
-        const isProjecrTaskAvailable = PolicyValidate(projectPolicyData, "PROJECT_TASK");
+        const isProjecrTaskAvailable = PolicyValidate(
+          projectPolicyData,
+          "PROJECT_TASK"
+        );
 
-        const isPrjectTaskAssignAvailable = PolicyValidate(projectPolicyData, "PROJECT_ASSIGN");
+        const isPrjectTaskAssignAvailable = PolicyValidate(
+          projectPolicyData,
+          "PROJECT_ASSIGN"
+        );
 
         if (isProjectAvailable) {
           setAssignTask(isPrjectTaskAssignAvailable);
@@ -71,14 +94,13 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
         }
       }
     }
-
-  }, [userData, show, excom, navigate]);
+  }, [userData, show, excom, navigate,formData]);
 
   const handlePrioritySelect = (eventKey) => {
     setSelectedPriority(eventKey);
   };
 
-  const handleDateChange = (e) => { };
+  const handleDateChange = (e) => {};
 
   const notes = [
     { date: "2023-01-02", author: "Jane Doe", content: "Sample note 2" },
@@ -109,7 +131,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
           className="text-cl-primary"
           id="contained-modal-title-vcenter"
         >
-          Task
+          {formData.taskName}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -130,9 +152,12 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 )}
               </div>
               <h5>
-                <b>{formatDate(taskData.task_name)}</b>
+                <b></b>
               </h5>
-              <div className="d-flex align-items-center mb-3">
+              <div
+                className="d-flex justify-content-between align-items-center mb-3"
+                style={{ width: "350px" }}
+              >
                 <div className="text-cl-primary mb-1 d-flex align-items-center">
                   <img
                     src={loading}
@@ -142,14 +167,21 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                   />
                   <span>Status</span>
                 </div>
-                <div class=" form-group">
+                <div className="form-group">
                   <select
-                    class="form-control ms-5"
-                    id="exampleFormControlSelect1"
+                    className="form-select"
+                    id="status"
+                    name="status"
+                    value={formData.status}
+                    onChange={handleChange}
+                    required
                   >
-                    <option>TODO</option>
-                    <option>Pending</option>
-                    <option>In progress</option>
+                    <option value="" hidden>
+                      Select Status
+                    </option>
+                    <option value="TODO">TODO</option>
+                    <option value="PROGRESS">In Progress</option>
+                    <option value="COMPLETE">Completed</option>
                   </select>
                 </div>
               </div>
@@ -167,9 +199,10 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 </div>
                 <input
                   type="date"
+                  name="startDate"
                   className="form-control ms-3"
-                  value={formatDate(taskData.start_date)}
-                  onChange={handleDateChange}
+                  value={formData.startDate}
+                  onChange={handleChange}
                 />
               </div>
               <div
@@ -186,12 +219,16 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 </div>
                 <input
                   type="date"
+                  name="endDate"
                   className="form-control ms-3"
-                  value={formatDate(taskData.end_date)}
-                  onChange={handleDateChange}
+                  value={formData.endDate}
+                  onChange={handleChange}
                 />
               </div>
-              <div className="d-flex align-items-center mb-3">
+              <div
+                className="d-flex justify-content-between align-items-center mb-3"
+                style={{ width: "350px" }}
+              >
                 <div className="text-cl-primary mb-1 d-flex align-items-center">
                   <img
                     src={star}
@@ -201,14 +238,21 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                   />
                   <span>Priority</span>
                 </div>
-                <div class="form-group">
+                <div className="form-group">
                   <select
-                    class="form-control ms-5"
-                    id="exampleFormControlSelect1"
+                    className="form-select"
+                    id="priority"
+                    name="priority"
+                    value={formData.priority}
+                    onChange={handleChange}
+                    required
                   >
-                    <option>Low</option>
-                    <option>Medium</option>
-                    <option>High</option>
+                    <option value="" hidden>
+                      Select Priority
+                    </option>
+                    <option value="LOW">Low</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="HIGH">High</option>
                   </select>
                 </div>
               </div>
