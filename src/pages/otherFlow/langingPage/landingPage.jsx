@@ -6,6 +6,7 @@ import userrole from "../../../assets/images/userrole.png";
 import ou from "../../../assets/images/ou.png";
 import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
+import { PolicyValidate } from "../../../utils/valitations/Valitation";
 
 const OtherLandingPage = () => {
   const userData = useSelector((state) => state.user.userData);
@@ -15,9 +16,7 @@ const OtherLandingPage = () => {
   useEffect(() => {
     setPageLoading(true);
     if (userData) {
-      const isOtherAvailable = userData?.some(userRoleDetail =>
-        userRoleDetail.role?.policies.some(policy => policy.policyCode === "OTHER")
-      );
+      const isOtherAvailable = PolicyValidate(userData, "OTHER");
       if (!isOtherAvailable) {
         navigate("/dashboard");
       } else {

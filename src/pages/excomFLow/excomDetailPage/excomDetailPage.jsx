@@ -10,8 +10,9 @@ import Info from "../../../assets/images/Info.png";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
-import { getAllExcomMember } from "../../../redux/actions/ou";
+import { getAllExcomMember, getOUById } from "../../../redux/actions/ou";
 import { getAllTermYear } from '../../../redux/actions/termYear';
+import { PolicyValidate } from "../../../utils/valitations/Valitation";
 
 const CommitteeMemberCard = ({
   photo,
@@ -239,26 +240,26 @@ const ExcomDetailPage = () => {
   useEffect(() => {
     setPageLoading(true);
     if (userData) {
-      const isExcomAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM"
-        )
-      );
+      const isExcomAvailable = PolicyValidate(userData,"EXCOM");
 
-      const isExcomAssignAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM_ASSIGN"
-        )
-      );
+      const isExcomAssignAvailable = PolicyValidate(userData,"EXCOM_ASSIGN");
 
-      if (!isExcomAvailable) {
-        navigate("/dashboard");
-      } else {
-        setAssignPolicy(isExcomAssignAvailable);
-        setPageLoading(false);
-      }
+      getOUById(ouId,(res)=>{
+        if(res.status == 200){
+          if (!isExcomAvailable) {
+            navigate("/dashboard");
+          } else {
+            setAssignPolicy(isExcomAssignAvailable);
+            setPageLoading(false);
+          }
+        }
+        else{
+          navigate("/dashboard/not-found");
+        }
+      });
+      
     }
-  }, [userData]);
+  }, [userData,ouId]);
   const handleShowEditExcomModel = (member) => {
     setSelectedMember(member);
     setEditExcomModelShow(true);
@@ -289,7 +290,7 @@ const ExcomDetailPage = () => {
         setExcomCardLoader(false);
       }
     });
-  }, [refreshExcomData, termFilter]);
+  }, [refreshExcomData, termFilter,ouId]);
 
   const handleTermChange = (e) => setTermFilter(e.target.value);
 

@@ -107,3 +107,21 @@ export const updateDurationProject = (id, data, callback) => {
     callback(error.response);
   }
 };
+
+
+export const getProjectById = (id, callback) => {
+  const endpoint = `${import.meta.env.VITE_API_HOST}project/${id}`;
+
+  try {
+    http
+      .get(endpoint)
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        callback(error.response);
+      });
+  } catch (error) {
+    callback(error.response);
+  }
+};
