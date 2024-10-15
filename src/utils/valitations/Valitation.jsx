@@ -4,3 +4,14 @@ export const EmailValidation = (email) => {
     }
     return (false)
 };
+
+
+export const PolicyValidate = (userData, Code) => {
+    return userData?.some((userRoleDetail) =>
+        userRoleDetail.role?.policies.some(
+            (policy) => policy.policyCode === Code
+        )
+    )
+};
+
+

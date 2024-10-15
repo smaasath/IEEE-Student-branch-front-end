@@ -9,6 +9,7 @@ import { getAllPolicy } from '../../../redux/actions/policy';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import CommonLoader from '../../../components/common/commonLoader/commonLoader';
+import { PolicyValidate } from '../../../utils/valitations/Valitation';
 
 
 const PolicyPage = () => {
@@ -31,9 +32,7 @@ const PolicyPage = () => {
   useEffect(() => {
     setPageLoading(true)
     if (userData) {
-      const isOtherAvailable = userData?.some(userRoleDetail =>
-        userRoleDetail.role?.policies.some(policy => policy.policyCode === "OTHER")
-      );
+      const isOtherAvailable = PolicyValidate(userData, "OTHER");
       if (!isOtherAvailable) {
         navigate('/dashboard')
       } else {

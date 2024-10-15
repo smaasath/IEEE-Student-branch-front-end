@@ -20,6 +20,22 @@ export const getAllOU = (callback) => {
     }
 };
 
+export const getOUById = (ouId,callback) => {
+    const endpoint = `${import.meta.env.VITE_API_HOST}ou/${ouId}`;
+
+    try {
+        http
+            .get(endpoint)
+            .then((response) => {
+                callback(response);
+            })
+            .catch((error) => {
+                callback(error.response);
+            });
+    } catch (error) {
+        callback(error.response);
+    }
+};
 
 export const CreateOU = (data, callback) => {
     const endpoint = `${import.meta.env.VITE_API_HOST}ou`;

@@ -10,6 +10,7 @@ import { getAllTermYear } from '../../../redux/actions/termYear';
 import CommonLoader from '../../../components/common/commonLoader/commonLoader';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { PolicyValidate } from '../../../utils/valitations/Valitation';
 
 const TimeLinePage = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -78,9 +79,7 @@ const TimeLinePage = () => {
     useEffect(() => {
         setPageLoading(true)
         if (userData) {
-            const isOtherAvailable = userData?.some(userRoleDetail =>
-                userRoleDetail.role?.policies.some(policy => policy.policyCode === "PROJECT_TIME")
-            );
+            const isOtherAvailable = PolicyValidate(userData,"PROJECT_TIME");
             if (!isOtherAvailable) {
                 navigate('/dashboard')
             } else {

@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { getAllTermYear } from "../../../redux/actions/termYear";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
 import { getAllExcomMember, getAllOU } from "../../../redux/actions/ou";
+import { PolicyValidate } from "../../../utils/valitations/Valitation";
 
 const ExcomLandingPage = () => {
   const currentYear = new Date().getFullYear();
@@ -139,11 +140,7 @@ const ExcomLandingPage = () => {
   useEffect(() => {
     setPageLoading(true);
     if (userData) {
-      const isOtherAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM"
-        )
-      );
+      const isOtherAvailable = PolicyValidate(userData,"EXCOM");
       if (!isOtherAvailable) {
         navigate("/dashboard");
       } else {
