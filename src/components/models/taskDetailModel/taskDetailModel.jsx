@@ -16,8 +16,9 @@ import CommonNoteContainer from "../../common/commonNoteContainer/commonNoteCont
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { PolicyValidate } from "../../../utils/valitations/Valitation";
+import TaskAssignModel from "../taskAsignModel/taskAssignModel";
 
-const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
+const TaskDetailModel = ({ onHide, show, taskData, project, excom, openTaskAssignModal }) => {
   if (!taskData) return null;
 
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
     if (!dateString) return "N/A";
     return dateString.split("T")[0];
   };
-  
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
@@ -94,7 +95,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
         }
       }
     }
-  }, [userData, show, excom, navigate,formData]);
+  }, [userData, show, excom, navigate, formData]);
 
   const handlePrioritySelect = (eventKey) => {
     setSelectedPriority(eventKey);
@@ -113,6 +114,8 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
   const closeTaskModal = () => {
     setShowTaskModal(false);
   };
+
+  
 
   const tableHeading = [
     { label: "Task Title", value: "Task_title" },
@@ -257,7 +260,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 </div>
               </div>
               <div className="mb-3">
-                <div className="text-cl-primary mb-1 d-flex align-items-center">
+                {/* <div className="text-cl-primary mb-1 d-flex align-items-center">
                   <img
                     src={clock}
                     style={{ width: "25px", height: "25px" }}
@@ -266,7 +269,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                   <span className="ms-2">
                     Created at <b>May, 15 2022 14:23 PM</b>
                   </span>
-                </div>
+                </div> */}
               </div>
               <div className="mb-3">
                 <div className="text-cl-primary">Description</div>
@@ -345,17 +348,22 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                   <div className="d-flex justify-content-between w-100 align-items-center">
                     <h6 className="text-third fw-bold">Assignees</h6>
                     {assignTask && (
-                      <img
-                        src={add}
-                        alt="Add"
-                        style={{ width: "30px", height: "30px" }}
-                      />
+                      <button
+                        className="border-0 bg-transparent"
+                        onClick={()=>{openTaskAssignModal()}}
+                      >
+                        <img
+                          src={add}
+                          alt="Add"
+                          style={{ width: "30px", height: "30px" }}
+                        />
+                      </button>
                     )}
                   </div>
                 </div>
-                <div className="mt-3">
+                {/* <div className="mt-3">
                   <CommonSearch primary={false} />
-                </div>
+                </div> */}
                 <div
                   className="mt-4 d-flex justify-content-between align-items-center gap-1 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar"
                   style={{ maxHeight: 500 }}
@@ -371,6 +379,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
         <CommonButton onClick={onHide} close={true} text={"Cancel"} />
       </Modal.Footer>
       <CreateTaskModel show={showTaskModal} onHide={closeTaskModal} />
+      
     </Modal>
   );
 };
