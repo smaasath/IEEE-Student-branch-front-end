@@ -28,47 +28,20 @@ const ViewEventModal = ({ onHide, show, eventData }) => {
           
           <div className="w-100">
           <div className="mb-3">
-              <label className="form-label text-dark"><b>Event Name:</b></label> 
-              <input
-              type="text"
-              className="form-control"
-              value={eventData.eventName} 
-              />
+              <label className="form-label text-dark"><b>Event Name:</b></label> {eventData.eventName}
             </div>
             <div className="mb-3">
-              <label className="form-label text-dark"><b>Date:</b></label> 
-              <input
-              type="text"
-              className="form-control"
-              value={eventData.date}
-              />
-              
+              <label className="form-label text-dark"><b>Last Name:</b></label> {eventData.date}
             </div>
             <div className="mb-3">
-              <label className="form-label text-dark"><b>Venue:</b></label>
-              <input
-              type="text"
-              className="form-control"
-              value={eventData.venue}
-              /> 
+              <label className="form-label text-dark"><b>Email:</b></label> {eventData.venue}
             </div>
             <div className="mb-3">
-              <label className="form-label text-dark"><b>Description:</b></label>
-              <textarea
-             className="form-control"
-             value={eventData.description}
-             rows={4} // You can adjust the number of rows as needed
-  />
+            <label className="form-label text-dark"><b>Description:</b></label> {eventData.description}
             </div>
             <div className="mb-3">
-              <label className="form-label text-dark"><b>Link:</b></label> 
-              <input
-              type="text"
-              className="form-control"
-              value={eventData.event_link}
-              readOnly
-              /> 
-            </div>
+              <label className="form-label text-dark"><b>Link:</b></label> {eventData.event_link}
+              </div>
             
           </div>
         </div>

@@ -8,6 +8,7 @@ import VolunteerViewModel from "../../../components/models/volunteerViewModel/vo
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { PolicyValidate } from "../../../utils/valitations/Valitation";
 
 
 
@@ -55,9 +56,7 @@ const VolunteerDetailsPage = () => {
   useEffect(() => {
     setPageLoading(true)
     if (userData) {
-      const isFinanceAvailable = userData?.some(userRoleDetail =>
-        userRoleDetail.role?.policies.some(policy => policy.policyCode === "SERVICE_VOLUNTEER")
-      );
+      const isFinanceAvailable = PolicyValidate(userData,"SERVICE_VOLUNTEER")
       if (!isFinanceAvailable) {
         navigate('/dashboard')
       } else {

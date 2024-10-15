@@ -8,13 +8,11 @@ export const createTask = (body, callback) => {
 
     try {
         http
-            .post(endpoint, body)  // Sending the body directly as JSON
+            .post(endpoint, body)
             .then((response) => {
-                console.log('Response:', response);
                 callback(response);
             })
             .catch((error) => {
-                console.log('Error Response:', error.response);
                 callback(error.response);
             });
     } catch (error) {
@@ -22,3 +20,21 @@ export const createTask = (body, callback) => {
         callback(error.response);
     }
 };
+
+
+export const getExcomTask = (ouid, callback) => {
+    const endpoint = `${import.meta.env.VITE_API_HOST}task/${ouid}`;
+  
+    try {
+      http
+        .get(endpoint)
+        .then((response) => {
+          callback(response);
+        })
+        .catch((error) => {
+          callback(error.response);
+        });
+    } catch (error) {
+      callback(error.response);
+    }
+  };

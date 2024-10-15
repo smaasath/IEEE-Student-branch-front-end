@@ -60,6 +60,7 @@ function App() {
         </Route>
         <Route path='' element={<PrivateRoute />}>
           <Route path='/dashboard' element={<DashboardLayout />}>
+          <Route path='not-found' element={<NotFound />} />
             <Route index element={<UpcommingEventsPage />} />
             <Route path='executive-committee' >
               <Route path='' element={<ExcomLandingPage />} />

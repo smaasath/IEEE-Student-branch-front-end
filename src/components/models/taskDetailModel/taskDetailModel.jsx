@@ -10,11 +10,12 @@ import star from "../../../assets/images/Star.png";
 import deleted from "../../../assets/icons/delete.png";
 import loading from "../../../assets/images/Loading.png";
 import clock from "../../../assets/images/Clock.png";
-import TaskModel from "../createTaskModel/createTaskModel";
+import CreateTaskModel from "../createTaskModel/createTaskModel";
 import CommonTable from "../../common/commonTable/commonTable";
 import CommonNoteContainer from "../../common/commonNoteContainer/commonNoteContainer";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { PolicyValidate } from "../../../utils/valitations/Valitation";
 
 const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
   if (!taskData) return null;
@@ -25,46 +26,59 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
   const [selectedPriority, setSelectedPriority] = useState("High");
   const userData = useSelector((state) => state.user.userData);
   const [pageLoading, setPageLoading] = useState(true);
-
+  const projectPolicyData = useSelector((state) => state.user.projectPolicy);
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    return dateString.split('T')[0];
+  };
+
   useEffect(() => {
     setPageLoading(true);
-    if (userData && show && excom) {
-      const isExcomAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM"
-        )
-      );
+    if (excom) {
+      if (userData && show) {
+        const isExcomAvailable = PolicyValidate(userData, "EXCOM");
+        const isExcomTaskAvailable = PolicyValidate(userData, "EXCOM_TASK");
+        const isExcomTaskAssignAvailable = PolicyValidate(userData, "EXCOM_TASK_ASSIGN");
 
-      const isExcomTaskAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM_TASK"
-        )
-      );
+        if (!isExcomAvailable) {
+          navigate("/dashboard");
+        } else {
+          setAssignTask(isExcomTaskAssignAvailable);
+          setCreateTask(isExcomTaskAvailable);
+          setPageLoading(false);
+        }
+      }
 
-      const isExcomTaskAssignAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM_TASK_ASSIGN"
-        )
-      );
+    } else if (project) {
+      if (projectPolicyData && show) {
+        const isProjectAvailable = PolicyValidate(userData, "PROJECT");
 
-      if (!isExcomAvailable) {
-        navigate("/dashboard");
-      } else {
-        setAssignTask(isExcomTaskAssignAvailable);
-        setCreateTask(isExcomTaskAvailable);
-        setPageLoading(false);
+        const isProjecrTaskAvailable = PolicyValidate(projectPolicyData, "PROJECT_TASK");
+
+        const isPrjectTaskAssignAvailable = PolicyValidate(projectPolicyData, "PROJECT_ASSIGN");
+
+        if (isProjectAvailable) {
+          setAssignTask(isPrjectTaskAssignAvailable);
+          setCreateTask(isProjecrTaskAvailable);
+          setPageLoading(false);
+        } else {
+          setAssignTask(isPrjectTaskAssignAvailable);
+          setCreateTask(isProjecrTaskAvailable);
+          setPageLoading(false);
+        }
       }
     }
+
   }, [userData, show, excom, navigate]);
 
   const handlePrioritySelect = (eventKey) => {
     setSelectedPriority(eventKey);
   };
 
-  const handleDateChange = (e) => {};
+  const handleDateChange = (e) => { };
 
   const notes = [
     { date: "2023-01-02", author: "Jane Doe", content: "Sample note 2" },
@@ -104,7 +118,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
             <div>
               <div className="mb-3 d-flex justify-content-between align-items-center">
                 <div className="text-cl-primary">
-                  Main Task Title / Sub Task Title
+                  Main Task Title / Sub Task Title {/* need to discuss */}
                 </div>
                 {createTask && (
                   <button
@@ -116,7 +130,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 )}
               </div>
               <h5>
-                <b>Create project banner.</b>
+                <b>{formatDate(taskData.task_name)}</b>
               </h5>
               <div className="d-flex align-items-center mb-3">
                 <div className="text-cl-primary mb-1 d-flex align-items-center">
@@ -133,7 +147,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                     class="form-control ms-5"
                     id="exampleFormControlSelect1"
                   >
-                    <option>Reviewed</option>
+                    <option>TODO</option>
                     <option>Pending</option>
                     <option>In progress</option>
                   </select>
@@ -154,7 +168,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 <input
                   type="date"
                   className="form-control ms-3"
-                  value={taskData.startDate}
+                  value={formatDate(taskData.start_date)}
                   onChange={handleDateChange}
                 />
               </div>
@@ -173,7 +187,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 <input
                   type="date"
                   className="form-control ms-3"
-                  value={taskData.endDate}
+                  value={formatDate(taskData.end_date)}
                   onChange={handleDateChange}
                 />
               </div>
@@ -312,7 +326,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
       <Modal.Footer className="d-flex justify-content-end mt-3">
         <CommonButton onClick={onHide} close={true} text={"Cancel"} />
       </Modal.Footer>
-      <TaskModel show={showTaskModal} onHide={closeTaskModal} />
+      <CreateTaskModel show={showTaskModal} onHide={closeTaskModal} />
     </Modal>
   );
 };

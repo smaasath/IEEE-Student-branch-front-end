@@ -334,6 +334,7 @@ const ProjectModel = ({
                 <input
                   type="date"
                   name="start_date"
+                  min={new Date().toISOString().split('T')[0]}
                   value={formData.start_date}
                   onChange={handleInputChange}
                   className={`form-select ${
@@ -356,6 +357,7 @@ const ProjectModel = ({
                 </label>
                 <input
                   type="date"
+                  min={formData.start_date}
                   name="end_date"
                   value={formData.end_date}
                   onChange={handleInputChange}

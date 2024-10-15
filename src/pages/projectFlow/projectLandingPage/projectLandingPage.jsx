@@ -13,6 +13,8 @@ import { deleteProject, getAllProject, getProjectCount } from "../../../redux/ac
 import { getAllOU } from "../../../redux/actions/ou";
 import { getAllTermYear } from "../../../redux/actions/termYear";
 import CommonDeleteModel from "../../../components/models/commonDeleteModel/commonDeleteModel";
+import { PolicyValidate } from "../../../utils/valitations/Valitation";
+
 
 const ProjectLandingPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -44,16 +46,8 @@ const ProjectLandingPage = () => {
   useEffect(() => {
     setPageLoading(true);
     if (userData) {
-      const isProjectAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "PROJECT"
-        )
-      );
-      const isProjectTimelineAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "PROJECT_TIME"
-        )
-      );
+      const isProjectAvailable = PolicyValidate(userData,"PROJECT");
+      const isProjectTimelineAvailable = PolicyValidate(userData,"PROJECT_TIME");
 
       setIsProjectTimelineAvailable(isProjectTimelineAvailable);
       setProjectPolicy(isProjectAvailable);
@@ -135,7 +129,7 @@ const ProjectLandingPage = () => {
     {
       label: "",
       value: "ACTION",
-      type: projectPolicy ? ["VIEW", "EDIT", "DELETE"] : ["VIEW"],
+      type: projectPolicy ? ["VIEW", "EDIT"] : ["VIEW"],
     },
   ];
 
@@ -341,7 +335,7 @@ const ProjectLandingPage = () => {
                   tableData={tableData}
                   loading={false}
                   viewAction={(project) => {
-                    navigateToProject(project);
+                    navigateToProject(project.projectID);
                   }}
                   editAction={(project) => {
                     editProject(project);

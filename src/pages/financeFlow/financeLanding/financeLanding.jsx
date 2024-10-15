@@ -9,6 +9,7 @@ import AddTransectionModel from '../../../components/models/addTransectionModel/
 import AddBankAccountModel from '../../../components/models/addBankAccountModel/addBankAccountModel'
 import { useSelector } from 'react-redux'
 import CommonLoader from '../../../components/common/commonLoader/commonLoader'
+import { PolicyValidate } from '../../../utils/valitations/Valitation'
 
 
 
@@ -26,9 +27,7 @@ const FinanceLanding = () => {
     useEffect(() => {
         setPageLoading(true)
         if (userData) {
-            const isFinanceAvailable = userData?.some(userRoleDetail =>
-                userRoleDetail.role?.policies.some(policy => policy.policyCode === "FINANCE")
-              );
+            const isFinanceAvailable = PolicyValidate(userData, "FINANCE");
             if (!isFinanceAvailable) {
                 navigate('/dashboard')
             } else {
