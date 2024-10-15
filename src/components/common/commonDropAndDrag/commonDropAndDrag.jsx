@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import AddTask from '../../../assets/icons/Add.png'
 import CommonTaskCard from '../commonTaskCard/commonTaskCard';
-import { getExcomTask } from '../../../redux/actions/task';
+import { getExcomTask, UpdateExcomTaskStatus } from '../../../redux/actions/task';
 
 
 
@@ -14,7 +14,6 @@ const CommonDropAndDrag = ({ id, project, excom, refresh }) => {
   useEffect(() => {
     getExcomTask(id, (res) => {
       if (res?.status == 200) {
-        console.warn(res?.data?.data)
         convertTaskIntoDropdown(res?.data?.data?.content);
         setTaskArray(res?.data?.data?.content)
       }
@@ -24,7 +23,7 @@ const CommonDropAndDrag = ({ id, project, excom, refresh }) => {
 
   function convertTaskIntoDropdown(tasksArray) {
     let data = tasksArray.map((item) => ({
-      id: item.taskId + item.task_name,
+      id: item.taskId.toString(),
       ...item,
     }));
     const task = data.reduce((acc, task) => {
@@ -41,7 +40,7 @@ const CommonDropAndDrag = ({ id, project, excom, refresh }) => {
         },
         'PROGRESS': {
           id: 'PROGRESS',
-          title: 'On Going',
+          title: 'Progress',
           taskIds: filterTaskIdByStatus('PROGRESS', data) || [],
         },
         'COMPLETE': {
@@ -69,7 +68,7 @@ const CommonDropAndDrag = ({ id, project, excom, refresh }) => {
   const onDragEnd = result => {
     const { source, destination, draggableId } = result;
 
-    console.warn(result,"hhhhhhhhhhhhhhhhhhhhh")
+    updateTaskStaus(result);
 
     if (!destination || (source.droppableId === destination.droppableId && source.index === destination.index)) {
       return;
@@ -125,9 +124,19 @@ const CommonDropAndDrag = ({ id, project, excom, refresh }) => {
     }
   };
 
+  function updateTaskStaus(result) {
+    const task_id = parseInt(result?.draggableId);
+    const status = result?.destination?.droppableId;
+    UpdateExcomTaskStatus(task_id, status, (res) => {
+
+    })
+
+  }
+
   return (
     <>
-      <div className='d-flex justify-content-between'>
+    <div className='d-flex flex-column'>
+    <div className='d-flex justify-content-between'>
         <DragDropContext onDragEnd={onDragEnd}>
           {data?.columnOrder?.map((columnId) => {
             const column = data.columns[columnId];
@@ -165,6 +174,9 @@ const CommonDropAndDrag = ({ id, project, excom, refresh }) => {
       {taskArray?.length > 0 ? null : (
         <div className='text-center w-100'>No tasks found</div>
       )}
+    </div>
+    
+     
 
     </>
 
