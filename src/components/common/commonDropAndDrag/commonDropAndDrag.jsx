@@ -69,7 +69,7 @@ const CommonDropAndDrag = ({ id, project, excom, refresh }) => {
   const onDragEnd = result => {
     const { source, destination, draggableId } = result;
 
-    console.warn(result,"hhhhhhhhhhhhhhhhhhhhh")
+    // console.warn(result,"hhhhhhhhhhhhhhhhhhhhh")
 
     if (!destination || (source.droppableId === destination.droppableId && source.index === destination.index)) {
       return;
@@ -127,7 +127,8 @@ const CommonDropAndDrag = ({ id, project, excom, refresh }) => {
 
   return (
     <>
-      <div className='d-flex justify-content-between'>
+    <div className='d-flex flex-column'>
+    <div className='d-flex justify-content-between'>
         <DragDropContext onDragEnd={onDragEnd}>
           {data?.columnOrder?.map((columnId) => {
             const column = data.columns[columnId];
@@ -165,6 +166,9 @@ const CommonDropAndDrag = ({ id, project, excom, refresh }) => {
       {taskArray?.length > 0 ? null : (
         <div className='text-center w-100'>No tasks found</div>
       )}
+    </div>
+    
+     
 
     </>
 
