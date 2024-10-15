@@ -92,3 +92,25 @@ export const getAllExcomMember = (page, search, ouid, termyearId, callback) => {
         callback(error.response);
     }
 };
+
+// export const getAllExcomMember = (page, search, ouid, termyearId, callback) => {
+//         // Build endpoint dynamically, only including parameters that are not empty
+//         const endpoint = `${import.meta.env.VITE_API_HOST}ou/getExcom?search=${search || ''}&ouid=${ouid || ''}&termyearId=${termyearId || ''}&page=${page}`;
+//         console.log(`Calling API: ${endpoint}`);
+//         
+//         try {
+//             http.get(endpoint)
+//                 .then((response) => {
+//                     console.log("API Response: ", response); // Check what is returned
+//                     callback(response);
+//                 })
+//                 .catch((error) => {
+//                     console.error("API Error: ", error); // Log errors
+//                     callback(error.response);
+//                 });
+//         } catch (error) {
+//             console.error("Catch Error: ", error); // Log catch block errors
+//             callback(error.response);
+//         }
+//     };
+    
