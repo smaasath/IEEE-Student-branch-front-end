@@ -4,6 +4,7 @@ import AddTask from "../../../assets/icons/Add.png";
 import CommonTaskCard from "../commonTaskCard/commonTaskCard";
 import {
   getExcomTask,
+  getProjectTask,
   UpdateExcomTaskStatus,
 } from "../../../redux/actions/task";
 import TaskDetailModel from "../../models/taskDetailModel/taskDetailModel";
@@ -29,12 +30,27 @@ const CommonDropAndDrag = ({
   const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {
-    getTasks();
+    if(excom){
+      getTasks();
+    }else if(project){
+      getTasksByProject();
+    }
+   
   }, [refresh, search, status, user_id, priority]);
 
 
   function getTasks(){
     getExcomTask(id, search, status, user_id, page-1, priority, (res) => {
+      if (res?.status == 200) {
+        convertTaskIntoDropdown(res?.data?.data?.content);
+        setTaskArray(res?.data?.data?.content);
+        setTotaltPage(res?.data?.data?.totalPages)
+      }
+    });
+  }
+
+  function getTasksByProject(){
+    getProjectTask(id, search, status, user_id, page-1, priority, (res) => {
       if (res?.status == 200) {
         convertTaskIntoDropdown(res?.data?.data?.content);
         setTaskArray(res?.data?.data?.content);
