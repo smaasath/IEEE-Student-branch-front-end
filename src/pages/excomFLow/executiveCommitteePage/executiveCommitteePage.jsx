@@ -159,7 +159,7 @@ function ExecutiveCommitteePage() {
                     value={priority}
                     onChange={handlePriorityChange}
                   >
-                    <option selected>Priority</option>
+                    <option selected value={''}> Priority</option>
                     <option value="LOW">LOW</option>
                     <option value="MEDIUM">MEDIUM</option>
                     <option value="HIGH">HIGH</option>
@@ -172,10 +172,10 @@ function ExecutiveCommitteePage() {
                     value={status} 
                     onChange={handleStatusChange}
                   >
-                    <option selected>Status</option>
+                    <option selected value={''}>Status</option>
                     <option value="TODO">TO DO</option>
                     <option value="PROGRESS">PROGRESS</option>
-                    <option value="COMPLETED">COMPLETED</option>
+                    <option value="COMPLETE">COMPLETED</option>
                   </select>
                 </div>
                 <div>
@@ -185,7 +185,7 @@ function ExecutiveCommitteePage() {
                     value={selectedMemberId}
                     onChange={handleMemberChange}
                   >
-                    <option selected>Assignee</option>
+                    <option selected value={''}>Assignee</option>
                     {members.map((member) => (
                       <option key={member.id} value={member.id}>
                         {member.fullName}
