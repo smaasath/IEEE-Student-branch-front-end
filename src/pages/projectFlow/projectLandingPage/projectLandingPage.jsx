@@ -214,7 +214,7 @@ const ProjectLandingPage = () => {
   };
 
   const handleSearchChange = (e) => {
-    setSearchItem(e.target.value);
+    setSearchItem(e);
     setCurrentPage(1);
   };
 

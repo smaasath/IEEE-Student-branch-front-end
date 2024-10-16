@@ -17,6 +17,7 @@ import TaskModel from "../../../components/models/createTaskModel/createTaskMode
 import { getProjectById } from "../../../redux/actions/project";
 import { PolicyValidate } from "../../../utils/valitations/Valitation";
 import { projectPolicy } from "../../../redux/reducers/userSlice";
+import CommonPagination from "../../../components/common/commonPagination/commonPagination";
 
 
 const ProjectPage = () => {
@@ -39,6 +40,7 @@ const ProjectPage = () => {
   const [project, setProject] = useState([]);
   const [myRoles, setMyroles] = useState([]);
   const [otherRoles, setOtherRoles] = useState([]);
+  const [AllRoles, setAllRoles] = useState([]);
   const [refreshTasks, setRefreshTasks] = useState(0);
   const [searchItem, setsearchItem] = useState("");
   const [priority, setPriority] = useState("");
@@ -53,27 +55,30 @@ const ProjectPage = () => {
       getProjectById(id, (res) => {
         if (res?.status == 200) {
           setProject(res?.data?.data?.project);
-          distpatch(projectPolicy(res?.data?.data))
+          distpatch(projectPolicy(res?.data?.data?.my_user_role_details))
           const projectmain = PolicyValidate(userData, "PROJECT");
+          setMyroles(res?.data?.data?.my_user_role_details);
+          setOtherRoles(res?.data?.data?.other_role_details);
+          const allrole = [...res?.data?.data?.my_user_role_details, ...res?.data?.data?.other_role_details];
+          setAllRoles(allrole);
           if (projectmain) {
             setIsFinanceAvailable(true);
             setIsEventAvailable(true);
             setIsAssignAvailable(true);
             setIsTaskAvailable(true);
             setPageLoading(false);
-            return
+          } else {
+            const isProjectFinanceAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_FINANCE");
+            const isProjectEventAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_EVENT");
+            const isProjectAssignAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_ASSIGN");
+            const isProjectTaskAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_TASK");
+            setIsFinanceAvailable(isProjectFinanceAvailable);
+            setIsEventAvailable(isProjectEventAvailable);
+            setIsAssignAvailable(isProjectAssignAvailable);
+            setIsTaskAvailable(isProjectTaskAvailable);
+            setPageLoading(false);
           }
-          setMyroles(res?.data?.data?.my_user_role_details);
-          setOtherRoles(res?.data?.data?.other_role_details);
-          const isProjectFinanceAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_FINANCE");
-          const isProjectEventAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_EVENT");
-          const isProjectAssignAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_ASSIGN");
-          const isProjectTaskAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_TASK");
-          setIsFinanceAvailable(isProjectFinanceAvailable);
-          setIsEventAvailable(isProjectEventAvailable);
-          setIsAssignAvailable(isProjectAssignAvailable);
-          setIsTaskAvailable(isProjectTaskAvailable);
-          setPageLoading(false);
+
         } else {
           setPageLoading(false);
           navigate("/project");
@@ -89,6 +94,14 @@ const ProjectPage = () => {
 
   const closeTaskModal = () => {
     setShowTaskModal(false);
+  };
+
+  const handleSearchChange = (e) => setsearchItem(e);
+  const handlePriorityChange = (e) => setPriority(e.target.value);
+  const handleStatusChange = (e) => setStatus(e.target.value);
+  const handleMemberChange = (e) => {
+    console.warn(e.target.value, "e.target.valuee.target.valuee.target.value")
+    setSelectedMemberId(e.target.value)
   };
 
   return (
@@ -172,15 +185,47 @@ const ProjectPage = () => {
           <div className="d-flex flex-column bg-white common-shadow rounded-3 p-3 mt-4">
             <div className="d-flex justify-content-between align-items-center w-100 flex-wrap gap-4">
               <div>
-                <CommonSearch />
+                <CommonSearch primary={true} onChange={handleSearchChange} />
               </div>
               <div className="">
                 <select
                   className="form-select w-100"
                   aria-label="Large select example"
+                  value={priority}
+                  onChange={handlePriorityChange}
                 >
-                  <option selected>Assignee</option>
-                  <option value="1">Me</option>
+                  <option selected value={''}> Priority</option>
+                  <option value="LOW">LOW</option>
+                  <option value="MEDIUM">MEDIUM</option>
+                  <option value="HIGH">HIGH</option>
+                </select>
+              </div>
+              <div className="">
+                <select
+                  className="form-select w-100"
+                  aria-label="Large select example"
+                  value={status}
+                  onChange={handleStatusChange}
+                >
+                  <option selected value={''}>Status</option>
+                  <option value="TODO">TO DO</option>
+                  <option value="PROGRESS">PROGRESS</option>
+                  <option value="COMPLETE">COMPLETED</option>
+                </select>
+              </div>
+              <div>
+                <select
+                  className="form-select w-100"
+                  aria-label="Large select example"
+                  value={selectedMemberId}
+                  onChange={handleMemberChange}
+                >
+                  <option selected value={''}>Assignee</option>
+                  {AllRoles.map((member) => (
+                    <option key={member?.user?.userID} value={member?.user?.userID}>
+                      {`${member?.user?.firstName} ${member?.user?.lastName}`}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -197,8 +242,15 @@ const ProjectPage = () => {
                 user_id={selectedMemberId}
                 page={currentPage}
                 priority={priority}
-                setTotaltPage={setTotaltPage} />
+                setTotaltPage={setTotaltPage}
+                projectMembers={otherRoles}
+              />
             </div>
+            {totalPage > 1 ? (
+                <div className="mt-5 d-flex justify-content-end">
+                  <CommonPagination currentPage={currentPage} pages={totalPage} setCurrentPage={setCurrentPage} />
+                </div>
+              ) : null}
           </div>
 
           <div className="row mt-4">
@@ -212,8 +264,9 @@ const ProjectPage = () => {
 
                 <div className="mt-3 d-flex justify-content-end">
                   <div>
-                    <CommonSearch primary={false} />
+                    <CommonSearch primary={true}  />
                   </div>
+
                 </div>
 
                 <div
@@ -253,15 +306,19 @@ const ProjectPage = () => {
                   )}
                 </div>
 
-                <div className="mt-3">
-                  <CommonSearch primary={false} />
-                </div>
-
                 <div
                   className="mt-4 d-flex justify-content-between align-items-center gap-1 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar"
                   style={{ maxHeight: 500 }}
                 >
-                  <CommonMemberContainer />
+                  {
+                    AllRoles?.map((item, index) => {
+                      return (
+                        <CommonMemberContainer key={index} role={item?.role?.userRole} userData={item?.user} />
+                      )
+
+                    })
+                  }
+
                 </div>
               </div>
             </div>

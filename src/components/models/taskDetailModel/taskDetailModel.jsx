@@ -80,32 +80,26 @@ const TaskDetailModel = ({
         const isProjecrTaskAvailable = PolicyValidate(
           projectPolicyData,
           "PROJECT_TASK"
-        );
+        ) || isProjectAvailable;
 
         const isPrjectTaskAssignAvailable = PolicyValidate(
           projectPolicyData,
           "PROJECT_ASSIGN"
-        );
+        ) || isProjectAvailable;
 
-        if (isProjectAvailable) {
-          setAssignTask(isPrjectTaskAssignAvailable);
-          setCreateTask(isProjecrTaskAvailable);
-          setPageLoading(false);
-        } else {
-          setAssignTask(isPrjectTaskAssignAvailable);
-          setCreateTask(isProjecrTaskAvailable);
-          setPageLoading(false);
-        }
+        setAssignTask(isPrjectTaskAssignAvailable);
+        setCreateTask(isProjecrTaskAvailable);
+        setPageLoading(false);
       }
     }
   }, [userData, show]);
 
 
-  useEffect(()=>{
-    if(show){
+  useEffect(() => {
+    if (show) {
       getTaskById(taskID, (res) => {
         if (res?.status == 200) {
-          console.log(res?.data?.data,"taskdaata")
+          console.log(res?.data?.data, "taskdaata")
           const task = res?.data?.data;
           let data = {
             taskName: task?.task_name || "N/A",
@@ -124,13 +118,13 @@ const TaskDetailModel = ({
         }
       });
     }
-  },[show])
+  }, [show])
 
   const handlePrioritySelect = (eventKey) => {
     setSelectedPriority(eventKey);
   };
 
-  const handleDateChange = (e) => {};
+  const handleDateChange = (e) => { };
 
   const notes = [
     { date: "2023-01-02", author: "Jane Doe", content: "Sample note 2" },

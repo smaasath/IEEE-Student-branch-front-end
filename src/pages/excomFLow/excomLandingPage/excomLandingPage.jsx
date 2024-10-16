@@ -165,7 +165,7 @@ const ExcomLandingPage = () => {
   //     setsearchItem(item?.target?.value || "");
   //     console.warn(item?.target?.value);
   //   }
-  const handleSearchChange = (e) => setsearchItem(e.target.value);
+  const handleSearchChange = (e) => setsearchItem(e);
   const handleEntityChange = (e) => setEntityFilter(e.target.value);
   const handleTermChange = (e) => setTermFilter(e.target.value);
 
