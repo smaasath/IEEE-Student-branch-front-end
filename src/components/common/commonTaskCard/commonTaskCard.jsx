@@ -12,11 +12,10 @@ const CommonTaskCard = ({ task, openTaskModal }) => {
   const [assigneesArray, setAssigneesArray] = useState([]);
 
   useEffect(() => {
-
     const array = task?.users;
     array.push(task.createdBy)
     setAssigneesArray(array)
-  }, [])
+  }, [task])
 
 
 

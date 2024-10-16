@@ -15,7 +15,6 @@ export default function TaskAssignModel({ show, onHide, taskData, changed, proje
   const [userData, setUserData] = useState([]);
   const [userLoader, setUserLoader] = useState(false);
 
-  //   const handleSearchChangeofRoles = (e) => setsearchRoleItem(e.target.value);
   const handleSearchChangeofUsers = (e) => setsearchUserItem(e);
   const handleAssign = (userID) => {
     setAssigneesIds((prevAssigneesIds) => {

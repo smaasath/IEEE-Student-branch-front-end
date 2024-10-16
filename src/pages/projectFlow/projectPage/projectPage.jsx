@@ -61,6 +61,7 @@ const ProjectPage = () => {
           setOtherRoles(res?.data?.data?.other_role_details);
           const allrole = [...res?.data?.data?.my_user_role_details, ...res?.data?.data?.other_role_details];
           setAllRoles(allrole);
+          console.warn(allrole, "aaaaaaaaaaaaaaaaaa")
           if (projectmain) {
             setIsFinanceAvailable(true);
             setIsEventAvailable(true);
@@ -247,10 +248,10 @@ const ProjectPage = () => {
               />
             </div>
             {totalPage > 1 ? (
-                <div className="mt-5 d-flex justify-content-end">
-                  <CommonPagination currentPage={currentPage} pages={totalPage} setCurrentPage={setCurrentPage} />
-                </div>
-              ) : null}
+              <div className="mt-5 d-flex justify-content-end">
+                <CommonPagination currentPage={currentPage} pages={totalPage} setCurrentPage={setCurrentPage} />
+              </div>
+            ) : null}
           </div>
 
           <div className="row mt-4">
@@ -264,7 +265,7 @@ const ProjectPage = () => {
 
                 <div className="mt-3 d-flex justify-content-end">
                   <div>
-                    <CommonSearch primary={true}  />
+                    <CommonSearch primary={true} />
                   </div>
 
                 </div>
@@ -293,6 +294,12 @@ const ProjectPage = () => {
             </div>
             <div className="col-lg-4 p-3">
               <div className="d-flex bg-white common-shadow flex-column p-3 rounded-3">
+                <div>
+                  <h6 className="text-third fw-bold">Project Created By</h6>
+                </div>
+                <CommonMemberContainer userData={project?.createdBy} />
+              </div>
+              <div className="mt-3 d-flex bg-white common-shadow flex-column p-3 rounded-3">
                 <div className="d-flex justify-content-between align-items-center gap-4 flex-wrap">
                   <div>
                     <h6 className="text-third fw-bold">Project Members</h6>

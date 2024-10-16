@@ -25,6 +25,7 @@ const TaskDetailModel = ({
   project,
   excom,
   openTaskAssignModal,
+  setSelectedTask
 }) => {
 
 
@@ -36,7 +37,7 @@ const TaskDetailModel = ({
   const [pageLoading, setPageLoading] = useState(true);
   const projectPolicyData = useSelector((state) => state.user.projectPolicy);
   const [showTaskModal, setShowTaskModal] = useState(false);
-  const [selectedTask, setSelectedTask] = useState(null);
+
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
@@ -101,6 +102,7 @@ const TaskDetailModel = ({
         if (res?.status == 200) {
           console.log(res?.data?.data, "taskdaata")
           const task = res?.data?.data;
+          setSelectedTask(task)
           let data = {
             taskName: task?.task_name || "N/A",
             startDate: formatDate(task.start_date),
