@@ -39,6 +39,13 @@ const ProjectPage = () => {
   const [project, setProject] = useState([]);
   const [myRoles, setMyroles] = useState([]);
   const [otherRoles, setOtherRoles] = useState([]);
+  const [refreshTasks, setRefreshTasks] = useState(0);
+  const [searchItem, setsearchItem] = useState("");
+  const [priority, setPriority] = useState("");
+  const [status, setStatus] = useState("");
+  const [selectedMemberId, setSelectedMemberId] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotaltPage] = useState(0);
 
   useEffect(() => {
     setPageLoading(true);
@@ -181,7 +188,16 @@ const ProjectPage = () => {
               className="mt-4 d-flex justify-content-between overflow-scroll overflow-y-hidden custom-scrollbar"
               style={{ maxWidth: 1300 }}
             >
-              <CommonDropAndDrag />
+              <CommonDropAndDrag
+                id={id}
+                project={true}
+                refresh={refreshTasks}
+                search={searchItem}
+                status={status}
+                user_id={selectedMemberId}
+                page={currentPage}
+                priority={priority}
+                setTotaltPage={setTotaltPage} />
             </div>
           </div>
 
@@ -250,7 +266,9 @@ const ProjectPage = () => {
               </div>
             </div>
           </div>
-          <TaskModel show={showTaskModal} onHide={closeTaskModal} />
+          <TaskModel changed={() => {
+            setRefreshTasks(refreshTasks + 1);
+          }} projectID={id} type={"PROJECT"} show={showTaskModal} onHide={closeTaskModal} />
         </div>
       )}
     </>

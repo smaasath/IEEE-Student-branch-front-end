@@ -142,12 +142,12 @@ const TimeLinePage = () => {
 
     const handleOUChange = (e) => {
         setSelectedOU(e.target.value);
-        setCurrentPage(1);
+
     };
 
     const handleYearChange = (e) => {
         setSelectedYear(e.target.value);
-        setCurrentPage(1);
+
     };
 
 
@@ -208,7 +208,7 @@ const TimeLinePage = () => {
                                     termYear.map((yearItem) => (
                                         <option
                                             key={yearItem.termyearId}
-                                            value={yearItem.termYearID}
+                                            value={yearItem.termyearId}
                                         >
                                             {yearItem.termyear}
                                         </option>
