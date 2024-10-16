@@ -6,6 +6,8 @@ import {
   getExcomTask,
   UpdateExcomTaskStatus,
 } from "../../../redux/actions/task";
+import TaskDetailModel from "../../models/taskDetailModel/taskDetailModel";
+import TaskAssignModel from "../../models/taskAsignModel/taskAssignModel";
 
 
 const CommonDropAndDrag = ({
@@ -22,8 +24,16 @@ const CommonDropAndDrag = ({
 }) => {
   const [data, setData] = useState([]);
   const [taskArray, setTaskArray] = useState([]);
+  const [showTaskModal, setShowTaskModal] = useState(false);
+  const [showTaskAssignModal, setShowTaskAssignModal] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {
+    getTasks();
+  }, [refresh, search, status, user_id, priority]);
+
+
+  function getTasks(){
     getExcomTask(id, search, status, user_id, page-1, priority, (res) => {
       if (res?.status == 200) {
         convertTaskIntoDropdown(res?.data?.data?.content);
@@ -31,9 +41,28 @@ const CommonDropAndDrag = ({
         setTotaltPage(res?.data?.data?.totalPages)
       }
     });
-  }, [refresh, search, status, user_id, priority]);
+  }
 
+  const openTaskAssignModal = () => {
+    setShowTaskModal(false);
+    setShowTaskAssignModal(true);
+  };
 
+  const closeTaskAssignModal = () => {
+    setShowTaskAssignModal(false);
+    setShowTaskModal(true);
+  };
+
+  const openTaskModal = (task) => {
+    setSelectedTask(task)
+    setShowTaskModal(true);
+  };
+
+  const closeTaskModal = () => {
+    getTasks();
+    setShowTaskModal(false);
+
+  };
 
   function convertTaskIntoDropdown(tasksArray) {
     let data = tasksArray.map((item) => ({
@@ -192,6 +221,7 @@ const CommonDropAndDrag = ({
                             excom={excom}
                             task={task}
                             key={index}
+                            openTaskModal={openTaskModal}
                           />
                         ))}
                       </div>
@@ -199,6 +229,7 @@ const CommonDropAndDrag = ({
                   )}
                 </Droppable>
               );
+              
             })}
           </DragDropContext>
         </div>
@@ -206,6 +237,22 @@ const CommonDropAndDrag = ({
           <div className="text-center w-100">No tasks found</div>
         )}
       </div>
+
+
+      <TaskAssignModel
+        show={showTaskAssignModal}
+        onHide={closeTaskAssignModal}
+        taskData={selectedTask}
+      />
+
+      <TaskDetailModel
+        project={project}
+        excom={excom}
+        show={showTaskModal}
+        onHide={closeTaskModal}
+        taskID={selectedTask?.taskId}
+        openTaskAssignModal={openTaskAssignModal}
+      />
     </>
   );
 };

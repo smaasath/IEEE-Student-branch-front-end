@@ -5,32 +5,16 @@ import deadline from "../../../assets/icons/deadline.png";
 import defaultUser from "../../../assets/images/default-user.png";
 import enter from "../../../assets/icons/Enter.png";
 import CommonPriorityContainer from "../commonPriorityContainer/commonPriorityContainer";
-import TaskDetailModel from "../../models/taskDetailModel/taskDetailModel";
-import TaskAssignModel from "../../models/taskAsignModel/taskAssignModel";
 
-const CommonTaskCard = ({ task, onClick, project, excom }) => {
-  const [showTaskModal, setShowTaskModal] = useState(false);
-  const [showTaskAssignModal, setShowTaskAssignModal] = useState(false);
 
-  const assigneesArray = task.users;
+const CommonTaskCard = ({ task,openTaskModal}) => {
 
-  const openTaskModal = () => {
-    setShowTaskModal(true);
-  };
 
-  const closeTaskModal = () => {
-    setShowTaskModal(false);
-  };
+  const assigneesArray = task?.users;
 
-  const openTaskAssignModal = () => {
-    setShowTaskModal(false);
-    setShowTaskAssignModal(true);
-  };
 
-  const closeTaskAssignModal = () => {
-    setShowTaskAssignModal(false);
-    setShowTaskModal(true);
-  };
+
+
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     return dateString.split("T")[0]; // Split the date string and take only the first part (date)
@@ -38,7 +22,7 @@ const CommonTaskCard = ({ task, onClick, project, excom }) => {
 
   return (
     <>
-      <Draggable key={task.id} draggableId={task.id}>
+      <Draggable key={task?.id} draggableId={task?.id}>
         {(provided) => (
           <div
             ref={provided.innerRef}
@@ -55,7 +39,7 @@ const CommonTaskCard = ({ task, onClick, project, excom }) => {
                 <CommonPriorityContainer priority={task.priority} />
               </div>
               <button
-                onClick={openTaskModal}
+                onClick={()=>{openTaskModal(task)}}
                 className="bg-transparent border-0"
               >
                 <img width={35} src={enter} />
@@ -104,21 +88,6 @@ const CommonTaskCard = ({ task, onClick, project, excom }) => {
           </div>
         )}
       </Draggable>
-
-      <TaskAssignModel
-        show={showTaskAssignModal}
-        onHide={closeTaskAssignModal}
-        taskData={task}
-      />
-
-      <TaskDetailModel
-        project={project}
-        excom={excom}
-        show={showTaskModal}
-        onHide={closeTaskModal}
-        taskID={task.taskId}
-        openTaskAssignModal={openTaskAssignModal}
-      />
     </>
   );
 };
