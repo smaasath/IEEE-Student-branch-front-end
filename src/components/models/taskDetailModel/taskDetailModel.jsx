@@ -17,6 +17,8 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { PolicyValidate } from "../../../utils/valitations/Valitation";
 import { editTask, getTaskById } from "../../../redux/actions/task";
+import { getAllCommentsByTask } from "../../../redux/actions/comment";
+
 
 const TaskDetailModel = ({
   onHide,
@@ -51,6 +53,7 @@ const TaskDetailModel = ({
   const [formData, setFormData] = useState(null);
   const [taskData, setTaskData] = useState(null);
   const [assigneesArray, setAssigneesArray] = useState(null);
+  const [commentList, setCommentList] = useState(null);
 
   useEffect(() => {
     // console.log(taskData, "Checking task Data");
@@ -115,6 +118,16 @@ const TaskDetailModel = ({
     }
   }, [userData, show]);
 
+  useEffect(()=>{
+    if(show){
+      getAllCommentsByTask(taskID,(res)=>{
+        if(res?.status == 200){
+          console.log(res?.data?.data,"Notes ddsaffdfdsafafsdf");
+          setCommentList(res?.data?.data);
+        }
+      })
+    }
+  },[show])
   useEffect(() => {
     if (show) {
       getTaskById(taskID, (res) => {
@@ -144,7 +157,6 @@ const TaskDetailModel = ({
     setSelectedPriority(eventKey);
   };
 
-  const handleDateChange = (e) => {};
 
   const notes = [
     { date: "2023-01-02", author: "Jane Doe", content: "Sample note 2" },
@@ -301,16 +313,16 @@ const TaskDetailModel = ({
                 </div>
               </div>
               <div className="mb-3">
-                {/* <div className="text-cl-primary mb-1 d-flex align-items-center">
+                <div className="text-cl-primary mb-1 d-flex align-items-center">
                   <img
                     src={clock}
                     style={{ width: "25px", height: "25px" }}
                     alt="Clock"
                   />
                   <span className="ms-2">
-                    Created at <b>May, 15 2022 14:23 PM</b>
+                    Created by <b className="ms-2">{taskData?.createdBy?.firstName} {taskData?.createdBy?.lastName}</b>
                   </span>
-                </div> */}
+                </div>
               </div>
               <div className="mb-3">
                 <div className="text-cl-primary">Description</div>
@@ -368,12 +380,9 @@ const TaskDetailModel = ({
                 <div className="p-2">
                   <CommonSearch primary={false} />
                 </div>
-                {notes.map((note, index) => (
+                {commentList?.map((note, index) => (
                   <div className="p-2" key={index}>
-                    <CommonNoteContainer
-                      date={note.date}
-                      author={note.author}
-                      content={note.content}
+                    <CommonNoteContainer noteData={note}
                     />
                   </div>
                 ))}
@@ -421,7 +430,7 @@ const TaskDetailModel = ({
                 >
                   {assigneesArray?.map((assignee, index) => (
                     <div key={index}>
-                      {console.log(assignee, "No : ", index)}
+                      {/* {console.log(assignee, "No : ", index)} */}
                       <CommonMemberContainer userData={assignee} />
                     </div>
                   ))}
