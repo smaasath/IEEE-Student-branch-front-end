@@ -21,7 +21,8 @@ const CommonDropAndDrag = ({
   user_id,
   page,
   priority,
-  setTotaltPage
+  setTotaltPage,
+  projectMembers
 }) => {
   const [data, setData] = useState([]);
   const [taskArray, setTaskArray] = useState([]);
@@ -36,7 +37,7 @@ const CommonDropAndDrag = ({
       getTasksByProject();
     }
    
-  }, [refresh, search, status, user_id, priority]);
+  }, [refresh, search, status, user_id, priority,page]);
 
 
   function getTasks(){
@@ -44,7 +45,7 @@ const CommonDropAndDrag = ({
       if (res?.status == 200) {
         convertTaskIntoDropdown(res?.data?.data?.content);
         setTaskArray(res?.data?.data?.content);
-        setTotaltPage(res?.data?.data?.totalPages)
+        setTotaltPage(res?.data?.data?.totalPages);
       }
     });
   }
@@ -75,7 +76,12 @@ const CommonDropAndDrag = ({
   };
 
   const closeTaskModal = () => {
-    getTasks();
+    if(excom){
+      getTasks();
+    }else if(project){
+      getTasksByProject();
+    }
+
     setShowTaskModal(false);
 
   };
@@ -259,6 +265,7 @@ const CommonDropAndDrag = ({
         show={showTaskAssignModal}
         onHide={closeTaskAssignModal}
         taskData={selectedTask}
+        projectMembers={projectMembers}
       />
 
       <TaskDetailModel

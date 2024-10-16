@@ -140,22 +140,16 @@ const TaskDetailModel = ({
         const isProjecrTaskAvailable = PolicyValidate(
           projectPolicyData,
           "PROJECT_TASK"
-        );
+        ) || isProjectAvailable;
 
         const isPrjectTaskAssignAvailable = PolicyValidate(
           projectPolicyData,
           "PROJECT_ASSIGN"
-        );
+        ) || isProjectAvailable;
 
-        if (isProjectAvailable) {
-          setAssignTask(isPrjectTaskAssignAvailable);
-          setCreateTask(isProjecrTaskAvailable);
-          setPageLoading(false);
-        } else {
-          setAssignTask(isPrjectTaskAssignAvailable);
-          setCreateTask(isProjecrTaskAvailable);
-          setPageLoading(false);
-        }
+        setAssignTask(isPrjectTaskAssignAvailable);
+        setCreateTask(isProjecrTaskAvailable);
+        setPageLoading(false);
       }
     }
   }, [userData, show]);
@@ -164,7 +158,6 @@ const TaskDetailModel = ({
     if (show) {
       getTaskById(taskID, (res) => {
         if (res?.status == 200) {
-          // console.log(res?.data?.data, "taskdaata");
           const task = res?.data?.data;
           const data = {
             task_name: task?.task_name,
@@ -183,11 +176,14 @@ const TaskDetailModel = ({
         }
       });
     }
+
   }, [show]);
+
 
   const handlePrioritySelect = (eventKey) => {
     setSelectedPriority(eventKey);
   };
+
 
   const notes = [
     { date: "2023-01-02", author: "Jane Doe", content: "Sample note 2" },

@@ -33,8 +33,8 @@ const EditExcomModel = ({ onHide, show, selectedMember, changed }) => {
   const handleSelectRole = (roleID) => {
     setSelectedRoleId(roleID);
   };
-  const handleSearchChangeofRoles = (e) => setsearchRoleItem(e.target.value);
-  const handleSearchChangeofUsers = (e) => setsearchUserItem(e.target.value);
+  const handleSearchChangeofRoles = (e) => setsearchRoleItem(e);
+  const handleSearchChangeofUsers = (e) => setsearchUserItem(e);
 
   const handleAssignRole = () => {
     setAssignLoading(true);

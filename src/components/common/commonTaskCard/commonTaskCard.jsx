@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import testUser from "../../../assets/images/testUser.png";
 import deadline from "../../../assets/icons/deadline.png";
@@ -7,10 +7,18 @@ import enter from "../../../assets/icons/Enter.png";
 import CommonPriorityContainer from "../commonPriorityContainer/commonPriorityContainer";
 
 
-const CommonTaskCard = ({ task,openTaskModal}) => {
+const CommonTaskCard = ({ task, openTaskModal }) => {
+
+  const [assigneesArray, setAssigneesArray] = useState([]);
+
+  useEffect(() => {
+
+    const array = task?.users;
+    array.push(task.createdBy)
+    setAssigneesArray(array)
+  }, [])
 
 
-  const assigneesArray = task?.users;
 
 
 
@@ -39,7 +47,7 @@ const CommonTaskCard = ({ task,openTaskModal}) => {
                 <CommonPriorityContainer priority={task.priority} />
               </div>
               <button
-                onClick={()=>{openTaskModal(task)}}
+                onClick={() => { openTaskModal(task) }}
                 className="bg-transparent border-0"
               >
                 <img width={35} src={enter} />
@@ -54,7 +62,7 @@ const CommonTaskCard = ({ task,openTaskModal}) => {
             </div> */}
             <div className="d-flex justify-content-between align-items-center mt-3">
               <div className="d-flex ms-2">
-                {assigneesArray.slice(0, 3).map((assignee, index) => (
+                {assigneesArray?.slice(0, 3)?.map((assignee, index) => (
                   <div
                     key={index}
                     style={{ width: 29, height: 29, marginRight: -5 }}
@@ -69,9 +77,9 @@ const CommonTaskCard = ({ task,openTaskModal}) => {
                   </div>
                 ))}
               </div>
-              {assigneesArray.length > 3 && (
+              {assigneesArray?.length > 3 && (
                 <div className="text-black-50" style={{ fontSize: 12 }}>
-                 + {assigneesArray.length - 3} people
+                  + {assigneesArray.length - 3} people
                 </div>
               )}
 

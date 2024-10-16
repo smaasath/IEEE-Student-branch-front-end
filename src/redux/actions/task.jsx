@@ -99,18 +99,10 @@ export const getExcomTask = (
   }
 };
 
-export const getProjectTask = (
-  project_id,
-  search,
-  status,
-  user_id,
-  page,
-  priority,
-  callback
-) => {
-  const endpoint = `${
-    import.meta.env.VITE_API_HOST
-  }project/${project_id}?search=${search}&status=${status}&user_id=${user_id}&page=${page}&priority=${priority}`;
+
+export const getProjectTask = (project_id, search, status, user_id, page, priority, callback) => {
+  const endpoint = `${import.meta.env.VITE_API_HOST}task/project/${project_id}?search=${search}&status=${status}&user_id=${user_id}&page=${page}&priority=${priority}`;
+
 
   try {
     http

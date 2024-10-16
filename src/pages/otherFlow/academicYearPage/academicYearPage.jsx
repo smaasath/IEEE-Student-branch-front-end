@@ -48,8 +48,7 @@ const AcademicYearPage = () => {
 
 
   function search(item) {
-    setsearchItem(item?.target?.value)
-    console.warn(item?.target?.value);
+    setsearchItem(item)
   }
 
 

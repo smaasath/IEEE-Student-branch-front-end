@@ -46,8 +46,8 @@ const ProjectLandingPage = () => {
   useEffect(() => {
     setPageLoading(true);
     if (userData) {
-      const isProjectAvailable = PolicyValidate(userData,"PROJECT");
-      const isProjectTimelineAvailable = PolicyValidate(userData,"PROJECT_TIME");
+      const isProjectAvailable = PolicyValidate(userData, "PROJECT");
+      const isProjectTimelineAvailable = PolicyValidate(userData, "PROJECT_TIME");
 
       setIsProjectTimelineAvailable(isProjectTimelineAvailable);
       setProjectPolicy(isProjectAvailable);
@@ -208,12 +208,13 @@ const ProjectLandingPage = () => {
   };
 
   const handleYearChange = (e) => {
+    console.warn(e.target.value)
     setSelectedYear(e.target.value);
-    setCurrentPage(1);
+    // setCurrentPage(1);
   };
 
   const handleSearchChange = (e) => {
-    setSearchItem(e.target.value);
+    setSearchItem(e);
     setCurrentPage(1);
   };
 
@@ -254,7 +255,7 @@ const ProjectLandingPage = () => {
                       termYear.map((yearItem) => (
                         <option
                           key={yearItem.termyearId}
-                          value={yearItem.termYearID}
+                          value={yearItem.termyearId}
                         >
                           {yearItem.termyear}
                         </option>
