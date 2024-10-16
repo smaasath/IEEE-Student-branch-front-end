@@ -30,7 +30,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom, openTaskAssig
   const projectPolicyData = useSelector((state) => state.user.projectPolicy);
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
-
+  
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     return dateString.split("T")[0];
@@ -50,9 +50,13 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom, openTaskAssig
     description: taskData.description,
   });
 
+  // const [assigneesList, setAssigneesList] = useState(taskData.users);
+  const assigneesArray = taskData.users;
+
   useEffect(() => {
     setPageLoading(true);
-    console.log(formData);
+    // console.log(assigneesList, "Task asssigneees");
+    // console.log(formData);
     if (excom) {
       if (userData && show) {
         const isExcomAvailable = PolicyValidate(userData, "EXCOM");
@@ -364,11 +368,31 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom, openTaskAssig
                 {/* <div className="mt-3">
                   <CommonSearch primary={false} />
                 </div> */}
+                
                 <div
                   className="mt-4 d-flex justify-content-between align-items-center gap-1 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar"
                   style={{ maxHeight: 500 }}
-                >
-                  <CommonMemberContainer />
+                > 
+                  {assigneesArray.map((assignee, index) =>(
+                    
+                    <div key={index}>
+                     {console.log(assignee, "No : ", index)}
+                      <CommonMemberContainer userData={assignee} />
+                    </div>
+                     
+                  )
+                  )
+                  }
+                 
+                 {/* {notes.map((note, index) => (
+                  <div className="p-2" key={index}>
+                    <CommonNoteContainer
+                      date={note.date}
+                      author={note.author}
+                      content={note.content}
+                    />
+                  </div>
+                ))} */}
                 </div>
               </div>
             </div>

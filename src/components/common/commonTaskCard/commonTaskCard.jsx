@@ -12,6 +12,7 @@ const CommonTaskCard = ({ task, onClick, project, excom }) => {
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [showTaskAssignModal, setShowTaskAssignModal] = useState(false);
 
+  const assigneesArray = task.users;
 
   const openTaskModal = () => {
     setShowTaskModal(true);
@@ -69,43 +70,27 @@ const CommonTaskCard = ({ task, onClick, project, excom }) => {
             </div>
             <div className="d-flex justify-content-between align-items-center mt-3">
               <div className="d-flex ms-2">
-                <div
-                  style={{ width: 29, height: 29, marginRight: -5 }}
-                  className="bg-white  rounded-circle d-flex justify-content-center align-items-center"
-                >
-                  <img
-                    src={task?.createdBy?.profilePic || defaultUser}
-                    width={25}
-                    height={25}
-                    className="rounded-circle"
-                  />
-                </div>
-                <div
-                  style={{ width: 29, height: 29, marginRight: -5 }}
-                  className="bg-white  rounded-circle d-flex justify-content-center align-items-center"
-                >
-                  <img
-                    src={task?.createdBy?.profilePic || defaultUser}
-                    width={25}
-                    height={25}
-                    className="rounded-circle"
-                  />
-                </div>
-                <div
-                  style={{ width: 29, height: 29, marginRight: -5 }}
-                  className="bg-white  rounded-circle d-flex justify-content-center align-items-center"
-                >
-                  <img
-                    src={task?.createdBy?.profilePic || testUser}
-                    width={25}
-                    height={25}
-                    className="rounded-circle"
-                  />
-                </div>
+                {assigneesArray.slice(0, 3).map((assignee, index) => (
+                  <div
+                    key={index}
+                    style={{ width: 29, height: 29, marginRight: -5 }}
+                    className="bg-white  rounded-circle d-flex justify-content-center align-items-center"
+                  >
+                    <img
+                      src={assignee.profilePic || defaultUser}
+                      width={25}
+                      height={25}
+                      className="rounded-circle"
+                    />
+                  </div>
+                ))}
               </div>
-              <div className="text-black-50" style={{ fontSize: 12 }}>
-                + 1 people
-              </div>
+              {assigneesArray.length > 3 && (
+                <div className="text-black-50" style={{ fontSize: 12 }}>
+                 + {assigneesArray.length - 3} people
+                </div>
+              )}
+
               <div className="d-flex gap-2 align-items-center text-black-50">
                 <div>
                   <img src={deadline} width={15} />
