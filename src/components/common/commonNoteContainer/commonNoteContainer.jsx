@@ -4,6 +4,8 @@ import deleted from "../../../assets/icons/delete.png";
 import defaultUser from "../../../assets/images/default-user.png";
 
 const CommonNoteContainer = ({ noteData }) => {
+    
+    
     function formatDateTime(dateString) {
         const date = new Date(dateString);
       

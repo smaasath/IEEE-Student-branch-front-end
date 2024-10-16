@@ -17,8 +17,10 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { PolicyValidate } from "../../../utils/valitations/Valitation";
 import { editTask, getTaskById } from "../../../redux/actions/task";
-import { getAllCommentsByTask } from "../../../redux/actions/comment";
-
+import {
+  addComment,
+  getAllCommentsByTask,
+} from "../../../redux/actions/comment";
 
 const TaskDetailModel = ({
   onHide,
@@ -39,6 +41,46 @@ const TaskDetailModel = ({
   const [selectedTask, setSelectedTask] = useState(null);
   // const [refreshTaskDetails, setRefreshTaskDetails] = useState(1);
   const [firstTimeFormDataLoaded, setFirstTimeFormDataLoaded] = useState(false);
+
+  const [comment, setComment] = useState("");
+  const [noteSendloading, setNoteSendloading] = useState(false);
+  const [refreshNotes, setRefreshNotes] = useState(1);
+  const handleNoteChange = (event) => {
+    setComment(event.target.value);
+  };
+  const submitNote = () => {
+    if (comment.trim()) {
+      setNoteSendloading(true);
+      addComment(
+        {
+          comment: comment,
+          task_id: taskID,
+          type: "TASK",
+        },
+        (res) => {
+          if (res?.status == 200) {
+            setComment("");
+            setNoteSendloading(false);
+            setRefreshNotes(refreshNotes + 1);
+          } else {
+            setNoteSendloading(false);
+            console.warn(res, "err in submit note");
+          }
+        }
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (show) {
+      getAllCommentsByTask(taskID, (res) => {
+        if (res?.status == 200) {
+          console.log(res?.data?.data, "Notes ddsaffdfdsafafsdf");
+          setCommentList(res?.data?.data);
+        }
+      });
+    }
+  }, [show, refreshNotes]);
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
@@ -118,16 +160,6 @@ const TaskDetailModel = ({
     }
   }, [userData, show]);
 
-  useEffect(()=>{
-    if(show){
-      getAllCommentsByTask(taskID,(res)=>{
-        if(res?.status == 200){
-          console.log(res?.data?.data,"Notes ddsaffdfdsafafsdf");
-          setCommentList(res?.data?.data);
-        }
-      })
-    }
-  },[show])
   useEffect(() => {
     if (show) {
       getTaskById(taskID, (res) => {
@@ -156,7 +188,6 @@ const TaskDetailModel = ({
   const handlePrioritySelect = (eventKey) => {
     setSelectedPriority(eventKey);
   };
-
 
   const notes = [
     { date: "2023-01-02", author: "Jane Doe", content: "Sample note 2" },
@@ -320,7 +351,11 @@ const TaskDetailModel = ({
                     alt="Clock"
                   />
                   <span className="ms-2">
-                    Created by <b className="ms-2">{taskData?.createdBy?.firstName} {taskData?.createdBy?.lastName}</b>
+                    Created by{" "}
+                    <b className="ms-2">
+                      {taskData?.createdBy?.firstName}{" "}
+                      {taskData?.createdBy?.lastName}
+                    </b>
                   </span>
                 </div>
               </div>
@@ -380,22 +415,39 @@ const TaskDetailModel = ({
                 <div className="p-2">
                   <CommonSearch primary={false} />
                 </div>
-                {commentList?.map((note, index) => (
-                  <div className="p-2" key={index}>
-                    <CommonNoteContainer noteData={note}
-                    />
-                  </div>
-                ))}
+                <div className="overflow-auto" style={{ height: "400px" }}>
+                  {commentList?.map((note, index) => (
+                    <div className="p-2" key={index}>
+                      <CommonNoteContainer noteData={note} />
+                    </div>
+                  ))}
+                </div>
+
                 <div className="mt-3">
                   <div className="d-flex justify-content-between align-items-center gap-3">
                     <div className="form-group w-100">
                       <textarea
                         className="form-control"
                         placeholder="Add note here"
+                        value={comment}
+                        onChange={handleNoteChange}
                       ></textarea>
                     </div>
-                    <button className="bg-transparent border-0">
-                      <img src={send} width={30} alt="Send" />
+                    <button
+                      className="bg-transparent border-0"
+                      onClick={submitNote}
+                      disabled={!comment.trim()}
+                    >
+                      {noteSendloading ? (
+                        <div className="d-flex justify-content-center">
+                          <div
+                            className={`spinner-border text-secondary`}
+                            role="status"
+                          ></div>
+                        </div>
+                      ) : (
+                        <img src={send} width={30} alt="Send" />
+                      )}
                     </button>
                   </div>
                 </div>
@@ -430,20 +482,9 @@ const TaskDetailModel = ({
                 >
                   {assigneesArray?.map((assignee, index) => (
                     <div key={index}>
-                      {/* {console.log(assignee, "No : ", index)} */}
                       <CommonMemberContainer userData={assignee} />
                     </div>
                   ))}
-
-                  {/* {notes.map((note, index) => (
-                  <div className="p-2" key={index}>
-                    <CommonNoteContainer
-                      date={note.date}
-                      author={note.author}
-                      content={note.content}
-                    />
-                  </div>
-                ))} */}
                 </div>
               </div>
             </div>
