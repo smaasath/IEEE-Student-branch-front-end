@@ -21,9 +21,44 @@ export const createTask = (body, callback) => {
   }
 };
 
+export const assignTask = (body, callback) => {
+  const endpoint = `${import.meta.env.VITE_API_HOST}task/assign`;
 
-export const getExcomTask = (ouid, callback) => {
-  const endpoint = `${import.meta.env.VITE_API_HOST}task/${ouid}`;
+  try {
+    http
+      .post(endpoint, body)
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        callback(error.response);
+      });
+  } catch (error) {
+    console.log('Caught Error:', error.response);
+    callback(error.response);
+  }
+};
+
+
+// export const getExcomTask = (ouid, callback) => {
+//   const endpoint = `${import.meta.env.VITE_API_HOST}task/${ouid}`;
+
+//   try {
+//     http
+//       .get(endpoint)
+//       .then((response) => {
+//         callback(response);
+//       })
+//       .catch((error) => {
+//         callback(error.response);
+//       });
+//   } catch (error) {
+//     callback(error.response);
+//   }
+// };
+
+export const getExcomTask = (ouid, search, status, user_id, page, priority, callback) => {
+  const endpoint = `${import.meta.env.VITE_API_HOST}task/${ouid}?search=${search}&status=${status}&user_id=${user_id}&page=${page}&priority=${priority}`;
 
   try {
     http
@@ -39,6 +74,22 @@ export const getExcomTask = (ouid, callback) => {
   }
 };
 
+export const getTaskById = ( taskId,callback) => {
+  const endpoint = `${import.meta.env.VITE_API_HOST}task/task/${taskId}`;
+
+  try {
+    http
+      .get(endpoint)
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        callback(error.response);
+      });
+  } catch (error) {
+    callback(error.response);
+  }
+};
 
 export const UpdateExcomTaskStatus = (task_id, status, callback) => {
   const endpoint = `${import.meta.env.VITE_API_HOST}task/status/${task_id}?status=${status}`;
