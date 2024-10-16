@@ -181,7 +181,7 @@ const ProjectPage = () => {
               className="mt-4 d-flex justify-content-between overflow-scroll overflow-y-hidden custom-scrollbar"
               style={{ maxWidth: 1300 }}
             >
-              <CommonDropAndDrag />
+              <CommonDropAndDrag  id={id} project={true} />
             </div>
           </div>
 
@@ -250,7 +250,7 @@ const ProjectPage = () => {
               </div>
             </div>
           </div>
-          <TaskModel show={showTaskModal} onHide={closeTaskModal} />
+          <TaskModel type={"PROJECT"} projectID={id} show={showTaskModal} onHide={closeTaskModal} />
         </div>
       )}
     </>
