@@ -16,8 +16,9 @@ import CommonNoteContainer from "../../common/commonNoteContainer/commonNoteCont
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { PolicyValidate } from "../../../utils/valitations/Valitation";
+import TaskAssignModel from "../taskAsignModel/taskAssignModel";
 
-const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
+const TaskDetailModel = ({ onHide, show, taskData, project, excom, openTaskAssignModal }) => {
   if (!taskData) return null;
 
   const navigate = useNavigate();
@@ -29,19 +30,41 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
   const projectPolicyData = useSelector((state) => state.user.projectPolicy);
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
-
+  
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
-    return dateString.split('T')[0];
+    return dateString.split("T")[0];
   };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const [formData, setFormData] = useState({
+    taskName: taskData.task_name,
+    startDate: formatDate(taskData.start_date),
+    endDate: formatDate(taskData.end_date),
+    priority: taskData.priority,
+    status: taskData.status,
+    description: taskData.description,
+  });
+
+  // const [assigneesList, setAssigneesList] = useState(taskData.users);
+  const assigneesArray = taskData.users;
 
   useEffect(() => {
     setPageLoading(true);
+    // console.log(assigneesList, "Task asssigneees");
+    // console.log(formData);
     if (excom) {
       if (userData && show) {
         const isExcomAvailable = PolicyValidate(userData, "EXCOM");
         const isExcomTaskAvailable = PolicyValidate(userData, "EXCOM_TASK");
-        const isExcomTaskAssignAvailable = PolicyValidate(userData, "EXCOM_TASK_ASSIGN");
+        const isExcomTaskAssignAvailable = PolicyValidate(
+          userData,
+          "EXCOM_TASK_ASSIGN"
+        );
 
         if (!isExcomAvailable) {
           navigate("/dashboard");
@@ -51,14 +74,19 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
           setPageLoading(false);
         }
       }
-
     } else if (project) {
       if (projectPolicyData && show) {
         const isProjectAvailable = PolicyValidate(userData, "PROJECT");
 
-        const isProjecrTaskAvailable = PolicyValidate(projectPolicyData, "PROJECT_TASK");
+        const isProjecrTaskAvailable = PolicyValidate(
+          projectPolicyData,
+          "PROJECT_TASK"
+        );
 
-        const isPrjectTaskAssignAvailable = PolicyValidate(projectPolicyData, "PROJECT_ASSIGN");
+        const isPrjectTaskAssignAvailable = PolicyValidate(
+          projectPolicyData,
+          "PROJECT_ASSIGN"
+        );
 
         if (isProjectAvailable) {
           setAssignTask(isPrjectTaskAssignAvailable);
@@ -71,14 +99,13 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
         }
       }
     }
-
-  }, [userData, show, excom, navigate]);
+  }, [userData, show, excom, navigate, formData]);
 
   const handlePrioritySelect = (eventKey) => {
     setSelectedPriority(eventKey);
   };
 
-  const handleDateChange = (e) => { };
+  const handleDateChange = (e) => {};
 
   const notes = [
     { date: "2023-01-02", author: "Jane Doe", content: "Sample note 2" },
@@ -91,6 +118,8 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
   const closeTaskModal = () => {
     setShowTaskModal(false);
   };
+
+  
 
   const tableHeading = [
     { label: "Task Title", value: "Task_title" },
@@ -109,7 +138,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
           className="text-cl-primary"
           id="contained-modal-title-vcenter"
         >
-          Task
+          {formData.taskName}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -130,9 +159,12 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 )}
               </div>
               <h5>
-                <b>{formatDate(taskData.task_name)}</b>
+                <b></b>
               </h5>
-              <div className="d-flex align-items-center mb-3">
+              <div
+                className="d-flex justify-content-between align-items-center mb-3"
+                style={{ width: "350px" }}
+              >
                 <div className="text-cl-primary mb-1 d-flex align-items-center">
                   <img
                     src={loading}
@@ -142,14 +174,21 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                   />
                   <span>Status</span>
                 </div>
-                <div class=" form-group">
+                <div className="form-group">
                   <select
-                    class="form-control ms-5"
-                    id="exampleFormControlSelect1"
+                    className="form-select"
+                    id="status"
+                    name="status"
+                    value={formData.status}
+                    onChange={handleChange}
+                    required
                   >
-                    <option>TODO</option>
-                    <option>Pending</option>
-                    <option>In progress</option>
+                    <option value="" hidden>
+                      Select Status
+                    </option>
+                    <option value="TODO">TODO</option>
+                    <option value="PROGRESS">In Progress</option>
+                    <option value="COMPLETE">Completed</option>
                   </select>
                 </div>
               </div>
@@ -167,9 +206,10 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 </div>
                 <input
                   type="date"
+                  name="startDate"
                   className="form-control ms-3"
-                  value={formatDate(taskData.start_date)}
-                  onChange={handleDateChange}
+                  value={formData.startDate}
+                  onChange={handleChange}
                 />
               </div>
               <div
@@ -186,12 +226,16 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 </div>
                 <input
                   type="date"
+                  name="endDate"
                   className="form-control ms-3"
-                  value={formatDate(taskData.end_date)}
-                  onChange={handleDateChange}
+                  value={formData.endDate}
+                  onChange={handleChange}
                 />
               </div>
-              <div className="d-flex align-items-center mb-3">
+              <div
+                className="d-flex justify-content-between align-items-center mb-3"
+                style={{ width: "350px" }}
+              >
                 <div className="text-cl-primary mb-1 d-flex align-items-center">
                   <img
                     src={star}
@@ -201,19 +245,26 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                   />
                   <span>Priority</span>
                 </div>
-                <div class="form-group">
+                <div className="form-group">
                   <select
-                    class="form-control ms-5"
-                    id="exampleFormControlSelect1"
+                    className="form-select"
+                    id="priority"
+                    name="priority"
+                    value={formData.priority}
+                    onChange={handleChange}
+                    required
                   >
-                    <option>Low</option>
-                    <option>Medium</option>
-                    <option>High</option>
+                    <option value="" hidden>
+                      Select Priority
+                    </option>
+                    <option value="LOW">Low</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="HIGH">High</option>
                   </select>
                 </div>
               </div>
               <div className="mb-3">
-                <div className="text-cl-primary mb-1 d-flex align-items-center">
+                {/* <div className="text-cl-primary mb-1 d-flex align-items-center">
                   <img
                     src={clock}
                     style={{ width: "25px", height: "25px" }}
@@ -222,7 +273,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                   <span className="ms-2">
                     Created at <b>May, 15 2022 14:23 PM</b>
                   </span>
-                </div>
+                </div> */}
               </div>
               <div className="mb-3">
                 <div className="text-cl-primary">Description</div>
@@ -301,22 +352,47 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                   <div className="d-flex justify-content-between w-100 align-items-center">
                     <h6 className="text-third fw-bold">Assignees</h6>
                     {assignTask && (
-                      <img
-                        src={add}
-                        alt="Add"
-                        style={{ width: "30px", height: "30px" }}
-                      />
+                      <button
+                        className="border-0 bg-transparent"
+                        onClick={()=>{openTaskAssignModal()}}
+                      >
+                        <img
+                          src={add}
+                          alt="Add"
+                          style={{ width: "30px", height: "30px" }}
+                        />
+                      </button>
                     )}
                   </div>
                 </div>
-                <div className="mt-3">
+                {/* <div className="mt-3">
                   <CommonSearch primary={false} />
-                </div>
+                </div> */}
+                
                 <div
                   className="mt-4 d-flex justify-content-between align-items-center gap-1 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar"
                   style={{ maxHeight: 500 }}
-                >
-                  <CommonMemberContainer />
+                > 
+                  {assigneesArray.map((assignee, index) =>(
+                    
+                    <div key={index}>
+                     {console.log(assignee, "No : ", index)}
+                      <CommonMemberContainer userData={assignee} />
+                    </div>
+                     
+                  )
+                  )
+                  }
+                 
+                 {/* {notes.map((note, index) => (
+                  <div className="p-2" key={index}>
+                    <CommonNoteContainer
+                      date={note.date}
+                      author={note.author}
+                      content={note.content}
+                    />
+                  </div>
+                ))} */}
                 </div>
               </div>
             </div>
@@ -327,6 +403,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
         <CommonButton onClick={onHide} close={true} text={"Cancel"} />
       </Modal.Footer>
       <CreateTaskModel show={showTaskModal} onHide={closeTaskModal} />
+      
     </Modal>
   );
 };

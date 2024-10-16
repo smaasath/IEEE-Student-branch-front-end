@@ -21,6 +21,24 @@ export const createTask = (body, callback) => {
   }
 };
 
+export const assignTask = (body, callback) => {
+  const endpoint = `${import.meta.env.VITE_API_HOST}task/assign`;
+
+  try {
+    http
+      .post(endpoint, body)
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        callback(error.response);
+      });
+  } catch (error) {
+    console.log('Caught Error:', error.response);
+    callback(error.response);
+  }
+};
+
 
 // export const getExcomTask = (ouid, callback) => {
 //   const endpoint = `${import.meta.env.VITE_API_HOST}task/${ouid}`;
