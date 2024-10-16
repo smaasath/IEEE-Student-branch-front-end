@@ -16,7 +16,6 @@ import CommonNoteContainer from "../../common/commonNoteContainer/commonNoteCont
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { PolicyValidate } from "../../../utils/valitations/Valitation";
-import TaskAssignModel from "../taskAsignModel/taskAssignModel";
 import { getTaskById } from "../../../redux/actions/task";
 
 const TaskDetailModel = ({
