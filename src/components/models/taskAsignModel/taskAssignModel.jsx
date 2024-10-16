@@ -30,7 +30,7 @@ export default function TaskAssignModel({ show, onHide, taskData, changed }) {
   };
 
   const formData = {
-    taskId: taskData.taskId,
+    taskId: taskData?.taskId,
     users: assigneesIds,
     // type: taskData.type
   };
@@ -52,14 +52,14 @@ export default function TaskAssignModel({ show, onHide, taskData, changed }) {
   useEffect(() => {
     setUserLoader(true);
     if (show) {
-      if (taskData && taskData.users) {
-        const userIds = taskData.users.map((user) => user.userID);
+      if (taskData && taskData?.users) {
+        const userIds = taskData?.users?.map((user) => user.userID);
         setAssigneesIds(userIds);
       }
 
-      if (taskData.type === "EXCOM") {
-        getAllExcomMember(0, searchUserItem, taskData.ou.ouID, "", (res) => {
-          if (res.status == 200) {
+      if (taskData?.type === "EXCOM") {
+        getAllExcomMember(0, searchUserItem, taskData?.ou?.ouID, "", (res) => {
+          if (res?.status == 200) {
             console.log(res?.data?.data?.content, "get ALL Excom members");
             let data = res?.data?.data?.content?.map((users) => ({
               id: users.user?.userID,
@@ -70,7 +70,7 @@ export default function TaskAssignModel({ show, onHide, taskData, changed }) {
               academicYear: users.user?.academicYear?.academicYear || "N/A",
               status: users.user?.academicYear?.status || "N/A",
               photo: users.user?.profilePic || profile,
-              role: users.role.userRole,
+              role: users.role?.userRole,
             }));
             console.warn(data);
             setUserData(data);
@@ -111,7 +111,7 @@ export default function TaskAssignModel({ show, onHide, taskData, changed }) {
             <div className="mt-3">
               <label htmlFor="memberSelect" className="form-label text-dark">
                 Select{" "}
-                {taskData.type === "EXCOM"
+                {taskData?.type === "EXCOM"
                   ? "Excom Members"
                   : "Project OC Members"}
               </label>
