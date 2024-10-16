@@ -18,6 +18,7 @@ import { getProjectById } from "../../../redux/actions/project";
 import { PolicyValidate } from "../../../utils/valitations/Valitation";
 import { projectPolicy } from "../../../redux/reducers/userSlice";
 import CommonPagination from "../../../components/common/commonPagination/commonPagination";
+import EditExcomModel from "../../../components/models/editExcomModel/editExcomModel";
 
 
 const ProjectPage = () => {
@@ -48,46 +49,50 @@ const ProjectPage = () => {
   const [selectedMemberId, setSelectedMemberId] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotaltPage] = useState(0);
+  const [editExcomModelShow, setEditExcomModelShow] = useState(false);
 
   useEffect(() => {
     setPageLoading(true);
     if (userData) {
-      getProjectById(id, (res) => {
-        if (res?.status == 200) {
-          setProject(res?.data?.data?.project);
-          distpatch(projectPolicy(res?.data?.data?.my_user_role_details))
-          const projectmain = PolicyValidate(userData, "PROJECT");
-          setMyroles(res?.data?.data?.my_user_role_details);
-          setOtherRoles(res?.data?.data?.other_role_details);
-          const allrole = [...res?.data?.data?.my_user_role_details, ...res?.data?.data?.other_role_details];
-          setAllRoles(allrole);
-          console.warn(allrole, "aaaaaaaaaaaaaaaaaa")
-          if (projectmain) {
-            setIsFinanceAvailable(true);
-            setIsEventAvailable(true);
-            setIsAssignAvailable(true);
-            setIsTaskAvailable(true);
-            setPageLoading(false);
-          } else {
-            const isProjectFinanceAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_FINANCE");
-            const isProjectEventAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_EVENT");
-            const isProjectAssignAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_ASSIGN");
-            const isProjectTaskAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_TASK");
-            setIsFinanceAvailable(isProjectFinanceAvailable);
-            setIsEventAvailable(isProjectEventAvailable);
-            setIsAssignAvailable(isProjectAssignAvailable);
-            setIsTaskAvailable(isProjectTaskAvailable);
-            setPageLoading(false);
-          }
-
-        } else {
-          setPageLoading(false);
-          navigate("/project");
-        }
-      })
-
+      getProjectDetails();
     }
   }, [userData, id]);
+
+
+  function getProjectDetails() {
+    getProjectById(id, (res) => {
+      if (res?.status == 200) {
+        setProject(res?.data?.data?.project);
+        distpatch(projectPolicy(res?.data?.data?.my_user_role_details))
+        const projectmain = PolicyValidate(userData, "PROJECT");
+        setMyroles(res?.data?.data?.my_user_role_details);
+        setOtherRoles(res?.data?.data?.other_role_details);
+        const allrole = [...res?.data?.data?.my_user_role_details, ...res?.data?.data?.other_role_details];
+        setAllRoles(allrole);
+        if (projectmain) {
+          setIsFinanceAvailable(true);
+          setIsEventAvailable(true);
+          setIsAssignAvailable(true);
+          setIsTaskAvailable(true);
+          setPageLoading(false);
+        } else {
+          const isProjectFinanceAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_FINANCE");
+          const isProjectEventAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_EVENT");
+          const isProjectAssignAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_ASSIGN");
+          const isProjectTaskAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_TASK");
+          setIsFinanceAvailable(isProjectFinanceAvailable);
+          setIsEventAvailable(isProjectEventAvailable);
+          setIsAssignAvailable(isProjectAssignAvailable);
+          setIsTaskAvailable(isProjectTaskAvailable);
+          setPageLoading(false);
+        }
+
+      } else {
+        setPageLoading(false);
+        navigate("/project");
+      }
+    })
+  }
 
   const openTaskModal = () => {
     setShowTaskModal(true);
@@ -306,7 +311,7 @@ const ProjectPage = () => {
                   </div>
                   {isAssignAvailable && (
                     <div>
-                      <button className="bg-transparent border-0">
+                      <button onClick={()=>{setEditExcomModelShow(true)}} className="bg-transparent border-0">
                         <img src={add} width={30} />
                       </button>
                     </div>
@@ -333,6 +338,16 @@ const ProjectPage = () => {
           <TaskModel changed={() => {
             setRefreshTasks(refreshTasks + 1);
           }} projectID={id} type={"PROJECT"} show={showTaskModal} onHide={closeTaskModal} />
+
+          <EditExcomModel
+            show={editExcomModelShow}
+            onHide={() => setEditExcomModelShow(false)}
+            id={id}
+            changed={() => {
+              getProjectDetails();
+            }}
+            mode={"PROJECT"} />
+
         </div>
       )}
     </>
