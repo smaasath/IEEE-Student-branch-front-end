@@ -5,6 +5,7 @@ import profile from "../../../assets/images/profile.png";
 import CommonButton from "../../../components/common/commonButton/commonButton";
 import EditProfileModal from "../../../components/models/editProfileModel/editProfileModel";
 import { useSelector } from "react-redux";
+import { editUsers } from "../../../redux/actions/user";
 
 const ProfileCard = ({ photo, name, userRole }) => {
   return (
@@ -41,11 +42,11 @@ const ProfileEditPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState(profile);
   const [isEditable, setIsEditable] = useState(false);
+  const [loader, setLoader] = useState(false);
   const userData = useSelector((state) => state.user.userData);
 
   const [formData, setFormData] = useState({
     bio: "",
-    userRole: "",
     profilePic: "",
     firstName: "",
     lastName: "",
@@ -55,11 +56,12 @@ const ProfileEditPage = () => {
     ieeeEmail: "",
     location: "",
     ieeeNumber: "",
+    fbURL: "",
+    linkedInURL: "",
   });
 
   const [error, setError] = useState({
     bio: false,
-    userRole: false,
     profilePic: false,
     firstName: false,
     lastName: false,
@@ -79,7 +81,6 @@ const ProfileEditPage = () => {
       setFormData({
         profilePic: user.profilePic || "",
         bio: user.bio || "",
-        userRole: user.userRole || "",
         firstName: user.firstName || "",
         lastName: user.lastName || "",
         fbURL: user.fbURL || "",
@@ -114,38 +115,67 @@ const ProfileEditPage = () => {
     setError((prevError) => ({ ...prevError, [name]: false }));
   };
 
+  console.log(formData);
+
   const handleSubmit = () => {
-    const newError = {};
+    const error = {};
     Object.keys(formData).forEach((field) => {
       if (
         !formData[field] &&
         [
-          "bio",
-          "userRole",
           "profilePic",
           "firstName",
           "lastName",
-          "fbURL",
-          "linkedInURL",
           "userName",
           "email",
           "contactNo",
           "location",
-          "ieeeEmail",
-          "ieeeNumber",
         ].includes(field)
-      ) {
-        newError[field] = true;
-      }
+      )
+
+        if (!formData.profilePic || !formData.firstName ||!formData.lastName ||!formData.userName ||!formData.email ||!formData.contactNo ||!formData.location || formData.type === "") {
+          setError({
+            ...error,
+            profilePic: !formData.profilePic,
+            firstName: !formData.firstName,
+            lastName: !formData.lastName,
+            userName: !formData.userName,
+            email: !formData.email,
+            contactNo: !formData.contactNo,
+            location: !formData.location,
+            type: formData.type === "" ? true : false,
+          });
+          return;
+        }
     });
 
-    if (Object.keys(newError).length > 0) {
-      setError(newError);
-      return;
-    }
+    const data = {
+      email: formData.email,
+      ieee_email: formData.ieeeEmail,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      ieee_membership_number: formData.ieeeNumber,
+      contactNo: formData.contactNo,
+      bio: formData.bio,
+      profilePic: formData.profilePic,
+      fbURL: formData.fbURL,
+      linkedInURL: formData.linkedInURL,
+      location: formData.location,
+    };
 
-    console.log("Form submitted successfully", formData);
-    setIsEditable(false);
+    console.log(data);
+
+    setLoader(true);
+
+    editUsers(data, (res) => {
+      setLoader(false);
+      if (res?.status === 200) {
+        console.log(res, "User updated successfully:");
+        setIsEditable(false);
+      } else {
+        console.log(res, "User Update Failed.");
+      }
+    });
   };
 
   const handleEditClick = () => {
@@ -155,10 +185,10 @@ const ProfileEditPage = () => {
   const userProfile = [
     {
       photo: profilePhoto,
-      name: `${formData.firstName} ${formData.lastName}`,
-      userRole: formData.userRole,
+      name: `${formData.firstName} ${formData.lastName}`, 
     },
   ];
+  
 
   return (
     <div className="container">
@@ -166,11 +196,7 @@ const ProfileEditPage = () => {
         <div className="row mt-4 px-5">
           {userProfile.map((user, index) => (
             <div className="col-6 col-md-6 mb-4" key={index}>
-              <ProfileCard
-                photo={user.profilePic}
-                name={user.name}
-                userRole={user.userRole}
-              />
+              <ProfileCard photo={user.profilePic} name={user.name} />
             </div>
           ))}
         </div>
@@ -221,31 +247,6 @@ const ProfileEditPage = () => {
                 !isEditable && !formData.bio ? "No role defined" : ""
               }
             />
-          </div>
-        )}
-
-        {(formData.userRole || isEditable) && (
-          <div className="mt-3">
-            <label htmlFor="userRole" className="form-label text-dark">
-              User Role
-            </label>
-
-            <input
-              type="text"
-              name="userRole"
-              value={formData.userRole || ""}
-              onChange={handleInputChange}
-              className={`form-control ${error.userRole ? "is-invalid" : ""}`}
-              style={{ width: "520px" }}
-              readOnly={!isEditable}
-              placeholder={
-                !isEditable && !formData.userRole ? "No role defined" : ""
-              }
-            />
-
-            {error.userRole && (
-              <div className="invalid-feedback">This field is required.</div>
-            )}
           </div>
         )}
 
@@ -375,17 +376,13 @@ const ProfileEditPage = () => {
             </label>
             <input
               type="text"
-              name="location"
+              name="ieeeEmail"
               value={formData.ieeeEmail || ""}
               onChange={handleInputChange}
               className={`form-control ${error.ieeeEmail ? "is-invalid" : ""}`}
               style={{ width: "1055px" }}
-              required
               readOnly={!isEditable}
             />
-            {error.ieeeEmail && (
-              <div className="invalid-feedback">This field is required.</div>
-            )}
           </div>
         )}
 
@@ -396,17 +393,13 @@ const ProfileEditPage = () => {
             </label>
             <input
               type="text"
-              name="location"
+              name="ieeeNumber"
               value={formData.ieeeNumber || ""}
               onChange={handleInputChange}
               className={`form-control ${error.ieeeNumber ? "is-invalid" : ""}`}
               style={{ width: "1055px" }}
-              required
               readOnly={!isEditable}
             />
-            {error.ieeeNumber && (
-              <div className="invalid-feedback">This field is required.</div>
-            )}
           </div>
         )}
 
@@ -417,17 +410,13 @@ const ProfileEditPage = () => {
             </label>
             <input
               type="text"
-              name="location"
+              name="fbURL"
               value={formData.fbURL || ""}
               onChange={handleInputChange}
               className={`form-control ${error.fbURL ? "is-invalid" : ""}`}
               style={{ width: "1055px" }}
-              required
               readOnly={!isEditable}
             />
-            {error.fbURL && (
-              <div className="invalid-feedback">This field is required.</div>
-            )}
           </div>
         )}
 
@@ -438,39 +427,27 @@ const ProfileEditPage = () => {
             </label>
             <input
               type="text"
-              name="location"
+              name="linkedInURL"
               value={formData.linkedInURL || ""}
               onChange={handleInputChange}
-              className={`form-control ${
-                error.linkedInURL ? "is-invalid" : ""
-              }`}
+              className={`form-control ${error.linkedInURL ? "is-invalid" : ""}`}
               style={{ width: "1055px" }}
-              required
               readOnly={!isEditable}
             />
-            {error.linkedInURL && (
-              <div className="invalid-feedback">This field is required.</div>
-            )}
           </div>
         )}
 
         <div className="d-flex justify-content-end align-items-end gap-1 mt-5">
           <div className="d-flex gap-3 flex-row">
             <div>
-              {isEditable && (
-                <CommonButton
-                  text={"Cancel"}
-                  close={true}
-                  onClick={() => setIsEditable(false)}
-                />
-              )}
+              {isEditable && <CommonButton text={"Cancel"} close={true} onClick={handleSubmit}/>}
             </div>
             <div>
               {isEditable && (
                 <CommonButton
                   text={"Save Changes"}
-                  onClick={handleSubmit}
-                  disabled={!isEditable}
+                  loader={loader}
+                  onClick={() => setIsEditable(false)}
                 />
               )}
             </div>
