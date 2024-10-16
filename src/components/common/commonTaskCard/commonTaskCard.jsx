@@ -116,7 +116,7 @@ const CommonTaskCard = ({ task, onClick, project, excom }) => {
         excom={excom}
         show={showTaskModal}
         onHide={closeTaskModal}
-        taskData={task}
+        taskID={task.taskId}
         openTaskAssignModal={openTaskAssignModal}
       />
     </>
