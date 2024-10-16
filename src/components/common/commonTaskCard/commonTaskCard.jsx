@@ -49,9 +49,9 @@ const CommonTaskCard = ({ task,openTaskModal}) => {
             <div className="mt-3">
               <h6 className="fw-bold">{task.task_name}</h6>
             </div>
-            <div className="mt-1">
+            {/* <div className="mt-1">
               <p className="">{task.description}</p>
-            </div>
+            </div> */}
             <div className="d-flex justify-content-between align-items-center mt-3">
               <div className="d-flex ms-2">
                 {assigneesArray.slice(0, 3).map((assignee, index) => (

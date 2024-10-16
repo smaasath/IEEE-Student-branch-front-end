@@ -16,7 +16,7 @@ import CommonNoteContainer from "../../common/commonNoteContainer/commonNoteCont
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { PolicyValidate } from "../../../utils/valitations/Valitation";
-import { getTaskById } from "../../../redux/actions/task";
+import { editTask, getTaskById } from "../../../redux/actions/task";
 
 const TaskDetailModel = ({
   onHide,
@@ -26,8 +26,6 @@ const TaskDetailModel = ({
   excom,
   openTaskAssignModal,
 }) => {
-
-
   const navigate = useNavigate();
   const [assignTask, setAssignTask] = useState(false);
   const [createTask, setCreateTask] = useState(false);
@@ -37,6 +35,8 @@ const TaskDetailModel = ({
   const projectPolicyData = useSelector((state) => state.user.projectPolicy);
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
+  // const [refreshTaskDetails, setRefreshTaskDetails] = useState(1);
+  const [firstTimeFormDataLoaded, setFirstTimeFormDataLoaded] = useState(false);
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
@@ -52,7 +52,22 @@ const TaskDetailModel = ({
   const [taskData, setTaskData] = useState(null);
   const [assigneesArray, setAssigneesArray] = useState(null);
 
+  useEffect(() => {
+    // console.log(taskData, "Checking task Data");
+    if (firstTimeFormDataLoaded && show) {
+      editTask(taskData.taskId, formData, (res) => {
+        if (res?.status == 200) {
+          let task = res?.data?.data;
+          setTaskData(task);
+          console.log("succussfulyy edited");
+        } else {
+          console.warn("Error in Updatin edited data");
+        }
+      });
 
+      setFirstTimeFormDataLoaded(true);
+    }
+  }, [formData]);
 
   useEffect(() => {
     setPageLoading(true);
@@ -100,23 +115,22 @@ const TaskDetailModel = ({
     }
   }, [userData, show]);
 
-
-  useEffect(()=>{
-    if(show){
+  useEffect(() => {
+    if (show) {
       getTaskById(taskID, (res) => {
         if (res?.status == 200) {
-          console.log(res?.data?.data,"taskdaata")
+          // console.log(res?.data?.data, "taskdaata");
           const task = res?.data?.data;
-          let data = {
-            taskName: task?.task_name || "N/A",
-            startDate: formatDate(task.start_date),
-            endDate: formatDate(task.end_date),
+          const data = {
+            task_name: task?.task_name,
+            start_date: task?.start_date,
+            end_date: task?.end_date,
             priority: task?.priority,
             status: task?.status,
             description: task?.description,
           };
           setFormData(data);
-          setTaskData(res?.data?.data?.content);
+          setTaskData(res?.data?.data);
           setAssigneesArray(res?.data?.data?.users);
         } else {
           // navigate("/dashboard/not-found");
@@ -124,7 +138,7 @@ const TaskDetailModel = ({
         }
       });
     }
-  },[show])
+  }, [show]);
 
   const handlePrioritySelect = (eventKey) => {
     setSelectedPriority(eventKey);
@@ -161,7 +175,7 @@ const TaskDetailModel = ({
           className="text-cl-primary"
           id="contained-modal-title-vcenter"
         >
-          {formData?.taskName}
+          {taskData?.task_name}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -202,7 +216,7 @@ const TaskDetailModel = ({
                     className="form-select"
                     id="status"
                     name="status"
-                    value={formData?.status}
+                    value={taskData?.status}
                     onChange={handleChange}
                     required
                   >
@@ -229,9 +243,9 @@ const TaskDetailModel = ({
                 </div>
                 <input
                   type="date"
-                  name="startDate"
+                  name="start_date"
                   className="form-control ms-3"
-                  value={formData?.startDate}
+                  value={formatDate(taskData?.start_date)}
                   onChange={handleChange}
                 />
               </div>
@@ -249,9 +263,9 @@ const TaskDetailModel = ({
                 </div>
                 <input
                   type="date"
-                  name="endDate"
+                  name="end_date"
                   className="form-control ms-3"
-                  value={formData?.endDate}
+                  value={formatDate(taskData?.end_date)}
                   onChange={handleChange}
                 />
               </div>
@@ -273,7 +287,7 @@ const TaskDetailModel = ({
                     className="form-select"
                     id="priority"
                     name="priority"
-                    value={formData?.priority}
+                    value={taskData?.priority}
                     onChange={handleChange}
                     required
                   >
@@ -300,7 +314,14 @@ const TaskDetailModel = ({
               </div>
               <div className="mb-3">
                 <div className="text-cl-primary">Description</div>
-                <textarea className="form-control" rows="3"></textarea>
+                <textarea
+                  name="description"
+                  className="form-control"
+                  onChange={handleChange}
+                  rows="3"
+                >
+                  {taskData?.description}
+                </textarea>
               </div>
               <div className="mt-4">
                 <div className="d-flex justify-content-between align-items-center">
