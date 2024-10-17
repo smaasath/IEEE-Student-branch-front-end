@@ -53,16 +53,16 @@ const TaskDetailModel = ({
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
+    // console.log(event.target.value,"Changing is work");
   };
 
   const [formData, setFormData] = useState(null);
   const [taskData, setTaskData] = useState(null);
   const [assigneesArray, setAssigneesArray] = useState(null);
-  
 
   useEffect(() => {
-    // console.log(taskData, "Checking task Data");
     if (firstTimeFormDataLoaded && show) {
+      console.log("inside edit task");
       editTask(taskData.taskId, formData, (res) => {
         if (res?.status == 200) {
           let task = res?.data?.data;
@@ -72,9 +72,8 @@ const TaskDetailModel = ({
           console.warn("Error in Updatin edited data");
         }
       });
-
-      setFirstTimeFormDataLoaded(true);
     }
+    setFirstTimeFormDataLoaded(true);
   }, [formData]);
 
   useEffect(() => {
@@ -361,9 +360,8 @@ const TaskDetailModel = ({
           </div>
           <div className="col-lg-4">
             <div className="bg-white rounded-3 common-shadow p-3">
-              
-              <CommonNotesArea taskID={taskID} show={show} task={true}/>
-           
+              <CommonNotesArea taskID={taskID} show={show} task={true} />
+
               <div className="d-flex bg-white common-shadow flex-column p-2 rounded-3">
                 <div className="d-flex justify-content-between align-items-center gap-4 flex-wrap mt-4 p-2">
                   <div className="d-flex justify-content-between w-100 align-items-center">
