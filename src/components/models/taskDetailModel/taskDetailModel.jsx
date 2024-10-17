@@ -29,18 +29,18 @@ const TaskDetailModel = ({
   project,
   excom,
   openTaskAssignModal,
-  setSelectedTask
+  
 }) => {
   const navigate = useNavigate();
   const [assignTask, setAssignTask] = useState(false);
   const [createTask, setCreateTask] = useState(false);
-  const [selectedPriority, setSelectedPriority] = useState("High");
+  // const [selectedPriority, setSelectedPriority] = useState("High");
   const userData = useSelector((state) => state.user.userData);
   const [pageLoading, setPageLoading] = useState(true);
   const projectPolicyData = useSelector((state) => state.user.projectPolicy);
   const [showTaskModal, setShowTaskModal] = useState(false);
 
-  const [selectedTask, setSelectedTask] = useState(null);
+  // const [selectedTask, setSelectedTask] = useState(null);
   // const [refreshTaskDetails, setRefreshTaskDetails] = useState(1);
   const [firstTimeFormDataLoaded, setFirstTimeFormDataLoaded] = useState(false);
 
@@ -418,7 +418,7 @@ const TaskDetailModel = ({
                 <div className="overflow-auto" style={{ height: "400px" }}>
                   {commentList?.map((note, index) => (
                     <div className="p-2" key={index}>
-                      <CommonNoteContainer noteData={note} />
+                      <CommonNoteContainer noteData={note} refreshCommentLoader = {()=>setRefreshNotes(refreshNotes + 1)}/>
                     </div>
                   ))}
                 </div>
@@ -436,7 +436,7 @@ const TaskDetailModel = ({
                     <button
                       className="bg-transparent border-0"
                       onClick={submitNote}
-                      disabled={!comment.trim()}
+                      disabled={!comment.trim() || noteSendloading}
                     >
                       {noteSendloading ? (
                         <div className="d-flex justify-content-center">

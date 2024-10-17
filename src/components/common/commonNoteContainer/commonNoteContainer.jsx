@@ -2,9 +2,21 @@ import React from "react";
 import enter from "../../../assets/icons/note.png";
 import deleted from "../../../assets/icons/delete.png";
 import defaultUser from "../../../assets/images/default-user.png";
+import { deleteCommentById } from "../../../redux/actions/comment";
 
-const CommonNoteContainer = ({ noteData }) => {
+const CommonNoteContainer = ({ noteData, refreshCommentLoader }) => {
     
+
+  function handleDeleteComment(){
+
+    deleteCommentById(noteData.commentID,(res)=>{
+      if(res?.status == 200){
+        refreshCommentLoader()
+      }
+
+    });
+
+  }
     
     function formatDateTime(dateString) {
         const date = new Date(dateString);
@@ -38,7 +50,7 @@ const CommonNoteContainer = ({ noteData }) => {
             <p className="m-0 text-secondary">{formatDateTime(noteData?.created_at)}</p>
           </div>
         </div>
-        <button className="bg-transparent border-0">
+        <button className="bg-transparent border-0" onClick={handleDeleteComment}>
           <img src={deleted} width={25} />
         </button>
       </div>
