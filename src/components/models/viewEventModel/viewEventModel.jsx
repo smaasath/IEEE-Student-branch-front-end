@@ -45,11 +45,7 @@ const ViewEventModal = ({ onHide, show, eventData }) => {
               <div className="mb-3">
               <label className="form-label text-dark"><b>Project Name:</b></label> {eventData.projectName}
               </div>
-              <div className="mb-3">
-              <label className="form-label text-dark"><b>Image:</b></label> {eventData.eventImage}
-              </div>
-
-            
+               
           </div>
         </div>
       </Modal.Body>
