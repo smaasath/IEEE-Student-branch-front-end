@@ -13,7 +13,7 @@ const CommonMemberContainer = ({ userData, role }) => {
                         <h6 className='m-0' style={{ color: "#121212" }}>{userData?.firstName} {userData?.lastName}</h6>
                     </div>
                     <div className='text-start'>
-                        <p className='m-0 text-start' style={{ color: "#41475" }}>{userData?.email} | {userData?.contactNo}</p>
+                        <p className='m-0 text-start' style={{ color: "#41475" }}>{userData?.contactNo}</p>
                     </div>
                 </div>
             </div>

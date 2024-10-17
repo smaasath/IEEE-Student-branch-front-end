@@ -16,7 +16,13 @@ import CommonNoteContainer from "../../common/commonNoteContainer/commonNoteCont
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { PolicyValidate } from "../../../utils/valitations/Valitation";
-import { getTaskById } from "../../../redux/actions/task";
+import { editTask, getTaskById } from "../../../redux/actions/task";
+import {
+  addComment,
+  getAllCommentsByTask,
+} from "../../../redux/actions/comment";
+
+import CommonNotesArea from "../../common/commonNoteArea/commonNoteArea";
 
 const TaskDetailModel = ({
   onHide,
@@ -25,19 +31,19 @@ const TaskDetailModel = ({
   project,
   excom,
   openTaskAssignModal,
-  setSelectedTask
 }) => {
-
-
   const navigate = useNavigate();
   const [assignTask, setAssignTask] = useState(false);
   const [createTask, setCreateTask] = useState(false);
-  const [selectedPriority, setSelectedPriority] = useState("High");
+  // const [selectedPriority, setSelectedPriority] = useState("High");
   const userData = useSelector((state) => state.user.userData);
   const [pageLoading, setPageLoading] = useState(true);
   const projectPolicyData = useSelector((state) => state.user.projectPolicy);
   const [showTaskModal, setShowTaskModal] = useState(false);
 
+  // const [selectedTask, setSelectedTask] = useState(null);
+  // const [refreshTaskDetails, setRefreshTaskDetails] = useState(1);
+  const [firstTimeFormDataLoaded, setFirstTimeFormDataLoaded] = useState(false);
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
@@ -47,13 +53,28 @@ const TaskDetailModel = ({
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
+    // console.log(event.target.value,"Changing is work");
   };
 
   const [formData, setFormData] = useState(null);
   const [taskData, setTaskData] = useState(null);
   const [assigneesArray, setAssigneesArray] = useState(null);
 
-
+  useEffect(() => {
+    if (firstTimeFormDataLoaded && show) {
+      console.log("inside edit task");
+      editTask(taskData.taskId, formData, (res) => {
+        if (res?.status == 200) {
+          let task = res?.data?.data;
+          setTaskData(task);
+          console.log("succussfulyy edited");
+        } else {
+          console.warn("Error in Updatin edited data");
+        }
+      });
+    }
+    setFirstTimeFormDataLoaded(true);
+  }, [formData]);
 
   useEffect(() => {
     setPageLoading(true);
@@ -78,15 +99,13 @@ const TaskDetailModel = ({
       if (projectPolicyData && show) {
         const isProjectAvailable = PolicyValidate(userData, "PROJECT");
 
-        const isProjecrTaskAvailable = PolicyValidate(
-          projectPolicyData,
-          "PROJECT_TASK"
-        ) || isProjectAvailable;
+        const isProjecrTaskAvailable =
+          PolicyValidate(projectPolicyData, "PROJECT_TASK") ||
+          isProjectAvailable;
 
-        const isPrjectTaskAssignAvailable = PolicyValidate(
-          projectPolicyData,
-          "PROJECT_ASSIGN"
-        ) || isProjectAvailable;
+        const isPrjectTaskAssignAvailable =
+          PolicyValidate(projectPolicyData, "PROJECT_ASSIGN") ||
+          isProjectAvailable;
 
         setAssignTask(isPrjectTaskAssignAvailable);
         setCreateTask(isProjecrTaskAvailable);
@@ -95,24 +114,22 @@ const TaskDetailModel = ({
     }
   }, [userData, show]);
 
-
   useEffect(() => {
     if (show) {
       getTaskById(taskID, (res) => {
         if (res?.status == 200) {
-          console.log(res?.data?.data, "taskdaata")
           const task = res?.data?.data;
-          setSelectedTask(task)
-          let data = {
-            taskName: task?.task_name || "N/A",
-            startDate: formatDate(task.start_date),
-            endDate: formatDate(task.end_date),
+
+          const data = {
+            task_name: task?.task_name,
+            start_date: task?.start_date,
+            end_date: task?.end_date,
             priority: task?.priority,
             status: task?.status,
             description: task?.description,
           };
           setFormData(data);
-          setTaskData(res?.data?.data?.content);
+          setTaskData(res?.data?.data);
           setAssigneesArray(res?.data?.data?.users);
         } else {
           // navigate("/dashboard/not-found");
@@ -120,17 +137,11 @@ const TaskDetailModel = ({
         }
       });
     }
-  }, [show])
+  }, [show]);
 
   const handlePrioritySelect = (eventKey) => {
     setSelectedPriority(eventKey);
   };
-
-  const handleDateChange = (e) => { };
-
-  const notes = [
-    { date: "2023-01-02", author: "Jane Doe", content: "Sample note 2" },
-  ];
 
   const openTaskModal = () => {
     setShowTaskModal(true);
@@ -157,7 +168,7 @@ const TaskDetailModel = ({
           className="text-cl-primary"
           id="contained-modal-title-vcenter"
         >
-          {formData?.taskName}
+          {taskData?.task_name}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -198,7 +209,7 @@ const TaskDetailModel = ({
                     className="form-select"
                     id="status"
                     name="status"
-                    value={formData?.status}
+                    value={taskData?.status}
                     onChange={handleChange}
                     required
                   >
@@ -225,9 +236,9 @@ const TaskDetailModel = ({
                 </div>
                 <input
                   type="date"
-                  name="startDate"
+                  name="start_date"
                   className="form-control ms-3"
-                  value={formData?.startDate}
+                  value={formatDate(taskData?.start_date)}
                   onChange={handleChange}
                 />
               </div>
@@ -245,9 +256,9 @@ const TaskDetailModel = ({
                 </div>
                 <input
                   type="date"
-                  name="endDate"
+                  name="end_date"
                   className="form-control ms-3"
-                  value={formData?.endDate}
+                  value={formatDate(taskData?.end_date)}
                   onChange={handleChange}
                 />
               </div>
@@ -269,7 +280,7 @@ const TaskDetailModel = ({
                     className="form-select"
                     id="priority"
                     name="priority"
-                    value={formData?.priority}
+                    value={taskData?.priority}
                     onChange={handleChange}
                     required
                   >
@@ -283,20 +294,31 @@ const TaskDetailModel = ({
                 </div>
               </div>
               <div className="mb-3">
-                {/* <div className="text-cl-primary mb-1 d-flex align-items-center">
+                <div className="text-cl-primary mb-1 d-flex align-items-center">
                   <img
                     src={clock}
                     style={{ width: "25px", height: "25px" }}
                     alt="Clock"
                   />
                   <span className="ms-2">
-                    Created at <b>May, 15 2022 14:23 PM</b>
+                    Created by{" "}
+                    <b className="ms-2">
+                      {taskData?.createdBy?.firstName}{" "}
+                      {taskData?.createdBy?.lastName}
+                    </b>
                   </span>
-                </div> */}
+                </div>
               </div>
               <div className="mb-3">
                 <div className="text-cl-primary">Description</div>
-                <textarea className="form-control" rows="3"></textarea>
+                <textarea
+                  name="description"
+                  className="form-control"
+                  onChange={handleChange}
+                  rows="3"
+                >
+                  {taskData?.description}
+                </textarea>
               </div>
               <div className="mt-4">
                 <div className="d-flex justify-content-between align-items-center">
@@ -338,34 +360,8 @@ const TaskDetailModel = ({
           </div>
           <div className="col-lg-4">
             <div className="bg-white rounded-3 common-shadow p-3">
-              <div className="bg-white common-shadow p-2 rounded-3 mb-2">
-                <h6 className="text-third fw-bold">Notes</h6>
-                <div className="p-2">
-                  <CommonSearch primary={false} />
-                </div>
-                {notes.map((note, index) => (
-                  <div className="p-2" key={index}>
-                    <CommonNoteContainer
-                      date={note.date}
-                      author={note.author}
-                      content={note.content}
-                    />
-                  </div>
-                ))}
-                <div className="mt-3">
-                  <div className="d-flex justify-content-between align-items-center gap-3">
-                    <div className="form-group w-100">
-                      <textarea
-                        className="form-control"
-                        placeholder="Add note here"
-                      ></textarea>
-                    </div>
-                    <button className="bg-transparent border-0">
-                      <img src={send} width={30} alt="Send" />
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <CommonNotesArea taskID={taskID} show={show} task={true} />
+
               <div className="d-flex bg-white common-shadow flex-column p-2 rounded-3">
                 <div className="d-flex justify-content-between align-items-center gap-4 flex-wrap mt-4 p-2">
                   <div className="d-flex justify-content-between w-100 align-items-center">
@@ -386,30 +382,15 @@ const TaskDetailModel = ({
                     )}
                   </div>
                 </div>
-                {/* <div className="mt-3">
-                  <CommonSearch primary={false} />
-                </div> */}
-
                 <div
                   className="mt-4 d-flex justify-content-between align-items-center gap-1 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar"
                   style={{ maxHeight: 500 }}
                 >
                   {assigneesArray?.map((assignee, index) => (
                     <div key={index}>
-                      {console.log(assignee, "No : ", index)}
                       <CommonMemberContainer userData={assignee} />
                     </div>
                   ))}
-
-                  {/* {notes.map((note, index) => (
-                  <div className="p-2" key={index}>
-                    <CommonNoteContainer
-                      date={note.date}
-                      author={note.author}
-                      content={note.content}
-                    />
-                  </div>
-                ))} */}
                 </div>
               </div>
             </div>

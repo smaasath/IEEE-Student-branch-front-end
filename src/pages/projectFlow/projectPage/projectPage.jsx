@@ -19,12 +19,13 @@ import { PolicyValidate } from "../../../utils/valitations/Valitation";
 import { projectPolicy } from "../../../redux/reducers/userSlice";
 import CommonPagination from "../../../components/common/commonPagination/commonPagination";
 import EditExcomModel from "../../../components/models/editExcomModel/editExcomModel";
+import { addComment } from "../../../redux/actions/comment";
+import CommonNotesArea from "../../../components/common/commonNoteArea/commonNoteArea";
 import { Editor } from "react-draft-wysiwyg";
 import { convertToHTML } from "draft-convert";
 import { EditorState } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { toolbar } from "../../../../Data/toolbar";
-
 
 const ProjectPage = () => {
   const navigate = useNavigate();
@@ -65,16 +66,18 @@ const ProjectPage = () => {
     }
   }, [userData, id]);
 
-
   function getProjectDetails() {
     getProjectById(id, (res) => {
       if (res?.status == 200) {
         setProject(res?.data?.data?.project);
-        distpatch(projectPolicy(res?.data?.data?.my_user_role_details))
+        distpatch(projectPolicy(res?.data?.data?.my_user_role_details));
         const projectmain = PolicyValidate(userData, "PROJECT");
         setMyroles(res?.data?.data?.my_user_role_details);
         setOtherRoles(res?.data?.data?.other_role_details);
-        const allrole = [...res?.data?.data?.my_user_role_details, ...res?.data?.data?.other_role_details];
+        const allrole = [
+          ...res?.data?.data?.my_user_role_details,
+          ...res?.data?.data?.other_role_details,
+        ];
         setAllRoles(allrole);
         if (projectmain) {
           setIsFinanceAvailable(true);
@@ -83,22 +86,33 @@ const ProjectPage = () => {
           setIsTaskAvailable(true);
           setPageLoading(false);
         } else {
-          const isProjectFinanceAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_FINANCE");
-          const isProjectEventAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_EVENT");
-          const isProjectAssignAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_ASSIGN");
-          const isProjectTaskAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_TASK");
+          const isProjectFinanceAvailable = PolicyValidate(
+            res?.data?.data?.my_user_role_details,
+            "PROJECT_FINANCE"
+          );
+          const isProjectEventAvailable = PolicyValidate(
+            res?.data?.data?.my_user_role_details,
+            "PROJECT_EVENT"
+          );
+          const isProjectAssignAvailable = PolicyValidate(
+            res?.data?.data?.my_user_role_details,
+            "PROJECT_ASSIGN"
+          );
+          const isProjectTaskAvailable = PolicyValidate(
+            res?.data?.data?.my_user_role_details,
+            "PROJECT_TASK"
+          );
           setIsFinanceAvailable(isProjectFinanceAvailable);
           setIsEventAvailable(isProjectEventAvailable);
           setIsAssignAvailable(isProjectAssignAvailable);
           setIsTaskAvailable(isProjectTaskAvailable);
           setPageLoading(false);
         }
-
       } else {
         setPageLoading(false);
         navigate("/project");
       }
-    })
+    });
   }
 
   const openTaskModal = () => {
@@ -113,8 +127,8 @@ const ProjectPage = () => {
   const handlePriorityChange = (e) => setPriority(e.target.value);
   const handleStatusChange = (e) => setStatus(e.target.value);
   const handleMemberChange = (e) => {
-    console.warn(e.target.value, "e.target.valuee.target.valuee.target.value")
-    setSelectedMemberId(e.target.value)
+    console.warn(e.target.value, "e.target.valuee.target.valuee.target.value");
+    setSelectedMemberId(e.target.value);
   };
 
 
@@ -226,7 +240,10 @@ const ProjectPage = () => {
                   value={priority}
                   onChange={handlePriorityChange}
                 >
-                  <option selected value={''}> Priority</option>
+                  <option selected value={""}>
+                    {" "}
+                    Priority
+                  </option>
                   <option value="LOW">LOW</option>
                   <option value="MEDIUM">MEDIUM</option>
                   <option value="HIGH">HIGH</option>
@@ -239,7 +256,9 @@ const ProjectPage = () => {
                   value={status}
                   onChange={handleStatusChange}
                 >
-                  <option selected value={''}>Status</option>
+                  <option selected value={""}>
+                    Status
+                  </option>
                   <option value="TODO">TO DO</option>
                   <option value="PROGRESS">PROGRESS</option>
                   <option value="COMPLETE">COMPLETED</option>
@@ -252,9 +271,14 @@ const ProjectPage = () => {
                   value={selectedMemberId}
                   onChange={handleMemberChange}
                 >
-                  <option selected value={''}>Assignee</option>
+                  <option selected value={""}>
+                    Assignee
+                  </option>
                   {AllRoles.map((member) => (
-                    <option key={member?.user?.userID} value={member?.user?.userID}>
+                    <option
+                      key={member?.user?.userID}
+                      value={member?.user?.userID}
+                    >
                       {`${member?.user?.firstName} ${member?.user?.lastName}`}
                     </option>
                   ))}
@@ -280,48 +304,18 @@ const ProjectPage = () => {
             </div>
             {totalPage > 1 ? (
               <div className="mt-5 d-flex justify-content-end">
-                <CommonPagination currentPage={currentPage} pages={totalPage} setCurrentPage={setCurrentPage} />
+                <CommonPagination
+                  currentPage={currentPage}
+                  pages={totalPage}
+                  setCurrentPage={setCurrentPage}
+                />
               </div>
             ) : null}
           </div>
 
           <div className="row mt-4">
             <div className="col-lg-8 p-3">
-              <div className="d-flex bg-white common-shadow flex-column p-3 rounded-3">
-                <div className="d-flex justify-content-between align-items-center gap-4 flex-wrap">
-                  <div>
-                    <h6 className="text-third fw-bold">Notes</h6>
-                  </div>
-                </div>
-
-                <div className="mt-3 d-flex justify-content-end">
-                  <div>
-                    <CommonSearch primary={true} />
-                  </div>
-
-                </div>
-
-                <div
-                  className="mt-4 d-flex justify-content-between align-items-center gap-4 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar pb-3 ps-2 pe-2 pt-1"
-                  style={{ maxHeight: 800 }}
-                >
-                  <CommonNoteContainer />
-                </div>
-                <div className="mt-3">
-                  <div className="d-flex justify-content-between align-items-center gap-3">
-                    <div class="form-group w-100">
-                      <textarea
-                        class="form-control"
-                        placeholder="Add note here"
-                        id="exampleFormControlTextarea1"
-                      ></textarea>
-                    </div>
-                    <button className="bg-transparent border-0">
-                      <img src={send} width={30} />
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <CommonNotesArea show={true} projectID={id} project={true}/>
             </div>
             <div className="col-lg-4 p-3">
               <div className="d-flex bg-white common-shadow flex-column p-3 rounded-3">
@@ -338,7 +332,7 @@ const ProjectPage = () => {
                   {isAssignAvailable && (
                     <div>
                       <button onClick={() => { setEditExcomModelShow(true) }} className="bg-transparent border-0">
-                        <img src={add} width={30} />
+                      <img src={add} width={30} />
                       </button>
                     </div>
                   )}
@@ -348,22 +342,28 @@ const ProjectPage = () => {
                   className="mt-4 d-flex justify-content-between align-items-center gap-1 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar"
                   style={{ maxHeight: 500 }}
                 >
-                  {
-                    AllRoles?.map((item, index) => {
-                      return (
-                        <CommonMemberContainer key={index} role={item?.role?.userRole} userData={item?.user} />
-                      )
-
-                    })
-                  }
-
+                  {AllRoles?.map((item, index) => {
+                    return (
+                      <CommonMemberContainer
+                        key={index}
+                        role={item?.role?.userRole}
+                        userData={item?.user}
+                      />
+                    );
+                  })}
                 </div>
               </div>
             </div>
           </div>
-          <TaskModel changed={() => {
-            setRefreshTasks(refreshTasks + 1);
-          }} projectID={id} type={"PROJECT"} show={showTaskModal} onHide={closeTaskModal} />
+          <TaskModel
+            changed={() => {
+              setRefreshTasks(refreshTasks + 1);
+            }}
+            projectID={id}
+            type={"PROJECT"}
+            show={showTaskModal}
+            onHide={closeTaskModal}
+          />
 
           <EditExcomModel
             show={editExcomModelShow}
@@ -372,8 +372,8 @@ const ProjectPage = () => {
             changed={() => {
               getProjectDetails();
             }}
-            mode={"PROJECT"} />
-
+            mode={"PROJECT"}
+          />
         </div>
       )}
     </>
