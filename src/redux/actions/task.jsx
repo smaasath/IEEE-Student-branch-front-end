@@ -74,6 +74,24 @@ export const getExcomTask = (ouid, search, status, user_id, page, priority, call
   }
 };
 
+
+export const getProjectTask = (project_id, search, status, user_id, page, priority, callback) => {
+  const endpoint = `${import.meta.env.VITE_API_HOST}task/project/${project_id}?search=${search}&status=${status}&user_id=${user_id}&page=${page}&priority=${priority}`;
+
+  try {
+    http
+      .get(endpoint)
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        callback(error.response);
+      });
+  } catch (error) {
+    callback(error.response);
+  }
+};
+
 export const getTaskById = ( taskId,callback) => {
   const endpoint = `${import.meta.env.VITE_API_HOST}task/task/${taskId}`;
 

@@ -125,3 +125,21 @@ export const getProjectById = (id, callback) => {
     callback(error.response);
   }
 };
+
+
+export const AssignProject = (role_id,user_id,project_id, callback) => {
+  const endpoint = `${import.meta.env.VITE_API_HOST}project/${role_id}/assign/${user_id}/${project_id}`;
+
+  try {
+    http
+      .post(endpoint)
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        callback(error.response);
+      });
+  } catch (error) {
+    callback(error.response);
+  }
+};

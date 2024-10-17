@@ -64,9 +64,9 @@ function ExecutiveCommitteePage() {
 
   useEffect(() => {
     getAllExcomMember(0, "", ouId, "", (response) => {
-      console.log("response now:",response.data.data.content)
+      console.log("response now:", response.data.data.content)
       if (response && response.data) {
-        const userList =  response.data.data.content.map((user) => ({
+        const userList = response.data.data.content.map((user) => ({
           id: user?.user?.userID,
           fullName: `${user?.user?.firstName} ${user?.user?.lastName}`,
         }));
@@ -95,12 +95,13 @@ function ExecutiveCommitteePage() {
     setSelectedTask(null);
   };
 
-  const handleSearchChange = (e) => setsearchItem(e.target.value);
+  const handleSearchChange = (e) => setsearchItem(e);
   const handlePriorityChange = (e) => setPriority(e.target.value);
   const handleStatusChange = (e) => setStatus(e.target.value);
   const handleMemberChange = (e) => {
-    console.warn(e.target.value,"e.target.valuee.target.valuee.target.value")
-    setSelectedMemberId(e.target.value)};
+    console.warn(e.target.value, "e.target.valuee.target.valuee.target.value")
+    setSelectedMemberId(e.target.value)
+  };
 
   return (
     <>
@@ -149,7 +150,7 @@ function ExecutiveCommitteePage() {
             <div className="d-flex flex-column bg-white common-shadow rounded-3 p-3 mt-4">
               <div className="d-flex justify-content-between align-items-center w-100 flex-wrap gap-4">
                 <div>
-                <CommonSearch primary={true} onChange={handleSearchChange} />
+                  <CommonSearch primary={true} onChange={handleSearchChange} />
                 </div>
 
                 <div className="">
@@ -169,7 +170,7 @@ function ExecutiveCommitteePage() {
                   <select
                     className="form-select w-100"
                     aria-label="Large select example"
-                    value={status} 
+                    value={status}
                     onChange={handleStatusChange}
                   >
                     <option selected value={''}>Status</option>
@@ -210,9 +211,12 @@ function ExecutiveCommitteePage() {
                   setTotaltPage={setTotaltPage}
                 />
               </div>
-              <div className="mt-5 d-flex justify-content-end">
-              <CommonPagination currentPage={currentPage} pages={totalPage} setCurrentPage={setCurrentPage} />
-              </div>
+              {totalPage > 1 ? (
+                <div className="mt-5 d-flex justify-content-end">
+                  <CommonPagination currentPage={currentPage} pages={totalPage} setCurrentPage={setCurrentPage} />
+                </div>
+              ) : null}
+
             </div>
             <TaskModel
               show={showTaskModal}

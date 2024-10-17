@@ -16,7 +16,6 @@ import CommonNoteContainer from "../../common/commonNoteContainer/commonNoteCont
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { PolicyValidate } from "../../../utils/valitations/Valitation";
-import TaskAssignModel from "../taskAsignModel/taskAssignModel";
 import { getTaskById } from "../../../redux/actions/task";
 
 const TaskDetailModel = ({
@@ -26,6 +25,7 @@ const TaskDetailModel = ({
   project,
   excom,
   openTaskAssignModal,
+  setSelectedTask
 }) => {
 
 
@@ -37,7 +37,7 @@ const TaskDetailModel = ({
   const [pageLoading, setPageLoading] = useState(true);
   const projectPolicyData = useSelector((state) => state.user.projectPolicy);
   const [showTaskModal, setShowTaskModal] = useState(false);
-  const [selectedTask, setSelectedTask] = useState(null);
+
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
@@ -81,33 +81,28 @@ const TaskDetailModel = ({
         const isProjecrTaskAvailable = PolicyValidate(
           projectPolicyData,
           "PROJECT_TASK"
-        );
+        ) || isProjectAvailable;
 
         const isPrjectTaskAssignAvailable = PolicyValidate(
           projectPolicyData,
           "PROJECT_ASSIGN"
-        );
+        ) || isProjectAvailable;
 
-        if (isProjectAvailable) {
-          setAssignTask(isPrjectTaskAssignAvailable);
-          setCreateTask(isProjecrTaskAvailable);
-          setPageLoading(false);
-        } else {
-          setAssignTask(isPrjectTaskAssignAvailable);
-          setCreateTask(isProjecrTaskAvailable);
-          setPageLoading(false);
-        }
+        setAssignTask(isPrjectTaskAssignAvailable);
+        setCreateTask(isProjecrTaskAvailable);
+        setPageLoading(false);
       }
     }
   }, [userData, show]);
 
 
-  useEffect(()=>{
-    if(show){
+  useEffect(() => {
+    if (show) {
       getTaskById(taskID, (res) => {
         if (res?.status == 200) {
-          console.log(res?.data?.data,"taskdaata")
+          console.log(res?.data?.data, "taskdaata")
           const task = res?.data?.data;
+          setSelectedTask(task)
           let data = {
             taskName: task?.task_name || "N/A",
             startDate: formatDate(task.start_date),
@@ -125,13 +120,13 @@ const TaskDetailModel = ({
         }
       });
     }
-  },[show])
+  }, [show])
 
   const handlePrioritySelect = (eventKey) => {
     setSelectedPriority(eventKey);
   };
 
-  const handleDateChange = (e) => {};
+  const handleDateChange = (e) => { };
 
   const notes = [
     { date: "2023-01-02", author: "Jane Doe", content: "Sample note 2" },

@@ -17,6 +17,8 @@ import TaskModel from "../../../components/models/createTaskModel/createTaskMode
 import { getProjectById } from "../../../redux/actions/project";
 import { PolicyValidate } from "../../../utils/valitations/Valitation";
 import { projectPolicy } from "../../../redux/reducers/userSlice";
+import CommonPagination from "../../../components/common/commonPagination/commonPagination";
+import EditExcomModel from "../../../components/models/editExcomModel/editExcomModel";
 
 
 const ProjectPage = () => {
@@ -39,25 +41,41 @@ const ProjectPage = () => {
   const [project, setProject] = useState([]);
   const [myRoles, setMyroles] = useState([]);
   const [otherRoles, setOtherRoles] = useState([]);
+  const [AllRoles, setAllRoles] = useState([]);
+  const [refreshTasks, setRefreshTasks] = useState(0);
+  const [searchItem, setsearchItem] = useState("");
+  const [priority, setPriority] = useState("");
+  const [status, setStatus] = useState("");
+  const [selectedMemberId, setSelectedMemberId] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotaltPage] = useState(0);
+  const [editExcomModelShow, setEditExcomModelShow] = useState(false);
 
   useEffect(() => {
     setPageLoading(true);
     if (userData) {
-      getProjectById(id, (res) => {
-        if (res?.status == 200) {
-          setProject(res?.data?.data?.project);
-          distpatch(projectPolicy(res?.data?.data))
-          const projectmain = PolicyValidate(userData, "PROJECT");
-          if (projectmain) {
-            setIsFinanceAvailable(true);
-            setIsEventAvailable(true);
-            setIsAssignAvailable(true);
-            setIsTaskAvailable(true);
-            setPageLoading(false);
-            return
-          }
-          setMyroles(res?.data?.data?.my_user_role_details);
-          setOtherRoles(res?.data?.data?.other_role_details);
+      getProjectDetails();
+    }
+  }, [userData, id]);
+
+
+  function getProjectDetails() {
+    getProjectById(id, (res) => {
+      if (res?.status == 200) {
+        setProject(res?.data?.data?.project);
+        distpatch(projectPolicy(res?.data?.data?.my_user_role_details))
+        const projectmain = PolicyValidate(userData, "PROJECT");
+        setMyroles(res?.data?.data?.my_user_role_details);
+        setOtherRoles(res?.data?.data?.other_role_details);
+        const allrole = [...res?.data?.data?.my_user_role_details, ...res?.data?.data?.other_role_details];
+        setAllRoles(allrole);
+        if (projectmain) {
+          setIsFinanceAvailable(true);
+          setIsEventAvailable(true);
+          setIsAssignAvailable(true);
+          setIsTaskAvailable(true);
+          setPageLoading(false);
+        } else {
           const isProjectFinanceAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_FINANCE");
           const isProjectEventAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_EVENT");
           const isProjectAssignAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_ASSIGN");
@@ -67,14 +85,14 @@ const ProjectPage = () => {
           setIsAssignAvailable(isProjectAssignAvailable);
           setIsTaskAvailable(isProjectTaskAvailable);
           setPageLoading(false);
-        } else {
-          setPageLoading(false);
-          navigate("/project");
         }
-      })
 
-    }
-  }, [userData, id]);
+      } else {
+        setPageLoading(false);
+        navigate("/project");
+      }
+    })
+  }
 
   const openTaskModal = () => {
     setShowTaskModal(true);
@@ -82,6 +100,14 @@ const ProjectPage = () => {
 
   const closeTaskModal = () => {
     setShowTaskModal(false);
+  };
+
+  const handleSearchChange = (e) => setsearchItem(e);
+  const handlePriorityChange = (e) => setPriority(e.target.value);
+  const handleStatusChange = (e) => setStatus(e.target.value);
+  const handleMemberChange = (e) => {
+    console.warn(e.target.value, "e.target.valuee.target.valuee.target.value")
+    setSelectedMemberId(e.target.value)
   };
 
   return (
@@ -165,15 +191,47 @@ const ProjectPage = () => {
           <div className="d-flex flex-column bg-white common-shadow rounded-3 p-3 mt-4">
             <div className="d-flex justify-content-between align-items-center w-100 flex-wrap gap-4">
               <div>
-                <CommonSearch />
+                <CommonSearch primary={true} onChange={handleSearchChange} />
               </div>
               <div className="">
                 <select
                   className="form-select w-100"
                   aria-label="Large select example"
+                  value={priority}
+                  onChange={handlePriorityChange}
                 >
-                  <option selected>Assignee</option>
-                  <option value="1">Me</option>
+                  <option selected value={''}> Priority</option>
+                  <option value="LOW">LOW</option>
+                  <option value="MEDIUM">MEDIUM</option>
+                  <option value="HIGH">HIGH</option>
+                </select>
+              </div>
+              <div className="">
+                <select
+                  className="form-select w-100"
+                  aria-label="Large select example"
+                  value={status}
+                  onChange={handleStatusChange}
+                >
+                  <option selected value={''}>Status</option>
+                  <option value="TODO">TO DO</option>
+                  <option value="PROGRESS">PROGRESS</option>
+                  <option value="COMPLETE">COMPLETED</option>
+                </select>
+              </div>
+              <div>
+                <select
+                  className="form-select w-100"
+                  aria-label="Large select example"
+                  value={selectedMemberId}
+                  onChange={handleMemberChange}
+                >
+                  <option selected value={''}>Assignee</option>
+                  {AllRoles.map((member) => (
+                    <option key={member?.user?.userID} value={member?.user?.userID}>
+                      {`${member?.user?.firstName} ${member?.user?.lastName}`}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -181,8 +239,24 @@ const ProjectPage = () => {
               className="mt-4 d-flex justify-content-between overflow-scroll overflow-y-hidden custom-scrollbar"
               style={{ maxWidth: 1300 }}
             >
-              <CommonDropAndDrag />
+              <CommonDropAndDrag
+                id={id}
+                project={true}
+                refresh={refreshTasks}
+                search={searchItem}
+                status={status}
+                user_id={selectedMemberId}
+                page={currentPage}
+                priority={priority}
+                setTotaltPage={setTotaltPage}
+                projectMembers={otherRoles}
+              />
             </div>
+            {totalPage > 1 ? (
+              <div className="mt-5 d-flex justify-content-end">
+                <CommonPagination currentPage={currentPage} pages={totalPage} setCurrentPage={setCurrentPage} />
+              </div>
+            ) : null}
           </div>
 
           <div className="row mt-4">
@@ -196,8 +270,9 @@ const ProjectPage = () => {
 
                 <div className="mt-3 d-flex justify-content-end">
                   <div>
-                    <CommonSearch primary={false} />
+                    <CommonSearch primary={true} />
                   </div>
+
                 </div>
 
                 <div
@@ -224,33 +299,55 @@ const ProjectPage = () => {
             </div>
             <div className="col-lg-4 p-3">
               <div className="d-flex bg-white common-shadow flex-column p-3 rounded-3">
+                <div>
+                  <h6 className="text-third fw-bold">Project Created By</h6>
+                </div>
+                <CommonMemberContainer userData={project?.createdBy} />
+              </div>
+              <div className="mt-3 d-flex bg-white common-shadow flex-column p-3 rounded-3">
                 <div className="d-flex justify-content-between align-items-center gap-4 flex-wrap">
                   <div>
                     <h6 className="text-third fw-bold">Project Members</h6>
                   </div>
                   {isAssignAvailable && (
                     <div>
-                      <button className="bg-transparent border-0">
+                      <button onClick={()=>{setEditExcomModelShow(true)}} className="bg-transparent border-0">
                         <img src={add} width={30} />
                       </button>
                     </div>
                   )}
                 </div>
 
-                <div className="mt-3">
-                  <CommonSearch primary={false} />
-                </div>
-
                 <div
                   className="mt-4 d-flex justify-content-between align-items-center gap-1 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar"
                   style={{ maxHeight: 500 }}
                 >
-                  <CommonMemberContainer />
+                  {
+                    AllRoles?.map((item, index) => {
+                      return (
+                        <CommonMemberContainer key={index} role={item?.role?.userRole} userData={item?.user} />
+                      )
+
+                    })
+                  }
+
                 </div>
               </div>
             </div>
           </div>
-          <TaskModel show={showTaskModal} onHide={closeTaskModal} />
+          <TaskModel changed={() => {
+            setRefreshTasks(refreshTasks + 1);
+          }} projectID={id} type={"PROJECT"} show={showTaskModal} onHide={closeTaskModal} />
+
+          <EditExcomModel
+            show={editExcomModelShow}
+            onHide={() => setEditExcomModelShow(false)}
+            id={id}
+            changed={() => {
+              getProjectDetails();
+            }}
+            mode={"PROJECT"} />
+
         </div>
       )}
     </>
