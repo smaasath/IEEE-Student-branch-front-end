@@ -19,6 +19,11 @@ import { PolicyValidate } from "../../../utils/valitations/Valitation";
 import { projectPolicy } from "../../../redux/reducers/userSlice";
 import CommonPagination from "../../../components/common/commonPagination/commonPagination";
 import EditExcomModel from "../../../components/models/editExcomModel/editExcomModel";
+import { Editor } from "react-draft-wysiwyg";
+import { convertToHTML } from "draft-convert";
+import { EditorState } from "draft-js";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { toolbar } from "../../../../Data/toolbar";
 
 
 const ProjectPage = () => {
@@ -50,6 +55,8 @@ const ProjectPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotaltPage] = useState(0);
   const [editExcomModelShow, setEditExcomModelShow] = useState(false);
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+
 
   useEffect(() => {
     setPageLoading(true);
@@ -110,6 +117,16 @@ const ProjectPage = () => {
     setSelectedMemberId(e.target.value)
   };
 
+
+  const onEditorStateChange = (state) => {
+    setEditorState(state);
+
+    // Convert to HTML
+    const contentState = state.getCurrentContent();
+    const htmlContent = convertToHTML(contentState);
+    console.log(htmlContent); // Log or use the HTML content as needed
+  };
+
   return (
     <>
       {pageLoading ? (
@@ -118,13 +135,22 @@ const ProjectPage = () => {
         <div className="p-3">
           <div className="bg-white rounded-3 common-shadow p-3 row align-items-center">
             <div className="col-md-3 d-flex justify-content-center">
-              <img src={projectDefault} width={150} className="img-fluid" />
+              <img src={project?.projectLogo || projectDefault} width={150} className="img-fluid" />
             </div>
             <div className="col-md-9 d-flex flex-column">
               <div>
-                <h2>IEEE OpenDay 2024</h2>
+                <h2>{project?.projectName}</h2>
               </div>
               <div>
+                <Editor
+                  editorState={editorState}
+                  toolbarClassName="toolbarClassName"
+                  wrapperClassName="wrapperClassName"
+                  editorClassName="editorClassName"
+                  onEditorStateChange={onEditorStateChange}
+                  toolbar={toolbar}
+            
+                />
                 <p className="text-secondary text-wrap">
                   IEEE Open Day 2024 is a highly anticipated event organized by
                   the IEEE Uva Wellassa University Student Branch, aimed at
@@ -311,7 +337,7 @@ const ProjectPage = () => {
                   </div>
                   {isAssignAvailable && (
                     <div>
-                      <button onClick={()=>{setEditExcomModelShow(true)}} className="bg-transparent border-0">
+                      <button onClick={() => { setEditExcomModelShow(true) }} className="bg-transparent border-0">
                         <img src={add} width={30} />
                       </button>
                     </div>
