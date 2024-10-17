@@ -29,6 +29,7 @@ const TaskDetailModel = ({
   project,
   excom,
   openTaskAssignModal,
+  setSelectedTask
 }) => {
   const navigate = useNavigate();
   const [assignTask, setAssignTask] = useState(false);
@@ -38,6 +39,7 @@ const TaskDetailModel = ({
   const [pageLoading, setPageLoading] = useState(true);
   const projectPolicyData = useSelector((state) => state.user.projectPolicy);
   const [showTaskModal, setShowTaskModal] = useState(false);
+
   const [selectedTask, setSelectedTask] = useState(null);
   // const [refreshTaskDetails, setRefreshTaskDetails] = useState(1);
   const [firstTimeFormDataLoaded, setFirstTimeFormDataLoaded] = useState(false);
@@ -81,6 +83,7 @@ const TaskDetailModel = ({
       });
     }
   }, [show, refreshNotes]);
+
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
@@ -159,6 +162,7 @@ const TaskDetailModel = ({
       getTaskById(taskID, (res) => {
         if (res?.status == 200) {
           const task = res?.data?.data;
+
           const data = {
             task_name: task?.task_name,
             start_date: task?.start_date,

@@ -391,6 +391,8 @@ const ExcomDetailPage = () => {
             show={editExcomModelShow}
             onHide={() => setEditExcomModelShow(false)}
             selectedMember={selectedMember}
+            mode={"EXCOM"}
+            id={ouId}
             changed={() => {
               setRefreshExcomData(refreshExcomData + 1);
             }}

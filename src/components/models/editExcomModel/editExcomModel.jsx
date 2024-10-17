@@ -7,11 +7,10 @@ import CommonSearch from "../../common/commonSearch/commonSearch";
 import selectIcon from "../../../assets/icons/check_mark_dark.png";
 import { assignOuExcomRole, getAllRoles } from "../../../redux/actions/role";
 import { getAllUsers } from "../../../redux/actions/user";
-import { useParams } from "react-router-dom";
+import { AssignProject } from "../../../redux/actions/project";
 
-const EditExcomModel = ({ onHide, show, selectedMember, changed }) => {
+const EditExcomModel = ({ onHide, show, selectedMember, changed, mode, id }) => {
   const [selectedRoleId, setSelectedRoleId] = useState(null);
-  // const [searchTerm, setSearchTerm] = useState("");
   const [selectedMemberID, setSelectedMemberID] = useState(null);
   const [roleData, setRoleData] = useState([]);
   const [totalPage, setTotalPage] = useState(1);
@@ -21,11 +20,7 @@ const EditExcomModel = ({ onHide, show, selectedMember, changed }) => {
   const [searchRoleItem, setsearchRoleItem] = useState("");
   const [searchUserItem, setsearchUserItem] = useState("");
   const [error, setError] = useState("");
-
-  // const [refreshTable, setRefreshTable] = useState(0);
-
   const [userData, setUserData] = useState([]);
-  const { id: ouId } = useParams();
 
   const handleSelectMember = (memberID) => {
     setSelectedMemberID(memberID);
@@ -39,19 +34,35 @@ const EditExcomModel = ({ onHide, show, selectedMember, changed }) => {
   const handleAssignRole = () => {
     setAssignLoading(true);
     setError("");
-    if (selectedRoleId && selectedMemberID && ouId) {
-      assignOuExcomRole(selectedRoleId, selectedMemberID, ouId, (response) => {
-        if (response.status === 200) {
-          console.log("Role assigned successfully:", response);
-          changed();
-          onHide();
-          setAssignLoading(false);
-        } else {
-          console.log("Failed to assign role:", response?.data?.error);
-          setError(response?.data?.message);
-          setAssignLoading(false);
-        }
-      });
+    if (selectedRoleId && selectedMemberID && id) {
+      if (mode == "EXCOM") {
+        assignOuExcomRole(selectedRoleId, selectedMemberID, id, (response) => {
+          if (response.status === 200) {
+            console.log("Role assigned successfully:", response);
+            changed();
+            onHide();
+            setAssignLoading(false);
+          } else {
+            console.log("Failed to assign role:", response?.data?.error);
+            setError(response?.data?.message);
+            setAssignLoading(false);
+          }
+        });
+      } else if (mode == "PROJECT") {
+        AssignProject(selectedRoleId, selectedMemberID, id, (response) => {
+          if (response.status === 200) {
+            console.log("Role assigned successfully:", response);
+            changed();
+            onHide();
+            setAssignLoading(false);
+          } else {
+            console.log("Failed to assign role:", response?.data?.error);
+            setError(response?.data?.message);
+            setAssignLoading(false);
+          }
+        });
+      }
+
     } else {
       console.error("Please select both a role and a member.");
       setError("Select both a role and a member");
@@ -61,7 +72,7 @@ const EditExcomModel = ({ onHide, show, selectedMember, changed }) => {
 
   useEffect(() => {
     setLoader(true);
-    getAllRoles(0, searchRoleItem, "EXCOM", (res) => {
+    getAllRoles(0, searchRoleItem, mode, (res) => {
       if (res.status == 200) {
         let data = res?.data?.data?.content?.map(({ roleID, userRole }) => ({
           id: roleID,
@@ -69,8 +80,6 @@ const EditExcomModel = ({ onHide, show, selectedMember, changed }) => {
         }));
         console.warn(data);
         setRoleData(data);
-        // setTotalPage(res?.data?.data?.totalPages);
-        // console.warn(res?.data?.data?.totalPages);
         setLoader(false);
       } else {
         console.error("Failed to load roles");
@@ -120,7 +129,7 @@ const EditExcomModel = ({ onHide, show, selectedMember, changed }) => {
             className="text-third"
             id="contained-modal-title-vcenter"
           >
-            Assign Executive Committee
+            {mode == "EXCOM" ? "Assign Executive Committee" : "Assign Project Members"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -161,7 +170,7 @@ const EditExcomModel = ({ onHide, show, selectedMember, changed }) => {
             </div>
 
             <div className="mt-3">
-            <label htmlFor="memberSelect" className="form-label text-dark">
+              <label htmlFor="memberSelect" className="form-label text-dark">
                 Select Member
               </label>
               <CommonSearch onChange={handleSearchChangeofUsers} />
@@ -174,9 +183,8 @@ const EditExcomModel = ({ onHide, show, selectedMember, changed }) => {
                     key={user.id}
                     type="button"
                     value={user.id}
-                    className={`list-group-item list-group-item-action ${
-                      selectedMemberID === user.id ? "active1" : ""
-                    }`}
+                    className={`list-group-item list-group-item-action ${selectedMemberID === user.id ? "active1" : ""
+                      }`}
                     onClick={() => handleSelectMember(user.id)}
                   >
                     <div className="d-flex align-items-center">

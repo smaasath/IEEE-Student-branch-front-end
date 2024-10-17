@@ -31,17 +31,22 @@ const CommonDropAndDrag = ({
   const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {
-    if(excom){
+    getAllTasks();
+
+  }, [refresh, search, status, user_id, priority, page]);
+
+
+  function getAllTasks() {
+    if (excom) {
       getTasks();
-    }else if(project){
+    } else if (project) {
       getTasksByProject();
     }
-   
-  }, [refresh, search, status, user_id, priority,page]);
+  }
 
 
-  function getTasks(){
-    getExcomTask(id, search, status, user_id, page-1, priority, (res) => {
+  function getTasks() {
+    getExcomTask(id, search, status, user_id, page - 1, priority, (res) => {
       if (res?.status == 200) {
         convertTaskIntoDropdown(res?.data?.data?.content);
         setTaskArray(res?.data?.data?.content);
@@ -50,8 +55,8 @@ const CommonDropAndDrag = ({
     });
   }
 
-  function getTasksByProject(){
-    getProjectTask(id, search, status, user_id, page-1, priority, (res) => {
+  function getTasksByProject() {
+    getProjectTask(id, search, status, user_id, page - 1, priority, (res) => {
       if (res?.status == 200) {
         convertTaskIntoDropdown(res?.data?.data?.content);
         setTaskArray(res?.data?.data?.content);
@@ -76,9 +81,9 @@ const CommonDropAndDrag = ({
   };
 
   const closeTaskModal = () => {
-    if(excom){
+    if (excom) {
       getTasks();
-    }else if(project){
+    } else if (project) {
       getTasksByProject();
     }
 
@@ -127,7 +132,6 @@ const CommonDropAndDrag = ({
 
   const onDragEnd = (result) => {
     const { source, destination, draggableId } = result;
-
     updateTaskStaus(result);
 
     if (
@@ -191,7 +195,9 @@ const CommonDropAndDrag = ({
   function updateTaskStaus(result) {
     const task_id = parseInt(result?.draggableId);
     const status = result?.destination?.droppableId;
-    UpdateExcomTaskStatus(task_id, status, (res) => {});
+    UpdateExcomTaskStatus(task_id, status, (res) => {
+      getAllTasks();
+    });
   }
 
   return (
@@ -226,10 +232,10 @@ const CommonDropAndDrag = ({
                                 column.id == "TODO"
                                   ? "#5F6A6A"
                                   : column.id == "PROGRESS"
-                                  ? "#00629B"
-                                  : column.id == "COMPLETE"
-                                  ? "#229954"
-                                  : "black",
+                                    ? "#00629B"
+                                    : column.id == "COMPLETE"
+                                      ? "#229954"
+                                      : "black",
                             }}
                           >
                             {column.title}
@@ -251,7 +257,7 @@ const CommonDropAndDrag = ({
                   )}
                 </Droppable>
               );
-              
+
             })}
           </DragDropContext>
         </div>
@@ -275,6 +281,7 @@ const CommonDropAndDrag = ({
         onHide={closeTaskModal}
         taskID={selectedTask?.taskId}
         openTaskAssignModal={openTaskAssignModal}
+        setSelectedTask={setSelectedTask}
       />
     </>
   );
