@@ -40,7 +40,7 @@ const ViewEventModal = ({ onHide, show, eventData }) => {
             <label className="form-label text-dark"><b>Description:</b></label> {eventData.description}
             </div>
             <div className="mb-3">
-              <label className="form-label text-dark"><b>Link:</b></label> {eventData.event_link}
+              <label className="form-label text-dark"><b>Link:</b></label> {eventData.eventLink}
               </div>
               <div className="mb-3">
               <label className="form-label text-dark"><b>Project Name:</b></label> {eventData.projectName}
