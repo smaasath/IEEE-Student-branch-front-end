@@ -22,6 +22,8 @@ import {
   getAllCommentsByTask,
 } from "../../../redux/actions/comment";
 
+import CommonNotesArea from "../../common/commonNoteArea/commonNoteArea";
+
 const TaskDetailModel = ({
   onHide,
   show,
@@ -29,7 +31,6 @@ const TaskDetailModel = ({
   project,
   excom,
   openTaskAssignModal,
-  
 }) => {
   const navigate = useNavigate();
   const [assignTask, setAssignTask] = useState(false);
@@ -44,47 +45,6 @@ const TaskDetailModel = ({
   // const [refreshTaskDetails, setRefreshTaskDetails] = useState(1);
   const [firstTimeFormDataLoaded, setFirstTimeFormDataLoaded] = useState(false);
 
-  const [comment, setComment] = useState("");
-  const [noteSendloading, setNoteSendloading] = useState(false);
-  const [refreshNotes, setRefreshNotes] = useState(1);
-  const handleNoteChange = (event) => {
-    setComment(event.target.value);
-  };
-  const submitNote = () => {
-    if (comment.trim()) {
-      setNoteSendloading(true);
-      addComment(
-        {
-          comment: comment,
-          task_id: taskID,
-          type: "TASK",
-        },
-        (res) => {
-          if (res?.status == 200) {
-            setComment("");
-            setNoteSendloading(false);
-            setRefreshNotes(refreshNotes + 1);
-          } else {
-            setNoteSendloading(false);
-            console.warn(res, "err in submit note");
-          }
-        }
-      );
-    }
-  };
-
-  useEffect(() => {
-    if (show) {
-      getAllCommentsByTask(taskID, (res) => {
-        if (res?.status == 200) {
-          console.log(res?.data?.data, "Notes ddsaffdfdsafafsdf");
-          setCommentList(res?.data?.data);
-        }
-      });
-    }
-  }, [show, refreshNotes]);
-
-
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     return dateString.split("T")[0];
@@ -98,7 +58,7 @@ const TaskDetailModel = ({
   const [formData, setFormData] = useState(null);
   const [taskData, setTaskData] = useState(null);
   const [assigneesArray, setAssigneesArray] = useState(null);
-  const [commentList, setCommentList] = useState(null);
+  
 
   useEffect(() => {
     // console.log(taskData, "Checking task Data");
@@ -140,15 +100,13 @@ const TaskDetailModel = ({
       if (projectPolicyData && show) {
         const isProjectAvailable = PolicyValidate(userData, "PROJECT");
 
-        const isProjecrTaskAvailable = PolicyValidate(
-          projectPolicyData,
-          "PROJECT_TASK"
-        ) || isProjectAvailable;
+        const isProjecrTaskAvailable =
+          PolicyValidate(projectPolicyData, "PROJECT_TASK") ||
+          isProjectAvailable;
 
-        const isPrjectTaskAssignAvailable = PolicyValidate(
-          projectPolicyData,
-          "PROJECT_ASSIGN"
-        ) || isProjectAvailable;
+        const isPrjectTaskAssignAvailable =
+          PolicyValidate(projectPolicyData, "PROJECT_ASSIGN") ||
+          isProjectAvailable;
 
         setAssignTask(isPrjectTaskAssignAvailable);
         setCreateTask(isProjecrTaskAvailable);
@@ -180,18 +138,11 @@ const TaskDetailModel = ({
         }
       });
     }
-
   }, [show]);
-
 
   const handlePrioritySelect = (eventKey) => {
     setSelectedPriority(eventKey);
   };
-
-
-  const notes = [
-    { date: "2023-01-02", author: "Jane Doe", content: "Sample note 2" },
-  ];
 
   const openTaskModal = () => {
     setShowTaskModal(true);
@@ -410,48 +361,9 @@ const TaskDetailModel = ({
           </div>
           <div className="col-lg-4">
             <div className="bg-white rounded-3 common-shadow p-3">
-              <div className="bg-white common-shadow p-2 rounded-3 mb-2">
-                <h6 className="text-third fw-bold">Notes</h6>
-                <div className="p-2">
-                  <CommonSearch primary={false} />
-                </div>
-                <div className="overflow-auto" style={{ height: "400px" }}>
-                  {commentList?.map((note, index) => (
-                    <div className="p-2" key={index}>
-                      <CommonNoteContainer noteData={note} refreshCommentLoader = {()=>setRefreshNotes(refreshNotes + 1)}/>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-3">
-                  <div className="d-flex justify-content-between align-items-center gap-3">
-                    <div className="form-group w-100">
-                      <textarea
-                        className="form-control"
-                        placeholder="Add note here"
-                        value={comment}
-                        onChange={handleNoteChange}
-                      ></textarea>
-                    </div>
-                    <button
-                      className="bg-transparent border-0"
-                      onClick={submitNote}
-                      disabled={!comment.trim() || noteSendloading}
-                    >
-                      {noteSendloading ? (
-                        <div className="d-flex justify-content-center">
-                          <div
-                            className={`spinner-border text-secondary`}
-                            role="status"
-                          ></div>
-                        </div>
-                      ) : (
-                        <img src={send} width={30} alt="Send" />
-                      )}
-                    </button>
-                  </div>
-                </div>
-              </div>
+              
+              <CommonNotesArea taskID={taskID} show={show} task={true}/>
+           
               <div className="d-flex bg-white common-shadow flex-column p-2 rounded-3">
                 <div className="d-flex justify-content-between align-items-center gap-4 flex-wrap mt-4 p-2">
                   <div className="d-flex justify-content-between w-100 align-items-center">
@@ -472,10 +384,6 @@ const TaskDetailModel = ({
                     )}
                   </div>
                 </div>
-                {/* <div className="mt-3">
-                  <CommonSearch primary={false} />
-                </div> */}
-
                 <div
                   className="mt-4 d-flex justify-content-between align-items-center gap-1 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar"
                   style={{ maxHeight: 500 }}
