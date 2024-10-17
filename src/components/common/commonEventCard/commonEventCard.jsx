@@ -47,7 +47,7 @@ const CommonEventCard = ({ eventDetails, editable, editAction, viewAction }) => 
             </div>
             <div className="card-body text-light d-flex flex-column position-relative bg-dark p-0">
                 <img
-                    src={BgImage}
+                    src={eventDetails.image}
                     className="m-0 w-100"
                     style={{ height: "220px", objectFit: "cover" }}
                     alt="Event Background"
@@ -59,14 +59,17 @@ const CommonEventCard = ({ eventDetails, editable, editAction, viewAction }) => 
                     <div className="fw-bold text-center mt-1" style={{ fontSize: "1.0rem" }}>
                         {eventDetails.date}
                     </div>
+
                     <div className="mt-1 fw-bold" style={{ fontSize: "0.8rem" }}>
                         Venue
                     </div>
                     <div style={{ fontSize: "0.7rem" }}> {eventDetails.venue}</div>
+
                     <div className="mt-1 fw-bold" style={{ fontSize: "0.8rem" }}>
                         Description
                     </div>
                     <div style={{ fontSize: "0.7rem" }}>{truncatedDescription}</div>
+
                     <div className="mt-1 fw-bold" style={{ fontSize: "0.8rem" }}>
                         Event Link
                     </div>

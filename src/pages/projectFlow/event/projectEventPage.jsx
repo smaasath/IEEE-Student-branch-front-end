@@ -8,13 +8,14 @@ import { projectPolicy } from '../../../redux/reducers/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import CommonLoader from '../../../components/common/commonLoader/commonLoader';
+import { getEventsByProject } from '../../../redux/actions/event';
 
 
 const ProjectEventPage = () => {
   const [addEventModelShow, setAddEventModelShow] = useState(false);
   const [disable, setDisable] = useState(false);
   const [editable, setEditable] = useState(false);
-  const { id } = useParams();
+  const { id: eventId } = useParams();
   const userData = useSelector((state) => state.user.userData);
   const projectPolicyData = useSelector((state) => state.user.projectPolicy);
   const [pageLoading, setPageLoading] = useState(true);
@@ -33,7 +34,7 @@ const ProjectEventPage = () => {
         }
         setPageLoading(false);
       } else {
-        getProjectById(id, (res) => {
+        getProjectById(eventId, (res) => {
           if (res?.status == 200) {
             setProjectData(res?.data?.data);
             const isEventPolicyAvailable = PolicyValidate(res?.data?.data?.my_user_role_details, "PROJECT_EVENT");
@@ -50,30 +51,59 @@ const ProjectEventPage = () => {
         })
       }
     }
-  }, [userData, projectPolicyData, id])
+  }, [userData, projectPolicyData, eventId])
 
-  const events = [{
-    id: 1,
-    eventName: "Hackathon Awareness",
-    date: "August 10, 2024",
-    venue: "UWU Main Hall",
-    description:
-      "The Shecorder is a revolutionary audio recording device designed with the unique needs and perspectives of women in mind.",
-    eventUrl: "",
-    projectName: "Shecodress<V6.0>",
-  },
-  {
-    id: 2,
-    eventName: "Hackathon First Round",
-    date: "August 20, 2024",
-    venue: "UWU D1 Lab",
-    description:
-      "Welcome to the UvaXtreme Hackathon—a dynamic, high-energy event where creativity, technology, and problem-solving converge! ",
-    eventUrl: "",
-    projectName: "UvaXtreme<V1.1>",
-  },
+  // const events = [{
+  //   id: 1,
+  //   eventName: "Hackathon Awareness",
+  //   date: "August 10, 2024",
+  //   venue: "UWU Main Hall",
+  //   description:
+  //     "The Shecorder is a revolutionary audio recording device designed with the unique needs and perspectives of women in mind.",
+  //   eventUrl: "",
+  //   projectName: "Shecodress<V6.0>",
+  // },
+  // {
+  //   id: 2,
+  //   eventName: "Hackathon First Round",
+  //   date: "August 20, 2024",
+  //   venue: "UWU D1 Lab",
+  //   description:
+  //     "Welcome to the UvaXtreme Hackathon—a dynamic, high-energy event where creativity, technology, and problem-solving converge! ",
+  //   eventUrl: "",
+  //   projectName: "UvaXtreme<V1.1>",
+  // },
 
-  ];
+  // ];
+
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    // setouloader(true);
+    getEventsByProject(eventId, (res) => {
+      console.log("res in event", res?.data?.data?.content);
+      if (res.status == 200) {
+        let data = res?.data?.data?.content?.map(
+          ({ eventID, eventName, eventLink,image, date, venue, decsription, project }) => ({
+            id: eventID,
+            eventName: eventName,
+            eventUrl:eventLink,
+            image: image,
+            date: date,
+            venue: venue,
+            description: decsription,
+            projectName: project?.projectName,
+          })
+        );
+        // console.warn(data);
+        setEvents(data);
+        // setouloader(false);
+      } else {
+        setEvents([]);
+        // setouloader(false);
+      }
+    });
+  }, [eventId]);
 
   const handleCloseAddEventModel = () => {
     setAddEventModelShow(false);
@@ -115,7 +145,7 @@ const ProjectEventPage = () => {
           onHide={handleCloseAddEventModel}
           disabled={disable}
           editable={editable}
-          id={id}
+          id={eventId}
         />
       </>
     )
