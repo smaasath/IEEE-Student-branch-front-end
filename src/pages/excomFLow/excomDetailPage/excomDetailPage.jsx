@@ -240,12 +240,12 @@ const ExcomDetailPage = () => {
   useEffect(() => {
     setPageLoading(true);
     if (userData) {
-      const isExcomAvailable = PolicyValidate(userData,"EXCOM");
+      const isExcomAvailable = PolicyValidate(userData, "EXCOM");
 
-      const isExcomAssignAvailable = PolicyValidate(userData,"EXCOM_ASSIGN");
+      const isExcomAssignAvailable = PolicyValidate(userData, "EXCOM_ASSIGN");
 
-      getOUById(ouId,(res)=>{
-        if(res.status == 200){
+      getOUById(ouId, (res) => {
+        if (res.status == 200) {
           if (!isExcomAvailable) {
             navigate("/dashboard");
           } else {
@@ -253,13 +253,13 @@ const ExcomDetailPage = () => {
             setPageLoading(false);
           }
         }
-        else{
+        else {
           navigate("/dashboard/not-found");
         }
       });
-      
+
     }
-  }, [userData,ouId]);
+  }, [userData, ouId]);
   const handleShowEditExcomModel = (member) => {
     setSelectedMember(member);
     setEditExcomModelShow(true);
@@ -290,14 +290,15 @@ const ExcomDetailPage = () => {
         setExcomCardLoader(false);
       }
     });
-  }, [refreshExcomData, termFilter,ouId]);
+  }, [refreshExcomData, termFilter, ouId]);
 
   const handleTermChange = (e) => setTermFilter(e.target.value);
 
   useEffect(() => {
     getAllTermYear((res) => {
-      if (res.status == 201) {
-        let termYears = res?.data?.data
+      if (res.status == 200) {
+        let termYears = res?.data?.data;
+        console.log(termYears, "termyear");
         setAvailableTermYears(termYears);
       }
     });
@@ -334,7 +335,7 @@ const ExcomDetailPage = () => {
                   value={termFilter}
                   onChange={handleTermChange}
                 >
-                  <option value={currentYear}>Select Term</option>
+                  <option value={''}>Select Term</option>
                   {availableTermYears.map((year) => (
                     <option key={year.termyearId} value={year.termyearId}>
                       {year.termyear}
@@ -390,6 +391,8 @@ const ExcomDetailPage = () => {
             show={editExcomModelShow}
             onHide={() => setEditExcomModelShow(false)}
             selectedMember={selectedMember}
+            mode={"EXCOM"}
+            id={ouId}
             changed={() => {
               setRefreshExcomData(refreshExcomData + 1);
             }}

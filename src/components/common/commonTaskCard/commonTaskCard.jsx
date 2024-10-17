@@ -1,36 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import testUser from "../../../assets/images/testUser.png";
 import deadline from "../../../assets/icons/deadline.png";
 import defaultUser from "../../../assets/images/default-user.png";
 import enter from "../../../assets/icons/Enter.png";
 import CommonPriorityContainer from "../commonPriorityContainer/commonPriorityContainer";
-import TaskDetailModel from "../../models/taskDetailModel/taskDetailModel";
-import TaskAssignModel from "../../models/taskAsignModel/taskAssignModel";
 
-const CommonTaskCard = ({ task, onClick, project, excom }) => {
-  const [showTaskModal, setShowTaskModal] = useState(false);
-  const [showTaskAssignModal, setShowTaskAssignModal] = useState(false);
 
-  const assigneesArray = task.users;
+const CommonTaskCard = ({ task, openTaskModal }) => {
 
-  const openTaskModal = () => {
-    setShowTaskModal(true);
-  };
+  const [assigneesArray, setAssigneesArray] = useState([]);
 
-  const closeTaskModal = () => {
-    setShowTaskModal(false);
-  };
+  useEffect(() => {
+    const array = task?.users;
+    array.push(task.createdBy)
+    setAssigneesArray(array)
+  }, [task])
 
-  const openTaskAssignModal = () => {
-    setShowTaskModal(false);
-    setShowTaskAssignModal(true);
-  };
 
-  const closeTaskAssignModal = () => {
-    setShowTaskAssignModal(false);
-    setShowTaskModal(true);
-  };
+
+
+
+
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     return dateString.split("T")[0]; // Split the date string and take only the first part (date)
@@ -38,7 +29,7 @@ const CommonTaskCard = ({ task, onClick, project, excom }) => {
 
   return (
     <>
-      <Draggable key={task.id} draggableId={task.id}>
+      <Draggable key={task?.id} draggableId={task?.id}>
         {(provided) => (
           <div
             ref={provided.innerRef}
@@ -55,7 +46,7 @@ const CommonTaskCard = ({ task, onClick, project, excom }) => {
                 <CommonPriorityContainer priority={task.priority} />
               </div>
               <button
-                onClick={openTaskModal}
+                onClick={() => { openTaskModal(task) }}
                 className="bg-transparent border-0"
               >
                 <img width={35} src={enter} />
@@ -70,7 +61,7 @@ const CommonTaskCard = ({ task, onClick, project, excom }) => {
             </div>
             <div className="d-flex justify-content-between align-items-center mt-3">
               <div className="d-flex ms-2">
-                {assigneesArray.slice(0, 3).map((assignee, index) => (
+                {assigneesArray?.slice(0, 3)?.map((assignee, index) => (
                   <div
                     key={index}
                     style={{ width: 29, height: 29, marginRight: -5 }}
@@ -85,9 +76,9 @@ const CommonTaskCard = ({ task, onClick, project, excom }) => {
                   </div>
                 ))}
               </div>
-              {assigneesArray.length > 3 && (
+              {assigneesArray?.length > 3 && (
                 <div className="text-black-50" style={{ fontSize: 12 }}>
-                 + {assigneesArray.length - 3} people
+                  + {assigneesArray.length - 3} people
                 </div>
               )}
 
@@ -104,21 +95,6 @@ const CommonTaskCard = ({ task, onClick, project, excom }) => {
           </div>
         )}
       </Draggable>
-
-      <TaskAssignModel
-        show={showTaskAssignModal}
-        onHide={closeTaskAssignModal}
-        taskData={task}
-      />
-
-      <TaskDetailModel
-        project={project}
-        excom={excom}
-        show={showTaskModal}
-        onHide={closeTaskModal}
-        taskData={task}
-        openTaskAssignModal={openTaskAssignModal}
-      />
     </>
   );
 };

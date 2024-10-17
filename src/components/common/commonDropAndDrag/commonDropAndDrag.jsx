@@ -4,8 +4,11 @@ import AddTask from "../../../assets/icons/Add.png";
 import CommonTaskCard from "../commonTaskCard/commonTaskCard";
 import {
   getExcomTask,
+  getProjectTask,
   UpdateExcomTaskStatus,
 } from "../../../redux/actions/task";
+import TaskDetailModel from "../../models/taskDetailModel/taskDetailModel";
+import TaskAssignModel from "../../models/taskAsignModel/taskAssignModel";
 
 
 const CommonDropAndDrag = ({
@@ -18,22 +21,75 @@ const CommonDropAndDrag = ({
   user_id,
   page,
   priority,
-  setTotaltPage
+  setTotaltPage,
+  projectMembers
 }) => {
   const [data, setData] = useState([]);
   const [taskArray, setTaskArray] = useState([]);
+  const [showTaskModal, setShowTaskModal] = useState(false);
+  const [showTaskAssignModal, setShowTaskAssignModal] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {
-    getExcomTask(id, search, status, user_id, page-1, priority, (res) => {
+    getAllTasks();
+
+  }, [refresh, search, status, user_id, priority, page]);
+
+
+  function getAllTasks() {
+    if (excom) {
+      getTasks();
+    } else if (project) {
+      getTasksByProject();
+    }
+  }
+
+
+  function getTasks() {
+    getExcomTask(id, search, status, user_id, page - 1, priority, (res) => {
+      if (res?.status == 200) {
+        convertTaskIntoDropdown(res?.data?.data?.content);
+        setTaskArray(res?.data?.data?.content);
+        setTotaltPage(res?.data?.data?.totalPages);
+      }
+    });
+  }
+
+  function getTasksByProject() {
+    getProjectTask(id, search, status, user_id, page - 1, priority, (res) => {
       if (res?.status == 200) {
         convertTaskIntoDropdown(res?.data?.data?.content);
         setTaskArray(res?.data?.data?.content);
         setTotaltPage(res?.data?.data?.totalPages)
       }
     });
-  }, [refresh, search, status, user_id, priority]);
+  }
 
+  const openTaskAssignModal = () => {
+    setShowTaskModal(false);
+    setShowTaskAssignModal(true);
+  };
 
+  const closeTaskAssignModal = () => {
+    setShowTaskAssignModal(false);
+    setShowTaskModal(true);
+  };
+
+  const openTaskModal = (task) => {
+    setSelectedTask(task)
+    setShowTaskModal(true);
+  };
+
+  const closeTaskModal = () => {
+    if (excom) {
+      getTasks();
+    } else if (project) {
+      getTasksByProject();
+    }
+
+    setShowTaskModal(false);
+
+  };
 
   function convertTaskIntoDropdown(tasksArray) {
     let data = tasksArray.map((item) => ({
@@ -76,7 +132,6 @@ const CommonDropAndDrag = ({
 
   const onDragEnd = (result) => {
     const { source, destination, draggableId } = result;
-
     updateTaskStaus(result);
 
     if (
@@ -140,7 +195,9 @@ const CommonDropAndDrag = ({
   function updateTaskStaus(result) {
     const task_id = parseInt(result?.draggableId);
     const status = result?.destination?.droppableId;
-    UpdateExcomTaskStatus(task_id, status, (res) => {});
+    UpdateExcomTaskStatus(task_id, status, (res) => {
+      getAllTasks();
+    });
   }
 
   return (
@@ -175,10 +232,10 @@ const CommonDropAndDrag = ({
                                 column.id == "TODO"
                                   ? "#5F6A6A"
                                   : column.id == "PROGRESS"
-                                  ? "#00629B"
-                                  : column.id == "COMPLETE"
-                                  ? "#229954"
-                                  : "black",
+                                    ? "#00629B"
+                                    : column.id == "COMPLETE"
+                                      ? "#229954"
+                                      : "black",
                             }}
                           >
                             {column.title}
@@ -192,6 +249,7 @@ const CommonDropAndDrag = ({
                             excom={excom}
                             task={task}
                             key={index}
+                            openTaskModal={openTaskModal}
                           />
                         ))}
                       </div>
@@ -199,6 +257,7 @@ const CommonDropAndDrag = ({
                   )}
                 </Droppable>
               );
+
             })}
           </DragDropContext>
         </div>
@@ -206,6 +265,24 @@ const CommonDropAndDrag = ({
           <div className="text-center w-100">No tasks found</div>
         )}
       </div>
+
+
+      <TaskAssignModel
+        show={showTaskAssignModal}
+        onHide={closeTaskAssignModal}
+        taskData={selectedTask}
+        projectMembers={projectMembers}
+      />
+
+      <TaskDetailModel
+        project={project}
+        excom={excom}
+        show={showTaskModal}
+        onHide={closeTaskModal}
+        taskID={selectedTask?.taskId}
+        openTaskAssignModal={openTaskAssignModal}
+        setSelectedTask={setSelectedTask}
+      />
     </>
   );
 };

@@ -47,8 +47,7 @@ const UserRoleModel = ({ onHide, show, editable, disabled, item, changed }) => {
   }
 
   function search(item) {
-    setsearchItem(item?.target?.value);
-    console.warn(item?.target?.value);
+    setsearchItem(item);
   }
 
   useEffect(() => {

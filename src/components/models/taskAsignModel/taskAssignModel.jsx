@@ -8,15 +8,14 @@ import { useParams } from "react-router-dom";
 import { getAllExcomMember } from "../../../redux/actions/ou";
 import { assignTask } from "../../../redux/actions/task";
 
-export default function TaskAssignModel({ show, onHide, taskData, changed }) {
+export default function TaskAssignModel({ show, onHide, taskData, changed, projectMembers }) {
   const [assigneesIds, setAssigneesIds] = useState([]);
   const [searchUserItem, setsearchUserItem] = useState("");
   const [error, setError] = useState("");
   const [userData, setUserData] = useState([]);
   const [userLoader, setUserLoader] = useState(false);
 
-  //   const handleSearchChangeofRoles = (e) => setsearchRoleItem(e.target.value);
-  const handleSearchChangeofUsers = (e) => setsearchUserItem(e.target.value);
+  const handleSearchChangeofUsers = (e) => setsearchUserItem(e);
   const handleAssign = (userID) => {
     setAssigneesIds((prevAssigneesIds) => {
       if (prevAssigneesIds.includes(userID)) {
@@ -30,21 +29,18 @@ export default function TaskAssignModel({ show, onHide, taskData, changed }) {
   };
 
   const formData = {
-    taskId: taskData.taskId,
+    taskId: taskData?.taskId,
     users: assigneesIds,
-    // type: taskData.type
   };
 
   useEffect(() => {
-    // console.log(assigneesIds, "Assignees");
+
     if (show) {
       assignTask(formData, (res) => {
         if (res?.status === 201) {
           console.log(res, "Assign Task COmplete");
         } else {
           console.warn(res, "Error in Task Assigning");
-          //   setLoading(false);
-          //   setExistErr("Task Creation Failed");
         }
       });
     }
@@ -52,14 +48,14 @@ export default function TaskAssignModel({ show, onHide, taskData, changed }) {
   useEffect(() => {
     setUserLoader(true);
     if (show) {
-      if (taskData && taskData.users) {
-        const userIds = taskData.users.map((user) => user.userID);
+      if (taskData && taskData?.users) {
+        const userIds = taskData?.users?.map((user) => user.userID);
         setAssigneesIds(userIds);
       }
 
-      if (taskData.type === "EXCOM") {
-        getAllExcomMember(0, searchUserItem, taskData.ou.ouID, "", (res) => {
-          if (res.status == 200) {
+      if (taskData?.type === "EXCOM") {
+        getAllExcomMember(0, searchUserItem, taskData?.ou?.ouID, "", (res) => {
+          if (res?.status == 200) {
             console.log(res?.data?.data?.content, "get ALL Excom members");
             let data = res?.data?.data?.content?.map((users) => ({
               id: users.user?.userID,
@@ -70,12 +66,10 @@ export default function TaskAssignModel({ show, onHide, taskData, changed }) {
               academicYear: users.user?.academicYear?.academicYear || "N/A",
               status: users.user?.academicYear?.status || "N/A",
               photo: users.user?.profilePic || profile,
-              role: users.role.userRole,
+              role: users.role?.userRole,
             }));
             console.warn(data);
             setUserData(data);
-            // setTotalPage(res?.data?.data?.totalPages);
-            // console.warn(res?.data?.data?.totalPages);
             setUserLoader(false);
           } else {
             console.error("Failed to load Users");
@@ -83,7 +77,20 @@ export default function TaskAssignModel({ show, onHide, taskData, changed }) {
           }
         });
       } else {
-        // for projects
+        console.warn(projectMembers,"aaa")
+        let data = projectMembers?.map((users) => ({
+          id: users.user?.userID,
+          fname: users.user?.firstName,
+          lname: users.user?.lastName,
+          email: users.user?.email,
+          phone: users.user?.contactNo,
+          academicYear: users.user?.academicYear?.academicYear || "N/A",
+          status: users.user?.academicYear?.status || "N/A",
+          photo: users.user?.profilePic || profile,
+          role: users.role?.userRole,
+        }));
+        setUserData(data);
+        setUserLoader(false);
       }
     }
   }, [searchUserItem, show]);
@@ -111,7 +118,7 @@ export default function TaskAssignModel({ show, onHide, taskData, changed }) {
             <div className="mt-3">
               <label htmlFor="memberSelect" className="form-label text-dark">
                 Select{" "}
-                {taskData.type === "EXCOM"
+                {taskData?.type === "EXCOM"
                   ? "Excom Members"
                   : "Project OC Members"}
               </label>
