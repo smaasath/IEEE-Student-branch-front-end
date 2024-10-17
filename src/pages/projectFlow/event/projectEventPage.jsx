@@ -53,29 +53,6 @@ const ProjectEventPage = () => {
     }
   }, [userData, projectPolicyData, eventId])
 
-  // const events = [{
-  //   id: 1,
-  //   eventName: "Hackathon Awareness",
-  //   date: "August 10, 2024",
-  //   venue: "UWU Main Hall",
-  //   description:
-  //     "The Shecorder is a revolutionary audio recording device designed with the unique needs and perspectives of women in mind.",
-  //   eventUrl: "",
-  //   projectName: "Shecodress<V6.0>",
-  // },
-  // {
-  //   id: 2,
-  //   eventName: "Hackathon First Round",
-  //   date: "August 20, 2024",
-  //   venue: "UWU D1 Lab",
-  //   description:
-  //     "Welcome to the UvaXtreme Hackathon—a dynamic, high-energy event where creativity, technology, and problem-solving converge! ",
-  //   eventUrl: "",
-  //   projectName: "UvaXtreme<V1.1>",
-  // },
-
-  // ];
-
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
@@ -84,14 +61,14 @@ const ProjectEventPage = () => {
       console.log("res in event", res?.data?.data?.content);
       if (res.status == 200) {
         let data = res?.data?.data?.content?.map(
-          ({ eventID, eventName, eventLink,image, date, venue, decsription, project }) => ({
+          ({ eventID, eventName, eventLink,image, date, venue, description, project }) => ({
             id: eventID,
             eventName: eventName,
-            eventUrl:eventLink,
+            eventLink:eventLink,
             image: image,
             date: date,
             venue: venue,
-            description: decsription,
+            description: description,
             projectName: project?.projectName,
           })
         );

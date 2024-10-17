@@ -7,13 +7,27 @@ import BgImage from "../../../assets/images/event_default_bg.png";
 import ViewEventModal from '../../../components/models/viewEventModel/viewEventModel'; // Import the correct ViewEventModal
 import EditEventModal from '../../../components/models/editEventModel/editEventModel'; // Import the correct EditEventModal
 
+// const truncateText = (text, maxWords) => {
+//     const words = text.split(' ');
+//     if (words.length > maxWords) {
+//         return words.slice(0, maxWords).join(' ') + '...';
+//     }
+//     return text;
+// };
+
 const truncateText = (text, maxWords) => {
+    if (!text) {
+        return ''; // Return an empty string if text is null or undefined
+    }
+    
     const words = text.split(' ');
     if (words.length > maxWords) {
         return words.slice(0, maxWords).join(' ') + '...';
     }
+    
     return text;
 };
+
 
 const CommonEventCard = ({ eventDetails, editable, editAction, viewAction }) => {
     const truncatedDescription = truncateText(eventDetails.description, 20);
@@ -22,6 +36,8 @@ const CommonEventCard = ({ eventDetails, editable, editAction, viewAction }) => 
     const [viewEventModalShow, setViewEventModalShow] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null); // State for selected event
     const [editEventModalShow, setEditEventModalShow] = useState(false);
+
+    console.log(eventDetails,"eventDetailseventDetailseventDetails")
 
     const handleCloseViewEventModal = () => setViewEventModalShow(false);
     const handleCloseEditEventModal = () => setEditEventModalShow(false);
@@ -68,19 +84,20 @@ const CommonEventCard = ({ eventDetails, editable, editAction, viewAction }) => 
                     <div className="mt-1 fw-bold" style={{ fontSize: "0.8rem" }}>
                         Description
                     </div>
-                    <div style={{ fontSize: "0.7rem" }}>{truncatedDescription}</div>
+                    <div style={{ fontSize: "0.7rem",color:"white" }}>{eventDetails.description}</div>
 
                     <div className="mt-1 fw-bold" style={{ fontSize: "0.8rem" }}>
                         Event Link
                     </div>
-                    <div className="d-flex py-0 mt-0">
+                    <div style={{ fontSize: "0.7rem" }}> {eventDetails.eventLink}</div>
+                    {/* <div className="d-flex py-0 mt-0">
                         <button className="bg-transparent border-0 d-flex" onClick={""}>
                             <img src={CopyToClipboardIcon} width={20} alt="Copy" />
                         </button>
                         <button className="bg-transparent border-0 ms-0 d-flex" onClick={""}>
                             <img src={OpenNewTabIcon} width={20} alt="Open New Tab" />
                         </button>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div className="card-footer d-flex">
