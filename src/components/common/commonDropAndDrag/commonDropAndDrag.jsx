@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import AddTask from "../../../assets/icons/Add.png";
+import table from "../../../assets/icons/table.png";
+import drop from "../../../assets/icons/drop.png";
 import CommonTaskCard from "../commonTaskCard/commonTaskCard";
 import {
   getExcomTask,
@@ -9,6 +10,7 @@ import {
 } from "../../../redux/actions/task";
 import TaskDetailModel from "../../models/taskDetailModel/taskDetailModel";
 import TaskAssignModel from "../../models/taskAsignModel/taskAssignModel";
+import CommonTable from "../commonTable/commonTable";
 
 
 const CommonDropAndDrag = ({
@@ -26,9 +28,45 @@ const CommonDropAndDrag = ({
 }) => {
   const [data, setData] = useState([]);
   const [taskArray, setTaskArray] = useState([]);
+  const [tableArray, settableArray] = useState([]);
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [showTaskAssignModal, setShowTaskAssignModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
+  const methods = ["TABLE", "DROP"];
+  const [method, setMethod] = useState("DROP");
+
+  const tableHeading = [
+    {
+      label: "Task Name",
+      value: "task_name",
+    },
+    {
+      label: "Start Date",
+      value: "stdate",
+    },
+    {
+      label: "End Date",
+      value: "eDate",
+    },
+    {
+      label: "Status",
+      value: "status",
+    },
+    {
+      label: "Priority",
+      value: "priority",
+    },
+    {
+      label: "",
+      value: "ACTION",
+      type: ["VIEW"],
+    },
+  ];
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toISOString().slice(0, 10); // Extract YYYY-MM-DD
+  };
+
 
   useEffect(() => {
     getAllTasks();
@@ -51,8 +89,21 @@ const CommonDropAndDrag = ({
         convertTaskIntoDropdown(res?.data?.data?.content);
         setTaskArray(res?.data?.data?.content);
         setTotaltPage(res?.data?.data?.totalPages);
+        const data = res?.data?.data?.content?.map((item) => {
+          const stdate = formatDate(item.start_date);
+          const eDate = formatDate(item.end_date);
+          return {
+            stdate: stdate,
+            eDate: eDate,
+            ...item,
+          };
+        });
+
+        settableArray(data);
       }
     });
+
+
   }
 
   function getTasksByProject() {
@@ -61,6 +112,17 @@ const CommonDropAndDrag = ({
         convertTaskIntoDropdown(res?.data?.data?.content);
         setTaskArray(res?.data?.data?.content);
         setTotaltPage(res?.data?.data?.totalPages)
+        const data = res?.data?.data?.content?.map((item) => {
+          const stdate = formatDate(item.start_date);
+          const eDate = formatDate(item.end_date);
+          return {
+            stdate: stdate,
+            eDate: eDate,
+            ...item,
+          };
+        });
+
+        settableArray(data);
       }
     });
   }
@@ -202,65 +264,115 @@ const CommonDropAndDrag = ({
 
   return (
     <>
-      <div className="d-flex flex-column">
-        <div className="d-flex justify-content-between">
-          <DragDropContext onDragEnd={onDragEnd}>
-            {data?.columnOrder?.map((columnId) => {
-              const column = data.columns[columnId];
-              const tasks = column?.taskIds?.map(
-                (taskId) => data.tasks[taskId]
-              );
 
+      <div className={`d-flex flex-column ${method == "TABLE" ? "w-100" : ""}`}>
+        <div className="d-flex justify-content-end mb-3">
+          <div
+            className="btn-group"
+            role="group"
+            aria-label="Basic example"
+          >
+            {methods.map((item, index) => {
               return (
-                <Droppable key={column.id} droppableId={column.id}>
-                  {(provided) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      className="d-flex flex-column align-items-center m-3 p-4 rounded-3 overflow-scroll overflow-x-hidden custom-scrollbar"
-                      style={{
-                        backgroundColor: "#EEF2F5",
-                        width: 330,
-                        maxHeight: 1000,
-                      }}
-                    >
-                      <div className="d-flex justify-content-between align-items-center w-100">
-                        <div>
-                          <h5
-                            style={{
-                              color:
-                                column.id == "TODO"
-                                  ? "#5F6A6A"
-                                  : column.id == "PROGRESS"
-                                    ? "#00629B"
-                                    : column.id == "COMPLETE"
-                                      ? "#229954"
-                                      : "black",
-                            }}
-                          >
-                            {column.title}
-                          </h5>
-                        </div>
-                      </div>
-                      <div className="d-flex mt-4 flex-column justify-content-center gap-4">
-                        {tasks.map((task, index) => (
-                          <CommonTaskCard
-                            project={project}
-                            excom={excom}
-                            task={task}
-                            key={index}
-                            openTaskModal={openTaskModal}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </Droppable>
+                <button
+                  onClick={() => {
+                    setMethod(item);
+                  }}
+                  key={index}
+                  type="button"
+                  className={`btn ${item == method ? "bag-secondary text-dark" : "text-dark"
+                    }`}
+                >
+                  <img src={item == "TABLE" ? table : drop} width={25} />
+                </button>
               );
-
             })}
-          </DragDropContext>
+          </div>
         </div>
+        <div className="w-100">
+          {
+            method == "TABLE" ? (
+              <div className="w-100">
+                <CommonTable
+                  tableHeading={tableHeading}
+                  primary={true}
+                  tableData={tableArray}
+                  loading={false}
+                  viewAction={openTaskModal}
+                />
+              </div>
+
+            ) : null
+          }
+
+        </div>
+
+
+
+        {
+          method == "DROP" ? (
+            <div className="d-flex justify-content-between">
+              <DragDropContext onDragEnd={onDragEnd}>
+                {data?.columnOrder?.map((columnId) => {
+                  const column = data.columns[columnId];
+                  const tasks = column?.taskIds?.map(
+                    (taskId) => data.tasks[taskId]
+                  );
+
+                  return (
+                    <Droppable key={column.id} droppableId={column.id}>
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          className="d-flex flex-column align-items-center m-3 p-4 rounded-3 overflow-scroll overflow-x-hidden custom-scrollbar"
+                          style={{
+                            backgroundColor: "#EEF2F5",
+                            width: 330,
+                            maxHeight: 1000,
+                          }}
+                        >
+                          <div className="d-flex justify-content-between align-items-center w-100">
+                            <div>
+                              <h5
+                                style={{
+                                  color:
+                                    column.id == "TODO"
+                                      ? "#5F6A6A"
+                                      : column.id == "PROGRESS"
+                                        ? "#00629B"
+                                        : column.id == "COMPLETE"
+                                          ? "#229954"
+                                          : "black",
+                                }}
+                              >
+                                {column.title}
+                              </h5>
+                            </div>
+                          </div>
+                          <div className="d-flex mt-4 flex-column justify-content-center gap-4">
+                            {tasks.map((task, index) => (
+                              <CommonTaskCard
+                                project={project}
+                                excom={excom}
+                                task={task}
+                                key={index}
+                                openTaskModal={openTaskModal}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </Droppable>
+                  );
+
+                })}
+              </DragDropContext>
+            </div>
+          ) : null
+        }
+
+
         {taskArray?.length > 0 ? null : (
           <div className="text-center w-100">No tasks found</div>
         )}

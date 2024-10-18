@@ -36,8 +36,7 @@ const CommonNoteContainer = ({ noteData, refreshCommentLoader }) => {
 
   return (
     <div
-      className="bg-white w-100 d-flex flex-column common-shadow rounded-3 p-3"
-      style={{ minWidth: 370, maxWidth:370 }}
+      className="bg-white w-100 d-flex flex-column common-shadow rounded-3 p-3 w-100"
     >
       <div className="d-flex justify-content-between align-items-center">
         <div className="d-flex gap-3">

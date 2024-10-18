@@ -14,18 +14,15 @@ import CommonMemberContainer from "../../../components/common/commonMemberContai
 import { useDispatch, useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
 import TaskModel from "../../../components/models/createTaskModel/createTaskModel";
-import { getProjectById } from "../../../redux/actions/project";
+import { getProjectById, updateProject } from "../../../redux/actions/project";
 import { PolicyValidate } from "../../../utils/valitations/Valitation";
 import { projectPolicy } from "../../../redux/reducers/userSlice";
 import CommonPagination from "../../../components/common/commonPagination/commonPagination";
 import EditExcomModel from "../../../components/models/editExcomModel/editExcomModel";
 import { addComment } from "../../../redux/actions/comment";
 import CommonNotesArea from "../../../components/common/commonNoteArea/commonNoteArea";
-import { Editor } from "react-draft-wysiwyg";
-import { convertToHTML } from "draft-convert";
-import { EditorState } from "draft-js";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { toolbar } from "../../../../Data/toolbar";
+import CommonEditor from "../../../components/common/CommonEditor/CommonEditor";
+
 
 const ProjectPage = () => {
   const navigate = useNavigate();
@@ -56,7 +53,8 @@ const ProjectPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotaltPage] = useState(0);
   const [editExcomModelShow, setEditExcomModelShow] = useState(false);
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [description, setDescription] = useState('');
+
 
 
   useEffect(() => {
@@ -66,10 +64,31 @@ const ProjectPage = () => {
     }
   }, [userData, id]);
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0];
+  };
+
+  function saveDescription() {
+    const data = {
+      project_name: project.projectName,
+      description: description,
+      start_date: formatDate(project.startDate),
+      end_date: formatDate(project.endDate),
+      project_logo: project.projectLogo,
+      status: project.status,
+      ou_id: project.ous.map((ou) => ou.ouID),
+    };
+    updateProject(id, data, (res) => {
+
+    });
+  }
+
   function getProjectDetails() {
     getProjectById(id, (res) => {
       if (res?.status == 200) {
         setProject(res?.data?.data?.project);
+        setDescription(res?.data?.data?.project?.description);
         distpatch(projectPolicy(res?.data?.data?.my_user_role_details));
         const projectmain = PolicyValidate(userData, "PROJECT");
         setMyroles(res?.data?.data?.my_user_role_details);
@@ -132,14 +151,6 @@ const ProjectPage = () => {
   };
 
 
-  const onEditorStateChange = (state) => {
-    setEditorState(state);
-
-    // Convert to HTML
-    const contentState = state.getCurrentContent();
-    const htmlContent = convertToHTML(contentState);
-    console.log(htmlContent); // Log or use the HTML content as needed
-  };
 
   return (
     <>
@@ -156,25 +167,7 @@ const ProjectPage = () => {
                 <h2>{project?.projectName}</h2>
               </div>
               <div>
-                <Editor
-                  editorState={editorState}
-                  toolbarClassName="toolbarClassName"
-                  wrapperClassName="wrapperClassName"
-                  editorClassName="editorClassName"
-                  onEditorStateChange={onEditorStateChange}
-                  toolbar={toolbar}
-            
-                />
-                <p className="text-secondary text-wrap">
-                  IEEE Open Day 2024 is a highly anticipated event organized by
-                  the IEEE Uva Wellassa University Student Branch, aimed at
-                  fostering a culture of learning, engagement, and community
-                  within the student body. This year's event promises an
-                  exciting lineup of activities and initiatives designed to
-                  showcase the myriad opportunities available through IEEE
-                  membership while providing valuable insights into the world of
-                  technology and innovation.
-                </p>
+                <CommonEditor html={description} updateProject={saveDescription} setHtml={setDescription} />
               </div>
             </div>
           </div>
@@ -315,7 +308,7 @@ const ProjectPage = () => {
 
           <div className="row mt-4">
             <div className="col-lg-8 p-3">
-              <CommonNotesArea show={true} projectID={id} project={true}/>
+              <CommonNotesArea show={true} projectID={id} project={true} />
             </div>
             <div className="col-lg-4 p-3">
               <div className="d-flex bg-white common-shadow flex-column p-3 rounded-3">
@@ -332,7 +325,7 @@ const ProjectPage = () => {
                   {isAssignAvailable && (
                     <div>
                       <button onClick={() => { setEditExcomModelShow(true) }} className="bg-transparent border-0">
-                      <img src={add} width={30} />
+                        <img src={add} width={30} />
                       </button>
                     </div>
                   )}
