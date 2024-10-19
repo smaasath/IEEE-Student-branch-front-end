@@ -154,4 +154,19 @@ export const UpdateExcomTaskStatus = (task_id, status, callback) => {
   }
 };
 
-
+export const getTaskCount = (taskType,projectId,ouId, callback) => {
+  const endpoint = `${import.meta.env.VITE_API_HOST}task/count?taskType=${taskType}&projectId=${projectId}&ouId=${ouId}`;
+  
+  try {
+    http
+      .get(endpoint)
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        callback(error.response);
+      });
+  } catch (error) {
+    callback(error.response);
+  }
+};

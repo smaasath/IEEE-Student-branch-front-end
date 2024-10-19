@@ -24,7 +24,8 @@ const CommonDropAndDrag = ({
   page,
   priority,
   setTotaltPage,
-  projectMembers
+  projectMembers,
+  referhTaskCount
 }) => {
   const [data, setData] = useState([]);
   const [taskArray, setTaskArray] = useState([]);
@@ -77,8 +78,10 @@ const CommonDropAndDrag = ({
   function getAllTasks() {
     if (excom) {
       getTasks();
+      referhTaskCount()
     } else if (project) {
       getTasksByProject();
+      referhTaskCount();
     }
   }
 
