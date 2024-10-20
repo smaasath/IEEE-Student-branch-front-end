@@ -104,7 +104,7 @@ const TaskDetailModel = ({
           isProjectAvailable;
 
         const isPrjectTaskAssignAvailable =
-          PolicyValidate(projectPolicyData, "PROJECT_ASSIGN") ||
+          PolicyValidate(projectPolicyData, "PROJECT_TASK") ||
           isProjectAvailable;
 
         setAssignTask(isPrjectTaskAssignAvailable);

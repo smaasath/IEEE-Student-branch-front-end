@@ -82,7 +82,7 @@ const ProjectPage = () => {
       status: project.status,
       ou_id: project.ous.map((ou) => ou.ouID),
     };
-    updateProject(id, data, (res) => {});
+    updateProject(id, data, (res) => { });
   }
 
   function getProjectTaskCount() {
@@ -198,7 +198,7 @@ const ProjectPage = () => {
           <div className="text-cl-primary mt-4">Tasks</div>
           <div className="d-flex mt-3 justify-content-between align-items-center gap-4 flex-wrap">
             <div>
-            <CommonPieChart todo={taskCount.todo} progress={taskCount.progress} complete={taskCount.complete} />
+              <CommonPieChart todo={taskCount.todo} progress={taskCount.progress} complete={taskCount.complete} />
             </div>
             <div className="d-flex justify-content-between flex-wrap flex-grow-1 gap-4">
               <div>
@@ -286,26 +286,31 @@ const ProjectPage = () => {
                   <option value="COMPLETE">COMPLETED</option>
                 </select>
               </div>
-              <div>
-                <select
-                  className="form-select w-100"
-                  aria-label="Large select example"
-                  value={selectedMemberId}
-                  onChange={handleMemberChange}
-                >
-                  <option selected value={""}>
-                    Assignee
-                  </option>
-                  {AllRoles.map((member) => (
-                    <option
-                      key={member?.user?.userID}
-                      value={member?.user?.userID}
+              {
+                isTaskAvailable && (
+                  <div>
+                    <select
+                      className="form-select w-100"
+                      aria-label="Large select example"
+                      value={selectedMemberId}
+                      onChange={handleMemberChange}
                     >
-                      {`${member?.user?.firstName} ${member?.user?.lastName}`}
-                    </option>
-                  ))}
-                </select>
-              </div>
+                      <option selected value={""}>
+                        Assignee
+                      </option>
+                      {AllRoles.map((member) => (
+                        <option
+                          key={member?.user?.userID}
+                          value={member?.user?.userID}
+                        >
+                          {`${member?.user?.firstName} ${member?.user?.lastName}`}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )
+              }
+
             </div>
             <div
               className="mt-4 d-flex justify-content-between overflow-scroll overflow-y-hidden custom-scrollbar"
