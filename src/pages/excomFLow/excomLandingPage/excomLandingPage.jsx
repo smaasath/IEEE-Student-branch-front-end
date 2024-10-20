@@ -30,6 +30,7 @@ const ExcomLandingPage = () => {
   const [excomData, SetExcomData] = useState(null);
   const [loader, setLoader] = useState(false);
   const [ouloader, setouloader] = useState(false);
+  const [IsExcomAllAvailable, setIsExcomAllAvailable] = useState(false);
 
   useEffect(() => {
     setouloader(true);
@@ -95,7 +96,7 @@ const ExcomLandingPage = () => {
         }
       }
     );
-  }, [searchItem, currentPage, refreshTable, entityFilter,termFilter]);
+  }, [searchItem, currentPage, refreshTable, entityFilter, termFilter]);
 
   // useEffect(() => {
   //       if (!entityFilter) {
@@ -140,8 +141,10 @@ const ExcomLandingPage = () => {
   useEffect(() => {
     setPageLoading(true);
     if (userData) {
-      const isOtherAvailable = PolicyValidate(userData,"EXCOM");
-      if (!isOtherAvailable) {
+      const isExcomAvailable = PolicyValidate(userData, "EXCOM");
+      const isExcomAllAvailable = PolicyValidate(userData, "EXCOM_ALL");
+      setIsExcomAllAvailable(isExcomAllAvailable);
+      if (!isExcomAvailable) {
         navigate("/dashboard");
       } else {
         setPageLoading(false);
@@ -213,27 +216,27 @@ const ExcomLandingPage = () => {
             <div className="row mt-3">
               {ouloader
                 ? [0, 0, 0].map((ou) => (
-                    <div
-                      key={ou.id}
-                      className="col-10 col-sm-6 col-md-5 col-lg-3 me-0 mb-4"
-                    >
-                      <OuCard loading={true} />
-                    </div>
-                  ))
+                  <div
+                    key={ou.id}
+                    className="col-10 col-sm-6 col-md-5 col-lg-3 me-0 mb-4"
+                  >
+                    <OuCard loading={true} />
+                  </div>
+                ))
                 : entityCards.map((ou) => (
-                    <div
-                      key={ou.id}
-                      className="col-10 col-sm-6 col-md-5 col-lg-3 me-0 mb-4"
-                    >
-                      <OuCard
-                        id={ou.id}
-                        name={ou.shortName}
-                        logo={ou.logo}
-                        type={ou.name}
-                        onclick={(id) => navigateToExcomPage(id)}
-                      />
-                    </div>
-                  ))}
+                  <div
+                    key={ou.id}
+                    className="col-10 col-sm-6 col-md-5 col-lg-3 me-0 mb-4"
+                  >
+                    <OuCard
+                      id={ou.id}
+                      name={ou.shortName}
+                      logo={ou.logo}
+                      type={ou.name}
+                      onclick={(id) => navigateToExcomPage(id)}
+                    />
+                  </div>
+                ))}
             </div>
 
             <div className="text-cl-primary mt-4">Members details</div>
@@ -257,20 +260,23 @@ const ExcomLandingPage = () => {
                     ))}
                   </select>
                 </div>
-                <div>
-                  <select
-                    className="form-select ms-2 me-1"
-                    value={termFilter}
-                    onChange={handleTermChange}
-                  >
-                    <option value={currentYear}>Select Term</option>
-                    {availableTermYears.map((year) => (
-                      <option key={year.termyearId} value={year.termyearId}>
-                        {year.termyear}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                {IsExcomAllAvailable && (
+                  <div>
+                    <select
+                      className="form-select ms-2 me-1"
+                      value={termFilter}
+                      onChange={handleTermChange}
+                    >
+                      <option value={currentYear}>Select Term</option>
+                      {availableTermYears.map((year) => (
+                        <option key={year.termyearId} value={year.termyearId}>
+                          {year.termyear}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
               </div>
 
               <div className="mt-3 p-3 rounded-4 bg-white d-flex flex-column justify-content-between table-container">

@@ -43,7 +43,7 @@ function ExecutiveCommitteePage() {
     complete: 0,
   });
 
-  
+
 
   useEffect(() => {
     setPageLoading(true);
@@ -53,16 +53,17 @@ function ExecutiveCommitteePage() {
 
       const isExcomTaskAvailable = PolicyValidate(userData, "EXCOM_TASK");
 
+      if (!isExcomAvailable) {
+        navigate("/dashboard");
+      } else {
+        settaskPolicy(isExcomTaskAvailable);
+        setPageLoading(false);
+      }
+
       getOUById(id, (res) => {
         if (res.status == 200) {
           getExcomTaskCount();
-          if (!isExcomAvailable) {
-            console.log("loading dashboard");
-            navigate("/dashboard");
-          } else {
-            settaskPolicy(isExcomTaskAvailable);
-            setPageLoading(false);
-          }
+
         } else {
           navigate("/dashboard/not-found");
         }
@@ -111,7 +112,7 @@ function ExecutiveCommitteePage() {
     setSelectedMemberId(e.target.value)
   };
 
-  function getExcomTaskCount(){
+  function getExcomTaskCount() {
     getTaskCount("EXCOM", "", id, (res) => {
       if (res?.status == 200) {
         let count = res?.data?.data;
@@ -151,7 +152,7 @@ function ExecutiveCommitteePage() {
             <div className="text-cl-primary mt-4">Tasks</div>
             <div className="d-flex mt-3 justify-content-between align-items-center gap-4 flex-wrap">
               <div onClick={() => openTaskDetailModel("Pie Chart")}>
-                <CommonPieChart />
+                <CommonPieChart todo={taskCount.todo} progress={taskCount.progress} complete={taskCount.complete} />
               </div>
               <div className="d-flex justify-content-between flex-wrap flex-grow-1 gap-4">
                 <div>
@@ -202,21 +203,24 @@ function ExecutiveCommitteePage() {
                     <option value="COMPLETE">COMPLETED</option>
                   </select>
                 </div>
-                <div>
-                  <select
-                    className="form-select w-100"
-                    aria-label="Large select example"
-                    value={selectedMemberId}
-                    onChange={handleMemberChange}
-                  >
-                    <option selected value={''}>Assignee</option>
-                    {members.map((member) => (
-                      <option key={member.id} value={member.id}>
-                        {member.fullName}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                {taskPolicy && (
+                  <div>
+                    <select
+                      className="form-select w-100"
+                      aria-label="Large select example"
+                      value={selectedMemberId}
+                      onChange={handleMemberChange}
+                    >
+                      <option selected value={''}>Assignee</option>
+                      {members.map((member) => (
+                        <option key={member.id} value={member.id}>
+                          {member.fullName}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
               </div>
               <div
                 className="mt-4 d-flex justify-content-between overflow-scroll overflow-y-hidden custom-scrollbar"
@@ -232,7 +236,7 @@ function ExecutiveCommitteePage() {
                   page={currentPage}
                   priority={priority}
                   setTotaltPage={setTotaltPage}
-                  referhTaskCount ={()=>getExcomTaskCount()}
+                  referhTaskCount={() => getExcomTaskCount()}
                 />
               </div>
               {totalPage > 1 ? (
