@@ -16,6 +16,7 @@ import { PolicyValidate } from "../../../utils/valitations/Valitation";
 // import { getOUById } from "../../../redux/actions/ou";
 import { getAllExcomMember, getOUById } from "../../../redux/actions/ou";
 import CommonPagination from "../../../components/common/commonPagination/commonPagination";
+import { getTaskCount } from "../../../redux/actions/task";
 
 
 
@@ -36,7 +37,13 @@ function ExecutiveCommitteePage() {
   const [priority, setPriority] = useState("");
   const [status, setStatus] = useState("");
   const [selectedMemberId, setSelectedMemberId] = useState("");
+  const [taskCount, setTaskCount] = useState({
+    todo: 0,
+    progress: 0,
+    complete: 0,
+  });
 
+  
 
   useEffect(() => {
     setPageLoading(true);
@@ -48,6 +55,7 @@ function ExecutiveCommitteePage() {
 
       getOUById(id, (res) => {
         if (res.status == 200) {
+          getExcomTaskCount();
           if (!isExcomAvailable) {
             console.log("loading dashboard");
             navigate("/dashboard");
@@ -64,7 +72,7 @@ function ExecutiveCommitteePage() {
 
   useEffect(() => {
     getAllExcomMember(0, "", ouId, "", (response) => {
-      console.log("response now:", response.data.data.content)
+      // console.log("response now:", response.data.data.content)
       if (response && response.data) {
         const userList = response.data.data.content.map((user) => ({
           id: user?.user?.userID,
@@ -103,6 +111,21 @@ function ExecutiveCommitteePage() {
     setSelectedMemberId(e.target.value)
   };
 
+  function getExcomTaskCount(){
+    getTaskCount("EXCOM", "", id, (res) => {
+      if (res?.status == 200) {
+        let count = res?.data?.data;
+        setTaskCount({
+          todo: count?.todo,
+          progress: count?.progress,
+          complete: count?.complete,
+        });
+      } else {
+        console.warn("Error in task count loading");
+      }
+    });
+  }
+
   return (
     <>
       {pageLoading ? (
@@ -132,13 +155,13 @@ function ExecutiveCommitteePage() {
               </div>
               <div className="d-flex justify-content-between flex-wrap flex-grow-1 gap-4">
                 <div>
-                  <CommonStatusCountCard type={"TODO"} count={1} />
+                  <CommonStatusCountCard type={"TODO"} count={taskCount.todo} />
                 </div>
                 <div>
-                  <CommonStatusCountCard type={"ONGOING"} count={2} />
+                  <CommonStatusCountCard type={"ONGOING"} count={taskCount.progress} />
                 </div>
                 <div>
-                  <CommonStatusCountCard type={"COMPLETE"} count={4} />
+                  <CommonStatusCountCard type={"COMPLETE"} count={taskCount.complete} />
                 </div>
               </div>
             </div>
@@ -209,6 +232,7 @@ function ExecutiveCommitteePage() {
                   page={currentPage}
                   priority={priority}
                   setTotaltPage={setTotaltPage}
+                  referhTaskCount ={()=>getExcomTaskCount()}
                 />
               </div>
               {totalPage > 1 ? (

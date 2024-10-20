@@ -22,7 +22,7 @@ import EditExcomModel from "../../../components/models/editExcomModel/editExcomM
 import { addComment } from "../../../redux/actions/comment";
 import CommonNotesArea from "../../../components/common/commonNoteArea/commonNoteArea";
 import CommonEditor from "../../../components/common/CommonEditor/CommonEditor";
-
+import { getTaskCount } from "../../../redux/actions/task";
 
 const ProjectPage = () => {
   const navigate = useNavigate();
@@ -53,9 +53,12 @@ const ProjectPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotaltPage] = useState(0);
   const [editExcomModelShow, setEditExcomModelShow] = useState(false);
-  const [description, setDescription] = useState('');
-
-
+  const [description, setDescription] = useState("");
+  const [taskCount, setTaskCount] = useState({
+    todo: 0,
+    progress: 0,
+    complete: 0,
+  });
 
   useEffect(() => {
     setPageLoading(true);
@@ -79,14 +82,28 @@ const ProjectPage = () => {
       status: project.status,
       ou_id: project.ous.map((ou) => ou.ouID),
     };
-    updateProject(id, data, (res) => {
+    updateProject(id, data, (res) => {});
+  }
 
+  function getProjectTaskCount() {
+    getTaskCount("PROJECT", id, "", (res) => {
+      if (res?.status == 200) {
+        let count = res?.data?.data;
+        setTaskCount({
+          todo: count?.todo,
+          progress: count?.progress,
+          complete: count?.complete,
+        });
+      } else {
+        console.warn("Error in task count loading");
+      }
     });
   }
 
   function getProjectDetails() {
     getProjectById(id, (res) => {
       if (res?.status == 200) {
+        getProjectTaskCount();
         setProject(res?.data?.data?.project);
         setDescription(res?.data?.data?.project?.description);
         distpatch(projectPolicy(res?.data?.data?.my_user_role_details));
@@ -150,8 +167,6 @@ const ProjectPage = () => {
     setSelectedMemberId(e.target.value);
   };
 
-
-
   return (
     <>
       {pageLoading ? (
@@ -160,14 +175,22 @@ const ProjectPage = () => {
         <div className="p-3">
           <div className="bg-white rounded-3 common-shadow p-3 row align-items-center">
             <div className="col-md-3 d-flex justify-content-center">
-              <img src={project?.projectLogo || projectDefault} width={150} className="img-fluid" />
+              <img
+                src={project?.projectLogo || projectDefault}
+                width={150}
+                className="img-fluid"
+              />
             </div>
             <div className="col-md-9 d-flex flex-column">
               <div>
                 <h2>{project?.projectName}</h2>
               </div>
               <div>
-                <CommonEditor html={description} updateProject={saveDescription} setHtml={setDescription} />
+                <CommonEditor
+                  html={description}
+                  updateProject={saveDescription}
+                  setHtml={setDescription}
+                />
               </div>
             </div>
           </div>
@@ -179,13 +202,19 @@ const ProjectPage = () => {
             </div>
             <div className="d-flex justify-content-between flex-wrap flex-grow-1 gap-4">
               <div>
-                <CommonStatusCountCard type={"TODO"} count={1} />
+                <CommonStatusCountCard type={"TODO"} count={taskCount.todo} />
               </div>
               <div>
-                <CommonStatusCountCard type={"ONGOING"} count={0} />
+                <CommonStatusCountCard
+                  type={"ONGOING"}
+                  count={taskCount.progress}
+                />
               </div>
               <div>
-                <CommonStatusCountCard type={"COMPLETE"} count={0} />
+                <CommonStatusCountCard
+                  type={"COMPLETE"}
+                  count={taskCount.complete}
+                />
               </div>
             </div>
           </div>
@@ -293,6 +322,7 @@ const ProjectPage = () => {
                 priority={priority}
                 setTotaltPage={setTotaltPage}
                 projectMembers={otherRoles}
+                referhTaskCount={() => getProjectTaskCount()}
               />
             </div>
             {totalPage > 1 ? (
@@ -324,7 +354,12 @@ const ProjectPage = () => {
                   </div>
                   {isAssignAvailable && (
                     <div>
-                      <button onClick={() => { setEditExcomModelShow(true) }} className="bg-transparent border-0">
+                      <button
+                        onClick={() => {
+                          setEditExcomModelShow(true);
+                        }}
+                        className="bg-transparent border-0"
+                      >
                         <img src={add} width={30} />
                       </button>
                     </div>
