@@ -12,6 +12,13 @@ import TaskModel from "../../../components/models/createTaskModel/createTaskMode
 import TaskDetailModel from "../../../components/models/taskDetailModel/taskDetailModel";
 import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
+import { PolicyValidate } from "../../../utils/valitations/Valitation";
+// import { getOUById } from "../../../redux/actions/ou";
+import { getAllExcomMember, getOUById } from "../../../redux/actions/ou";
+import CommonPagination from "../../../components/common/commonPagination/commonPagination";
+import { getTaskCount } from "../../../redux/actions/task";
+
+
 
 function ExecutiveCommitteePage() {
   const { id } = useParams();
@@ -21,20 +28,30 @@ function ExecutiveCommitteePage() {
   const [taskPolicy, settaskPolicy] = useState(false);
   const userData = useSelector((state) => state.user.userData);
   const [pageLoading, setPageLoading] = useState(true);
+  const [refreshTasks, setRefreshTasks] = useState(0);
+  const [members, setMembers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotaltPage] = useState(0);
+  const { id: ouId } = useParams();
+  const [searchItem, setsearchItem] = useState("");
+  const [priority, setPriority] = useState("");
+  const [status, setStatus] = useState("");
+  const [selectedMemberId, setSelectedMemberId] = useState("");
+  const [taskCount, setTaskCount] = useState({
+    todo: 0,
+    progress: 0,
+    complete: 0,
+  });
+
+
+
   useEffect(() => {
     setPageLoading(true);
-    if (userData) {
-      const isExcomAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM"
-        )
-      );
 
-      const isExcomTaskAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM_TASK"
-        )
-      );
+    if (userData) {
+      const isExcomAvailable = PolicyValidate(userData, "EXCOM");
+
+      const isExcomTaskAvailable = PolicyValidate(userData, "EXCOM_TASK");
 
       if (!isExcomAvailable) {
         navigate("/dashboard");
@@ -42,8 +59,31 @@ function ExecutiveCommitteePage() {
         settaskPolicy(isExcomTaskAvailable);
         setPageLoading(false);
       }
+
+      getOUById(id, (res) => {
+        if (res.status == 200) {
+          getExcomTaskCount();
+
+        } else {
+          navigate("/dashboard/not-found");
+        }
+      });
     }
   }, [userData]);
+
+  useEffect(() => {
+    getAllExcomMember(0, "", ouId, "", (response) => {
+      // console.log("response now:", response.data.data.content)
+      if (response && response.data) {
+        const userList = response.data.data.content.map((user) => ({
+          id: user?.user?.userID,
+          fullName: `${user?.user?.firstName} ${user?.user?.lastName}`,
+        }));
+        setMembers(userList);
+      }
+    });
+  }, []);
+
   const navigateToexcomDetailPage = () => {
     navigate(`/dashboard/executive-committee/${id}/detail`);
   };
@@ -63,6 +103,29 @@ function ExecutiveCommitteePage() {
   const closeTaskDetailModel = () => {
     setSelectedTask(null);
   };
+
+  const handleSearchChange = (e) => setsearchItem(e);
+  const handlePriorityChange = (e) => setPriority(e.target.value);
+  const handleStatusChange = (e) => setStatus(e.target.value);
+  const handleMemberChange = (e) => {
+    console.warn(e.target.value, "e.target.valuee.target.valuee.target.value")
+    setSelectedMemberId(e.target.value)
+  };
+
+  function getExcomTaskCount() {
+    getTaskCount("EXCOM", "", id, (res) => {
+      if (res?.status == 200) {
+        let count = res?.data?.data;
+        setTaskCount({
+          todo: count?.todo,
+          progress: count?.progress,
+          complete: count?.complete,
+        });
+      } else {
+        console.warn("Error in task count loading");
+      }
+    });
+  }
 
   return (
     <>
@@ -89,17 +152,17 @@ function ExecutiveCommitteePage() {
             <div className="text-cl-primary mt-4">Tasks</div>
             <div className="d-flex mt-3 justify-content-between align-items-center gap-4 flex-wrap">
               <div onClick={() => openTaskDetailModel("Pie Chart")}>
-                <CommonPieChart />
+                <CommonPieChart todo={taskCount.todo} progress={taskCount.progress} complete={taskCount.complete} />
               </div>
               <div className="d-flex justify-content-between flex-wrap flex-grow-1 gap-4">
                 <div>
-                  <CommonStatusCountCard type={"TODO"} count={1} />
+                  <CommonStatusCountCard type={"TODO"} count={taskCount.todo} />
                 </div>
                 <div>
-                  <CommonStatusCountCard type={"ONGOING"} count={2} />
+                  <CommonStatusCountCard type={"ONGOING"} count={taskCount.progress} />
                 </div>
                 <div>
-                  <CommonStatusCountCard type={"COMPLETE"} count={4} />
+                  <CommonStatusCountCard type={"COMPLETE"} count={taskCount.complete} />
                 </div>
               </div>
             </div>
@@ -111,77 +174,87 @@ function ExecutiveCommitteePage() {
             <div className="d-flex flex-column bg-white common-shadow rounded-3 p-3 mt-4">
               <div className="d-flex justify-content-between align-items-center w-100 flex-wrap gap-4">
                 <div>
-                  <CommonSearch />
+                  <CommonSearch primary={true} onChange={handleSearchChange} />
+                </div>
+
+                <div className="">
+                  <select
+                    className="form-select w-100"
+                    aria-label="Large select example"
+                    value={priority}
+                    onChange={handlePriorityChange}
+                  >
+                    <option selected value={''}> Priority</option>
+                    <option value="LOW">LOW</option>
+                    <option value="MEDIUM">MEDIUM</option>
+                    <option value="HIGH">HIGH</option>
+                  </select>
                 </div>
                 <div className="">
                   <select
                     className="form-select w-100"
                     aria-label="Large select example"
+                    value={status}
+                    onChange={handleStatusChange}
                   >
-                    <option selected>Assignee</option>
-                    <option value="1">Me</option>
+                    <option selected value={''}>Status</option>
+                    <option value="TODO">TO DO</option>
+                    <option value="PROGRESS">PROGRESS</option>
+                    <option value="COMPLETE">COMPLETED</option>
                   </select>
                 </div>
+                {taskPolicy && (
+                  <div>
+                    <select
+                      className="form-select w-100"
+                      aria-label="Large select example"
+                      value={selectedMemberId}
+                      onChange={handleMemberChange}
+                    >
+                      <option selected value={''}>Assignee</option>
+                      {members.map((member) => (
+                        <option key={member.id} value={member.id}>
+                          {member.fullName}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
               </div>
               <div
                 className="mt-4 d-flex justify-content-between overflow-scroll overflow-y-hidden custom-scrollbar"
                 style={{ maxWidth: 1300 }}
               >
-                <CommonDropAndDrag excom={true} />
+                <CommonDropAndDrag
+                  id={id}
+                  excom={true}
+                  refresh={refreshTasks}
+                  search={searchItem}
+                  status={status}
+                  user_id={selectedMemberId}
+                  page={currentPage}
+                  priority={priority}
+                  setTotaltPage={setTotaltPage}
+                  referhTaskCount={() => getExcomTaskCount()}
+                />
               </div>
-            </div>
+              {totalPage > 1 ? (
+                <div className="mt-5 d-flex justify-content-end">
+                  <CommonPagination currentPage={currentPage} pages={totalPage} setCurrentPage={setCurrentPage} />
+                </div>
+              ) : null}
 
-            <div className="d-flex mt-5 justify-content-between align-items-center flex-wrap gap-4">
-              <div className="text-cl-primary mt-4">Upcoming Birthday</div>
             </div>
-
-            <div className="container mt-4">
-              <div className="row">
-                {[1].map((index) => (
-                  <div key={index} className="col-md-3">
-                    <div
-                      className="card"
-                      onClick={() => openTaskDetailModel(`Task ${index}`)}
-                    >
-                      <div className="card-body d-flex align-items-center">
-                        <img
-                          src={Profile}
-                          alt="Profile"
-                          className="rounded-circle me-3"
-                          style={{
-                            width: "50px",
-                            height: "50px",
-                            objectFit: "cover",
-                          }}
-                        />
-                        <div>
-                          <h5>
-                            <b>Ishara Suvini</b>
-                          </h5>
-                          <span>Web Master</span>
-                        </div>
-                      </div>
-                      <div
-                        className="card-footer"
-                        style={{ backgroundColor: "#0E2954", color: "white" }}
-                      >
-                        <small className="text-white">Date of Birth</small>
-                        <div className="d-flex align-items-center">
-                          <span className="fs-4">22nd October</span>
-                          <img
-                            src={BalloonImage}
-                            alt="Balloon"
-                            style={{ width: "30px", marginLeft: "auto" }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <TaskModel show={showTaskModal} onHide={closeTaskModal} />
+            <TaskModel
+              show={showTaskModal}
+              onHide={closeTaskModal}
+              type={"EXCOM"}
+              ouID={id}
+              changed={() => {
+                setRefreshTasks(refreshTasks + 1);
+              }}
+            />
           </div>
         </>
       )}

@@ -8,6 +8,7 @@ import moreicon from '../../../assets/icons/info.png'
 import viewDark from '../../../assets/icons/darkView.png'
 import editDark from '../../../assets/icons/darkEdit.png'
 import CommonStatusContainer from '../commonStatusContainer/commonStatusContainer'
+import CommonPriorityContainer from '../commonPriorityContainer/commonPriorityContainer'
 
 
 const CommonTable = ({ tableHeading, tableData, finance, primary, viewAction, editAction, deleteAction, moreAction, loading, report }) => {
@@ -61,7 +62,7 @@ const CommonTable = ({ tableHeading, tableData, finance, primary, viewAction, ed
                                                             } else if (action === "DELETE") {
                                                                 iconSrc = deleteicon;
                                                                 actionFunction = deleteAction;
-                                                            }else if (action === "MORE"){
+                                                            } else if (action === "MORE") {
                                                                 iconSrc = moreicon;
                                                                 actionFunction = moreAction;
                                                             }
@@ -141,6 +142,12 @@ const CommonTable = ({ tableHeading, tableData, finance, primary, viewAction, ed
                                                 return (
                                                     <td key={headIndex}>
                                                         <CommonStatusContainer status={item[head.value]} />
+                                                    </td>
+                                                );
+                                            } else if (head.value === "priority") {
+                                                return (
+                                                    <td key={headIndex}>
+                                                        <CommonPriorityContainer priority={item[head.value]} />
                                                     </td>
                                                 );
                                             } else {

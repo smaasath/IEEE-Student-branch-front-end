@@ -1,61 +1,170 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Gantt, ViewMode } from 'gantt-task-react';
 import "gantt-task-react/dist/index.css";
 import { Modal, Button } from 'react-bootstrap';
 import ViewSwitcher from '../../../components/common/viewSwitcher/viewSwitcher';
 import CommonButton from '../../../components/common/commonButton/commonButton';
-
+import { getAllProject, updateDurationProject } from '../../../redux/actions/project';
+import { getAllOU } from '../../../redux/actions/ou';
+import { getAllTermYear } from '../../../redux/actions/termYear';
+import CommonLoader from '../../../components/common/commonLoader/commonLoader';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { PolicyValidate } from '../../../utils/valitations/Valitation';
 
 const TimeLinePage = () => {
-    const [tasks] = useState([
-        {
-            start: new Date(2024, 6, 1),
-            end: new Date(2024, 9, 8),
-            name: 'IEEE OpenDay 2024',
-            id: '1',
-            type: 'task',
-        },
-        
-        {
-            start: new Date(2024, 8, 13),
-            end: new Date(2024, 12, 8),
-            name: 'UvaXtreme V1.0',
-            id: '5',
-            type: 'task',
-        },
-    ]);
-
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [selectedTask, setSelectedTask] = useState(null);
+    const [selectedProject, setSelectedProject] = useState(null);
     const [view, setView] = useState(ViewMode.Month);
+    const [projectData, SetProjectData] = useState([]);
+    const [ou, setOu] = useState(null);
+    const [termYear, setTermYear] = useState(null);
+    const [selectedOU, setSelectedOU] = useState("");
+    const [selectedYear, setSelectedYear] = useState("");
+    const [loader, setLoader] = useState(false);
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [modelError, setModelError] = useState(false);
+    const userData = useSelector((state) => state.user.userData);
+    const [pageLoading, setPageLoading] = useState(true);
+    const navigate = useNavigate();
 
-    const handleTaskClick = (task) => {
-        setSelectedTask(task);
+    useEffect(() => {
+        getProjects();
+    }, [selectedOU, selectedYear]);
+
+    function getProjects() {
+        SetProjectData([]);
+        setLoader(true);
+        getAllProject(
+            0,
+            '',
+            selectedYear,
+            '',
+            selectedOU,
+            (res) => {
+                if (res?.status === 200) {
+                    const data = res?.data?.data?.content?.map((item) => ({
+                        id: item.projectID,
+                        name: item?.projectName,
+                        start: new Date(item.startDate),
+                        end: new Date(item.endDate),
+                        ...item,
+                    }));
+                    SetProjectData(data);
+                    setLoader(false);
+                } else {
+                    setLoader(false);
+                }
+            }
+        );
+    }
+
+
+    const handleStartDateChange = (e) => {
+        const newStartDate = e.target.value;
+        setStartDate(newStartDate);
+        if (newStartDate > endDate) {
+            setEndDate('');
+        }
+    };
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toISOString().split("T")[0];
+    };
+
+
+    useEffect(() => {
+        setPageLoading(true)
+        if (userData) {
+            const isOtherAvailable = PolicyValidate(userData,"PROJECT_TIME");
+            if (!isOtherAvailable) {
+                navigate('/dashboard')
+            } else {
+                setPageLoading(false);
+            }
+        }
+    }, [userData])
+
+    useEffect(() => {
+        getAllOU((res) => {
+            if (res?.status === 200) {
+                setOu(res.data.data);
+            }
+        });
+    }, []);
+
+    useEffect(() => {
+        getAllTermYear((res) => {
+            if (res?.status === 200) {
+                setTermYear(res.data.data);
+            }
+        });
+    }, []);
+
+
+    function saveProject() {
+        setLoading(true);
+        setModelError(false);
+        const data = {
+            "start_date": startDate,
+            "end_date": endDate
+        }
+        updateDurationProject(selectedProject?.projectID, data,
+            (res) => {
+                if (res?.status == 200) {
+                    setLoading(false);
+                    getProjects();
+                    handleCloseModal();
+                } else {
+                    setLoading(false);
+                    setModelError(true);
+                }
+            }
+        )
+    }
+
+    const handleTaskClick = (project) => {
+        setLoading(false);
+        setModelError(false);
+        setSelectedProject(project);
+        setStartDate(formatDate(project.startDate))
+        setEndDate(formatDate(project.endDate))
         setModalIsOpen(true);
     };
 
     const handleCloseModal = () => {
         setModalIsOpen(false);
-        setSelectedTask(null);
+        setSelectedProject(null);
     };
+
+    const handleOUChange = (e) => {
+        setSelectedOU(e.target.value);
+
+    };
+
+    const handleYearChange = (e) => {
+        setSelectedYear(e.target.value);
+
+    };
+
 
     const TaskListTable = ({
         tasks,
-        rowWidth,
         rowHeight,
         onExpanderClick,
-        handleAddTask
     }) => {
         return (
             <div style={{ border: "1px solid #dfe1e5" }}>
                 {tasks.map((item, i) => {
-                    const isProject = item.type === "project";
                     return (
                         <div
                             key={i}
                             style={{
                                 height: rowHeight,
-                                width: "auto",
+                                width: 280,
                                 display: "flex",
                                 justifyContent: "space-between",
                                 alignItems: "center",
@@ -82,103 +191,164 @@ const TimeLinePage = () => {
     };
 
     return (
-        <div className="container mt-4">
-            <div className='text-cl-primary'>Project Time line</div>
-            <div className='mt-3 d-flex justify-content-end align-items-center gap-3 flex-wrap'>
-                <div className="">
-                    <select className="form-select w-100" aria-label="Large select example">
-                        <option selected>Select Year</option>
-                        <option value="1">2024</option>
-                        <option value="1">2023</option>
-                        <option value="1">2022</option>
-                    </select>
-                </div>
-                <div className="">
-                    <select className="form-select w-100" aria-label="Large select example">
-                        <option selected>Select Entity</option>
-                        <option value="1">SB</option>
-                        <option value="1">CS</option>
-                    </select>
-                </div>
-                <div>
-                    <ViewSwitcher
-                        onViewModeChange={(viewMode) => setView(viewMode)}
-                        view={view}
-                    />
-                </div>
-            </div>
-
-            <div className='mt-4'>
-                <Gantt tasks={tasks} onClick={handleTaskClick}
-                    rowHeight={40}
-                    todayColor="rgba(246, 246, 247, .6)"
-                    timeStep={100}
-                    columnWidth={80}
-                    barBackgroundColor='#00629B'
-                    barBackgroundSelectedColor='#0E2954'
-                    TaskListHeader={({ headerHeight }) => (
-                        <div
-                            style={{
-                                height: headerHeight,
-                                width: "auto",
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                                background: "#ffffff",
-                                padding: 10,
-                            }}
-                        >
-                            <h6 className='text-third fw-bold'>Projects</h6>
+        pageLoading ? (<CommonLoader />) : (
+            <>
+                <div className="container mt-4">
+                    <div className='text-cl-primary'>Project Time line</div>
+                    <div className='mt-3 d-flex justify-content-end align-items-center gap-3 flex-wrap'>
+                        <div className="">
+                            <select
+                                className="form-select w-100"
+                                aria-label="Select Year"
+                                value={selectedYear}
+                                onChange={handleYearChange}
+                            >
+                                <option value="">Select Year</option>
+                                {termYear &&
+                                    termYear.map((yearItem) => (
+                                        <option
+                                            key={yearItem.termyearId}
+                                            value={yearItem.termyearId}
+                                        >
+                                            {yearItem.termyear}
+                                        </option>
+                                    ))}
+                            </select>
                         </div>
-                    )}
-                    viewMode={view} TaskListTable={(props) => (
-                        <TaskListTable {...props} />
-                    )} />
-            </div>
-
-
-            {/* model */}
-            <Modal show={modalIsOpen} onHide={handleCloseModal}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Project Details</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {selectedTask && (
+                        <div className="">
+                            <select
+                                className="form-select w-100"
+                                aria-label="Select Entity"
+                                value={selectedOU}
+                                onChange={handleOUChange}
+                            >
+                                <option value="">Select Entity</option>
+                                {ou &&
+                                    ou.map((ouItem) => (
+                                        <option key={ouItem.id} value={ouItem.ouID}>
+                                            {ouItem.ouName}
+                                        </option>
+                                    ))}
+                            </select>
+                        </div>
                         <div>
-                            <div className='d-flex justify-content-between align-items-center'>
-                                <div>
-                                    Start Date
-                                </div>
-                                <div className=''>
-                                    <div className="input-group input-group-sm">
-                                        <input type="date" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='mt-4 d-flex justify-content-between align-items-center'>
-                                <div>
-                                    End Date
-                                </div>
-                                <div className=''>
-                                    <div className="input-group input-group-sm">
-                                        <input type="date" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
-                                    </div>
-                                </div>
+                            <ViewSwitcher
+                                onViewModeChange={(viewMode) => setView(viewMode)}
+                                view={view}
+                            />
+                        </div>
+                    </div>
+                    {
+                        loader ? (
+                            <CommonLoader />
+                        ) : (
+                            <div className='mt-4'>
+                                {projectData && projectData.length > 0 ? (
+                                    <Gantt tasks={projectData} onClick={handleTaskClick}
+                                        rowHeight={40}
+                                        todayColor="rgba(246, 246, 247, .6)"
+                                        timeStep={100}
+                                        columnWidth={80}
+                                        barBackgroundColor='#00629B'
+                                        barBackgroundSelectedColor='#0E2954'
+                                        TaskListHeader={({ headerHeight }) => (
+                                            <div
+                                                style={{
+                                                    height: headerHeight,
+                                                    width: "auto",
+                                                    display: "flex",
+                                                    justifyContent: "space-between",
+                                                    alignItems: "center",
+                                                    background: "#ffffff",
+                                                    padding: 10,
+                                                }}
+                                            >
+                                                <h6 className='text-third fw-bold'>Projects</h6>
+                                            </div>
+                                        )}
+                                        viewMode={view} TaskListTable={(props) => (
+                                            <TaskListTable {...props} />
+                                        )} />
+                                ) : null}
+
                             </div>
 
-                        </div>
-                    )}
-                </Modal.Body>
-                <Modal.Footer>
-                    <div>
-                        <CommonButton onClick={handleCloseModal} close={true} text={"Close"} />
-                    </div>
-                    <div>
-                        <CommonButton text={"Save"} />
-                    </div>
-                </Modal.Footer>
-            </Modal>
-        </div>
+                        )
+                    }
+
+
+
+                    {/* model */}
+                    <Modal show={modalIsOpen} onHide={handleCloseModal}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Project Details</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            {selectedProject && (
+                                <>
+                                    <div>
+                                        <div className='d-flex justify-content-between align-items-center'>
+                                            <div>
+                                                Start Date
+                                            </div>
+                                            <div>
+                                                <div className="input-group input-group-sm">
+                                                    <input
+                                                        type="date"
+                                                        className="form-control"
+                                                        aria-label="Sizing example input"
+                                                        aria-describedby="inputGroup-sizing-sm"
+                                                        min={new Date().toISOString().split('T')[0]}
+                                                        value={startDate}
+                                                        onChange={handleStartDateChange}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className='mt-4 d-flex justify-content-between align-items-center'>
+                                            <div>
+                                                End Date
+                                            </div>
+                                            <div>
+                                                <div className="input-group input-group-sm">
+                                                    <input
+                                                        type="date"
+                                                        className="form-control"
+                                                        aria-label="Sizing example input"
+                                                        aria-describedby="inputGroup-sizing-sm"
+                                                        min={startDate} // Set minimum end date to start date
+                                                        value={endDate}
+                                                        onChange={(e) => setEndDate(e.target.value)}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {
+                                        modelError ? (
+                                            <div className='mt-4 text-center w-100 text-danger'>
+                                                Project duration changing is failed
+                                            </div>
+                                        ) : null
+                                    }
+
+                                </>
+                            )}
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <div>
+                                <CommonButton onClick={handleCloseModal} close={true} text={"Close"} />
+                            </div>
+                            <div>
+                                <CommonButton load={loading} onClick={saveProject} text={"Save"} />
+                            </div>
+                        </Modal.Footer>
+                    </Modal>
+                </div>
+            </>
+        )
+
+
     );
 };
 

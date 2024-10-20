@@ -12,6 +12,7 @@ import sbLogoWhite from "../../../assets/logo_white.png";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { logout } from "../../../redux/actions/user";
+import { PolicyValidate } from "../../../utils/valitations/Valitation";
 
 const SideBar = () => {
   const userData = useSelector((state) => state.user.userData);
@@ -22,21 +23,9 @@ const SideBar = () => {
 
 
     useEffect(() => {
-        const isOtherAvailable = userData?.some(userRoleDetail =>
-            userRoleDetail.role?.policies.some(policy => policy.policyCode === "OTHER")
-          );
-
-        const isExcomAvailable = userData?.some(userRoleDetail =>
-            userRoleDetail.role?.policies.some(policy => policy.policyCode === "EXCOM")
-          );
-
-
-        const isFinanceAvailable = userData?.some(userRoleDetail =>
-            userRoleDetail.role?.policies.some(policy => policy.policyCode === "FINANCE")
-          );
-
-
-
+        const isOtherAvailable = PolicyValidate(userData, "OTHER");
+        const isExcomAvailable = PolicyValidate(userData, "EXCOM");
+        const isFinanceAvailable = PolicyValidate(userData, "FINANCE");
 
     const updatedRoutes = [
       { name: "Events", image: eventicon, path: "dashboard", available: true },

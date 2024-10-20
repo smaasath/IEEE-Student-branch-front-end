@@ -10,7 +10,7 @@ const CommonPriorityContainer = ({ priority }) => {
                 return { bgcolor: '#FDF2F2', color: '#EC5962', };
             case 'MEDIUM':
                 return { bgcolor: '#e6f0f5', color: '#00629B', };
-            case 'NORMAL':
+            case 'LOW':
                 return { bgcolor: '#f0f8ef', color: '#60B158', };
             default:
                 return { bgcolor: '#FFFFFF', color: '#000000', };

@@ -9,6 +9,7 @@ import { getAllRoles } from '../../../redux/actions/role';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import CommonLoader from '../../../components/common/commonLoader/commonLoader';
+import { PolicyValidate } from '../../../utils/valitations/Valitation';
 
 const UserRolePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,9 +29,7 @@ const UserRolePage = () => {
   useEffect(() => {
     setPageLoading(true)
     if (userData) {
-      const isOtherAvailable = userData?.some(userRoleDetail =>
-        userRoleDetail.role?.policies.some(policy => policy.policyCode === "OTHER")
-      );
+      const isOtherAvailable = PolicyValidate(userData, "OTHER");
       if (!isOtherAvailable) {
         navigate('/dashboard')
       } else {
@@ -48,8 +47,7 @@ const UserRolePage = () => {
   ];
 
   function search(item) {
-    setsearchItem(item?.target?.value)
-    console.warn(item?.target?.value);
+    setsearchItem(item)
   }
 
   const editRole = (item) => {

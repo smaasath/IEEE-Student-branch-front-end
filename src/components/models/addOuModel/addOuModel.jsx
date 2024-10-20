@@ -116,40 +116,35 @@ const AddOuModel = ({ onHide, show, disabled, editable, item, changed }) => {
     setLoading(true);
     if (editable) {
       let updatedFormData = { ...formData };
-  
-      // If image is not null, upload the image; otherwise, keep the existing logo
-      if (image) {
+      if(image){
         const imgurl = await handleProfileUpload(image);
-        updatedFormData = { ...updatedFormData, project_logo: imgurl };
+        updatedFormData = { ...updatedFormData, ou_logo: imgurl };
       }
-  
-      updatedFormData.projectID = item?.id;
-      updateProject(updatedFormData, (res) => {
+
+      updatedFormData.ouID = item?.id;
+      updateOU(updatedFormData, (res) => {
         if (res?.status === 200) {
           setLoading(false);
           changed();
           onHide();
         } else {
           setLoading(false);
-          setExist("Project Update Failed");
+          setExist("OU Update Failed");
         }
       });
     } else {
       let updatedFormData = { ...formData };
       const imgurl = await handleProfileUpload(image);
-      updatedFormData = { ...updatedFormData, project_logo: imgurl };
-      CreateProject(updatedFormData, (res) => {
+      updatedFormData = { ...updatedFormData, ou_logo: imgurl };
+
+      CreateOU(updatedFormData, (res) => {
         if (res?.status === 201) {
           setLoading(false);
-          resetFields();
           changed();
           onHide();
-        } else if (res?.status === 409) {
-          setLoading(false);
-          setExist("Project Already Exists");
         } else {
           setLoading(false);
-          setExist("Project Creation Failed");
+          setExist("OU added Failed");
         }
       });
     }

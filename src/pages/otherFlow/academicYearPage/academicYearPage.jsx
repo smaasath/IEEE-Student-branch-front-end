@@ -8,6 +8,7 @@ import { getAllAcademicYear } from '../../../redux/actions/academicYear';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import CommonLoader from '../../../components/common/commonLoader/commonLoader';
+import { PolicyValidate } from '../../../utils/valitations/Valitation';
 
 
 const AcademicYearPage = () => {
@@ -28,9 +29,7 @@ const AcademicYearPage = () => {
   useEffect(() => {
     setPageLoading(true)
     if (userData) {
-      const isOtherAvailable = userData?.some(userRoleDetail =>
-        userRoleDetail.role?.policies.some(policy => policy.policyCode === "OTHER")
-      );
+      const isOtherAvailable = PolicyValidate(userData, "OTHER");
       if (!isOtherAvailable) {
         navigate('/dashboard')
       } else {
@@ -49,8 +48,7 @@ const AcademicYearPage = () => {
 
 
   function search(item) {
-    setsearchItem(item?.target?.value)
-    console.warn(item?.target?.value);
+    setsearchItem(item)
   }
 
 

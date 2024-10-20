@@ -31,12 +31,11 @@ const ProjectModel = ({
     });
   }, []);
 
-
   useEffect(() => {
     if (show && editable && item) {
       const formatDate = (dateString) => {
         const date = new Date(dateString);
-        return date.toISOString().split('T')[0];
+        return date.toISOString().split("T")[0];
       };
 
       const data = {
@@ -46,7 +45,7 @@ const ProjectModel = ({
         end_date: formatDate(item.endDate),
         project_logo: item.projectLogo,
         status: item.status,
-        ou_id: [],
+        ou_id: item.ous.map((ou) => ou.ouID),
       };
 
       setFormData(data);
@@ -75,31 +74,33 @@ const ProjectModel = ({
   const [loading, setLoading] = useState(false);
   const [exist, setExist] = useState("");
 
-  // useEffect(() => {
-  //   if (!editable) {
-  //     setFormData({
-  //       project_name: "",
-  //       description: "",
-  //       start_date: "",
-  //       end_date: "",
-  //       project_logo: "",
-  //       ou_id: [],
-  //     });
-  //   } else {
-  //     setFormData(item);
-  //   }
+  const handleStatusChange = (e) => {
+    const { value } = e.target;
+    setFormData((prevData) => ({ ...prevData, status: value }));
+  };
 
-  //   setError({
-  //     project_name: false,
-  //     description: false,
-  //     start_date: false,
-  //     end_date: false,
-  //     project_logo: false,
-  //     ou_id: false,
-  //   });
-  //   setImage(null);
-  //   setExist("");
-  // }, [show, editable, item]);
+  useEffect(() => {
+    if (!editable) {
+      setFormData({
+        project_name: "",
+        description: "",
+        start_date: "",
+        end_date: "",
+        project_logo: "",
+        ou_id: [],
+      });
+    }
+    setError({
+      project_name: false,
+      description: false,
+      start_date: false,
+      end_date: false,
+      project_logo: false,
+      ou_id: false,
+    });
+    setImage(null);
+    setExist("");
+  }, [editable, item]);
 
   const resetFields = () => {
     setFormData({
@@ -214,8 +215,8 @@ const ProjectModel = ({
       let updatedFormData = { ...formData };
       const imgurl = await handleProfileUpload(image);
       updatedFormData = { ...updatedFormData, project_logo: imgurl };
-      const id=item?.projectID;
-      updateProject(id,updatedFormData, (res) => {
+      const id = item?.projectID;
+      updateProject(id, updatedFormData, (res) => {
         if (res?.status === 201) {
           setLoading(false);
           changed();
@@ -281,7 +282,7 @@ const ProjectModel = ({
                           type="checkbox"
                           id={item.ouID}
                           name="ouID"
-                          // checked={formData.ou_id.includes(item.ouID)}
+                          checked={formData.ou_id.includes(item.ouID)}
                           onChange={(e) => handleCheckboxChange(e, item.ouID)}
                         />
                         <label className="form-check-label" htmlFor={item.ouID}>
@@ -333,6 +334,7 @@ const ProjectModel = ({
                 <input
                   type="date"
                   name="start_date"
+                  min={new Date().toISOString().split('T')[0]}
                   value={formData.start_date}
                   onChange={handleInputChange}
                   className={`form-select ${
@@ -355,6 +357,7 @@ const ProjectModel = ({
                 </label>
                 <input
                   type="date"
+                  min={formData.start_date}
                   name="end_date"
                   value={formData.end_date}
                   onChange={handleInputChange}
@@ -385,6 +388,29 @@ const ProjectModel = ({
                 <div className="invalid-feedback">This field is required.</div>
               </div>
             </div>
+            {editable && (
+              <div className="mt-3">
+                <div class="form-group">
+                  <label for="exampleFormControlTextarea1">Status</label>
+                  <select
+                    className="form-select w-100"
+                    aria-label="Large select example"
+                    value={formData.status}
+                    onChange={handleStatusChange}
+                  >
+                    <option value="">Select Status</option>
+                    <option value="TODO">To Do</option>
+                    <option value="PROGRESS">Progress</option>
+                    <option value="COMPLETE">Complete</option>
+                  </select>
+                  {error.status && (
+                    <div className="invalid-feedback d-block">
+                      This field is required.
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
             <div className="mt-3">
               <label
                 htmlFor="academicYear"

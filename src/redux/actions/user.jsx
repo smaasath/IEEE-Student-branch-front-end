@@ -120,3 +120,20 @@ export const getAllUsers = (page, search, callback) => {
   }
 };
 
+export const editUsers = (data, callback) => {
+  const endpoint = `${import.meta.env.VITE_API_HOST}user/updateUser`;
+
+  try {
+    http
+      .put(endpoint, data)
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        callback(error.response);
+      });
+  } catch (error) {
+    callback(error.response);
+  }
+};
+

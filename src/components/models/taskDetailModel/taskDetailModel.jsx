@@ -10,65 +10,138 @@ import star from "../../../assets/images/Star.png";
 import deleted from "../../../assets/icons/delete.png";
 import loading from "../../../assets/images/Loading.png";
 import clock from "../../../assets/images/Clock.png";
-import TaskModel from "../createTaskModel/createTaskModel";
+import CreateTaskModel from "../createTaskModel/createTaskModel";
 import CommonTable from "../../common/commonTable/commonTable";
 import CommonNoteContainer from "../../common/commonNoteContainer/commonNoteContainer";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { PolicyValidate } from "../../../utils/valitations/Valitation";
+import { editTask, getTaskById } from "../../../redux/actions/task";
+import {
+  addComment,
+  getAllCommentsByTask,
+} from "../../../redux/actions/comment";
 
-const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
-  if (!taskData) return null;
+import CommonNotesArea from "../../common/commonNoteArea/commonNoteArea";
 
+const TaskDetailModel = ({
+  onHide,
+  show,
+  taskID,
+  project,
+  excom,
+  openTaskAssignModal,
+}) => {
   const navigate = useNavigate();
   const [assignTask, setAssignTask] = useState(false);
   const [createTask, setCreateTask] = useState(false);
-  const [selectedPriority, setSelectedPriority] = useState("High");
+  // const [selectedPriority, setSelectedPriority] = useState("High");
   const userData = useSelector((state) => state.user.userData);
   const [pageLoading, setPageLoading] = useState(true);
-
+  const projectPolicyData = useSelector((state) => state.user.projectPolicy);
   const [showTaskModal, setShowTaskModal] = useState(false);
-  const [selectedTask, setSelectedTask] = useState(null);
+
+  // const [selectedTask, setSelectedTask] = useState(null);
+  // const [refreshTaskDetails, setRefreshTaskDetails] = useState(1);
+  const [firstTimeFormDataLoaded, setFirstTimeFormDataLoaded] = useState(false);
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    return dateString.split("T")[0];
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+    // console.log(event.target.value,"Changing is work");
+  };
+
+  const [formData, setFormData] = useState(null);
+  const [taskData, setTaskData] = useState(null);
+  const [assigneesArray, setAssigneesArray] = useState(null);
+
+  useEffect(() => {
+    if (firstTimeFormDataLoaded && show) {
+      console.log("inside edit task");
+      editTask(taskData.taskId, formData, (res) => {
+        if (res?.status == 200) {
+          let task = res?.data?.data;
+          setTaskData(task);
+          console.log("succussfulyy edited");
+        } else {
+          console.warn("Error in Updatin edited data");
+        }
+      });
+    }
+    setFirstTimeFormDataLoaded(true);
+  }, [formData]);
 
   useEffect(() => {
     setPageLoading(true);
-    if (userData && show && excom) {
-      const isExcomAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM"
-        )
-      );
+    if (excom) {
+      if (userData && show) {
+        const isExcomAvailable = PolicyValidate(userData, "EXCOM");
+        const isExcomTaskAvailable = PolicyValidate(userData, "EXCOM_TASK");
+        const isExcomTaskAssignAvailable = PolicyValidate(
+          userData,
+          "EXCOM_TASK_ASSIGN"
+        );
 
-      const isExcomTaskAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM_TASK"
-        )
-      );
+        if (!isExcomAvailable) {
+          navigate("/dashboard");
+        } else {
+          setAssignTask(isExcomTaskAssignAvailable);
+          setCreateTask(isExcomTaskAvailable);
+          setPageLoading(false);
+        }
+      }
+    } else if (project) {
+      if (projectPolicyData && show) {
+        const isProjectAvailable = PolicyValidate(userData, "PROJECT");
 
-      const isExcomTaskAssignAvailable = userData?.some((userRoleDetail) =>
-        userRoleDetail.role?.policies.some(
-          (policy) => policy.policyCode === "EXCOM_TASK_ASSIGN"
-        )
-      );
+        const isProjecrTaskAvailable =
+          PolicyValidate(projectPolicyData, "PROJECT_TASK") ||
+          isProjectAvailable;
 
-      if (!isExcomAvailable) {
-        navigate("/dashboard");
-      } else {
-        setAssignTask(isExcomTaskAssignAvailable);
-        setCreateTask(isExcomTaskAvailable);
+        const isPrjectTaskAssignAvailable =
+          PolicyValidate(projectPolicyData, "PROJECT_TASK") ||
+          isProjectAvailable;
+
+        setAssignTask(isPrjectTaskAssignAvailable);
+        setCreateTask(isProjecrTaskAvailable);
         setPageLoading(false);
       }
     }
-  }, [userData, show, excom, navigate]);
+  }, [userData, show]);
+
+  useEffect(() => {
+    if (show) {
+      getTaskById(taskID, (res) => {
+        if (res?.status == 200) {
+          const task = res?.data?.data;
+
+          const data = {
+            task_name: task?.task_name,
+            start_date: task?.start_date,
+            end_date: task?.end_date,
+            priority: task?.priority,
+            status: task?.status,
+            description: task?.description,
+          };
+          setFormData(data);
+          setTaskData(res?.data?.data);
+          setAssigneesArray(res?.data?.data?.users);
+        } else {
+          // navigate("/dashboard/not-found");
+          console.warn("error in task loading by task id");
+        }
+      });
+    }
+  }, [show]);
 
   const handlePrioritySelect = (eventKey) => {
     setSelectedPriority(eventKey);
   };
-
-  const handleDateChange = (e) => {};
-
-  const notes = [
-    { date: "2023-01-02", author: "Jane Doe", content: "Sample note 2" },
-  ];
 
   const openTaskModal = () => {
     setShowTaskModal(true);
@@ -95,7 +168,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
           className="text-cl-primary"
           id="contained-modal-title-vcenter"
         >
-          Task
+          {taskData?.task_name}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -104,7 +177,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
             <div>
               <div className="mb-3 d-flex justify-content-between align-items-center">
                 <div className="text-cl-primary">
-                  Main Task Title / Sub Task Title
+                  Main Task Title / Sub Task Title {/* need to discuss */}
                 </div>
                 {createTask && (
                   <button
@@ -116,9 +189,12 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 )}
               </div>
               <h5>
-                <b>Create project banner.</b>
+                <b></b>
               </h5>
-              <div className="d-flex align-items-center mb-3">
+              <div
+                className="d-flex justify-content-between align-items-center mb-3"
+                style={{ width: "350px" }}
+              >
                 <div className="text-cl-primary mb-1 d-flex align-items-center">
                   <img
                     src={loading}
@@ -128,14 +204,21 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                   />
                   <span>Status</span>
                 </div>
-                <div class=" form-group">
+                <div className="form-group">
                   <select
-                    class="form-control ms-5"
-                    id="exampleFormControlSelect1"
+                    className="form-select"
+                    id="status"
+                    name="status"
+                    value={taskData?.status}
+                    onChange={handleChange}
+                    required
                   >
-                    <option>Reviewed</option>
-                    <option>Pending</option>
-                    <option>In progress</option>
+                    <option value="" hidden>
+                      Select Status
+                    </option>
+                    <option value="TODO">TODO</option>
+                    <option value="PROGRESS">In Progress</option>
+                    <option value="COMPLETE">Completed</option>
                   </select>
                 </div>
               </div>
@@ -153,9 +236,10 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 </div>
                 <input
                   type="date"
+                  name="start_date"
                   className="form-control ms-3"
-                  value={taskData.startDate}
-                  onChange={handleDateChange}
+                  value={formatDate(taskData?.start_date)}
+                  onChange={handleChange}
                 />
               </div>
               <div
@@ -172,12 +256,16 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                 </div>
                 <input
                   type="date"
+                  name="end_date"
                   className="form-control ms-3"
-                  value={taskData.endDate}
-                  onChange={handleDateChange}
+                  value={formatDate(taskData?.end_date)}
+                  onChange={handleChange}
                 />
               </div>
-              <div className="d-flex align-items-center mb-3">
+              <div
+                className="d-flex justify-content-between align-items-center mb-3"
+                style={{ width: "350px" }}
+              >
                 <div className="text-cl-primary mb-1 d-flex align-items-center">
                   <img
                     src={star}
@@ -187,14 +275,21 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                   />
                   <span>Priority</span>
                 </div>
-                <div class="form-group">
+                <div className="form-group">
                   <select
-                    class="form-control ms-5"
-                    id="exampleFormControlSelect1"
+                    className="form-select"
+                    id="priority"
+                    name="priority"
+                    value={taskData?.priority}
+                    onChange={handleChange}
+                    required
                   >
-                    <option>Low</option>
-                    <option>Medium</option>
-                    <option>High</option>
+                    <option value="" hidden>
+                      Select Priority
+                    </option>
+                    <option value="LOW">Low</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="HIGH">High</option>
                   </select>
                 </div>
               </div>
@@ -206,13 +301,24 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
                     alt="Clock"
                   />
                   <span className="ms-2">
-                    Created at <b>May, 15 2022 14:23 PM</b>
+                    Created by{" "}
+                    <b className="ms-2">
+                      {taskData?.createdBy?.firstName}{" "}
+                      {taskData?.createdBy?.lastName}
+                    </b>
                   </span>
                 </div>
               </div>
               <div className="mb-3">
                 <div className="text-cl-primary">Description</div>
-                <textarea className="form-control" rows="3"></textarea>
+                <textarea
+                  name="description"
+                  className="form-control"
+                  onChange={handleChange}
+                  rows="3"
+                >
+                  {taskData?.description}
+                </textarea>
               </div>
               <div className="mt-4">
                 <div className="d-flex justify-content-between align-items-center">
@@ -254,55 +360,37 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
           </div>
           <div className="col-lg-4">
             <div className="bg-white rounded-3 common-shadow p-3">
-              <div className="bg-white common-shadow p-2 rounded-3 mb-2">
-                <h6 className="text-third fw-bold">Notes</h6>
-                <div className="p-2">
-                  <CommonSearch primary={false} />
-                </div>
-                {notes.map((note, index) => (
-                  <div className="p-2" key={index}>
-                    <CommonNoteContainer
-                      date={note.date}
-                      author={note.author}
-                      content={note.content}
-                    />
-                  </div>
-                ))}
-                <div className="mt-3">
-                  <div className="d-flex justify-content-between align-items-center gap-3">
-                    <div className="form-group w-100">
-                      <textarea
-                        className="form-control"
-                        placeholder="Add note here"
-                      ></textarea>
-                    </div>
-                    <button className="bg-transparent border-0">
-                      <img src={send} width={30} alt="Send" />
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <CommonNotesArea taskID={taskID} show={show} task={true} />
+
               <div className="d-flex bg-white common-shadow flex-column p-2 rounded-3">
                 <div className="d-flex justify-content-between align-items-center gap-4 flex-wrap mt-4 p-2">
                   <div className="d-flex justify-content-between w-100 align-items-center">
                     <h6 className="text-third fw-bold">Assignees</h6>
                     {assignTask && (
-                      <img
-                        src={add}
-                        alt="Add"
-                        style={{ width: "30px", height: "30px" }}
-                      />
+                      <button
+                        className="border-0 bg-transparent"
+                        onClick={() => {
+                          openTaskAssignModal();
+                        }}
+                      >
+                        <img
+                          src={add}
+                          alt="Add"
+                          style={{ width: "30px", height: "30px" }}
+                        />
+                      </button>
                     )}
                   </div>
-                </div>
-                <div className="mt-3">
-                  <CommonSearch primary={false} />
                 </div>
                 <div
                   className="mt-4 d-flex justify-content-between align-items-center gap-1 flex-wrap overflow-scroll overflow-x-hidden custom-scrollbar"
                   style={{ maxHeight: 500 }}
                 >
-                  <CommonMemberContainer />
+                  {assigneesArray?.map((assignee, index) => (
+                    <div key={index}>
+                      <CommonMemberContainer userData={assignee} />
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -312,7 +400,7 @@ const TaskDetailModel = ({ onHide, show, taskData, project, excom }) => {
       <Modal.Footer className="d-flex justify-content-end mt-3">
         <CommonButton onClick={onHide} close={true} text={"Cancel"} />
       </Modal.Footer>
-      <TaskModel show={showTaskModal} onHide={closeTaskModal} />
+      <CreateTaskModel show={showTaskModal} onHide={closeTaskModal} />
     </Modal>
   );
 };
