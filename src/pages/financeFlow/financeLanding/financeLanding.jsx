@@ -7,7 +7,7 @@ import CommonFinanceTable from '../../../components/common/commonFinanceTable/co
 import { useNavigate } from 'react-router-dom'
 import AddTransectionModel from '../../../components/models/addTransectionModel/addTransectionModel'
 import AddBankAccountModel from '../../../components/models/addBankAccountModel/addBankAccountModel'
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux';
 import CommonLoader from '../../../components/common/commonLoader/commonLoader'
 import { PolicyValidate } from '../../../utils/valitations/Valitation'
 
@@ -21,16 +21,25 @@ const FinanceLanding = () => {
     const [addBankModelShow, setAddBankModelShow] = useState(false);
     const [disable, setDisable] = useState(false);
     const [editable, setEditable] = useState(false);
+    const [isFinanceAllPolicyAvailable, setIsFinanceAllPolicyAvailable] = useState(false);
+    const [isFinanceTransactionPolicyAvailable, setIsFinanceTransactionPolicyAvailable] = useState(false);
+    const [isFinanceBudgetPolicyAvailable, setIsFinanceBudgetPolicyAvailable] = useState(false);
     const [id, setId] = useState(null);
     const [pageLoading, setPageLoading] = useState(true);
-   
+
     useEffect(() => {
         setPageLoading(true)
         if (userData) {
             const isFinanceAvailable = PolicyValidate(userData, "FINANCE");
+            const FinanceAllPolicyAvailable = PolicyValidate(userData, "FINANCE_ALL");
+            const FinanceTransactionPolicyAvailable = PolicyValidate(userData, "FINANCE_TRANSACTION");
+            const FinanceBudgetPolicyAvailable = PolicyValidate(userData, "FINANCE_BUDGET_PROPOSAL");
             if (!isFinanceAvailable) {
                 navigate('/dashboard')
             } else {
+                setIsFinanceAllPolicyAvailable(FinanceAllPolicyAvailable);
+                setIsFinanceBudgetPolicyAvailable(FinanceBudgetPolicyAvailable);
+                setIsFinanceTransactionPolicyAvailable(FinanceTransactionPolicyAvailable);
                 setPageLoading(false);
             }
         }
@@ -76,23 +85,36 @@ const FinanceLanding = () => {
                     <div className='d-flex justify-content-between align-items-center gap-3'>
                         <div className='text-cl-primary'>Accounts</div>
                         <div className='d-flex gap-3 flex-row'>
-                            <div>
-                                <CommonButton text={"Report"} onClick={() => { navigate('report') }} />
-                            </div>
-                            <div>
-                                <CommonButton onClick={handleShowAddBankModel} text={"Add Account"} />
-                            </div>
+
+                            {
+                                isFinanceTransactionPolicyAvailable && (
+                                    <div>
+                                        <CommonButton text={"Report"} onClick={() => { navigate('report') }} />
+                                    </div>
+                                )
+                            }
+
+                            {
+                                isFinanceAllPolicyAvailable && (
+                                    <div>
+                                        <CommonButton onClick={handleShowAddBankModel} text={"Add Account"} />
+                                    </div>
+                                )
+                            }
+
                         </div>
 
 
                     </div>
                     <div className='d-flex flex-wrap mt-3 gap-4'>
-                        <div className='pb-3 d-flex flex-column align-items-center gap-3 overflow-scroll hide-scrollbar' style={{ maxHeight: 410 }}>
-                            <BankAccountCard ViewAction={viewAccount} editAction={editAccount} />
+                        {
+                            isFinanceAllPolicyAvailable && (
+                                <div className='pb-3 d-flex flex-column align-items-center gap-3 overflow-scroll hide-scrollbar' style={{ maxHeight: 410 }}>
+                                    <BankAccountCard ViewAction={viewAccount} editAction={editAccount} />
+                                </div>
+                            )
+                        }
 
-
-
-                        </div>
                         <div className='flex-grow-1'>
                             <FinanceChart />
                         </div>
@@ -107,19 +129,31 @@ const FinanceLanding = () => {
                     <div className='mt-5 d-flex justify-content-between align-items-center gap-4 flex-wrap'>
                         <div className='text-cl-primary'>Accounts</div>
                         <div className='d-flex justify-content-end gap-4'>
-                            <div>
-                                <CommonButton text={"Go to proposal"} onClick={() => { navigateToProposal() }} />
-                            </div>
-                            <div>
-                                <CommonButton text={"Add Transaction"} onClick={handleShowTransectionModel} />
-                            </div>
+                            {
+                                isFinanceBudgetPolicyAvailable && (
+                                    <div>
+                                        <CommonButton text={"Go to proposal"} onClick={() => { navigateToProposal() }} />
+                                    </div>
+                                )
+                            }
+
+
+                            {
+                                isFinanceTransactionPolicyAvailable && (
+                                    <div>
+                                        <CommonButton text={"Add Transaction"} onClick={handleShowTransectionModel} />
+                                    </div>
+                                )
+                            }
+
+
 
 
                         </div>
                     </div>
 
                     <div className='mt-4'>
-                        <CommonFinanceTable />
+                        <CommonFinanceTable transectionPermission={isFinanceTransactionPolicyAvailable} />
                     </div>
                 </div>
             )}
