@@ -10,6 +10,7 @@ import AddBankAccountModel from '../../../components/models/addBankAccountModel/
 import { useSelector } from 'react-redux';
 import CommonLoader from '../../../components/common/commonLoader/commonLoader'
 import { PolicyValidate } from '../../../utils/valitations/Valitation'
+import { getAllAccount } from '../../../redux/actions/account'
 
 
 
@@ -18,13 +19,14 @@ const FinanceLanding = () => {
 
     const userData = useSelector((state) => state.user.userData);
     const [transectionModelShow, setTransectionModelShow] = useState(false);
+    const [accounts, setAccounts] = useState([]);
     const [addBankModelShow, setAddBankModelShow] = useState(false);
     const [disable, setDisable] = useState(false);
     const [editable, setEditable] = useState(false);
     const [isFinanceAllPolicyAvailable, setIsFinanceAllPolicyAvailable] = useState(false);
     const [isFinanceTransactionPolicyAvailable, setIsFinanceTransactionPolicyAvailable] = useState(false);
     const [isFinanceBudgetPolicyAvailable, setIsFinanceBudgetPolicyAvailable] = useState(false);
-    const [id, setId] = useState(null);
+    const [selectedAccount, setSelectedAccount] = useState(null);
     const [pageLoading, setPageLoading] = useState(true);
 
     useEffect(() => {
@@ -40,10 +42,20 @@ const FinanceLanding = () => {
                 setIsFinanceAllPolicyAvailable(FinanceAllPolicyAvailable);
                 setIsFinanceBudgetPolicyAvailable(FinanceBudgetPolicyAvailable);
                 setIsFinanceTransactionPolicyAvailable(FinanceTransactionPolicyAvailable);
+                getAllAccounts();
                 setPageLoading(false);
             }
         }
     }, [userData])
+
+
+    function getAllAccounts() {
+        getAllAccount((res) => {
+            if (res?.status == 200) {
+                setAccounts(res?.data?.data)
+            }
+        })
+    }
 
     const handleCloseTransectionModel = () => { setTransectionModelShow(false); }
     const handleShowTransectionModel = () => { setTransectionModelShow(true); }
@@ -51,19 +63,18 @@ const FinanceLanding = () => {
         setAddBankModelShow(false);
         setDisable(false)
         setEditable(false)
-        setId(null)
     }
 
-    function editAccount() {
+    function editAccount(item) {
         setDisable(false)
-        setId("1")
+        setSelectedAccount(item)
         setEditable(true)
         handleShowAddBankModel()
     }
 
-    function viewAccount() {
+    function viewAccount(item) {
         setDisable(true)
-        setId(null)
+        setSelectedAccount(item)
         setEditable(false)
         handleShowAddBankModel()
     }
@@ -109,9 +120,16 @@ const FinanceLanding = () => {
                     <div className='d-flex flex-wrap mt-3 gap-4'>
                         {
                             isFinanceAllPolicyAvailable && (
+
                                 <div className='pb-3 d-flex flex-column align-items-center gap-3 overflow-scroll hide-scrollbar' style={{ maxHeight: 410 }}>
-                                    <BankAccountCard ViewAction={viewAccount} editAction={editAccount} />
+                                    {accounts?.map((item, index) => {
+                                        return (
+                                            <BankAccountCard key={index} Account={item} ViewAction={viewAccount} editAction={editAccount} />
+                                        )
+                                    })}
                                 </div>
+
+
                             )
                         }
 
@@ -160,7 +178,7 @@ const FinanceLanding = () => {
 
 
             <AddTransectionModel show={transectionModelShow} onHide={handleCloseTransectionModel} setTransectionModelShow={setTransectionModelShow} />
-            <AddBankAccountModel show={addBankModelShow} onHide={handleCloseAddBankModel} disabled={disable} editable={editable} id={id} />
+            <AddBankAccountModel show={addBankModelShow} onHide={handleCloseAddBankModel} disabled={disable} editable={editable} item={selectedAccount} change={getAllAccounts} />
         </>
     )
 }
