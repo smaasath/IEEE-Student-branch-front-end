@@ -6,8 +6,10 @@ import CommonButton from "../../../components/common/commonButton/commonButton";
 import EditProfileModal from "../../../components/models/editProfileModel/editProfileModel";
 import { useSelector } from "react-redux";
 import { editUsers } from "../../../redux/actions/user";
+import { uploadImage } from "../../../redux/actions/imageUpload";
+import { useDispatch } from "react-redux";
 
-const ProfileCard = ({ photo, name, userRole }) => {
+const ProfileCard = ({ formData }) => {
   return (
     <div
       className="card"
@@ -20,17 +22,19 @@ const ProfileCard = ({ photo, name, userRole }) => {
     >
       <div className="card-body d-flex">
         <img
-          src={photo || profile}
+          src={formData.profilePic || profile}
           alt="Profile"
           className="img-thumbnail me-3 rounded-circle"
           style={{ width: "100px", height: "100px", objectFit: "cover" }}
         />
         <div>
-          <h5 className="card-title">{name}</h5>
-          <p className="card-text">{userRole}</p>
+          <h5 className="card-title">
+            {formData.firstName + " " + formData.lastName}
+          </h5>
           <div className="d-flex gap-2">
-            <img src={Facebook} alt="Facebook" />
-            <img src={Linkedin} alt="Linkedin" />
+            {formData.fbURL && <img src={Facebook} alt="Facebook" />}
+
+            {formData.linkedInURL && <img src={Linkedin} alt="Linkedin" />}
           </div>
         </div>
       </div>
@@ -40,10 +44,11 @@ const ProfileCard = ({ photo, name, userRole }) => {
 
 const ProfileEditPage = () => {
   const [showModal, setShowModal] = useState(false);
-  const [profilePhoto, setProfilePhoto] = useState(profile);
   const [isEditable, setIsEditable] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [uploadedImage, setUploadedImage] = useState(null);
   const userData = useSelector((state) => state.user.userData);
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     bio: "",
@@ -79,7 +84,7 @@ const ProfileEditPage = () => {
     if (userData && userData.length > 0) {
       const user = userData[0]?.user;
       setFormData({
-        profilePic: user.profilePic || "",
+        profilePic: user.profilePic || profile,
         bio: user.bio || "",
         firstName: user.firstName || "",
         lastName: user.lastName || "",
@@ -92,7 +97,6 @@ const ProfileEditPage = () => {
         location: user.location || "",
         ieeeNumber: user.ieeeNumber || "",
       });
-      setProfilePhoto(user.profilePic || profile);
     }
   }, [userData]);
 
@@ -104,8 +108,12 @@ const ProfileEditPage = () => {
     setShowModal(false);
   };
 
-  const handleSave = (imgUrl) => {
-    setProfilePhoto(imgUrl);
+  const handleSave = (img) => {
+    setUploadedImage(img);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      profilePic: URL.createObjectURL(img),
+    }));
     setShowModal(false);
   };
 
@@ -115,9 +123,13 @@ const ProfileEditPage = () => {
     setError((prevError) => ({ ...prevError, [name]: false }));
   };
 
-  console.log(formData);
+  const handleProfileUpload = async () => {
+    if (!uploadedImage) return;
+    const uploadedImageUrl = await dispatch(uploadImage(uploadedImage));
+    return uploadedImageUrl;
+  };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const error = {};
     Object.keys(formData).forEach((field) => {
       if (
@@ -132,8 +144,16 @@ const ProfileEditPage = () => {
           "location",
         ].includes(field)
       )
-
-        if (!formData.profilePic || !formData.firstName ||!formData.lastName ||!formData.userName ||!formData.email ||!formData.contactNo ||!formData.location || formData.type === "") {
+        if (
+          !formData.profilePic ||
+          !formData.firstName ||
+          !formData.lastName ||
+          !formData.userName ||
+          !formData.email ||
+          !formData.contactNo ||
+          !formData.location ||
+          formData.type === ""
+        ) {
           setError({
             ...error,
             profilePic: !formData.profilePic,
@@ -149,6 +169,12 @@ const ProfileEditPage = () => {
         }
     });
 
+    let newImage = null;
+
+    if (uploadedImage) {
+      newImage = await handleProfileUpload();
+    }
+
     const data = {
       email: formData.email,
       ieee_email: formData.ieeeEmail,
@@ -157,13 +183,12 @@ const ProfileEditPage = () => {
       ieee_membership_number: formData.ieeeNumber,
       contactNo: formData.contactNo,
       bio: formData.bio,
-      profilePic: formData.profilePic,
+      profilePic: newImage ? newImage : formData.profilePic,
       fbURL: formData.fbURL,
       linkedInURL: formData.linkedInURL,
       location: formData.location,
     };
 
-    console.log(data);
 
     setLoader(true);
 
@@ -182,23 +207,13 @@ const ProfileEditPage = () => {
     setIsEditable(true);
   };
 
-  const userProfile = [
-    {
-      photo: profilePhoto,
-      name: `${formData.firstName} ${formData.lastName}`, 
-    },
-  ];
-  
-
   return (
     <div className="container">
       <div className="d-flex justify-content-between align-items-center">
         <div className="row mt-4 px-5">
-          {userProfile.map((user, index) => (
-            <div className="col-6 col-md-6 mb-4" key={index}>
-              <ProfileCard photo={user.profilePic} name={user.name} />
-            </div>
-          ))}
+          <div className="col-6 col-md-6 mb-4">
+            <ProfileCard formData={formData} />
+          </div>
         </div>
 
         <div
@@ -430,7 +445,9 @@ const ProfileEditPage = () => {
               name="linkedInURL"
               value={formData.linkedInURL || ""}
               onChange={handleInputChange}
-              className={`form-control ${error.linkedInURL ? "is-invalid" : ""}`}
+              className={`form-control ${
+                error.linkedInURL ? "is-invalid" : ""
+              }`}
               style={{ width: "1055px" }}
               readOnly={!isEditable}
             />
@@ -440,14 +457,22 @@ const ProfileEditPage = () => {
         <div className="d-flex justify-content-end align-items-end gap-1 mt-5">
           <div className="d-flex gap-3 flex-row">
             <div>
-              {isEditable && <CommonButton text={"Cancel"} close={true} onClick={handleSubmit}/>}
+              {isEditable && (
+                <CommonButton
+                  text={"Cancel"}
+                  close={true}
+                  onClick={() => {
+                    setIsEditable(false);
+                  }}
+                />
+              )}
             </div>
             <div>
               {isEditable && (
                 <CommonButton
                   text={"Save Changes"}
                   loader={loader}
-                  onClick={() => setIsEditable(false)}
+                  onClick={handleSubmit}
                 />
               )}
             </div>
