@@ -22,7 +22,8 @@ const VolunteerStatusChangeModel = ({ onHide, show, id }) => {
                             <label for="exampleFormControlInput1" className="form-label text-dark">Select Status</label>
                             <select className="form-select w-100" aria-label="Large select example">
                                 <option selected>Select status</option>
-                                <option value="1">Reviewed</option>
+                                <option value="REVIEWED">Reviewed</option>
+                                <option value="COMPLETE">Complete</option>
                             </select>
                         </div>
                     </div>
