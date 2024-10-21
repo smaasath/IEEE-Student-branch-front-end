@@ -1,35 +1,43 @@
 import React, { useEffect, useState } from "react";
-import service from "../../../assets/images/serviceback.png";
+
 import CommonButton from "../../../components/common/commonButton/commonButton";
-import CommonTable from '../../../components/common/commonTable/commonTable';
-import CommonSearch from '../../../components/common/commonSearch/commonSearch'
-import CommonPagination from '../../../components/common/commonPagination/commonPagination'
-import { useNavigate } from 'react-router-dom'
+import CommonTable from "../../../components/common/commonTable/commonTable";
+import CommonSearch from "../../../components/common/commonSearch/commonSearch";
+import CommonPagination from "../../../components/common/commonPagination/commonPagination";
+import { useNavigate } from "react-router-dom";
 import VolunteerStatusChangeModel from "../../../components/models/volunteerStatusChangeModel/volunteerStatusChangeModel";
 import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
 import { PolicyValidate } from "../../../utils/valitations/Valitation";
-
-
+import CreateServiceRequestModel from "../../../components/models/addServiceRequestModel/createServiceRequestModel";
 
 const serviveLandingPage = () => {
-
   const [currentPage, setCurrentPage] = useState(1);
   const [statusChangeModelShow, setStatusChangeModel] = useState(false);
   const userData = useSelector((state) => state.user.userData);
-  const handleCloseStatusChangeModel = () => { setStatusChangeModel(false); }
-  const handleShowStatusChangeModel = () => { setStatusChangeModel(true); }
+  const handleCloseStatusChangeModel = () => {
+    setStatusChangeModel(false);
+  };
+  const handleShowStatusChangeModel = () => {
+    setStatusChangeModel(true);
+  };
   const [pageLoading, setPageLoading] = useState(true);
   const [service, setService] = useState(false);
   const [serviceVolunteer, setServiceVolunteer] = useState(false);
+  const [showAddSereviceReqModel, setShowAddSereviceReqModel] = useState(false);
+  const [showViewSereviceReqModel, setShowViewSereviceReqModel] =
+    useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    setPageLoading(true)
+    setPageLoading(true);
     if (userData) {
-      const isServiceAvailable = PolicyValidate(userData,"SERVICE");
+      const isServiceAvailable = PolicyValidate(userData, "SERVICE");
 
-      const isServiceVolunteerAvailable =  PolicyValidate(userData,"SERVICE_VOLUNTEER");
+      const isServiceVolunteerAvailable = PolicyValidate(
+        userData,
+        "SERVICE_VOLUNTEER"
+      );
 
       if (isServiceAvailable) {
         setService(true);
@@ -37,54 +45,81 @@ const serviveLandingPage = () => {
       }
 
       if (isServiceVolunteerAvailable) {
-        setServiceVolunteer(true)
+        setServiceVolunteer(true);
         setPageLoading(false);
       }
 
       if (!isServiceAvailable || !isServiceVolunteerAvailable) {
-        setPageLoading(false)
+        setPageLoading(false);
       }
-
-
     }
-
-
-  }, [userData])
-
+  }, [userData]);
 
   function navigateToVolunteerDetailsPage() {
-    navigate('volunteer')
+    navigate("volunteer");
   }
+  const openAddServiceReqModel = () => {
+    setShowAddSereviceReqModel(true);
+  };
+  const handleCloseCreateServiceModel = () => {
+    setShowAddSereviceReqModel(false);
+  };
+  const openViewServiceReqModel = () => {
+    setShowViewSereviceReqModel(true);
+  };
+  const handleCloseViewServiceModel = () => {
+    setShowViewSereviceReqModel(false);
+  };
 
-  const tableHeading = [
-    {
-      label: "ID",
-      value: "id"
-    },
+  const allReqTableHeading = [
     {
       label: "Volunteer Name",
-      value: "volunteer_name"
+      value: "volunteer_name",
     },
     {
       label: "Academic Year",
-      value: "academic_year"
+      value: "academic_year",
     },
     {
       label: "Contact No",
-      value: "contact_no"
+      value: "contact_no",
     },
     {
       label: "Status",
-      value: "status"
+      value: "status",
     },
     {
       label: "Requested Date",
-      value: "requested_date"
+      value: "requested_date",
     },
     {
       label: "",
       value: "ACTION",
-      type: ["VIEW", "EDIT"]
+      type: ["VIEW", "EDIT", "MORE"],
+    },
+  ];
+
+  const myReqTableHeading = [
+    {
+      label: "Requested Date",
+      value: "requested_date",
+    },
+    {
+      label: "Email",
+      value: "email",
+    },
+    {
+      label: "Status",
+      value: "status",
+    },
+    {
+      label: "Due Date",
+      value: "due_date",
+    },
+    {
+      label: "",
+      value: "ACTION",
+      type: ["DELETE"],
     },
   ];
   const tableData = [
@@ -101,7 +136,7 @@ const serviveLandingPage = () => {
       volunteer_name: "Thilini Priyangika",
       academic_year: "3rd",
       contact_no: "0708596624",
-      status: "REVIEWED",
+      status: "COMPLETE",
       requested_date: "2024/06/09",
     },
     {
@@ -109,149 +144,118 @@ const serviveLandingPage = () => {
       volunteer_name: "Ishara Herath",
       academic_year: "2nd",
       contact_no: "0708876984",
-      status: "REVIEWED",
+      status: "TODO",
       requested_date: "2024/06/10",
     },
-  ]
+  ];
   return (
     <>
       <div className="container">
-        <div className="conatiner bg-white rounded p-3 common-shadow">
-          <h5 className="fw-semibold text-cl-primary">Request Form</h5>
-          <div className="row">
-            <div className="col-lg-7 col-md-6 col-sm-12">
-              <div className="row pb-3">
-                <div className="col-lg-6 col-md-12 col-sm-12">
-                  <div className="row pb-3">
-                    <label
-                      htmlFor="input-field"
-                      className="Text-input-label pb-2"
-                    >
-                      Due Date
-                    </label>
-                    <div>
-                      <input
-                        className="form-control"
-                        type="date"
-                        placeholder="name"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-6 col-md-12 col-sm-12">
-                  <div className="row pb-3">
-                    <label
-                      htmlFor="input-field"
-                      className="Text-input-label pb-2"
-                    >
-                      Email
-                    </label>
-                    <div>
-                      <input
-                        className="form-control"
-                        type="text"
-                        placeholder="name"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="d-flex justify-content-around pb-3">
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
-                  />
-                  <label class="form-check-label" for="flexCheckDefault">
-                    Excom
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
-                  />
-                  <label class="form-check-label" for="flexCheckDefault">
-                    Projects
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
-                  />
-                  <label class="form-check-label" for="flexCheckDefault">
-                    Others
-                  </label>
-                </div>
-              </div>
-              <div className="row pb-3">
-                <label htmlFor="input-field" className="Text-input-label pb-2">
-                  Description
-                </label>
+        <div className="d-flex w-100">
+          <div className="ms-auto me-0 d-flex justify-content-end">
+            <CommonButton
+              text={"My Activities"}
+              onClick={() => {
+                openCreateTaskModel();
+              }}
+            />
+          </div>
+        </div>
+        <div className="text-cl-primary">My service letter requests</div>
+        <div className="mt-4 d-flex flex-column gap-3 justify-content-center bg-white rounded-2 common-shadow p-3">
+          <div className="d-flex justify-content-between align-items-center gap-4 flex-wrap">
+            <div className="mt-2 table-container w-100" style={{ height: 400 }}>
+              <div className="mt-2 d-flex flex-wrap justify-content-end align-items-center">
                 <div>
-                  <textarea
-                    className="form-control"
-                    placeholder="Autosize height based on content lines"
-                    rows={3}
+                  <CommonButton
+                    text={"Send Request"}
+                    onClick={() => {
+                      openAddServiceReqModel();
+                    }}
                   />
                 </div>
               </div>
-              <div className="d-flex justify-content-end pe-2">
-                <CommonButton text={"Submit"} width={150} />
-              </div>
-            </div>
-            <div className="col-lg-5 col-md-6 col-sm-12">
-              <div className="d-flex justify-content-center align-items-center">
-                <img src={service} />
+              <div className="mt-4 table-container">
+                <CommonTable
+                  tableHeading={myReqTableHeading}
+                  primary={true}
+                  tableData={tableData}
+                  loading={false}
+                />
               </div>
             </div>
           </div>
         </div>
 
-        {
-          pageLoading ? (
-            <CommonLoader />
-          ) : null
-        }
+        {pageLoading ? <CommonLoader /> : null}
         {serviceVolunteer ? (
-          <div className='mt-5 d-flex justify-content-between align-items-center gap-4 flex-wrap'>
-            <div className='text-cl-primary'>Service letter requests</div>
-            <div className='d-flex gap-3 flex-row justify-content-end mt-4 '>
-              <div >
-                <CommonButton text={"Volunteer"} onClick={() => { navigateToVolunteerDetailsPage() }} />
+          <div className="mt-5 d-flex justify-content-between align-items-center gap-4 flex-wrap">
+            <div className="text-cl-primary">Service letter requests</div>
+            <div className="d-flex gap-3 flex-row justify-content-end mt-4 ">
+              <div>
+                <CommonButton
+                  text={"Volunteer"}
+                  onClick={() => {
+                    navigateToVolunteerDetailsPage();
+                  }}
+                />
               </div>
             </div>
           </div>
         ) : null}
 
         {service ? (
-          <div className='mt-4 d-flex flex-column gap-3 justify-content-center bg-white rounded-2 common-shadow p-3'>
-            <div className='mt-4 table-container'>
-              <div className='mt-2 d-flex flex-wrap justify-content-between align-items-center'>
+          <div className="mt-4 d-flex flex-column gap-3 justify-content-center bg-white rounded-2 common-shadow p-3">
+            <div className="mt-4 table-container">
+              <div className="mt-2 d-flex flex-wrap justify-content-between align-items-center">
                 <CommonSearch primary={true} />
               </div>
-              <div className='mt-4 table-container'>
-                <CommonTable tableHeading={tableHeading} primary={true} tableData={tableData} loading={false} editAction={(id) => { handleShowStatusChangeModel() }} />
+              <div className="mt-4 table-container">
+                <CommonTable
+                  tableHeading={allReqTableHeading}
+                  primary={true}
+                  tableData={tableData}
+                  loading={false}
+                  editAction={(id) => {
+                    handleShowStatusChangeModel();
+                  }}
+                  viewAction={(id) => {
+                    openViewServiceReqModel();
+                  }}
+                  moreAction={(id) => {
+                    console.log("");
+                  }}
+                />
               </div>
             </div>
 
-            <div className='mt-4 d-flex justify-content-end'>
-              <CommonPagination pages={10} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+            <div className="mt-4 d-flex justify-content-end">
+              <CommonPagination
+                pages={10}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+              />
             </div>
           </div>
         ) : null}
-
       </div>
-      <VolunteerStatusChangeModel show={statusChangeModelShow} onHide={handleCloseStatusChangeModel} />
+      <CreateServiceRequestModel
+        show={showAddSereviceReqModel}
+        onHide={handleCloseCreateServiceModel}
+        edit={true}
+      />
+      <CreateServiceRequestModel
+        show={showViewSereviceReqModel}
+        onHide={handleCloseViewServiceModel}
+        view={true}
+      />
+
+      <VolunteerStatusChangeModel
+        show={statusChangeModelShow}
+        onHide={handleCloseStatusChangeModel}
+      />
     </>
-  )
-}
+  );
+};
 
 export default serviveLandingPage;
