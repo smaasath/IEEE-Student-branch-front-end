@@ -10,6 +10,10 @@ import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
 import { PolicyValidate } from "../../../utils/valitations/Valitation";
 import CreateServiceRequestModel from "../../../components/models/addServiceRequestModel/createServiceRequestModel";
+import {
+  getAllServiceRequests,
+  getMyServiceRequests,
+} from "../../../redux/actions/service";
 
 const serviveLandingPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,6 +32,58 @@ const serviveLandingPage = () => {
   const [showViewSereviceReqModel, setShowViewSereviceReqModel] =
     useState(false);
   const navigate = useNavigate();
+  const [myReqests, setMyRequests] = useState(null);
+  const [myReqestsTableLoading, setMyReqestsTableLoading] = useState(false);
+  const [refreshTable, setRefreshTable] = useState(1);
+  const [allReqests, setAllRequests] = useState(null);
+  const [allReqestsTableLoading, setAllReqestsTableLoading] = useState(false);
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0];
+  };
+  useEffect(() => {
+    getMyServiceRequests(0, (res) => {
+      setMyReqestsTableLoading(true);
+      if (res.status === 200) {
+        const data = res?.data?.data?.content?.map((request) => ({
+          id: request?.serviceId,
+          requestDate: request?.request_date,
+          dueDate: formatDate(request?.due_date),
+          status: request?.status,
+          email: request?.email,
+          item: request,
+        }));
+        setMyRequests(data);
+      }
+      setMyReqestsTableLoading(false);
+    });
+  }, [refreshTable]);
+
+  useEffect(() => {
+    if (service) {
+      getAllServiceRequests("", "", 0, (res) => {
+        setAllReqestsTableLoading(true);
+        if (res.status === 200) {
+          console.log(res?.data?.data?.content, "asdasdasassad");
+          const data = res?.data?.data?.content?.map((request) => ({
+            id: request?.serviceId,
+            requestDate: request?.request_date,
+            dueDate: formatDate(request?.due_date),
+            status: request?.status,
+            email: request?.email,
+            volunteerName:
+              request?.user?.firstName + " " + request?.user?.lastName,
+            academicYear: request?.user?.academicYear?.academicYear,
+            contactNo: request?.user?.contactNo,
+            item: request,
+          }));
+          setAllRequests(data);
+        }
+        setAllReqestsTableLoading(false);
+      });
+    }
+  }, [refreshTable, service]);
 
   useEffect(() => {
     setPageLoading(true);
@@ -74,15 +130,15 @@ const serviveLandingPage = () => {
   const allReqTableHeading = [
     {
       label: "Volunteer Name",
-      value: "volunteer_name",
+      value: "volunteerName",
     },
     {
       label: "Academic Year",
-      value: "academic_year",
+      value: "academicYear",
     },
     {
       label: "Contact No",
-      value: "contact_no",
+      value: "contactNo",
     },
     {
       label: "Status",
@@ -90,7 +146,7 @@ const serviveLandingPage = () => {
     },
     {
       label: "Requested Date",
-      value: "requested_date",
+      value: "requestDate",
     },
     {
       label: "",
@@ -102,7 +158,7 @@ const serviveLandingPage = () => {
   const myReqTableHeading = [
     {
       label: "Requested Date",
-      value: "requested_date",
+      value: "requestDate",
     },
     {
       label: "Email",
@@ -114,7 +170,7 @@ const serviveLandingPage = () => {
     },
     {
       label: "Due Date",
-      value: "due_date",
+      value: "dueDate",
     },
     {
       label: "",
@@ -179,8 +235,8 @@ const serviveLandingPage = () => {
                 <CommonTable
                   tableHeading={myReqTableHeading}
                   primary={true}
-                  tableData={tableData}
-                  loading={false}
+                  tableData={myReqests}
+                  loading={myReqestsTableLoading}
                 />
               </div>
             </div>
@@ -214,8 +270,8 @@ const serviveLandingPage = () => {
                 <CommonTable
                   tableHeading={allReqTableHeading}
                   primary={true}
-                  tableData={tableData}
-                  loading={false}
+                  tableData={allReqests}
+                  loading={allReqestsTableLoading}
                   editAction={(id) => {
                     handleShowStatusChangeModel();
                   }}

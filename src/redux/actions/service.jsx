@@ -1,3 +1,5 @@
+import HttpInterceptor from "../../service/http-interceptor";
+
 const http = new HttpInterceptor();
 
 export const createServiceLetterRequest = (body, callback) => {
