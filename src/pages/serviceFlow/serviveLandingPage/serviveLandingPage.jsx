@@ -48,7 +48,7 @@ const serviveLandingPage = () => {
       if (res.status === 200) {
         const data = res?.data?.data?.content?.map((request) => ({
           id: request?.serviceId,
-          requestDate: request?.request_date,
+          requestDate: formatDate(request?.request_date),
           dueDate: formatDate(request?.due_date),
           status: request?.status,
           email: request?.email,
@@ -65,10 +65,10 @@ const serviveLandingPage = () => {
       getAllServiceRequests("", "", 0, (res) => {
         setAllReqestsTableLoading(true);
         if (res.status === 200) {
-          console.log(res?.data?.data?.content, "asdasdasassad");
+          // console.log(res?.data?.data?.content, "asdasdasassad");
           const data = res?.data?.data?.content?.map((request) => ({
             id: request?.serviceId,
-            requestDate: request?.request_date,
+            requestDate: formatDate(request?.request_date),
             dueDate: formatDate(request?.due_date),
             status: request?.status,
             email: request?.email,
@@ -299,6 +299,7 @@ const serviveLandingPage = () => {
         show={showAddSereviceReqModel}
         onHide={handleCloseCreateServiceModel}
         edit={true}
+        refresh={() => setRefreshTable(refreshTable + 1)}
       />
       <CreateServiceRequestModel
         show={showViewSereviceReqModel}

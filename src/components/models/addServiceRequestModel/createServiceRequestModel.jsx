@@ -2,15 +2,16 @@ import React, { useState } from "react";
 import service from "../../../assets/images/serviceback.png";
 import Modal from "react-bootstrap/Modal";
 import CommonButton from "../../common/commonButton/commonButton";
+import { createServiceLetterRequest } from "../../../redux/actions/service";
 
-const CreateServiceRequestModel = ({ onHide, show, view, edit }) => {
+const CreateServiceRequestModel = ({ onHide, show, view, edit, refresh }) => {
   const initialFormData = {
     due_date: "",
     email: "",
     remarks: "",
-    excom: false,
-    projects: false,
-    others: false,
+    type_excom: false,
+    type_project: false,
+    type_other: false,
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -19,6 +20,18 @@ const CreateServiceRequestModel = ({ onHide, show, view, edit }) => {
     email: false,
     remarks: false,
   });
+
+  // const handleInputChange = (e) => {
+  //   const { name, value, type, checked } = e.target;
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     [name]: type === "checkbox" ? checked : value,
+  //   }));
+  //   setErrors((prevErrors) => ({
+  //     ...prevErrors,
+  //     [name]: false,
+  //   }));
+  // };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -33,13 +46,14 @@ const CreateServiceRequestModel = ({ onHide, show, view, edit }) => {
   };
 
   const handleSubmit = () => {
-    // Validate form here if necessary
-    // Submit form data
-    console.log("Form Submitted:", formData);
-    // Clear the form
-    setFormData(initialFormData);
-    // Close the modal
-    onHide();
+    createServiceLetterRequest(formData, (res) => {
+      if (res?.status == 200) {
+        // Clear the form
+        setFormData(initialFormData);
+        onHide();
+        refresh();
+      }
+    });
   };
 
   return (
@@ -81,7 +95,7 @@ const CreateServiceRequestModel = ({ onHide, show, view, edit }) => {
                   name="due_date"
                   value={formData.due_date}
                   onChange={handleInputChange}
-                  disabled = {view? true : false}
+                  disabled={view ? true : false}
                 />
               </div>
             </div>
@@ -99,7 +113,7 @@ const CreateServiceRequestModel = ({ onHide, show, view, edit }) => {
                   placeholder="name@example.com"
                   value={formData.email}
                   onChange={handleInputChange}
-                  disabled = {view? true : false}
+                  disabled={view ? true : false}
                 />
               </div>
             </div>
@@ -109,11 +123,11 @@ const CreateServiceRequestModel = ({ onHide, show, view, edit }) => {
               <input
                 className="form-check-input"
                 type="checkbox"
-                id="excom"
-                name="excom"
-                checked={formData.excom}
+                id="type_excom"
+                name="type_excom"
+                checked={formData.type_excom}
                 onChange={handleInputChange}
-                disabled = {view? true : false}
+                disabled={view ? true : false}
               />
               <label className="form-check-label" htmlFor="excom">
                 Excom
@@ -123,11 +137,11 @@ const CreateServiceRequestModel = ({ onHide, show, view, edit }) => {
               <input
                 className="form-check-input"
                 type="checkbox"
-                id="projects"
-                name="projects"
-                checked={formData.projects}
+                id="type_project"
+                name="type_project"
+                checked={formData.type_project}
                 onChange={handleInputChange}
-                disabled = {view? true : false}
+                disabled={view ? true : false}
               />
               <label className="form-check-label" htmlFor="projects">
                 Projects
@@ -137,11 +151,11 @@ const CreateServiceRequestModel = ({ onHide, show, view, edit }) => {
               <input
                 className="form-check-input"
                 type="checkbox"
-                id="others"
-                name="others"
-                checked={formData.others}
+                id="type_other"
+                name="type_other"
+                checked={formData.type_other}
                 onChange={handleInputChange}
-                disabled = {view? true : false}
+                disabled={view ? true : false}
               />
               <label className="form-check-label" htmlFor="others">
                 Others
@@ -160,7 +174,7 @@ const CreateServiceRequestModel = ({ onHide, show, view, edit }) => {
                 rows={3}
                 value={formData.remarks}
                 onChange={handleInputChange}
-                disabled = {view? true : false}
+                disabled={view ? true : false}
               />
             </div>
           </div>
