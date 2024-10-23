@@ -11,9 +11,11 @@ import CommonLoader from "../../../components/common/commonLoader/commonLoader";
 import { PolicyValidate } from "../../../utils/valitations/Valitation";
 import CreateServiceRequestModel from "../../../components/models/addServiceRequestModel/createServiceRequestModel";
 import {
+  deleteServiceLetterRequest,
   getAllServiceRequests,
   getMyServiceRequests,
 } from "../../../redux/actions/service";
+import CommonDeleteModel from "../../../components/models/commonDeleteModel/commonDeleteModel";
 
 const serviveLandingPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,6 +35,10 @@ const serviveLandingPage = () => {
   const [allReqests, setAllRequests] = useState(null);
   const [allReqestsTableLoading, setAllReqestsTableLoading] = useState(false);
   const [slectedServiceRequest, setSelectedServiceRequest] = useState(null);
+  const [showDeleteModel, setShowDeleteModel] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteError, setdeleteError] = useState(false);
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toISOString().split("T")[0];
@@ -133,6 +139,30 @@ const serviveLandingPage = () => {
     setShowViewSereviceReqModel(false);
   };
 
+  const handleDeleteProject = () => {
+    setdeleteError(false);
+    setDeleteLoading(true);
+    deleteServiceLetterRequest(
+      slectedServiceRequest?.item?.serviceId,
+      (res) => {
+        if (res?.status == 200) {
+          setRefreshTable(refreshTable + 1);
+          setShowDeleteModel(false);
+          setSelectedServiceRequest(null);
+          setdeleteError(false);
+        } else {
+          setDeleteLoading(false);
+          setdeleteError(true);
+        }
+      }
+    );
+  };
+  const handleCloseDeleteModel = () => {
+    setShowDeleteModel(false);
+    setSelectedServiceRequest(null);
+    setdeleteError(false);
+  };
+
   const allReqTableHeading = [
     {
       label: "Volunteer Name",
@@ -218,6 +248,11 @@ const serviveLandingPage = () => {
                   primary={true}
                   tableData={myReqests}
                   loading={myReqestsTableLoading}
+                  serviceMyRequest={true}
+                  deleteAction={(item) => {
+                    setShowDeleteModel(true);
+                    setSelectedServiceRequest(item);
+                  }}
                 />
               </div>
             </div>
@@ -294,6 +329,16 @@ const serviveLandingPage = () => {
         onHide={handleCloseStatusChangeModel}
         requestData={slectedServiceRequest}
         refresh={() => setRefreshTable(refreshTable + 1)}
+      />
+
+      <CommonDeleteModel
+        onclick={handleDeleteProject}
+        loading={deleteLoading}
+        error={deleteError}
+        mode={"Service Letter Request"}
+        onHide={handleCloseDeleteModel}
+        show={showDeleteModel}
+        text={"request"}
       />
     </>
   );

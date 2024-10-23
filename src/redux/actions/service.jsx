@@ -72,3 +72,20 @@ export const editServiceRequestStatus = (request_id, callback) => {
     callback(error.response);
   }
 };
+
+export const deleteServiceLetterRequest = (request_id, callback) => {
+  const endpoint = `${import.meta.env.VITE_API_HOST}service/${request_id}`;
+
+  try {
+    http
+      .delete(endpoint)
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        callback(error.response);
+      });
+  } catch (error) {
+    callback(error.response);
+  }
+};
