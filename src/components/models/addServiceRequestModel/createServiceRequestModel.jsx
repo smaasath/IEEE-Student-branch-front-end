@@ -27,19 +27,7 @@ const CreateServiceRequestModel = ({
     email: false,
     remarks: false,
   });
-
-  // const handleInputChange = (e) => {
-  //   const { name, value, type, checked } = e.target;
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     [name]: type === "checkbox" ? checked : value,
-  //   }));
-  //   setErrors((prevErrors) => ({
-  //     ...prevErrors,
-  //     [name]: false,
-  //   }));
-  // };
-
+  
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     return dateString.split("T")[0];

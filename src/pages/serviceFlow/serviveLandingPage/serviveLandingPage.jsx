@@ -19,12 +19,7 @@ const serviveLandingPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [statusChangeModelShow, setStatusChangeModel] = useState(false);
   const userData = useSelector((state) => state.user.userData);
-  const handleCloseStatusChangeModel = () => {
-    setStatusChangeModel(false);
-  };
-  const handleShowStatusChangeModel = () => {
-    setStatusChangeModel(true);
-  };
+
   const [pageLoading, setPageLoading] = useState(true);
   const [service, setService] = useState(false);
   const [serviceVolunteer, setServiceVolunteer] = useState(false);
@@ -114,6 +109,15 @@ const serviveLandingPage = () => {
   function navigateToVolunteerDetailsPage() {
     navigate("volunteer");
   }
+
+  const handleShowStatusChangeModel = (requestData) => {
+    setSelectedServiceRequest(requestData);
+    setStatusChangeModel(true);
+  };
+  const handleCloseStatusChangeModel = () => {
+    setSelectedServiceRequest(null);
+    setStatusChangeModel(false);
+  };
   const openAddServiceReqModel = () => {
     setShowAddSereviceReqModel(true);
   };
@@ -180,32 +184,7 @@ const serviveLandingPage = () => {
       type: ["DELETE"],
     },
   ];
-  const tableData = [
-    {
-      id: "1234",
-      volunteer_name: "Kavindra Weerasinghe",
-      academic_year: "3rd",
-      contact_no: "0718596324",
-      status: "REVIEWED",
-      requested_date: "2024/06/08",
-    },
-    {
-      id: "1235",
-      volunteer_name: "Thilini Priyangika",
-      academic_year: "3rd",
-      contact_no: "0708596624",
-      status: "COMPLETE",
-      requested_date: "2024/06/09",
-    },
-    {
-      id: "1236",
-      volunteer_name: "Ishara Herath",
-      academic_year: "2nd",
-      contact_no: "0708876984",
-      status: "TODO",
-      requested_date: "2024/06/10",
-    },
-  ];
+
   return (
     <>
       <div className="container">
@@ -274,8 +253,8 @@ const serviveLandingPage = () => {
                   primary={true}
                   tableData={allReqests}
                   loading={allReqestsTableLoading}
-                  editAction={(id) => {
-                    handleShowStatusChangeModel();
+                  editAction={(item) => {
+                    handleShowStatusChangeModel(item);
                   }}
                   viewAction={(item) => {
                     openViewServiceReqModel(item);
@@ -307,12 +286,14 @@ const serviveLandingPage = () => {
         show={showViewSereviceReqModel}
         onHide={handleCloseViewServiceModel}
         view={true}
-        requestData = {slectedServiceRequest}
+        requestData={slectedServiceRequest}
       />
 
       <VolunteerStatusChangeModel
         show={statusChangeModelShow}
         onHide={handleCloseStatusChangeModel}
+        requestData={slectedServiceRequest}
+        refresh={() => setRefreshTable(refreshTable + 1)}
       />
     </>
   );
