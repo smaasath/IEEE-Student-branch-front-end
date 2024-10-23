@@ -20,7 +20,7 @@ const ProfileCard = ({formData}) => {
                 width: "450px",
             }}
         >
-            <div className="card-body d-flex">
+            <div className="card-body d-flex">   
                 <img
                     src={formData.profilePic || profile}
                     alt="Profile"
