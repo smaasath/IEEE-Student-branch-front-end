@@ -18,7 +18,10 @@ import {
 import CommonDeleteModel from "../../../components/models/commonDeleteModel/commonDeleteModel";
 
 const serviveLandingPage = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPageForAllTable, setCurrentPageForAllTable] = useState(1);
+  const [totalPageForAllTable, setTotalPageForAllTable] = useState(1);
+  const [currentPageForMyTable, setCurrentPageForAMyable] = useState(1);
+  const [totalPageForMyTable, setTotalPageForMyTable] = useState(1);
   const [statusChangeModelShow, setStatusChangeModel] = useState(false);
   const userData = useSelector((state) => state.user.userData);
 
@@ -38,14 +41,16 @@ const serviveLandingPage = () => {
   const [showDeleteModel, setShowDeleteModel] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteError, setdeleteError] = useState(false);
+  const [searchItem, setSearchItem] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toISOString().split("T")[0];
   };
   useEffect(() => {
-    getMyServiceRequests(0, (res) => {
-      setMyReqestsTableLoading(true);
+    setMyReqestsTableLoading(true);
+    getMyServiceRequests(currentPageForMyTable - 1, (res) => {
       if (res.status === 200) {
         const data = res?.data?.data?.content?.map((request) => ({
           id: request?.serviceId,
@@ -56,35 +61,48 @@ const serviveLandingPage = () => {
           item: request,
         }));
         setMyRequests(data);
+        setTotalPageForMyTable(res?.data?.data?.totalPages);
       }
       setMyReqestsTableLoading(false);
     });
-  }, [refreshTable]);
+  }, [refreshTable, currentPageForMyTable]);
 
   useEffect(() => {
     if (service) {
-      getAllServiceRequests("", "", 0, (res) => {
-        setAllReqestsTableLoading(true);
-        if (res.status === 200) {
-          // console.log(res?.data?.data?.content, "asdasdasassad");
-          const data = res?.data?.data?.content?.map((request) => ({
-            id: request?.serviceId,
-            requestDate: formatDate(request?.request_date),
-            dueDate: formatDate(request?.due_date),
-            status: request?.status,
-            email: request?.email,
-            volunteerName:
-              request?.user?.firstName + " " + request?.user?.lastName,
-            academicYear: request?.user?.academicYear?.academicYear,
-            contactNo: request?.user?.contactNo,
-            item: request,
-          }));
-          setAllRequests(data);
+      getAllServiceRequests(
+        searchItem,
+        selectedStatus,
+        currentPageForAllTable - 1,
+        (res) => {
+          setAllReqestsTableLoading(true);
+          if (res.status === 200) {
+            // console.log(res?.data?.data?.content, "asdasdasassad");
+            const data = res?.data?.data?.content?.map((request) => ({
+              id: request?.serviceId,
+              requestDate: formatDate(request?.request_date),
+              dueDate: formatDate(request?.due_date),
+              status: request?.status,
+              email: request?.email,
+              volunteerName:
+                request?.user?.firstName + " " + request?.user?.lastName,
+              academicYear: request?.user?.academicYear?.academicYear,
+              contactNo: request?.user?.contactNo,
+              item: request,
+            }));
+            setAllRequests(data);
+            setTotalPageForAllTable(res?.data?.data?.totalPages);
+          }
+          setAllReqestsTableLoading(false);
         }
-        setAllReqestsTableLoading(false);
-      });
+      );
     }
-  }, [refreshTable, service]);
+  }, [
+    refreshTable,
+    service,
+    currentPageForAllTable,
+    searchItem,
+    selectedStatus,
+  ]);
 
   useEffect(() => {
     setPageLoading(true);
@@ -137,6 +155,15 @@ const serviveLandingPage = () => {
   const handleCloseViewServiceModel = () => {
     setSelectedServiceRequest(null);
     setShowViewSereviceReqModel(false);
+  };
+  const handleStatusChange = (e) => {
+    // console.warn(e.target.value);
+    setSelectedStatus(e.target.value);
+    setCurrentPage(1);
+  };
+  const handleSearchChange = (e) => {
+    setSearchItem(e);
+    setCurrentPageForAllTable(1);
   };
 
   const handleDeleteProject = () => {
@@ -231,8 +258,8 @@ const serviveLandingPage = () => {
         <div className="text-cl-primary">My service letter requests</div>
         <div className="mt-4 d-flex flex-column gap-3 justify-content-center bg-white rounded-2 common-shadow p-3">
           <div className="d-flex justify-content-between align-items-center gap-4 flex-wrap">
-            <div className="mt-2 table-container w-100" style={{ height: 400 }}>
-              <div className="mt-2 d-flex flex-wrap justify-content-end align-items-center">
+            <div className="mt-2 table-container w-100" style={{ height: 330 }}>
+              <div className="mt-0 d-flex flex-wrap justify-content-end align-items-center">
                 <div>
                   <CommonButton
                     text={"Send Request"}
@@ -255,6 +282,13 @@ const serviveLandingPage = () => {
                   }}
                 />
               </div>
+            </div>
+            <div className="mt-4 d-flex justify-content-end">
+              <CommonPagination
+                pages={totalPageForMyTable}
+                currentPage={currentPageForMyTable}
+                setCurrentPage={setCurrentPageForAMyable}
+              />
             </div>
           </div>
         </div>
@@ -280,7 +314,23 @@ const serviveLandingPage = () => {
           <div className="mt-4 d-flex flex-column gap-3 justify-content-center bg-white rounded-2 common-shadow p-3">
             <div className="mt-4 table-container">
               <div className="mt-2 d-flex flex-wrap justify-content-between align-items-center">
-                <CommonSearch primary={true} />
+                <CommonSearch
+                  primary={true}
+                  value={searchItem}
+                  onChange={handleSearchChange}
+                />
+                <div className="">
+                  <select
+                    className="form-select w-100"
+                    aria-label="Large select example"
+                    value={selectedStatus}
+                    onChange={handleStatusChange}
+                  >
+                    <option value="" selected>Select Status</option>
+                    <option value="TODO">ToDo</option>
+                    <option value="REVIEWED">Reviewed</option>
+                  </select>
+                </div>
               </div>
               <div className="mt-4 table-container">
                 <CommonTable
@@ -303,9 +353,9 @@ const serviveLandingPage = () => {
 
             <div className="mt-4 d-flex justify-content-end">
               <CommonPagination
-                pages={10}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
+                pages={totalPageForAllTable}
+                currentPage={currentPageForAllTable}
+                setCurrentPage={setCurrentPageForAllTable}
               />
             </div>
           </div>
