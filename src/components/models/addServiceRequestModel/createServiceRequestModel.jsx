@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import service from "../../../assets/images/serviceback.png";
 import Modal from "react-bootstrap/Modal";
 import CommonButton from "../../common/commonButton/commonButton";
 import { createServiceLetterRequest } from "../../../redux/actions/service";
 
-const CreateServiceRequestModel = ({ onHide, show, view, edit, refresh }) => {
+const CreateServiceRequestModel = ({
+  onHide,
+  show,
+  view,
+  edit,
+  refresh,
+  requestData,
+}) => {
   const initialFormData = {
     due_date: "",
     email: "",
@@ -33,6 +40,27 @@ const CreateServiceRequestModel = ({ onHide, show, view, edit, refresh }) => {
   //   }));
   // };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    return dateString.split("T")[0];
+  };
+  useEffect(() => {
+    if (view) {
+      const request = requestData?.item;
+      const user = requestData?.user;
+      const data = {
+        request_date: formatDate(request?.request_date),
+        due_date: formatDate(request?.due_date),
+        email: request?.email,
+        remarks: request?.remarks,
+        type_excom: request?.type_excom,
+        type_project: request?.type_project,
+        type_other: request?.type_other,
+      };
+      setFormData(data);
+    }
+  }, [show]);
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevData) => ({
@@ -46,14 +74,16 @@ const CreateServiceRequestModel = ({ onHide, show, view, edit, refresh }) => {
   };
 
   const handleSubmit = () => {
-    createServiceLetterRequest(formData, (res) => {
-      if (res?.status == 200) {
-        // Clear the form
-        setFormData(initialFormData);
-        onHide();
-        refresh();
-      }
-    });
+    if (edit) {
+      createServiceLetterRequest(formData, (res) => {
+        if (res?.status == 200) {
+          // Clear the form
+          setFormData(initialFormData);
+          onHide();
+          refresh();
+        }
+      });
+    }
   };
 
   return (
@@ -75,7 +105,7 @@ const CreateServiceRequestModel = ({ onHide, show, view, edit, refresh }) => {
                     type="date"
                     id="due_date"
                     name="due_date"
-                    value={formData.due_date}
+                    value={formData.request_date}
                     onChange={handleInputChange}
                     disabled
                   />

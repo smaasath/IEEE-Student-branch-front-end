@@ -37,7 +37,7 @@ const serviveLandingPage = () => {
   const [refreshTable, setRefreshTable] = useState(1);
   const [allReqests, setAllRequests] = useState(null);
   const [allReqestsTableLoading, setAllReqestsTableLoading] = useState(false);
-
+  const [slectedServiceRequest, setSelectedServiceRequest] = useState(null);
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toISOString().split("T")[0];
@@ -120,10 +120,12 @@ const serviveLandingPage = () => {
   const handleCloseCreateServiceModel = () => {
     setShowAddSereviceReqModel(false);
   };
-  const openViewServiceReqModel = () => {
+  const openViewServiceReqModel = (requestData) => {
+    setSelectedServiceRequest(requestData);
     setShowViewSereviceReqModel(true);
   };
   const handleCloseViewServiceModel = () => {
+    setSelectedServiceRequest(null);
     setShowViewSereviceReqModel(false);
   };
 
@@ -275,8 +277,8 @@ const serviveLandingPage = () => {
                   editAction={(id) => {
                     handleShowStatusChangeModel();
                   }}
-                  viewAction={(id) => {
-                    openViewServiceReqModel();
+                  viewAction={(item) => {
+                    openViewServiceReqModel(item);
                   }}
                   moreAction={(id) => {
                     console.log("");
@@ -305,6 +307,7 @@ const serviveLandingPage = () => {
         show={showViewSereviceReqModel}
         onHide={handleCloseViewServiceModel}
         view={true}
+        requestData = {slectedServiceRequest}
       />
 
       <VolunteerStatusChangeModel
