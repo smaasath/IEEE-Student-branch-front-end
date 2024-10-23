@@ -10,17 +10,18 @@ import { useSelector } from "react-redux";
 import CommonLoader from "../../../components/common/commonLoader/commonLoader";
 import { PolicyValidate } from "../../../utils/valitations/Valitation";
 import CreateServiceRequestModel from "../../../components/models/addServiceRequestModel/createServiceRequestModel";
+import {
+  deleteServiceLetterRequest,
+  getAllServiceRequests,
+  getMyServiceRequests,
+} from "../../../redux/actions/service";
+import CommonDeleteModel from "../../../components/models/commonDeleteModel/commonDeleteModel";
 
 const serviveLandingPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [statusChangeModelShow, setStatusChangeModel] = useState(false);
   const userData = useSelector((state) => state.user.userData);
-  const handleCloseStatusChangeModel = () => {
-    setStatusChangeModel(false);
-  };
-  const handleShowStatusChangeModel = () => {
-    setStatusChangeModel(true);
-  };
+
   const [pageLoading, setPageLoading] = useState(true);
   const [service, setService] = useState(false);
   const [serviceVolunteer, setServiceVolunteer] = useState(false);
@@ -28,6 +29,62 @@ const serviveLandingPage = () => {
   const [showViewSereviceReqModel, setShowViewSereviceReqModel] =
     useState(false);
   const navigate = useNavigate();
+  const [myReqests, setMyRequests] = useState(null);
+  const [myReqestsTableLoading, setMyReqestsTableLoading] = useState(false);
+  const [refreshTable, setRefreshTable] = useState(1);
+  const [allReqests, setAllRequests] = useState(null);
+  const [allReqestsTableLoading, setAllReqestsTableLoading] = useState(false);
+  const [slectedServiceRequest, setSelectedServiceRequest] = useState(null);
+  const [showDeleteModel, setShowDeleteModel] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteError, setdeleteError] = useState(false);
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0];
+  };
+  useEffect(() => {
+    getMyServiceRequests(0, (res) => {
+      setMyReqestsTableLoading(true);
+      if (res.status === 200) {
+        const data = res?.data?.data?.content?.map((request) => ({
+          id: request?.serviceId,
+          requestDate: formatDate(request?.request_date),
+          dueDate: formatDate(request?.due_date),
+          status: request?.status,
+          email: request?.email,
+          item: request,
+        }));
+        setMyRequests(data);
+      }
+      setMyReqestsTableLoading(false);
+    });
+  }, [refreshTable]);
+
+  useEffect(() => {
+    if (service) {
+      getAllServiceRequests("", "", 0, (res) => {
+        setAllReqestsTableLoading(true);
+        if (res.status === 200) {
+          // console.log(res?.data?.data?.content, "asdasdasassad");
+          const data = res?.data?.data?.content?.map((request) => ({
+            id: request?.serviceId,
+            requestDate: formatDate(request?.request_date),
+            dueDate: formatDate(request?.due_date),
+            status: request?.status,
+            email: request?.email,
+            volunteerName:
+              request?.user?.firstName + " " + request?.user?.lastName,
+            academicYear: request?.user?.academicYear?.academicYear,
+            contactNo: request?.user?.contactNo,
+            item: request,
+          }));
+          setAllRequests(data);
+        }
+        setAllReqestsTableLoading(false);
+      });
+    }
+  }, [refreshTable, service]);
 
   useEffect(() => {
     setPageLoading(true);
@@ -58,31 +115,66 @@ const serviveLandingPage = () => {
   function navigateToVolunteerDetailsPage() {
     navigate("volunteer");
   }
+
+  const handleShowStatusChangeModel = (requestData) => {
+    setSelectedServiceRequest(requestData);
+    setStatusChangeModel(true);
+  };
+  const handleCloseStatusChangeModel = () => {
+    setSelectedServiceRequest(null);
+    setStatusChangeModel(false);
+  };
   const openAddServiceReqModel = () => {
     setShowAddSereviceReqModel(true);
   };
   const handleCloseCreateServiceModel = () => {
     setShowAddSereviceReqModel(false);
   };
-  const openViewServiceReqModel = () => {
+  const openViewServiceReqModel = (requestData) => {
+    setSelectedServiceRequest(requestData);
     setShowViewSereviceReqModel(true);
   };
   const handleCloseViewServiceModel = () => {
+    setSelectedServiceRequest(null);
     setShowViewSereviceReqModel(false);
+  };
+
+  const handleDeleteProject = () => {
+    setdeleteError(false);
+    setDeleteLoading(true);
+    deleteServiceLetterRequest(
+      slectedServiceRequest?.item?.serviceId,
+      (res) => {
+        if (res?.status == 200) {
+          setRefreshTable(refreshTable + 1);
+          setShowDeleteModel(false);
+          setSelectedServiceRequest(null);
+          setdeleteError(false);
+        } else {
+          setDeleteLoading(false);
+          setdeleteError(true);
+        }
+      }
+    );
+  };
+  const handleCloseDeleteModel = () => {
+    setShowDeleteModel(false);
+    setSelectedServiceRequest(null);
+    setdeleteError(false);
   };
 
   const allReqTableHeading = [
     {
       label: "Volunteer Name",
-      value: "volunteer_name",
+      value: "volunteerName",
     },
     {
       label: "Academic Year",
-      value: "academic_year",
+      value: "academicYear",
     },
     {
       label: "Contact No",
-      value: "contact_no",
+      value: "contactNo",
     },
     {
       label: "Status",
@@ -90,7 +182,7 @@ const serviveLandingPage = () => {
     },
     {
       label: "Requested Date",
-      value: "requested_date",
+      value: "requestDate",
     },
     {
       label: "",
@@ -102,7 +194,7 @@ const serviveLandingPage = () => {
   const myReqTableHeading = [
     {
       label: "Requested Date",
-      value: "requested_date",
+      value: "requestDate",
     },
     {
       label: "Email",
@@ -114,7 +206,7 @@ const serviveLandingPage = () => {
     },
     {
       label: "Due Date",
-      value: "due_date",
+      value: "dueDate",
     },
     {
       label: "",
@@ -122,32 +214,7 @@ const serviveLandingPage = () => {
       type: ["DELETE"],
     },
   ];
-  const tableData = [
-    {
-      id: "1234",
-      volunteer_name: "Kavindra Weerasinghe",
-      academic_year: "3rd",
-      contact_no: "0718596324",
-      status: "REVIEWED",
-      requested_date: "2024/06/08",
-    },
-    {
-      id: "1235",
-      volunteer_name: "Thilini Priyangika",
-      academic_year: "3rd",
-      contact_no: "0708596624",
-      status: "COMPLETE",
-      requested_date: "2024/06/09",
-    },
-    {
-      id: "1236",
-      volunteer_name: "Ishara Herath",
-      academic_year: "2nd",
-      contact_no: "0708876984",
-      status: "TODO",
-      requested_date: "2024/06/10",
-    },
-  ];
+
   return (
     <>
       <div className="container">
@@ -179,8 +246,13 @@ const serviveLandingPage = () => {
                 <CommonTable
                   tableHeading={myReqTableHeading}
                   primary={true}
-                  tableData={tableData}
-                  loading={false}
+                  tableData={myReqests}
+                  loading={myReqestsTableLoading}
+                  serviceMyRequest={true}
+                  deleteAction={(item) => {
+                    setShowDeleteModel(true);
+                    setSelectedServiceRequest(item);
+                  }}
                 />
               </div>
             </div>
@@ -214,13 +286,13 @@ const serviveLandingPage = () => {
                 <CommonTable
                   tableHeading={allReqTableHeading}
                   primary={true}
-                  tableData={tableData}
-                  loading={false}
-                  editAction={(id) => {
-                    handleShowStatusChangeModel();
+                  tableData={allReqests}
+                  loading={allReqestsTableLoading}
+                  editAction={(item) => {
+                    handleShowStatusChangeModel(item);
                   }}
-                  viewAction={(id) => {
-                    openViewServiceReqModel();
+                  viewAction={(item) => {
+                    openViewServiceReqModel(item);
                   }}
                   moreAction={(id) => {
                     console.log("");
@@ -243,16 +315,30 @@ const serviveLandingPage = () => {
         show={showAddSereviceReqModel}
         onHide={handleCloseCreateServiceModel}
         edit={true}
+        refresh={() => setRefreshTable(refreshTable + 1)}
       />
       <CreateServiceRequestModel
         show={showViewSereviceReqModel}
         onHide={handleCloseViewServiceModel}
         view={true}
+        requestData={slectedServiceRequest}
       />
 
       <VolunteerStatusChangeModel
         show={statusChangeModelShow}
         onHide={handleCloseStatusChangeModel}
+        requestData={slectedServiceRequest}
+        refresh={() => setRefreshTable(refreshTable + 1)}
+      />
+
+      <CommonDeleteModel
+        onclick={handleDeleteProject}
+        loading={deleteLoading}
+        error={deleteError}
+        mode={"Service Letter Request"}
+        onHide={handleCloseDeleteModel}
+        show={showDeleteModel}
+        text={"request"}
       />
     </>
   );
