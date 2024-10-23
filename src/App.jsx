@@ -32,6 +32,7 @@ import OuPage from './pages/otherFlow/ouPage/ouPage'
 import ProjectEventPage from './pages/projectFlow/event/projectEventPage';
 import UpcommingEventsPage from './pages/eventFlow/upcommingEventsPage';
 import Cookies from "js-cookie";
+import VolunteerActivitiesPage from './pages/serviceFlow/volunteerActivitiesPage/volunteerActivitiesPage';
 
 
 function App() {
@@ -85,6 +86,8 @@ function App() {
             <Route path='service'>
               <Route path='' element={<ServiceLanding />} />
               <Route path='volunteer' element={<VolunteerDetailsPage />} />
+              <Route path='activities/:id' element={<VolunteerActivitiesPage />} />
+              <Route path='activities' element={<VolunteerActivitiesPage />} />
               <Route path='volunteering' element={<Volunteering />} />
             </Route>
             <Route path='setting'>

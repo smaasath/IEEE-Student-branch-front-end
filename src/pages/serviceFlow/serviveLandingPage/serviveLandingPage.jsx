@@ -76,7 +76,6 @@ const serviveLandingPage = () => {
         (res) => {
           setAllReqestsTableLoading(true);
           if (res.status === 200) {
-            // console.log(res?.data?.data?.content, "asdasdasassad");
             const data = res?.data?.data?.content?.map((request) => ({
               id: request?.serviceId,
               requestDate: formatDate(request?.request_date),
@@ -133,7 +132,12 @@ const serviveLandingPage = () => {
   function navigateToVolunteerDetailsPage() {
     navigate("volunteer");
   }
-
+  function navigateToMyActivitiesPage() {
+    navigate("activities");
+  }
+  function navigateToUserActivitiesPage(userId) {
+    navigate(`activities/${userId}`);
+  }
   const handleShowStatusChangeModel = (requestData) => {
     setSelectedServiceRequest(requestData);
     setStatusChangeModel(true);
@@ -157,7 +161,6 @@ const serviveLandingPage = () => {
     setShowViewSereviceReqModel(false);
   };
   const handleStatusChange = (e) => {
-    // console.warn(e.target.value);
     setSelectedStatus(e.target.value);
     setCurrentPage(1);
   };
@@ -249,9 +252,7 @@ const serviveLandingPage = () => {
           <div className="ms-auto me-0 d-flex justify-content-end">
             <CommonButton
               text={"My Activities"}
-              onClick={() => {
-                openCreateTaskModel();
-              }}
+              onClick={navigateToMyActivitiesPage}
             />
           </div>
         </div>
@@ -326,7 +327,9 @@ const serviveLandingPage = () => {
                     value={selectedStatus}
                     onChange={handleStatusChange}
                   >
-                    <option value="" selected>Select Status</option>
+                    <option value="" selected>
+                      Select Status
+                    </option>
                     <option value="TODO">ToDo</option>
                     <option value="REVIEWED">Reviewed</option>
                   </select>
@@ -344,8 +347,8 @@ const serviveLandingPage = () => {
                   viewAction={(item) => {
                     openViewServiceReqModel(item);
                   }}
-                  moreAction={(id) => {
-                    console.log("");
+                  moreAction={(item) => {
+                    navigateToUserActivitiesPage(item?.item?.user?.userID);
                   }}
                 />
               </div>
