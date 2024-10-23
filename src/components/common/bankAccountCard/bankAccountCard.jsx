@@ -16,15 +16,7 @@ const BankAccountCard = ({ editAction, ViewAction, Account }) => {
                 </div>
 
                 <div className='d-flex justify-content-between align-items-center gap-2' style={{ marginTop: -30 }}>
-                    <div>
-                        <div className='text-white' style={{ fontSize: 10 }}>
-                            Current Balance
-                        </div>
-                        <div className='text-white'>
-                            <h4>LKR 500000.00</h4>
-                        </div>
-                    </div>
-                    <div className='d-flex gap-2'>
+                    <div className='d-flex gap-2 justify-content-end w-100'>
                         <div>
                             <button onClick={() => { editAction(Account) }} className='border-0 bg-transparent'>
                                 <img style={{ width: 21, height: 17 }} src={Edit} />

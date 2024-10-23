@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import CommonLoader from '../../../components/common/commonLoader/commonLoader'
 import { PolicyValidate } from '../../../utils/valitations/Valitation'
 import { getAllAccount } from '../../../redux/actions/account'
+import { getAllOuWallet, getMainWallet } from '../../../redux/actions/wallet'
 
 
 
@@ -28,6 +29,9 @@ const FinanceLanding = () => {
     const [isFinanceBudgetPolicyAvailable, setIsFinanceBudgetPolicyAvailable] = useState(false);
     const [selectedAccount, setSelectedAccount] = useState(null);
     const [pageLoading, setPageLoading] = useState(true);
+    const [ouWallets, setOuWallets] = useState([]);
+    const [mainWallet, setMainWallet] = useState([]);
+
 
     useEffect(() => {
         setPageLoading(true)
@@ -47,6 +51,24 @@ const FinanceLanding = () => {
             }
         }
     }, [userData])
+
+
+
+    useEffect(() => {
+        if (isFinanceAllPolicyAvailable) {
+            getMainWallet((res) => {
+                if (res?.status == 200) {
+                    setMainWallet(res?.data?.data)
+                }
+            })
+
+            getAllOuWallet((res) => {
+                if (res?.status == 200) {
+                    setOuWallets(res?.data?.data)
+                }
+            })
+        }
+    }, [isFinanceAllPolicyAvailable])
 
 
     function getAllAccounts() {
@@ -96,6 +118,29 @@ const FinanceLanding = () => {
                     <div className='d-flex justify-content-between align-items-center gap-3'>
                         <div className='text-cl-primary'>Accounts</div>
                         <div className='d-flex gap-3 flex-row'>
+                            {
+                                isFinanceAllPolicyAvailable && (
+                                    <div className=''>
+                                        <select class="form-select" aria-label="Default select example">
+                                            <option selected hidden={true}>Select a Wallet</option>
+                                            {
+                                                mainWallet?.map((item, index) => {
+                                                    return (
+                                                        <option key={index} value={item.id}>Student Branch</option>
+                                                    )
+                                                })
+                                            }
+                                            {
+                                                ouWallets?.map((item, index) => {
+                                                    return (
+                                                        <option key={index} value={item.id}>{item.ou.ouName}</option>
+                                                    )
+                                                })
+                                            }
+                                        </select>
+                                    </div>
+                                )
+                            }
 
                             {
                                 isFinanceTransactionPolicyAvailable && (
