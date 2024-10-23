@@ -89,3 +89,62 @@ export const deleteServiceLetterRequest = (request_id, callback) => {
     callback(error.response);
   }
 };
+
+export const getAllRolesDetailsByUser = (userID, type, page, callback) => {
+  let endpoint = null;
+  if (userID != null) {
+    endpoint = `${
+      import.meta.env.VITE_API_HOST
+    }service/activities/${userID}?type=${type}&page=${page}`;
+  } else {
+    endpoint = `${
+      import.meta.env.VITE_API_HOST
+    }service/activities?type=${type}&page=${page}`;
+  }
+
+  try {
+    http
+      .get(endpoint)
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        callback(error.response);
+      });
+  } catch (error) {
+    callback(error.response);
+  }
+};
+
+export const getAllTasksDetailsByUser = (
+  userID,
+  search,
+  priority,
+  status,
+  page,
+  callback
+) => {
+  let endpoint = null;
+  if (userID != null) {
+    endpoint = `${
+      import.meta.env.VITE_API_HOST
+    }service/activities/tasks/${userID}?search=${search}&priority=${priority}&status=${status}&page=${page}`;
+  } else {
+    endpoint = `${
+      import.meta.env.VITE_API_HOST
+    }service/activities/tasks?search=${search}&priority=${priority}&status=${status}&page=${page}`;
+  }
+
+  try {
+    http
+      .get(endpoint)
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        callback(error.response);
+      });
+  } catch (error) {
+    callback(error.response);
+  }
+};

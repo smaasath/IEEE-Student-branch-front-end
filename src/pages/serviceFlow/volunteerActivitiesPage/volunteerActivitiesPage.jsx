@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CommonButton from "../../../components/common/commonButton/commonButton";
 import CommonTable from "../../../components/common/commonTable/commonTable";
 import CommonPagination from "../../../components/common/commonPagination/commonPagination";
 import CommonStatusCountCard from "../../../components/common/commonStatusCountCard/commonStatusCountCard";
+import { getAllRolesDetailsByUser } from "../../../redux/actions/service";
+import { useParams } from "react-router-dom";
 
 export default function VolunteerActivitiesPage() {
+  const { id: paramId } = useParams();
+  const id = paramId ?? null;
   const [tableDataForExcomRoleTable, setTableDataForExcomRoleTable] =
     useState(null);
   const [tableLoadingForExcomRoleTable, setTableLoadingForExcomRoleTable] =
@@ -21,7 +25,7 @@ export default function VolunteerActivitiesPage() {
     useState(1);
   const [currentPageForProjectRoleTable, setCurrentPageForProjectRoleTable] =
     useState(1);
-    const [tableDataForActivitiesTable, setTableDataForActivitiesTable] =
+  const [tableDataForActivitiesTable, setTableDataForActivitiesTable] =
     useState(null);
   const [tableLoadingForActivitiesTable, setTableLoadingForActivitiesTable] =
     useState(false);
@@ -47,6 +51,10 @@ export default function VolunteerActivitiesPage() {
       label: "End Date",
       value: "end_date",
     },
+    {
+      label: "Term Year",
+      value: "termYear",
+    },
   ];
 
   const tableHeadingForProjectRoleTable = [
@@ -56,7 +64,7 @@ export default function VolunteerActivitiesPage() {
     },
     {
       label: "Project Role",
-      value: "excomRole",
+      value: "projectRole",
     },
     {
       label: "Start Date",
@@ -66,30 +74,83 @@ export default function VolunteerActivitiesPage() {
       label: "End Date",
       value: "end_date",
     },
-    
   ];
-  const tableHeadingForActivitiesTable =[
+  const tableHeadingForActivitiesTable = [
     {
-        label: "Task",
-        value: "task",
-      },
-      {
-        label: "Type",
-        value: "type",
-      },
-      {
-        label: "OU / Project",
-        value: "start_date",
-      },
-      {
-        label: "Priority",
-        value: "priority",
-      },
-      {
-        label: "Status",
-        value: "status",
-      },
+      label: "Task",
+      value: "task",
+    },
+    {
+      label: "Type",
+      value: "type",
+    },
+    {
+      label: "OU / Project",
+      value: "start_date",
+    },
+    {
+      label: "Priority",
+      value: "priority",
+    },
+    {
+      label: "Status",
+      value: "status",
+    },
   ];
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0];
+  };
+
+  useEffect(() => {
+    setTableLoadingForExcomRoleTable(true);
+    getAllRolesDetailsByUser(
+      id,
+      "EXCOM",
+      currentPageForExcomRoleTable - 1,
+      (res) => {
+        if (res?.status == 200) {
+          const data = res?.data?.data?.content?.map((role) => ({
+            id: role?.serviceId,
+            start_date: formatDate(role?.start_date),
+            end_date: role?.end_date == null ? "Ongoing" : formatDate(role?.end_date),
+            excomRole: role?.role?.userRole,
+            entity: role?.ou?.ouName,
+            termYear:role?.termyear?.termyear,
+            item: role,
+          }));
+          setTableDataForExcomRoleTable(data);
+          setTotalPageForExcomRoleTable(res?.data?.data?.totalPages);
+        }
+      }
+    );
+    setTableLoadingForExcomRoleTable(false);
+  }, []);
+
+  useEffect(() => {
+    setTableLoadingForProjectRoleTable(true);
+    getAllRolesDetailsByUser(
+      id,
+      "PROJECT",
+      currentPageForProjectRoleTable - 1,
+      (res) => {
+        if (res?.status == 200) {
+          const data = res?.data?.data?.content?.map((role) => ({
+            id: role?.serviceId,
+            start_date: formatDate(role?.start_date),
+            end_date: formatDate(role?.project?.endDate),
+            projectRole: role?.role?.userRole,
+            project: role?.project?.projectName,
+            item: role,
+          }));
+          setTableDataForProjectRoleTable(data);
+          setTotalPageForProjectRoleTable(res?.data?.data?.totalPages);
+        }
+      }
+    );
+    setTableLoadingForProjectRoleTable(false);
+  }, []);
+
   return (
     <>
       <div className="container">
@@ -101,17 +162,12 @@ export default function VolunteerActivitiesPage() {
                 className="mt-2 table-container w-100"
                 style={{ height: 300 }}
               >
-                
                 <div className="mt-3 table-container">
                   <CommonTable
                     tableHeading={tableHeadingForExcomRoleTable}
                     primary={true}
                     tableData={tableDataForExcomRoleTable}
                     loading={tableLoadingForExcomRoleTable}
-                    deleteAction={(item) => {
-                      setShowDeleteModel(true);
-                      setSelectedServiceRequest(item);
-                    }}
                   />
                 </div>
               </div>
@@ -166,9 +222,21 @@ export default function VolunteerActivitiesPage() {
                 style={{ height: 330 }}
               >
                 <div className="d-flex justify-content-between gap-4 rounded-4 bg-body-secondary p-3 flex-wrap flex-grow-1">
-                <CommonStatusCountCard type={"TODO"} count={115} withoutImage ={true}/>
-                <CommonStatusCountCard type={"ONGOING"} count={20} withoutImage ={true}/>
-                <CommonStatusCountCard type={"COMPLETE"} count={200} withoutImage ={true}/>
+                  <CommonStatusCountCard
+                    type={"TODO"}
+                    count={115}
+                    withoutImage={true}
+                  />
+                  <CommonStatusCountCard
+                    type={"ONGOING"}
+                    count={20}
+                    withoutImage={true}
+                  />
+                  <CommonStatusCountCard
+                    type={"COMPLETE"}
+                    count={200}
+                    withoutImage={true}
+                  />
                 </div>
                 <div className="mt-3 table-container">
                   <CommonTable
