@@ -11,7 +11,7 @@ import CommonStatusContainer from '../commonStatusContainer/commonStatusContaine
 import CommonPriorityContainer from '../commonPriorityContainer/commonPriorityContainer'
 
 
-const CommonTable = ({ tableHeading, tableData, finance, primary, viewAction, editAction, deleteAction, moreAction, loading, report }) => {
+const CommonTable = ({ tableHeading, tableData, finance, primary, viewAction, editAction, deleteAction, moreAction, loading, report, serviceMyRequest }) => {
 
     return (
         <div className='table-responsive overflow-y-scroll custom-scrollbar' style={{ maxHeight: report ? null : 500 }}>
@@ -66,12 +66,15 @@ const CommonTable = ({ tableHeading, tableData, finance, primary, viewAction, ed
                                                                 iconSrc = moreicon;
                                                                 actionFunction = moreAction;
                                                             }
-
+                                                            if(serviceMyRequest && action == "DELETE" && item?.item?.status  == "REVIEWED"){
+                                                                return null;   
+                                                            }
                                                             return (
                                                                 <button key={actionIndex} className='border-0 bg-transparent' onClick={() => actionFunction(item)}>
                                                                     <img src={iconSrc} style={{ width: 24 }} />
                                                                 </button>
-                                                            );
+                                                            );  
+                                                            
                                                         })}
                                                     </td>
                                                 );
