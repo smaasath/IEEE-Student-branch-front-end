@@ -17,7 +17,7 @@ import {
 } from "../../../redux/actions/service";
 import CommonDeleteModel from "../../../components/models/commonDeleteModel/commonDeleteModel";
 
-const serviveLandingPage = () => {
+const serviceLandingPage = () => {
   const [currentPageForAllTable, setCurrentPageForAllTable] = useState(1);
   const [totalPageForAllTable, setTotalPageForAllTable] = useState(1);
   const [currentPageForMyTable, setCurrentPageForAMyable] = useState(1);
@@ -397,4 +397,4 @@ const serviveLandingPage = () => {
   );
 };
 
-export default serviveLandingPage;
+export default serviceLandingPage;

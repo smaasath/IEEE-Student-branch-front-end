@@ -18,7 +18,7 @@ import ProjectLandingPage from './pages/projectFlow/projectLandingPage/projectLa
 import TimeLinePage from './pages/projectFlow/timeLinePage/timeLinePage';
 import ProjectPage from './pages/projectFlow/projectPage/projectPage';
 import ProjectFinanceLanding from './pages/projectFlow/finance/projectFinanceLanding/projectFinanceLanding';
-import ServiceLanding from './pages/serviceFlow/serviveLandingPage/serviveLandingPage';
+import ServiceLanding from './pages/serviceFlow/serviceLandingPage/serviceLandingPage';
 import VolunteerDetailsPage from './pages/serviceFlow/volunteerDetailsPage/volunteerDetails';
 import Volunteering from './pages/serviceFlow/VolunteeringPage/VolunteeringPage';
 import ProjectPrPlan from './pages/projectFlow/prPlan/projectPrPlan';
