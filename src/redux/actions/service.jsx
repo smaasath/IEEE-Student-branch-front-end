@@ -174,3 +174,22 @@ export const getAllTaskCountsByUser = (userID, priority, callback) => {
     callback(error.response);
   }
 };
+
+export const getBestVolunteers = (page, callback) => {
+  const endpoint = `${
+    import.meta.env.VITE_API_HOST
+  }service/volunteer/best?page=${page}`;
+
+  try {
+    http
+      .get(endpoint)
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        callback(error.response);
+      });
+  } catch (error) {
+    callback(error.response);
+  }
+};
