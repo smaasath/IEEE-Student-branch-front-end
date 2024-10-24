@@ -8,6 +8,7 @@ import {
   getAllTasksDetailsByUser,
 } from "../../../redux/actions/service";
 import { useParams } from "react-router-dom";
+import CommonSearch from "../../../components/common/commonSearch/commonSearch";
 
 export default function VolunteerActivitiesPage() {
   const { id: paramId } = useParams();
@@ -36,6 +37,10 @@ export default function VolunteerActivitiesPage() {
     useState(1);
   const [currentPageForActivitiesTable, setCurrentPageForActivitiesTable] =
     useState(1);
+
+  const [searchItem, setsearchItem] = useState("");
+  const [priority, setPriority] = useState("");
+  const [status, setStatus] = useState("");
 
   const tableHeadingForExcomRoleTable = [
     {
@@ -112,6 +117,9 @@ export default function VolunteerActivitiesPage() {
     const date = new Date(dateString);
     return date.toISOString().split("T")[0];
   };
+  const handleSearchChange = (e) => setsearchItem(e);
+  const handlePriorityChange = (e) => setPriority(e.target.value);
+  const handleStatusChange = (e) => setStatus(e.target.value);
 
   useEffect(() => {
     setTableLoadingForExcomRoleTable(true);
@@ -137,7 +145,7 @@ export default function VolunteerActivitiesPage() {
       }
     );
     setTableLoadingForExcomRoleTable(false);
-  }, []);
+  }, [currentPageForExcomRoleTable, id]);
 
   useEffect(() => {
     setTableLoadingForProjectRoleTable(true);
@@ -161,15 +169,15 @@ export default function VolunteerActivitiesPage() {
       }
     );
     setTableLoadingForProjectRoleTable(false);
-  }, []);
+  }, [currentPageForProjectRoleTable, id]);
 
   useEffect(() => {
     setTableLoadingForActivitiesTable(true);
     getAllTasksDetailsByUser(
       id,
-      "",
-      "",
-      "",
+      searchItem,
+      priority,
+      status,
       currentPageForActivitiesTable - 1,
       (res) => {
         if (res?.status == 200) {
@@ -181,7 +189,7 @@ export default function VolunteerActivitiesPage() {
             taskBelongTo:
               task?.type == "EXCOM"
                 ? task?.ou?.ou_short_name
-                : task?.project?.project_name,
+                : task?.project?.projectName,
             startDate: formatDate(task?.start_date),
             endDate: formatDate(task?.end_date),
             priority: task?.priority,
@@ -194,7 +202,7 @@ export default function VolunteerActivitiesPage() {
       }
     );
     setTableLoadingForActivitiesTable(false);
-  }, []);
+  }, [searchItem, priority, status, currentPageForActivitiesTable, id]);
 
   return (
     <>
@@ -261,12 +269,29 @@ export default function VolunteerActivitiesPage() {
         <div className="d-flex flex-column">
           <div className="text-cl-primary mt-5">Activities</div>
           <div className="mt-3 d-flex flex-column gap-3 justify-content-center bg-white rounded-2 common-shadow p-3">
-            <div className="d-flex justify-content-between align-items-center gap-4 flex-wrap">
-              <div
-                className="mt-2 table-container w-100"
-                style={{ height: 330 }}
-              >
-                <div className="d-flex justify-content-between gap-4 rounded-4 bg-body-secondary p-3 flex-wrap flex-grow-1">
+            <div className="d-flex justify-content-between align-items-center gap-2 flex-wrap">
+              <div className="w-100">
+                <div className="d-flex justify-content-between align-items-center">
+                  <div className="text-cl-primary">Total Counts</div>
+                  <div className="">
+                    <select
+                      className="form-select w-100"
+                      aria-label="Large select example"
+                      value={priority}
+                      onChange={handlePriorityChange}
+                    >
+                      <option value={""} selected>
+                        {" "}
+                        Priority
+                      </option>
+                      <option value="LOW">LOW</option>
+                      <option value="MEDIUM">MEDIUM</option>
+                      <option value="HIGH">HIGH</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="d-flex justify-content-between gap-4 rounded-4 bg-body-secondary p-3 flex-wrap mt-2 flex-grow-1">
                   <CommonStatusCountCard
                     type={"TODO"}
                     count={115}
@@ -283,7 +308,34 @@ export default function VolunteerActivitiesPage() {
                     withoutImage={true}
                   />
                 </div>
-                <div className="mt-3 table-container">
+                <div className="d-flex justify-content-between align-items-center mt-3">
+                  <CommonSearch
+                    primary={true}
+                    value={searchItem}
+                    onChange={handleSearchChange}
+                  />
+                  <div>
+                    <select
+                      className="form-select w-100"
+                      aria-label="Large select example"
+                      value={status}
+                      onChange={handleStatusChange}
+                    >
+                      <option selected value={""}>
+                        Status
+                      </option>
+                      <option value="TODO">TODO</option>
+                      <option value="PROGRESS">PROGRESS</option>
+                      <option value="COMPLETE">COMPLETED</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div
+                className="mt-2 table-container w-100"
+                style={{ height: 330 }}
+              >
+                <div className="table-container">
                   <CommonTable
                     tableHeading={tableHeadingForActivitiesTable}
                     primary={true}

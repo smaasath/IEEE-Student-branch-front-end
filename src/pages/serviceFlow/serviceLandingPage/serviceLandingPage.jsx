@@ -119,7 +119,7 @@ const serviceLandingPage = () => {
       }
 
       if (isServiceVolunteerAvailable) {
-        setServiceVolunteer(true);
+        // setServiceVolunteer(true);
         setPageLoading(false);
       }
 
@@ -263,7 +263,7 @@ const serviceLandingPage = () => {
           </div>
         </div>
         <div className="text-cl-primary">My service letter requests</div>
-        <div className="mt-4 d-flex flex-column gap-3 justify-content-center bg-white rounded-2 common-shadow p-3">
+        <div className="mt-4 mb-5 d-flex flex-column gap-3 justify-content-center bg-white rounded-2 common-shadow p-3">
           <div className="d-flex justify-content-between align-items-center gap-4 flex-wrap">
             <div className="mt-2 table-container w-100" style={{ height: 330 }}>
               <div className="mt-0 d-flex flex-wrap justify-content-end align-items-center">
@@ -302,9 +302,8 @@ const serviceLandingPage = () => {
 
         {pageLoading ? <CommonLoader /> : null}
         {serviceVolunteer ? (
-          <div className="mt-5 d-flex justify-content-between align-items-center gap-4 flex-wrap">
-            <div className="text-cl-primary">Service letter requests</div>
-            <div className="d-flex gap-3 flex-row justify-content-end mt-4 ">
+          
+            <div className="d-flex gap-3 flex-row justify-content-end mt-5 w-100 ">
               <div>
                 <CommonButton
                   text={"Volunteer"}
@@ -314,58 +313,61 @@ const serviceLandingPage = () => {
                 />
               </div>
             </div>
-          </div>
+  
         ) : null}
 
         {service ? (
-          <div className="mt-4 d-flex flex-column gap-3 justify-content-center bg-white rounded-2 common-shadow p-3">
-            <div className="mt-4 table-container">
-              <div className="mt-2 d-flex flex-wrap justify-content-between align-items-center">
-                <CommonSearch
-                  primary={true}
-                  value={searchItem}
-                  onChange={handleSearchChange}
-                />
-                <div className="">
-                  <select
-                    className="form-select w-100"
-                    aria-label="Large select example"
-                    value={selectedStatus}
-                    onChange={handleStatusChange}
-                  >
-                    <option value="" selected>
-                      Select Status
-                    </option>
-                    <option value="TODO">ToDo</option>
-                    <option value="REVIEWED">Reviewed</option>
-                  </select>
+          <div className="d-flex flex-column mt-3">
+            <div className="text-cl-primary">Service letter requests</div>
+            <div className="mt-4 d-flex flex-column gap-3 justify-content-center bg-white rounded-2 common-shadow p-3">
+              <div className="mt-4 table-container">
+                <div className="mt-2 d-flex flex-wrap justify-content-between align-items-center">
+                  <CommonSearch
+                    primary={true}
+                    value={searchItem}
+                    onChange={handleSearchChange}
+                  />
+                  <div className="">
+                    <select
+                      className="form-select w-100"
+                      aria-label="Large select example"
+                      value={selectedStatus}
+                      onChange={handleStatusChange}
+                    >
+                      <option value="" selected>
+                        Select Status
+                      </option>
+                      <option value="TODO">ToDo</option>
+                      <option value="REVIEWED">Reviewed</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="mt-4 table-container">
+                  <CommonTable
+                    tableHeading={allReqTableHeading}
+                    primary={true}
+                    tableData={allReqests}
+                    loading={allReqestsTableLoading}
+                    editAction={(item) => {
+                      handleShowStatusChangeModel(item);
+                    }}
+                    viewAction={(item) => {
+                      openViewServiceReqModel(item);
+                    }}
+                    moreAction={(item) => {
+                      navigateToUserActivitiesPage(item?.item?.user?.userID);
+                    }}
+                  />
                 </div>
               </div>
-              <div className="mt-4 table-container">
-                <CommonTable
-                  tableHeading={allReqTableHeading}
-                  primary={true}
-                  tableData={allReqests}
-                  loading={allReqestsTableLoading}
-                  editAction={(item) => {
-                    handleShowStatusChangeModel(item);
-                  }}
-                  viewAction={(item) => {
-                    openViewServiceReqModel(item);
-                  }}
-                  moreAction={(item) => {
-                    navigateToUserActivitiesPage(item?.item?.user?.userID);
-                  }}
+
+              <div className="mt-4 d-flex justify-content-end">
+                <CommonPagination
+                  pages={totalPageForAllTable}
+                  currentPage={currentPageForAllTable}
+                  setCurrentPage={setCurrentPageForAllTable}
                 />
               </div>
-            </div>
-
-            <div className="mt-4 d-flex justify-content-end">
-              <CommonPagination
-                pages={totalPageForAllTable}
-                currentPage={currentPageForAllTable}
-                setCurrentPage={setCurrentPageForAllTable}
-              />
             </div>
           </div>
         ) : null}
