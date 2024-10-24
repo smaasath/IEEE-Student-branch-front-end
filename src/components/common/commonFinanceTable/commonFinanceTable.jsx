@@ -6,7 +6,7 @@ import AddTransectionModel from '../../models/addTransectionModel/addTransection
 import { getAccountTransection, getTransection } from '../../../redux/actions/transection';
 
 
-const CommonFinanceTable = ({ selectedWallet, account }) => {
+const CommonFinanceTable = ({ selectedWallet, account, refresh }) => {
 
   const [selectedType, setSelectedType] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -66,7 +66,7 @@ const CommonFinanceTable = ({ selectedWallet, account }) => {
         })
     }
 
-  }, [selectedWallet, selectedType, search, account])
+  }, [selectedWallet, selectedType, search, account, refresh])
 
 
   const typeDetail = [
