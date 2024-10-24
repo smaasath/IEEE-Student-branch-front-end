@@ -96,7 +96,7 @@ const CommonEventCard = ({ eventDetails, editable, editAction, viewAction }) => 
                     <div className="mt-1 fw-bold" style={{ fontSize: "0.8rem" }}>
                         Event Link
                     </div>
-                    <div style={{ fontSize: "0.7rem" }}>  <a href="{eventDetails.eventLink}"><img src={EventIcon} width="25" alt="" /></a> </div>
+                    <div style={{ fontSize: "0.7rem" }}>  <a href={eventDetails.eventLink}><img src={EventIcon} width="25" alt="" /></a> </div>
                     {/* <div className="d-flex py-0 mt-0">
                         <button className="bg-transparent border-0 d-flex" onClick={""}>
                             <img src={CopyToClipboardIcon} width={20} alt="Copy" />
