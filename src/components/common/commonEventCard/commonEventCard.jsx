@@ -55,13 +55,23 @@ const CommonEventCard = ({ eventDetails, editable, editAction, viewAction }) => 
         setEditEventModalShow(true);
     };
 
+    const formattedDate = (isoDate) => {
+        const dateObj = new Date(isoDate);
+      
+        return dateObj.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        });
+      };
+
     return (
         <div className="card m-0 p-0 shadow-sm"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
             <div className="card-header fw-bold text-light bg-dark">
-                {eventDetails.eventName}
+                {eventDetails.projectName}
             </div>
             <div className="card-body text-light d-flex flex-column position-relative bg-dark p-0">
                 <img
@@ -75,8 +85,8 @@ const CommonEventCard = ({ eventDetails, editable, editAction, viewAction }) => 
                     className="position-absolute top-0 start-0 m-0 text-light px-2 py-1"
                     style={{ background: "rgba(0, 0, 0, 0.5)", height: "220px" }}
                 >
-                    <div className="fw-bold text-center mt-1" style={{ fontSize: "1.0rem" }}>
-                        {eventDetails.date}
+                   <div className="fw-bold text-center mt-1" style={{ fontSize: "1.0rem" }}>
+                        {formattedDate(eventDetails.date)}
                     </div>
 
                     <div className="mt-1 fw-bold" style={{ fontSize: "0.8rem" }}>
@@ -105,7 +115,7 @@ const CommonEventCard = ({ eventDetails, editable, editAction, viewAction }) => 
                 )}
             </div>
             <div className="card-footer d-flex">
-                <div className="fw-bold">{eventDetails.projectName}</div>
+                <div className="fw-bold">{eventDetails.eventName}</div>
                 <div className="ms-auto me-1">
                     <button
                         className="bg-transparent border-0"
@@ -128,6 +138,7 @@ const CommonEventCard = ({ eventDetails, editable, editAction, viewAction }) => 
             {/* Modal to show event details */}
             <ViewEventModal
                 show={viewEventModalShow}
+                formattedDate={formattedDate}
                 onHide={handleCloseViewEventModal}
                 eventData={selectedEvent} // Pass selected event data
             />
