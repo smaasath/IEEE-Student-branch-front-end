@@ -36,3 +36,21 @@ export const getAllOuWallet = (callback) => {
         callback(error.response);
     }
 };
+
+
+export const getMyExomWallet = (callback) => {
+    const endpoint = `${import.meta.env.VITE_API_HOST}wallet`;
+
+    try {
+        http
+            .get(endpoint)
+            .then((response) => {
+                callback(response);
+            })
+            .catch((error) => {
+                callback(error.response);
+            });
+    } catch (error) {
+        callback(error.response);
+    }
+};

@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 import CommonLoader from '../../../components/common/commonLoader/commonLoader'
 import { PolicyValidate } from '../../../utils/valitations/Valitation'
 import { getAllAccount } from '../../../redux/actions/account'
-import { getAllOuWallet, getMainWallet } from '../../../redux/actions/wallet'
+import { getAllOuWallet, getMainWallet, getMyExomWallet } from '../../../redux/actions/wallet'
 
 
 
@@ -30,6 +30,7 @@ const FinanceLanding = () => {
     const [selectedAccount, setSelectedAccount] = useState(null);
     const [pageLoading, setPageLoading] = useState(true);
     const [ouWallets, setOuWallets] = useState([]);
+    const [myWallet, setMyWallet] = useState(null);
     const [mainWallet, setMainWallet] = useState([]);
 
 
@@ -46,7 +47,10 @@ const FinanceLanding = () => {
                 setIsFinanceAllPolicyAvailable(FinanceAllPolicyAvailable);
                 setIsFinanceBudgetPolicyAvailable(FinanceBudgetPolicyAvailable);
                 setIsFinanceTransactionPolicyAvailable(FinanceTransactionPolicyAvailable);
-                getAllAccounts();
+                if (FinanceAllPolicyAvailable) {
+                    getAllAccounts();
+                }
+
                 setPageLoading(false);
             }
         }
@@ -62,9 +66,23 @@ const FinanceLanding = () => {
                 }
             })
 
+            getMyExomWallet((res) => {
+                if (res?.status == 200) {
+                    setMyWallet(res?.data?.data)
+                }
+            })
+
             getAllOuWallet((res) => {
                 if (res?.status == 200) {
                     setOuWallets(res?.data?.data)
+                }
+            })
+
+
+        } else {
+            getMyExomWallet((res) => {
+                if (res?.status == 200) {
+                    setMyWallet(res?.data?.data)
                 }
             })
         }
