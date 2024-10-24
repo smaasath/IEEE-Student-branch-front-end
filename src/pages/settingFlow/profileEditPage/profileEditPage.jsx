@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Facebook from "../../../assets/icons/Facebook.png";
 import Linkedin from "../../../assets/icons/LinkedIn Circled.png";
-import profile from "../../../assets/images/profile.png";
+import profile from "../../../assets/images/default-user.png";
 import CommonButton from "../../../components/common/commonButton/commonButton";
 import EditProfileModal from "../../../components/models/editProfileModel/editProfileModel";
 import { useSelector } from "react-redux";
