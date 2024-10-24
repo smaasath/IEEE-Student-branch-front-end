@@ -119,7 +119,7 @@ const serviceLandingPage = () => {
       }
 
       if (isServiceVolunteerAvailable) {
-        // setServiceVolunteer(true);
+        setServiceVolunteer(true);
         setPageLoading(false);
       }
 
