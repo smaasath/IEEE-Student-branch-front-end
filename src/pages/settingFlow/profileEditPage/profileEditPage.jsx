@@ -153,11 +153,6 @@ const ProfileEditPage = () => {
             "userName",
             "email",
             "contactNo",
-            "location",
-            "ieee_email",
-            "ieee_membership_number",
-            "fbURL",
-            "linkedInURL"
         ];
 
         const error = {};
