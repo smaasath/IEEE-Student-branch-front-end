@@ -3,7 +3,10 @@ import CommonButton from "../../../components/common/commonButton/commonButton";
 import CommonTable from "../../../components/common/commonTable/commonTable";
 import CommonPagination from "../../../components/common/commonPagination/commonPagination";
 import CommonStatusCountCard from "../../../components/common/commonStatusCountCard/commonStatusCountCard";
-import { getAllRolesDetailsByUser } from "../../../redux/actions/service";
+import {
+  getAllRolesDetailsByUser,
+  getAllTasksDetailsByUser,
+} from "../../../redux/actions/service";
 import { useParams } from "react-router-dom";
 
 export default function VolunteerActivitiesPage() {
@@ -78,15 +81,23 @@ export default function VolunteerActivitiesPage() {
   const tableHeadingForActivitiesTable = [
     {
       label: "Task",
-      value: "task",
+      value: "taskName",
     },
     {
       label: "Type",
-      value: "type",
+      value: "taskType",
     },
     {
       label: "OU / Project",
-      value: "start_date",
+      value: "taskBelongTo",
+    },
+    {
+      label: "Start Date",
+      value: "startDate",
+    },
+    {
+      label: "End Date",
+      value: "endDate",
     },
     {
       label: "Priority",
@@ -113,10 +124,11 @@ export default function VolunteerActivitiesPage() {
           const data = res?.data?.data?.content?.map((role) => ({
             id: role?.serviceId,
             start_date: formatDate(role?.start_date),
-            end_date: role?.end_date == null ? "Ongoing" : formatDate(role?.end_date),
+            end_date:
+              role?.end_date == null ? "Ongoing" : formatDate(role?.end_date),
             excomRole: role?.role?.userRole,
             entity: role?.ou?.ouName,
-            termYear:role?.termyear?.termyear,
+            termYear: role?.termyear?.termyear,
             item: role,
           }));
           setTableDataForExcomRoleTable(data);
@@ -149,6 +161,39 @@ export default function VolunteerActivitiesPage() {
       }
     );
     setTableLoadingForProjectRoleTable(false);
+  }, []);
+
+  useEffect(() => {
+    setTableLoadingForActivitiesTable(true);
+    getAllTasksDetailsByUser(
+      id,
+      "",
+      "",
+      "",
+      currentPageForActivitiesTable - 1,
+      (res) => {
+        if (res?.status == 200) {
+          console.log(res?.data?.data?.content);
+          const data = res?.data?.data?.content?.map((task) => ({
+            id: task?.serviceId,
+            taskName: task?.task_name,
+            taskType: task?.type,
+            taskBelongTo:
+              task?.type == "EXCOM"
+                ? task?.ou?.ou_short_name
+                : task?.project?.project_name,
+            startDate: formatDate(task?.start_date),
+            endDate: formatDate(task?.end_date),
+            priority: task?.priority,
+            status: task?.status,
+            item: task,
+          }));
+          setTableDataForActivitiesTable(data);
+          setTotalPageForActivitiesTable(res?.data?.data?.totalPages);
+        }
+      }
+    );
+    setTableLoadingForActivitiesTable(false);
   }, []);
 
   return (
@@ -253,9 +298,9 @@ export default function VolunteerActivitiesPage() {
               </div>
               <div className="mt-4 d-flex w-100 justify-content-end">
                 <CommonPagination
-                  pages={totalPageForProjectRoleTable}
-                  currentPage={currentPageForProjectRoleTable}
-                  setCurrentPage={setCurrentPageForExcomRoleTable}
+                  pages={totalPageForActivitiesTable}
+                  currentPage={currentPageForActivitiesTable}
+                  setCurrentPage={setCurrentPageForActivitiesTable}
                 />
               </div>
             </div>

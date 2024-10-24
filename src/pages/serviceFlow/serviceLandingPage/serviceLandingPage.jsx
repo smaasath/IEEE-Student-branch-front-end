@@ -206,13 +206,18 @@ const serviceLandingPage = () => {
       label: "Contact No",
       value: "contactNo",
     },
-    {
-      label: "Status",
-      value: "status",
-    },
+
     {
       label: "Requested Date",
       value: "requestDate",
+    },
+    {
+      label: "Due Date",
+      value: "dueDate",
+    },
+    {
+      label: "Status",
+      value: "status",
     },
     {
       label: "",
@@ -230,13 +235,14 @@ const serviceLandingPage = () => {
       label: "Email",
       value: "email",
     },
-    {
-      label: "Status",
-      value: "status",
-    },
+
     {
       label: "Due Date",
       value: "dueDate",
+    },
+    {
+      label: "Status",
+      value: "status",
     },
     {
       label: "",
