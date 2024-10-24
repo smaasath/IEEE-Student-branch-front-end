@@ -326,24 +326,24 @@ const ProfileEditPage = () => {
                     </div>
                 </div>
 
-                <div className="mt-3">
-                    <label htmlFor="userName" className="form-label text-dark">
-                        User Name
-                    </label>
-                    <input
-                        type="text"
-                        name="userName"
-                        value={formData.userName || ""}
-                        onChange={handleInputChange}
-                        className={`form-control ${error.userName ? "is-invalid" : ""}`}
-                        style={{width: "1055px"}}
-                        required
-                        readOnly={!isEditable}
-                    />
-                    {error.userName && (
-                        <div className="invalid-feedback">This field is required.</div>
-                    )}
-                </div>
+                <div>
+                        <label htmlFor="lastName" className="form-label text-dark">
+                            User Name
+                        </label>
+                        <input
+                            type="text"
+                            name="userName"
+                            value={formData.userName || ""}
+                            onChange={handleInputChange}
+                            className={`form-control ${error.userName ? "is-invalid" : ""}`}
+                            style={{width: "520px"}}
+                            required
+                            readOnly={!isEditable}
+                        />
+                        {error.userName && (
+                            <div className="invalid-feedback">This field is required.</div>
+                        )}
+                    </div>
 
                 <div className="mt-3 d-flex flex-wrap gap-lg-3">
                     <div>
