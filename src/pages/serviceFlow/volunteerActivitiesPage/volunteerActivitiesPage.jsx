@@ -5,6 +5,7 @@ import CommonPagination from "../../../components/common/commonPagination/common
 import CommonStatusCountCard from "../../../components/common/commonStatusCountCard/commonStatusCountCard";
 import {
   getAllRolesDetailsByUser,
+  getAllTaskCountsByUser,
   getAllTasksDetailsByUser,
 } from "../../../redux/actions/service";
 import { useParams } from "react-router-dom";
@@ -41,6 +42,10 @@ export default function VolunteerActivitiesPage() {
   const [searchItem, setsearchItem] = useState("");
   const [priority, setPriority] = useState("");
   const [status, setStatus] = useState("");
+  const [todo, setTodo] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [completed, setCompleted] = useState(0);
+  
 
   const tableHeadingForExcomRoleTable = [
     {
@@ -120,7 +125,15 @@ export default function VolunteerActivitiesPage() {
   const handleSearchChange = (e) => setsearchItem(e);
   const handlePriorityChange = (e) => setPriority(e.target.value);
   const handleStatusChange = (e) => setStatus(e.target.value);
-
+  function handleGetTasksCounts(){
+    getAllTaskCountsByUser(id,priority,(res)=>{
+      if(res?.status == 200){
+          setTodo(res?.data?.data?.todo);
+          setProgress(res?.data?.data?.progress);
+          setCompleted(res?.data?.data?.complete);
+      }
+    })
+  }
   useEffect(() => {
     setTableLoadingForExcomRoleTable(true);
     getAllRolesDetailsByUser(
@@ -198,6 +211,7 @@ export default function VolunteerActivitiesPage() {
           }));
           setTableDataForActivitiesTable(data);
           setTotalPageForActivitiesTable(res?.data?.data?.totalPages);
+          handleGetTasksCounts();
         }
       }
     );
@@ -294,17 +308,17 @@ export default function VolunteerActivitiesPage() {
                 <div className="d-flex justify-content-between gap-4 rounded-4 bg-body-secondary p-3 flex-wrap mt-2 flex-grow-1">
                   <CommonStatusCountCard
                     type={"TODO"}
-                    count={115}
+                    count={todo}
                     withoutImage={true}
                   />
                   <CommonStatusCountCard
                     type={"ONGOING"}
-                    count={20}
+                    count={progress}
                     withoutImage={true}
                   />
                   <CommonStatusCountCard
                     type={"COMPLETE"}
-                    count={200}
+                    count={completed}
                     withoutImage={true}
                   />
                 </div>
