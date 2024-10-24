@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./editExcomModel.css";
 import Modal from "react-bootstrap/Modal";
 import CommonButton from "../../common/commonButton/commonButton";
-import profile from "../../../assets/images/profile.png";
+import profile from "../../../assets/images/default-user.png";
 import CommonSearch from "../../common/commonSearch/commonSearch";
 import selectIcon from "../../../assets/icons/check_mark_dark.png";
 import { assignOuExcomRole, getAllRoles } from "../../../redux/actions/role";
@@ -100,7 +100,7 @@ const EditExcomModel = ({ onHide, show, selectedMember, changed, mode, id }) => 
           phone: user?.contactNo,
           academicYear: user?.academicYear?.academicYear || "N/A",
           status: user?.academicYear?.status || "N/A",
-          photo: profile,
+          photo: user?.profilePic || profile,
         }));
         console.warn(data);
         setUserData(data);
