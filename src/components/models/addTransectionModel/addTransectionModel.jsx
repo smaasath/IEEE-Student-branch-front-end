@@ -3,11 +3,11 @@ import Modal from "react-bootstrap/Modal";
 import CommonButton from "../../common/commonButton/commonButton";
 import CommonSearchModel from "../commonSearchModel/commonSearchModel";
 import { getAllAccount } from "../../../redux/actions/account";
-import { addAccountTransection } from "../../../redux/actions/transection";
+import { addAccountTransection, addouTransection } from "../../../redux/actions/transection";
 import { useSelector } from 'react-redux';
 import { PolicyValidate } from "../../../utils/valitations/Valitation";
 import { useNavigate } from "react-router-dom";
-import { getMainWallet } from "../../../redux/actions/wallet";
+import { getAllOuWallet, getMainWallet, getMyExomWallet } from "../../../redux/actions/wallet";
 
 
 const AddTransectionModel = ({
@@ -55,25 +55,40 @@ const AddTransectionModel = ({
   const [isFinanceTransactionPolicyAvailable, setIsFinanceTransactionPolicyAvailable] = useState(false);
   const [isFinanceBudgetPolicyAvailable, setIsFinanceBudgetPolicyAvailable] = useState(false);
   const [mainWallet, setMainWallet] = useState(null);
+  const [isCheckboxTransferOuChecked, setIsCheckboxTransferOuChecked] = useState(false);
+  const [myWallet, setMyWallet] = useState(null);
+  const [ouWallets, setOuWallets] = useState([]);
   const navigate = useNavigate();
   const [isSbChecked, setIsSbChecked] = useState(false);
 
   useEffect(() => {
     if (show) {
+      setIsCheckboxTransferOuChecked(false);
       setIsSbChecked(false);
       reset();
+      getMyExomWallet((res) => {
+        if (res?.status == 200) {
+          setMyWallet(res?.data?.data)
+        }
+      })
       if (isFinanceAllPolicyAvailable) {
         getMainWallet((res) => {
           if (res?.status == 200) {
             setMainWallet(res?.data?.data?.[0])
           }
         })
+        getAllAccount((res) => {
+          if (res?.status == 200) {
+            setAccounts(res?.data?.data)
+          }
+        })
+        getAllOuWallet((res) => {
+          if (res?.status == 200) {
+            setOuWallets(res?.data?.data)
+          }
+        })
       }
-      getAllAccount((res) => {
-        if (res?.status == 200) {
-          setAccounts(res?.data?.data)
-        }
-      })
+
     }
   }, [show, isFinanceAllPolicyAvailable]);
 
@@ -94,6 +109,11 @@ const AddTransectionModel = ({
       }
     }
   }, [userData])
+
+
+  const handleTransferOuCheckboxChange = (event) => {
+    setIsCheckboxTransferOuChecked(event.target.checked);
+  };
 
 
 
@@ -149,8 +169,66 @@ const AddTransectionModel = ({
     setLoading(true);
     if (method == "Bank") {
       addBankTransection();
+    } else if (method == "Inside") {
+      addInsideTransection();
     }
 
+  }
+
+
+  function addInsideTransection() {
+    setError({
+      title: false,
+      description: false,
+      type: false,
+      amount: false,
+      from_wallet_id: false,
+      to_wallet_id: false,
+      wallet_id: false,
+      account_id: false,
+      other: false
+    });
+
+    const isToWalletRequired = isCheckboxTransferOuChecked && !formData.to_wallet_id;
+
+    if (
+      !formData.title ||
+      !formData.type ||
+      !formData.amount ||
+      !formData.description ||
+      isToWalletRequired
+    ) {
+      setError({
+        ...error,
+        title: !formData.title,
+        description: !formData.description,
+        type: !formData.type,
+        amount: !formData.amount,
+        to_wallet_id: isToWalletRequired
+      });
+      return;
+    }
+    const data = {
+      "title": formData.title,
+      "description": formData.description,
+      "type": formData.type,
+      "amount": formData.amount,
+      "wallet_id": myWallet?.id,
+      "to_wallet_id": formData.to_wallet_id
+    }
+
+    addouTransection(data, (res) => {
+      if (res.status == 201) {
+        setLoading(false);
+        onHide();
+      } else {
+        setLoading(false);
+        setError({
+          ...error,
+          other: true,
+        });
+      }
+    })
   }
 
   function addBankTransection() {
@@ -369,7 +447,23 @@ const AddTransectionModel = ({
               </div>
             ) : null}
 
-            {method == "Budget" || method == "Inside" ? (
+
+            {method == "Inside" && isFinanceAllPolicyAvailable ? (
+              <div class="form-check mt-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  onChange={handleTransferOuCheckboxChange}
+                />
+                <label class="form-check-label" for="flexCheckDefault">
+                  Transfer to Ou Wallets
+                </label>
+              </div>
+            ) : null}
+
+            {(method == "Budget" || method == "Inside") && isFinanceAllPolicyAvailable &&
+              isCheckboxTransferOuChecked ? (
               <div className="mt-3">
                 <label
                   for="exampleFormControlInput1"
@@ -378,16 +472,25 @@ const AddTransectionModel = ({
                   To Wallet
                 </label>
                 <select
-                  className="form-select w-100"
-                  disabled={disabled}
-                  onClick={() => {
-                    setTransectionModelShow(false);
-                    handleShowWalletModelShow();
-                  }}
+                  name='to_wallet_id'
+                  value={formData.to_wallet_id}
+                  onChange={handleInputChange}
+                  className={`form-control w-100 ${error.to_wallet_id ? "is-invalid" : ""}`}
                   aria-label="Large select example"
+                  disabled={disabled}
                 >
-                  <option selected>Select Wallet</option>
+                  <option selected hidden={true}>Select a Wallet</option>
+                  {
+                    ouWallets?.map((item, index) => {
+                      return (
+                        <option key={index} value={item.id}>{item.ou.ouName}</option>
+                      )
+                    })
+                  }
                 </select>
+                <div className="invalid-feedback">
+                  This field is required.
+                </div>
               </div>
             ) : null}
 
@@ -463,7 +566,7 @@ const AddTransectionModel = ({
             <CommonButton onClick={onHide} close={true} text={"Close"} />
           </div>
           <div>
-            <CommonButton onClick={submit} text={"Add"} />
+            <CommonButton onClick={submit} load={loading} text={"Add"} />
           </div>
         </Modal.Footer>
       </Modal>
