@@ -283,13 +283,13 @@ const FinanceLanding = () => {
                     <div className='mt-5 d-flex justify-content-between align-items-center gap-4 flex-wrap'>
                         <div className='text-cl-primary'>Accounts</div>
                         <div className='d-flex justify-content-end gap-4'>
-                            {
+                            {/* {
                                 isFinanceBudgetPolicyAvailable && (
                                     <div>
                                         <CommonButton text={"Go to proposal"} onClick={() => { navigateToProposal() }} />
                                     </div>
                                 )
-                            }
+                            } */}
 
 
                             {

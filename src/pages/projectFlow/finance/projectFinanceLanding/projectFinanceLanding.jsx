@@ -57,7 +57,7 @@ const ProjectFinanceLanding = () => {
 
 
   useEffect(() => {
-    if (project) {
+
       getWalletByProject(id, (res) => {
         if (res?.status == 200) {
           setSelectedWallet(res?.data?.data?.id);
@@ -70,10 +70,7 @@ const ProjectFinanceLanding = () => {
           })
         }
       })
-
-
-    }
-  }, [project])
+  }, [project,userData, projectPolicyData, id])
 
   function policyCheck(data, useAPI) {
     setProjectData(data);
@@ -95,7 +92,7 @@ const ProjectFinanceLanding = () => {
       ) : (
         <>
           {showAddSection ? (
-            <AddExpense handleClose={handleOpenAddSection} />
+            <AddExpense selectedWallet={selectedWallet} handleClose={handleOpenAddSection} />
           ) : (
             <div className="container">
               <div className="d-flex justify-content-center justify-content-lg-between align-items-center flex-wrap gap-3 mt-5">
@@ -121,9 +118,9 @@ const ProjectFinanceLanding = () => {
                       onClick={handleOpenAddSection}
                     />
                   </div>
-                  <div>
+                  {/* <div>
                     <CommonButton text={"Report"} />
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className="container mt-4">
