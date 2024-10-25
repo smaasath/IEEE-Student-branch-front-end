@@ -72,10 +72,10 @@ const ProjectPage = () => {
     return date.toISOString().split("T")[0];
   };
 
-  function saveDescription() {
+  function saveDescription(html) {
     const data = {
       project_name: project.projectName,
-      description: description,
+      description: html,
       start_date: formatDate(project.startDate),
       end_date: formatDate(project.endDate),
       project_logo: project.projectLogo,

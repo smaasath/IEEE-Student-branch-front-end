@@ -148,3 +148,48 @@ export const getAllTasksDetailsByUser = (
     callback(error.response);
   }
 };
+
+export const getAllTaskCountsByUser = (userID, priority, callback) => {
+  let endpoint = null;
+  if (userID != null) {
+    endpoint = `${
+      import.meta.env.VITE_API_HOST
+    }service/activities/tasks/count/${userID}?priority=${priority}`;
+  } else {
+    endpoint = `${
+      import.meta.env.VITE_API_HOST
+    }service/activities/tasks/count?priority=${priority}`;
+  }
+
+  try {
+    http
+      .get(endpoint)
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        callback(error.response);
+      });
+  } catch (error) {
+    callback(error.response);
+  }
+};
+
+export const getBestVolunteers = (page, callback) => {
+  const endpoint = `${
+    import.meta.env.VITE_API_HOST
+  }service/volunteer/best?page=${page}`;
+
+  try {
+    http
+      .get(endpoint)
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        callback(error.response);
+      });
+  } catch (error) {
+    callback(error.response);
+  }
+};
