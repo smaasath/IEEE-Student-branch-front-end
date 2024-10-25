@@ -70,7 +70,7 @@ const ProjectFinanceLanding = () => {
           })
         }
       })
-  }, [project,userData, projectPolicyData, id])
+  }, [project,userData, projectPolicyData, id,showAddSection])
 
   function policyCheck(data, useAPI) {
     setProjectData(data);
